@@ -30,14 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jagadeesh.passwordmanager.presentation.theme.pagePadding
-import com.jagadeesh.passwordmanager.presentation.utils.copyToClipboard
-import com.jagadeesh.passwordmanager.presentation.utils.generateRandomPassword
+import com.jagadeesh.passwordmanager.core.copyToClipboard
+import com.jagadeesh.passwordmanager.core.generateRandomPassword
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordGeneratorScreen(navController: NavController) {
+fun PasswordGeneratorScreen() {
     var generatedPassword by rememberSaveable { mutableStateOf("") }
     var lengthValue by rememberSaveable { mutableIntStateOf(8) }
     var includeLowercase by rememberSaveable { mutableStateOf(true) }

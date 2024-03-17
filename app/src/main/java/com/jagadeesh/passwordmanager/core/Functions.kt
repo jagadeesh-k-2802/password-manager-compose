@@ -1,8 +1,9 @@
-package com.jagadeesh.passwordmanager.presentation.utils
+package com.jagadeesh.passwordmanager.core
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlin.random.Random
 

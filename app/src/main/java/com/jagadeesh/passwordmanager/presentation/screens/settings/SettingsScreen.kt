@@ -20,6 +20,7 @@ fun SettingsScreen(navController: NavController) {
             /**
              * TODO:
              * 1. Import/Export DB
+             * 2. Enable/Disable Biometric Authentication
              * 2. Dark Theme Toggle
              * 3. About Info
              */

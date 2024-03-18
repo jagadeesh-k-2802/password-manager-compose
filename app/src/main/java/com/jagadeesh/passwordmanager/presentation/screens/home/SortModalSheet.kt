@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortModalSheet(sheetState: SheetState) {
+fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
@@ -38,7 +38,7 @@ fun SortModalSheet(sheetState: SheetState) {
 
         ListItem(
             headlineContent = { Text("A -> Z") },
-            modifier = Modifier.clickable { },
+            modifier = Modifier.clickable { onValueSet(SortBy.ALPHABET_ASCENDING) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Filled.SortByAlpha,
@@ -49,7 +49,7 @@ fun SortModalSheet(sheetState: SheetState) {
 
         ListItem(
             headlineContent = { Text("Z -> A") },
-            modifier = Modifier.clickable { },
+            modifier = Modifier.clickable { onValueSet(SortBy.ALPHABET_DESCENDING) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Filled.SortByAlpha,
@@ -60,7 +60,7 @@ fun SortModalSheet(sheetState: SheetState) {
 
         ListItem(
             headlineContent = { Text("Newest -> Oldest") },
-            modifier = Modifier.clickable { },
+            modifier = Modifier.clickable { onValueSet(SortBy.NEWEST) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Filled.AccessTime,
@@ -71,7 +71,7 @@ fun SortModalSheet(sheetState: SheetState) {
 
         ListItem(
             headlineContent = { Text("Oldest -> Newest") },
-            modifier = Modifier.clickable { },
+            modifier = Modifier.clickable { onValueSet(SortBy.OLDEST) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Filled.AccessTime,

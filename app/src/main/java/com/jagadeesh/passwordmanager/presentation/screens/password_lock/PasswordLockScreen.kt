@@ -23,6 +23,7 @@ import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,32 +63,33 @@ fun PasswordLockScreen(
     val state = viewModel.state
     val errorChannel = viewModel.errorChannel.receiveAsFlow()
 
-    LaunchedEffect(key1 = Unit) {
-        if (state.hasPasswordSet == false) return@LaunchedEffect
-        val executor = context.mainExecutor
+    LaunchedEffect(state.hasPasswordSet) {
+        if (state.hasPasswordSet == true) {
+            val executor = context.mainExecutor
 
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric Authentication")
-            .setSubtitle("Authenticate using your fingerprint or face")
-            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-            .build()
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric Authentication")
+                .setSubtitle("Authenticate using your fingerprint or face")
+                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                .build()
 
-        val biometricPrompt = BiometricPrompt(
-            context,
-            executor,
-            object :
-                BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    navController.navigateWithPopUp(Routes.Home)
+            val biometricPrompt = BiometricPrompt(
+                context,
+                executor,
+                object :
+                    BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        navController.navigateWithPopUp(Routes.Home)
+                    }
                 }
-            }
-        )
+            )
 
-        biometricPrompt.authenticate(promptInfo)
+            biometricPrompt.authenticate(promptInfo)
+        }
     }
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(Unit) {
         errorChannel.collect { error ->
             snackbarHostState.showSnackbar(error)
         }
@@ -204,9 +206,11 @@ fun PasswordLockScreen(
 
                 Button(
                     onClick = {
-                        viewModel.setNewPassword(passwordValue, confirmPasswordValue)
                         keyboardController?.hide()
-                        navController.navigateWithPopUp(Routes.Home)
+
+                        viewModel.setNewPassword(passwordValue, confirmPasswordValue) {
+                            navController.navigateWithPopUp(Routes.Home)
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

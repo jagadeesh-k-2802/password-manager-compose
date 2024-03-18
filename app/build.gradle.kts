@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleDaggerHiltAndroid)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.googleDevToolsKsp)
 }
 
 android {
@@ -87,6 +88,15 @@ dependencies {
 
     // Biometric
     implementation(libs.androidx.biometric)
+
+    // Room DB
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // SQLCipher
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.androidx.sqlite)
 
     // Testing
     testImplementation(libs.junit)

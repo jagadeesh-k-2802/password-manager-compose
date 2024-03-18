@@ -29,6 +29,7 @@ fun BottomNavigationBar(navController: NavController) {
 
     bottomBarVisible = when (currentRoute) {
         Routes.PasswordLock.route -> false
+        Routes.AddItem.route -> false
         Routes.ItemDetail.route -> false
         else -> true
     }

@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jagadeesh.passwordmanager.presentation.composables.BottomNavigationBar
 import com.jagadeesh.passwordmanager.presentation.navigation.Routes
+import com.jagadeesh.passwordmanager.presentation.screens.add_item.AddItemScreen
 import com.jagadeesh.passwordmanager.presentation.screens.home.HomeScreen
 import com.jagadeesh.passwordmanager.presentation.screens.item_detail.ItemDetailScreen
 import com.jagadeesh.passwordmanager.presentation.screens.password_lock.PasswordLockScreen
@@ -55,6 +56,10 @@ class MainActivity : FragmentActivity() {
 
                         composable(Routes.Home.route) {
                             HomeScreen(navController)
+                        }
+
+                        composable(Routes.AddItem.route) {
+                            AddItemScreen(navController)
                         }
 
                         composable(Routes.PasswordGenerator.route) {

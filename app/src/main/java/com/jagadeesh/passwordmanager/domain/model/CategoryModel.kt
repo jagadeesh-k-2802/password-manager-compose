@@ -1,10 +1,8 @@
 package com.jagadeesh.passwordmanager.domain.model
 
-data class PasswordItemModel(
+data class CategoryModel(
     val id: Int? = null,
     val name: String,
-    val username: String,
-    val password: String,
-    val notes: String,
+    val color: String,
     val createdAt: Long? = null
 )

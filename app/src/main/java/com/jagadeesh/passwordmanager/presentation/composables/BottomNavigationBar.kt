@@ -1,8 +1,5 @@
 package com.jagadeesh.passwordmanager.presentation.composables
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Security
@@ -19,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jagadeesh.passwordmanager.presentation.navigation.Routes
-import com.jagadeesh.passwordmanager.presentation.navigation.navigateWithPopUp
+import com.jagadeesh.passwordmanager.presentation.navigation.navigateWithState
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -28,21 +25,17 @@ fun BottomNavigationBar(navController: NavController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     bottomBarVisible = when (currentRoute) {
-        Routes.PasswordLock.route -> false
-        Routes.AddItem.route -> false
-        Routes.ItemDetail.route -> false
-        else -> true
+        Routes.Home.route -> true
+        Routes.PasswordGenerator.route -> true
+        Routes.Settings.route -> true
+        else -> false
     }
 
-    AnimatedVisibility(
-        visible = bottomBarVisible,
-        enter = EnterTransition.None,
-        exit = ExitTransition.None
-    ) {
+    if (bottomBarVisible) {
         NavigationBar {
             NavigationBarItem(
                 selected = currentRoute?.equals(Routes.Home.route) == true,
-                onClick = { navController.navigateWithPopUp(Routes.Home) },
+                onClick = { navController.navigateWithState(Routes.Home) },
                 label = { Text("Home") },
                 icon = {
                     Icon(
@@ -54,7 +47,7 @@ fun BottomNavigationBar(navController: NavController) {
 
             NavigationBarItem(
                 selected = currentRoute?.equals(Routes.PasswordGenerator.route) == true,
-                onClick = { navController.navigateWithPopUp(Routes.PasswordGenerator) },
+                onClick = { navController.navigateWithState(Routes.PasswordGenerator) },
                 label = { Text("Password Generator") },
                 icon = {
                     Icon(
@@ -66,7 +59,7 @@ fun BottomNavigationBar(navController: NavController) {
 
             NavigationBarItem(
                 selected = currentRoute?.equals(Routes.Settings.route) == true,
-                onClick = { navController.navigateWithPopUp(Routes.Settings) },
+                onClick = { navController.navigateWithState(Routes.Settings) },
                 label = { Text("Settings") },
                 icon = {
                     Icon(

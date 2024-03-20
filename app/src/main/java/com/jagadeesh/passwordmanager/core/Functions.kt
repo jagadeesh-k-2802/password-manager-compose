@@ -3,11 +3,14 @@ package com.jagadeesh.passwordmanager.core
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
-@Suppress("SpellCheckingInspection")
 fun generateRandomPassword(
     length: Int,
     includeLowercase: Boolean = true,
@@ -16,7 +19,9 @@ fun generateRandomPassword(
     includeSymbols: Boolean = true,
     additionalCharacters: String? = null
 ): String {
+    @Suppress("SpellCheckingInspection")
     val lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
+    @Suppress("SpellCheckingInspection")
     val uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     val numberChars = "0123456789"
     val symbolChars = "!@#$%^&*()-_+=[]{}|;:,.<>?/`~"
@@ -39,10 +44,27 @@ fun generateRandomPassword(
     }
 }
 
-fun copyToClipboard(context: Context, text: String, label: String = "Password"): Boolean {
+fun copyToClipboard(context: Context, text: String?, label: String = "Text"): Boolean {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clipData)
-    Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Copied to Clipboard", Toast.LENGTH_SHORT).show()
     return true
+}
+
+fun <T> debounce(
+    delayMs: Long = 500L,
+    coroutineContext: CoroutineContext,
+    f: (T) -> Unit
+): (T) -> Unit {
+    var debounceJob: Job? = null
+
+    return { param: T ->
+        if (debounceJob?.isCompleted != false) {
+            debounceJob = CoroutineScope(coroutineContext).launch {
+                delay(delayMs)
+                f(param)
+            }
+        }
+    }
 }

@@ -7,11 +7,15 @@ enum class SortBy {
     OLDEST
 }
 
+/**
+ * The string mapping SHOULD match the column names of PasswordItemEntity
+ * else will result in Runtime Error
+ */
 fun SortBy.orderBy(): String {
     return when (this) {
         SortBy.ALPHABET_ASCENDING -> "name ASC"
         SortBy.ALPHABET_DESCENDING -> "name DESC"
-        SortBy.NEWEST -> "timestamp ASC"
-        SortBy.OLDEST -> "timestamp DESC"
+        SortBy.NEWEST -> "created_at DESC"
+        SortBy.OLDEST -> "created_at ASC"
     }
 }

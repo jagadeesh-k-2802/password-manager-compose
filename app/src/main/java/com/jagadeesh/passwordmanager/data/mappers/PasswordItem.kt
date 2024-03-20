@@ -8,14 +8,28 @@ fun PasswordItemEntity.toModel(): PasswordItemModel {
         id = id,
         name = name,
         username = username,
-        password = password
+        password = password,
+        notes = notes,
+        createdAt = createdAt
     )
 }
 
 fun PasswordItemModel.toEntity(): PasswordItemEntity {
-    return PasswordItemEntity(
-        name = name,
-        username = username,
-        password = password
-    )
+    return if (id != null && createdAt != null) {
+        PasswordItemEntity(
+            id = id,
+            name = name,
+            username = username,
+            password = password,
+            notes = notes,
+            createdAt = createdAt
+        )
+    } else {
+        PasswordItemEntity(
+            name = name,
+            username = username,
+            notes = notes,
+            password = password
+        )
+    }
 }

@@ -1,26 +1,28 @@
 package com.jagadeesh.passwordmanager.presentation.screens.password_lock
 
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,7 +45,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jagadeesh.passwordmanager.presentation.navigation.Routes
-import com.jagadeesh.passwordmanager.presentation.navigation.navigateWithPopUp
+import com.jagadeesh.passwordmanager.presentation.navigation.replace
 import com.jagadeesh.passwordmanager.presentation.theme.pagePadding
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -61,15 +63,15 @@ fun PasswordLockScreen(
     val context = LocalContext.current as FragmentActivity
     val scope = rememberCoroutineScope()
     val state = viewModel.state
-    val errorChannel = viewModel.errorChannel.receiveAsFlow()
+    val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
 
-    LaunchedEffect(state.hasPasswordSet) {
-        if (state.hasPasswordSet == true) {
+    LaunchedEffect(state.hasPasswordSet, state.useBiometricUnlock) {
+        if (state.hasPasswordSet == true && state.useBiometricUnlock == true) {
             val executor = context.mainExecutor
 
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric Authentication")
-                .setSubtitle("Authenticate using your fingerprint or face")
+                .setTitle("Unlock Password Manager")
+                .setSubtitle("Use your biometric to continue")
                 .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
                 .build()
 
@@ -80,18 +82,12 @@ fun PasswordLockScreen(
                     BiometricPrompt.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                         super.onAuthenticationSucceeded(result)
-                        navController.navigateWithPopUp(Routes.Home)
+                        navController.replace(Routes.Home)
                     }
                 }
             )
 
             biometricPrompt.authenticate(promptInfo)
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        errorChannel.collect { error ->
-            snackbarHostState.showSnackbar(error)
         }
     }
 
@@ -109,11 +105,17 @@ fun PasswordLockScreen(
                 Text("Enter Your Password", style = MaterialTheme.typography.titleLarge)
                 Spacer(modifier = Modifier.height(24.dp))
 
-                TextField(
+                OutlinedTextField(
                     value = passwordValue,
                     onValueChange = { value -> passwordValue = value },
-                    label = { Text("Master Password") },
+                    label = { Text("Password") },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = error is PasswordLockError.PasswordError,
+                    supportingText = {
+                        error?.let {
+                            if (it is PasswordLockError.PasswordError) Text(it.error)
+                        }
+                    },
                     trailingIcon = {
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
@@ -137,30 +139,38 @@ fun PasswordLockScreen(
                     )
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Button(
                     onClick = {
                         scope.launch {
                             if (viewModel.verifyPassword(passwordValue)) {
                                 keyboardController?.hide()
-                                navController.navigateWithPopUp(Routes.Home)
+                                navController.replace(Routes.Home)
                             }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    Icon(Icons.Filled.Done, "Confirm")
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text("Confirm")
                 }
             } else {
                 Text("Create Your Password", style = MaterialTheme.typography.titleLarge)
                 Spacer(modifier = Modifier.height(24.dp))
 
-                TextField(
+                OutlinedTextField(
                     value = passwordValue,
                     onValueChange = { value -> passwordValue = value },
-                    label = { Text("Master Password") },
+                    label = { Text("Password") },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = error is PasswordLockError.PasswordError,
+                    supportingText = {
+                        error?.let {
+                            if (it is PasswordLockError.PasswordError) Text(it.error)
+                        }
+                    },
                     trailingIcon = {
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
@@ -184,13 +194,17 @@ fun PasswordLockScreen(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                TextField(
+                OutlinedTextField(
                     value = confirmPasswordValue,
                     onValueChange = { value -> confirmPasswordValue = value },
-                    label = { Text("Confirm Master Password") },
+                    label = { Text("Confirm Password") },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = error is PasswordLockError.ConfirmPasswordError,
+                    supportingText = {
+                        error?.let {
+                            if (it is PasswordLockError.ConfirmPasswordError) Text(it.error)
+                        }
+                    },
                     visualTransformation = if (showPassword) {
                         VisualTransformation.None
                     } else {
@@ -202,18 +216,20 @@ fun PasswordLockScreen(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = {
                         keyboardController?.hide()
 
                         viewModel.setNewPassword(passwordValue, confirmPasswordValue) {
-                            navController.navigateWithPopUp(Routes.Home)
+                            navController.replace(Routes.Home)
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    Icon(Icons.Filled.Done, "Confirm")
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text("Confirm")
                 }
             }

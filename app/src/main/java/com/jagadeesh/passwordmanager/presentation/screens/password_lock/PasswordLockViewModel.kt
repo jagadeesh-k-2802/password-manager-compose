@@ -18,24 +18,29 @@ class PasswordLockViewModel @Inject constructor(
     var state by mutableStateOf(PasswordLockState())
         private set
 
-    val errorChannel = Channel<String>()
+    val errorChannel = Channel<PasswordLockError>()
 
     init {
-        getPasswordSet()
+        fetchInitialData()
     }
 
-    private fun getPasswordSet() {
+    private fun fetchInitialData() {
         viewModelScope.launch {
-            state = state.copy(hasPasswordSet = userPreferencesRepository.hasPasswordSet())
+            state = state.copy(
+                hasPasswordSet = userPreferencesRepository.hasPasswordSet(),
+                useBiometricUnlock = userPreferencesRepository.getBiometricUnlock()
+            )
         }
     }
 
     fun setNewPassword(newPassword: String, confirmNewPassword: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             if (newPassword != confirmNewPassword) {
-                errorChannel.send("Passwords do not match")
-            } else if (newPassword.isEmpty() || confirmNewPassword.isEmpty()) {
-                errorChannel.send("Password should not be empty")
+                errorChannel.send(PasswordLockError.ConfirmPasswordError("Passwords Don't Match"))
+            } else if (newPassword.isEmpty()) {
+                errorChannel.send(PasswordLockError.PasswordError("Password Should Not be Empty"))
+            } else if (confirmNewPassword.isEmpty()) {
+                errorChannel.send(PasswordLockError.PasswordError("Confirm Password Should Not be Empty"))
             } else {
                 userPreferencesRepository.setPassword(newPassword)
                 onSuccess()
@@ -49,7 +54,7 @@ class PasswordLockViewModel @Inject constructor(
         return if (isMatching) {
             true
         } else {
-            errorChannel.send("Incorrect Password")
+            errorChannel.send(PasswordLockError.PasswordError("Incorrect Password"))
             false
         }
     }

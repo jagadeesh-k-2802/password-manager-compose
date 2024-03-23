@@ -1,4 +1,4 @@
-package com.jagadeesh.passwordmanager.presentation.screens.edit_item
+package com.jagadeesh.passwordmanager.presentation.screens.edit_password_item
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

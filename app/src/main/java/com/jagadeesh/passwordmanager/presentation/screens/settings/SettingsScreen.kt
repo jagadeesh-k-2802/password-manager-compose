@@ -1,5 +1,9 @@
 package com.jagadeesh.passwordmanager.presentation.screens.settings
 
+import android.widget.Toast
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -10,8 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -22,7 +26,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jagadeesh.passwordmanager.presentation.navigation.Routes
@@ -36,6 +43,13 @@ fun SettingsScreen(
 ) {
     val scrollState = rememberScrollState()
     val state = viewModel.state
+    val context = LocalContext.current
+
+    val isScreenLockAvailable = remember {
+        val manager = BiometricManager.from(context)
+        val credentials = BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+        manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
+    }
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("Settings") }) }
@@ -47,32 +61,42 @@ fun SettingsScreen(
         ) {
             ListItem(
                 leadingContent = { Icon(Icons.Filled.Lock, null) },
-                trailingContent = {Icon(Icons.Filled.ChevronRight, null)},
+                trailingContent = { Icon(Icons.Filled.ChevronRight, null) },
                 headlineContent = { Text("Change Lock Password") },
-                modifier = Modifier.clickable {
-                    navController.navigate(Routes.ChangePassword)
-                }
+                modifier = Modifier.clickable { navController.navigate(Routes.ChangePassword) }
             )
 
             ListItem(
                 leadingContent = { Icon(Icons.Filled.Category, null) },
-                trailingContent = {Icon(Icons.Filled.ChevronRight, null)},
+                trailingContent = { Icon(Icons.Filled.ChevronRight, null) },
                 headlineContent = { Text("Manage Categories") },
-                modifier = Modifier.clickable {/* TODO: Manage Categories */ }
+                modifier = Modifier.clickable { navController.navigate(Routes.ManageCategories) }
             )
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.Fingerprint, null) },
-                headlineContent = { Text("Use Biometric Unlock") },
+                leadingContent = { Icon(Icons.Filled.LockOpen, null) },
+                headlineContent = { Text("Use Screen Lock to Unlock") },
                 trailingContent = {
                     Switch(
-                        checked = state.useBiometricUnlock == true,
+                        checked = state.useScreenLockToUnlock == true,
                         onCheckedChange = { value -> viewModel.setBiometricUnlock(value) }
                     )
                 },
-                modifier = Modifier.clickable {
-                    viewModel.setBiometricUnlock(state.useBiometricUnlock != true)
-                }
+                modifier = Modifier
+                    .clickable {
+                        if (isScreenLockAvailable) {
+                            viewModel.setBiometricUnlock(state.useScreenLockToUnlock != true)
+                        } else {
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Please, Setup your device lock screen first.",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
+                    }
+                    .alpha(if (isScreenLockAvailable) 1f else 0.5f)
             )
 
             ListItem(

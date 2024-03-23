@@ -5,6 +5,6 @@ interface UserPreferencesRepository {
     suspend fun setPassword(newPassword: String)
     suspend fun hasPasswordSet(): Boolean
     suspend fun verifyPassword(password: String): Boolean
-    suspend fun getBiometricUnlock(): Boolean
-    suspend fun setBiometricUnlock(newValue: Boolean)
+    suspend fun getScreenLockToUnlock(): Boolean
+    suspend fun setUseScreenLockToUnlock(newValue: Boolean)
 }

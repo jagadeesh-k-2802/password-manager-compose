@@ -63,11 +63,10 @@ fun HomeScreen(
     var isSearching by rememberSaveable { mutableStateOf(false) }
     val passwordItems = state.items?.collectAsState()
     val filteredItems = state.filteredItems?.collectAsState()
+    val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
 
     val debouncedFilter = remember {
-        debounce<Unit>(1000, Dispatchers.IO) {
-            viewModel.searchItems(searchQuery)
-        }
+        debounce<Unit>(1000, Dispatchers.IO) { viewModel.searchItems(searchQuery) }
     }
 
     if (sortBySheetState.isVisible) SortModalSheet(sortBySheetState) { sortBy ->
@@ -77,8 +76,9 @@ fun HomeScreen(
 
     if (filterBySheetState.isVisible) FilterByCategoryModalSheet(
         filterBySheetState,
-        viewModel
+        categoryItems
     ) { filterBy ->
+        viewModel.filterByCategory(filterBy)
         scope.launch { filterBySheetState.hide() }
     }
 
@@ -98,7 +98,7 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(Routes.AddItem) }) {
+            FloatingActionButton(onClick = { navController.navigate(Routes.AddPasswordItem) }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add new item")
             }
         }
@@ -198,14 +198,14 @@ fun HomeScreen(
                 if (filteredItems != null) {
                     items(filteredItems.value) { item ->
                         PasswordItem(item) {
-                            navController.navigate(Routes.ItemDetail.getPath(item.id ?: 0))
+                            navController.navigate(Routes.PasswordItemDetail.getPath(item.id ?: 0))
                         }
                     }
                 } else {
                     passwordItems?.let {
                         items(it.value) { item ->
                             PasswordItem(item) {
-                                navController.navigate(Routes.ItemDetail.getPath(item.id ?: 0))
+                                navController.navigate(Routes.PasswordItemDetail.getPath(item.id ?: 0))
                             }
                         }
                     }

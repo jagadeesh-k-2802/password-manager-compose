@@ -12,10 +12,20 @@ import kotlinx.coroutines.flow.map
 class PasswordItemRepositoryImpl(
     private val passwordDao: PasswordDao
 ) : PasswordItemRepository {
-    override fun getPasswordItems(orderBy: String, query: String): Flow<List<PasswordItemModel>> {
-        val sql = SimpleSQLiteQuery(
-            "SELECT * FROM password_items WHERE name LIKE '%$query%' ORDER BY $orderBy"
-        )
+    override fun getPasswordItems(
+        orderBy: String,
+        filterBy: String,
+        query: String
+    ): Flow<List<PasswordItemModel>> {
+        val sql = if (filterBy.isEmpty()) {
+            SimpleSQLiteQuery(
+                "SELECT * FROM password_items WHERE name LIKE '%$query%' ORDER BY $orderBy"
+            )
+        } else {
+            SimpleSQLiteQuery(
+                "SELECT * FROM password_items WHERE name LIKE '%$query%' AND $filterBy ORDER BY $orderBy"
+            )
+        }
 
         return passwordDao.getAllPasswordEntities(sql).map { items ->
             items.map { it.toModel() }

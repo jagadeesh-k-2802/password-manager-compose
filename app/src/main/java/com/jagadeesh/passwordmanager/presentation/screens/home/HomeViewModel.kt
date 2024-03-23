@@ -31,7 +31,11 @@ class HomeViewModel @Inject constructor(
             if (state.isLoading) {
                 state = state.copy(
                     isLoading = false,
-                    items = passwordItemRepository.getPasswordItems(state.sortBy.orderBy(), "")
+                    items = passwordItemRepository.getPasswordItems(
+                        state.sortBy.orderBy(),
+                        state.filterBy.where(),
+                        ""
+                    )
                         .stateIn(viewModelScope)
                 )
             }
@@ -42,7 +46,25 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(
                 sortBy = sortBy,
-                items = passwordItemRepository.getPasswordItems(sortBy.orderBy(), "")
+                items = passwordItemRepository.getPasswordItems(
+                    sortBy.orderBy(),
+                    state.filterBy.where(),
+                    ""
+                )
+                    .stateIn(viewModelScope)
+            )
+        }
+    }
+
+    fun filterByCategory(filterBy: FilterBy) {
+        viewModelScope.launch {
+            state = state.copy(
+                filterBy = filterBy,
+                items = passwordItemRepository.getPasswordItems(
+                    state.sortBy.orderBy(),
+                    filterBy.where(),
+                    ""
+                )
                     .stateIn(viewModelScope)
             )
         }
@@ -56,6 +78,7 @@ class HomeViewModel @Inject constructor(
                 state.copy(
                     filteredItems = passwordItemRepository.getPasswordItems(
                         state.sortBy.orderBy(),
+                        state.filterBy.where(),
                         searchQuery
                     ).stateIn(viewModelScope)
                 )

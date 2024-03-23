@@ -1,4 +1,4 @@
-package com.jagadeesh.passwordmanager.presentation.screens.edit_item
+package com.jagadeesh.passwordmanager.presentation.screens.edit_password_item
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditItemViewModel @Inject constructor(
+class EditPasswordItemViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val passwordItemRepository: PasswordItemRepository
 ) : ViewModel() {

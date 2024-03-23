@@ -6,5 +6,6 @@ data class PasswordItemModel(
     val username: String,
     val password: String,
     val notes: String,
+    val categoryId: Int? = null,
     val createdAt: Long? = null
 )

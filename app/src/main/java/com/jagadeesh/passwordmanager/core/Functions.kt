@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -67,4 +68,12 @@ fun <T> debounce(
             }
         }
     }
+}
+
+fun parseColor(string: String): Color {
+    val hexString = string.removePrefix("#")
+    val red = hexString.substring(0, 2).toInt(16)
+    val green = hexString.substring(2, 4).toInt(16)
+    val blue = hexString.substring(4, 6).toInt(16)
+    return Color(red, green, blue)
 }

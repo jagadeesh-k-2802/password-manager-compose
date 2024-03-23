@@ -26,7 +26,7 @@ class UserPreferencesRepositoryImpl(
         dataStore.updateData { prevUserSettings ->
             UserSettings(
                 password = newPassword,
-                useBiometricUnlock = prevUserSettings.useBiometricUnlock
+                useScreenLockToUnlock = prevUserSettings.useScreenLockToUnlock
             )
         }
     }
@@ -48,20 +48,20 @@ class UserPreferencesRepositoryImpl(
     }
 
     /**
-     * Check whether user has enabled biometric unlock
+     * Check whether user has enabled unlock using screen lock
      */
-    override suspend fun getBiometricUnlock(): Boolean {
-        return dataStore.data.first().useBiometricUnlock
+    override suspend fun getScreenLockToUnlock(): Boolean {
+        return dataStore.data.first().useScreenLockToUnlock
     }
 
     /**
-     * Set biometricUnlock preference according to user
+     * Set useScreenLockToUnlock preference according to user
      */
-    override suspend fun setBiometricUnlock(newValue: Boolean) {
+    override suspend fun setUseScreenLockToUnlock(newValue: Boolean) {
         dataStore.updateData { prevUserSettings ->
             UserSettings(
                 password = prevUserSettings.password,
-                useBiometricUnlock = newValue
+                useScreenLockToUnlock = newValue
             )
         }
     }

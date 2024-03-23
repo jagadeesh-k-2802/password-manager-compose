@@ -1,4 +1,4 @@
-package com.jagadeesh.passwordmanager.presentation.screens.item_detail
+package com.jagadeesh.passwordmanager.presentation.screens.password_item_detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,16 +39,16 @@ import com.jagadeesh.passwordmanager.presentation.theme.pagePadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemDetailScreen(
+fun PasswordItemDetailScreen(
     navController: NavController,
-    viewModel: ItemDetailViewModel = hiltViewModel()
+    viewModel: PasswordItemDetailViewModel = hiltViewModel()
 ) {
     val passwordItem by viewModel.passwordItem.collectAsState(initial = null)
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
-    if (isDeleteDialogVisible) ItemDeleteDialog(
+    if (isDeleteDialogVisible) PasswordItemDeleteDialog(
         onConfirm = {
             passwordItem?.let {
                 isDeleteDialogVisible = false
@@ -70,7 +70,7 @@ fun ItemDetailScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        navController.navigate(Routes.EditItem.getPath(passwordItem?.id ?: 0))
+                        navController.navigate(Routes.EditPasswordItem.getPath(passwordItem?.id ?: 0))
                     }) {
                         Icon(Icons.Filled.Edit, "Edit item")
                     }

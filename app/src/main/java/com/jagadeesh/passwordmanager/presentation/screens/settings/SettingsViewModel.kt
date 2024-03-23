@@ -24,15 +24,15 @@ class SettingsViewModel @Inject constructor(
     private fun getInitialData() {
         viewModelScope.launch {
             state = state.copy(
-                useBiometricUnlock = userPreferencesRepository.getBiometricUnlock()
+                useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock()
             )
         }
     }
 
     fun setBiometricUnlock(newValue: Boolean) {
         viewModelScope.launch {
-            state = state.copy(useBiometricUnlock = newValue)
-            userPreferencesRepository.setBiometricUnlock(newValue)
+            state = state.copy(useScreenLockToUnlock = newValue)
+            userPreferencesRepository.setUseScreenLockToUnlock(newValue)
         }
     }
 }

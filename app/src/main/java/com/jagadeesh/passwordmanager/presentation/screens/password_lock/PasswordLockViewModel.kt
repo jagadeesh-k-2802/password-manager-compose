@@ -28,7 +28,7 @@ class PasswordLockViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(
                 hasPasswordSet = userPreferencesRepository.hasPasswordSet(),
-                useBiometricUnlock = userPreferencesRepository.getBiometricUnlock()
+                useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock()
             )
         }
     }

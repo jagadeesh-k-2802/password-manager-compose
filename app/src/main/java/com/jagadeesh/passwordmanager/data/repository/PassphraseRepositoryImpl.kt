@@ -24,7 +24,7 @@ class PassphraseRepositoryImpl(
         dataStore.updateData { prevUserSettings ->
             UserSettings(
                 password = newPassword,
-                useBiometricUnlock = prevUserSettings.useBiometricUnlock
+                useScreenLockToUnlock = prevUserSettings.useScreenLockToUnlock
             )
         }
 

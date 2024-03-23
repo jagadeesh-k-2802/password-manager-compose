@@ -65,13 +65,13 @@ fun PasswordLockScreen(
     val state = viewModel.state
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
 
-    LaunchedEffect(state.hasPasswordSet, state.useBiometricUnlock) {
-        if (state.hasPasswordSet == true && state.useBiometricUnlock == true) {
+    LaunchedEffect(state.hasPasswordSet, state.useScreenLockToUnlock) {
+        if (state.hasPasswordSet == true && state.useScreenLockToUnlock == true) {
             val executor = context.mainExecutor
 
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Unlock Password Manager")
-                .setSubtitle("Use your biometric to continue")
+                .setSubtitle("Continue by using the same unlocking method as you would on your lock screen.")
                 .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
                 .build()
 

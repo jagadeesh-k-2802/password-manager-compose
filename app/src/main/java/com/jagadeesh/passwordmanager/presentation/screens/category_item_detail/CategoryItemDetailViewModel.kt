@@ -36,7 +36,7 @@ class CategoryItemDetailViewModel @Inject constructor(
                     id = categoryModel?.id,
                     name = name,
                     color = color,
-                    createdAt = categoryModel?.createdAt
+                    createdAt = System.currentTimeMillis()
                 )
             )
 

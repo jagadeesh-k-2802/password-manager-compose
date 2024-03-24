@@ -14,8 +14,21 @@ interface PasswordDao {
     @RawQuery(observedEntities = [PasswordItemEntity::class])
     fun getAllPasswordEntities(query: SimpleSQLiteQuery): Flow<List<PasswordItemEntity>>
 
-    @Query("SELECT * FROM password_items WHERE id = :id")
-    fun getPasswordEntity(id: Int): Flow<PasswordItemEntity?>
+    @Query(
+        "SELECT password_items.id AS id, " +
+                "password_items.name AS name, " +
+                "password_items.username AS username, " +
+                "password_items.password AS password, " +
+                "password_items.notes AS notes, " +
+                "categories.id AS category_id, " +
+                "categories.name AS category_name, " +
+                "categories.color AS category_color, " +
+                "password_items.created_at AS created_at " +
+                "FROM password_items " +
+                "LEFT JOIN categories ON password_items.category_id = categories.id " +
+                "WHERE password_items.id = :id"
+    )
+    fun getPasswordEntity(id: Int): Flow<PasswordCategory?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPasswordEntity(item: PasswordItemEntity)

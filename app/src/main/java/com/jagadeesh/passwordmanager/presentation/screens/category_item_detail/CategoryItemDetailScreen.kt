@@ -48,6 +48,7 @@ import com.jagadeesh.passwordmanager.constants.colorList
 import com.jagadeesh.passwordmanager.core.parseColor
 import com.jagadeesh.passwordmanager.presentation.screens.edit_password_item.UnsavedChangesDialog
 import com.jagadeesh.passwordmanager.presentation.theme.pagePadding
+import java.text.DateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -154,6 +155,20 @@ fun CategoryItemDetailScreen(
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = if (categoryItem?.createdAt != null) {
+                    DateFormat.getInstance().format(categoryItem?.createdAt ?: 0)
+                } else {
+                    ""
+                },
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Last Updated At") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 

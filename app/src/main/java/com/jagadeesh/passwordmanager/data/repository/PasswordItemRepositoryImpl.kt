@@ -4,6 +4,8 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import com.jagadeesh.passwordmanager.data.local.PasswordDao
 import com.jagadeesh.passwordmanager.data.mappers.toEntity
 import com.jagadeesh.passwordmanager.data.mappers.toModel
+import com.jagadeesh.passwordmanager.data.mappers.toPasswordItemEntity
+import com.jagadeesh.passwordmanager.domain.model.PasswordCategoryModel
 import com.jagadeesh.passwordmanager.domain.model.PasswordItemModel
 import com.jagadeesh.passwordmanager.domain.repository.PasswordItemRepository
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +34,7 @@ class PasswordItemRepositoryImpl(
         }
     }
 
-    override fun getPasswordItem(id: Int): Flow<PasswordItemModel?> {
+    override fun getPasswordItem(id: Int): Flow<PasswordCategoryModel?> {
         return passwordDao.getPasswordEntity(id).map { it?.toModel() }
     }
 
@@ -40,7 +42,7 @@ class PasswordItemRepositoryImpl(
         passwordDao.insertPasswordEntity(item.toEntity())
     }
 
-    override suspend fun deletePasswordItem(item: PasswordItemModel) {
-        passwordDao.deletePasswordEntity(item.toEntity())
+    override suspend fun deletePasswordItem(item: PasswordCategoryModel) {
+        passwordDao.deletePasswordEntity(item.toPasswordItemEntity())
     }
 }

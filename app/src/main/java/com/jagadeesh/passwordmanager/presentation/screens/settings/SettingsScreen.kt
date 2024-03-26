@@ -1,6 +1,10 @@
 package com.jagadeesh.passwordmanager.presentation.screens.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -49,6 +53,27 @@ fun SettingsScreen(
         val manager = BiometricManager.from(context)
         val credentials = BIOMETRIC_STRONG or DEVICE_CREDENTIAL
         manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
+    val importIntent = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            // TODO: Show dialog about data loss and new master password is db's password
+            if (uri != null) viewModel.importData(uri)
+        }
+    }
+
+    val exportIntent = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            if (uri != null) viewModel.exportData(uri) {
+                Toast.makeText(context, "Database Exported Successfully", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     Scaffold(
@@ -102,13 +127,24 @@ fun SettingsScreen(
             ListItem(
                 leadingContent = { Icon(Icons.Filled.Download, null) },
                 headlineContent = { Text("Import Data") },
-                modifier = Modifier.clickable {/* TODO: Import Data */ }
+                modifier = Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    intent.setType("application/*")
+                    importIntent.launch(intent)
+                }
             )
 
             ListItem(
                 leadingContent = { Icon(Icons.Filled.Upload, null) },
                 headlineContent = { Text("Export Data") },
-                modifier = Modifier.clickable {/* TODO: Export Data */ }
+                modifier = Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    intent.setType("application/vnd.sqlite3")
+                    intent.putExtra(Intent.EXTRA_TITLE, "passwords.db")
+                    exportIntent.launch(intent)
+                }
             )
 
             ListItem(

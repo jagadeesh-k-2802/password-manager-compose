@@ -18,6 +18,6 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(item: CategoryEntity)
 
-    @Delete(entity = CategoryEntity::class)
+    @Delete
     suspend fun deleteCategory(item: CategoryEntity)
 }

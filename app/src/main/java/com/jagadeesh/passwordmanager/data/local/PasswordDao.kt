@@ -41,6 +41,10 @@ interface PasswordDao {
         executeQuery(SimpleSQLiteQuery("PRAGMA rekey = '$newPassword'"))
     }
 
-    @Delete(entity = PasswordItemEntity::class)
+    suspend fun checkpoint() {
+        executeQuery(SimpleSQLiteQuery("PRAGMA wal_checkpoint"))
+    }
+
+    @Delete
     suspend fun deletePasswordEntity(item: PasswordItemEntity)
 }

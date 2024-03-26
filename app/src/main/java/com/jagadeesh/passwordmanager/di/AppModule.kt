@@ -12,11 +12,13 @@ import com.jagadeesh.passwordmanager.data.local.PasswordDao
 import com.jagadeesh.passwordmanager.data.local.PasswordDatabase
 import com.jagadeesh.passwordmanager.data.models.UserSettings
 import com.jagadeesh.passwordmanager.data.repository.CategoryRepositoryImpl
+import com.jagadeesh.passwordmanager.data.repository.DatabaseManagerRepositoryImpl
 import com.jagadeesh.passwordmanager.data.repository.PassphraseRepositoryImpl
 import com.jagadeesh.passwordmanager.data.repository.PasswordItemRepositoryImpl
 import com.jagadeesh.passwordmanager.data.repository.UserPreferencesRepositoryImpl
 import com.jagadeesh.passwordmanager.data.serializers.UserSettingsSerializer
 import com.jagadeesh.passwordmanager.domain.repository.CategoryRepository
+import com.jagadeesh.passwordmanager.domain.repository.DatabaseManagerRepository
 import com.jagadeesh.passwordmanager.domain.repository.PassphraseRepository
 import com.jagadeesh.passwordmanager.domain.repository.PasswordItemRepository
 import com.jagadeesh.passwordmanager.domain.repository.UserPreferencesRepository
@@ -49,18 +51,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePassphraseRepository(
-        passwordDao: PasswordDao,
-        dataStore: DataStore<UserSettings>
-    ): PassphraseRepository {
-        return PassphraseRepositoryImpl(
-            passwordDao = passwordDao,
-            dataStore = dataStore
-        )
-    }
-
-    @Provides
-    @Singleton
     fun providePasswordItemRepository(
         passwordDao: PasswordDao
     ): PasswordItemRepository {
@@ -76,6 +66,30 @@ object AppModule {
     ): CategoryRepository {
         return CategoryRepositoryImpl(
             categoryDao = categoryDao
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providePassphraseRepository(
+        passwordDao: PasswordDao,
+        dataStore: DataStore<UserSettings>
+    ): PassphraseRepository {
+        return PassphraseRepositoryImpl(
+            passwordDao = passwordDao,
+            dataStore = dataStore
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabaseManagerRepository(
+        @ApplicationContext appContext: Context,
+        passwordDao: PasswordDao
+    ): DatabaseManagerRepository {
+        return DatabaseManagerRepositoryImpl(
+            appContext = appContext,
+            passwordDao = passwordDao
         )
     }
 

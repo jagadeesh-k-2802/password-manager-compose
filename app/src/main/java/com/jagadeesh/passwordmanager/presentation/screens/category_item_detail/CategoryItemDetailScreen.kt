@@ -1,5 +1,6 @@
 package com.jagadeesh.passwordmanager.presentation.screens.category_item_detail
 
+import android.text.format.DateFormat
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -40,7 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -48,7 +52,9 @@ import com.jagadeesh.passwordmanager.constants.colorList
 import com.jagadeesh.passwordmanager.core.parseColor
 import com.jagadeesh.passwordmanager.presentation.screens.edit_password_item.UnsavedChangesDialog
 import com.jagadeesh.passwordmanager.presentation.theme.pagePadding
-import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +67,7 @@ fun CategoryItemDetailScreen(
     var color by rememberSaveable(categoryItem) { mutableStateOf(categoryItem?.color ?: "") }
     var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
     var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val dispatcher = backDispatcher.onBackPressedDispatcher
@@ -124,7 +131,8 @@ fun CategoryItemDetailScreen(
                 value = name,
                 onValueChange = { value -> name = value },
                 label = { Text("Name") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -160,7 +168,10 @@ fun CategoryItemDetailScreen(
 
             OutlinedTextField(
                 value = if (categoryItem?.createdAt != null) {
-                    DateFormat.getInstance().format(categoryItem?.createdAt ?: 0)
+                    val is24Hours = DateFormat.is24HourFormat(context)
+                    val hours = if (is24Hours) "HH" else "hh"
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy $hours:mm", Locale.ENGLISH)
+                    dateFormat.format(Date(categoryItem?.createdAt!!))
                 } else {
                     ""
                 },

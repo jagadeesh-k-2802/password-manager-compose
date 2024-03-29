@@ -85,11 +85,13 @@ object AppModule {
     @Singleton
     fun provideDatabaseManagerRepository(
         @ApplicationContext appContext: Context,
-        passwordDao: PasswordDao
+        passwordDao: PasswordDao,
+        passphraseRepository: PassphraseRepository
     ): DatabaseManagerRepository {
         return DatabaseManagerRepositoryImpl(
             appContext = appContext,
-            passwordDao = passwordDao
+            passwordDao = passwordDao,
+            passphraseRepository = passphraseRepository
         )
     }
 

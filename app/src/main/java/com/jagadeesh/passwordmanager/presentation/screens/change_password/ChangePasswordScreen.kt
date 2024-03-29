@@ -143,8 +143,8 @@ fun ChangePasswordScreen(
                 onClick = {
                     viewModel.updatePassword(currentPassword, newPassword) {
                         scope.launch {
-                            snackbarHostState.showSnackbar("Password Changed Successfully")
                             navController.popBackStack()
+                            snackbarHostState.showSnackbar("Password Changed Successfully")
                         }
                     }
                 }

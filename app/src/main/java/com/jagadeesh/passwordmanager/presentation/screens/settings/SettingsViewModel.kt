@@ -41,9 +41,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun importData(uri: Uri) {
+    fun importData(uri: Uri, password: String, onFinish: (Boolean) -> Unit) {
         viewModelScope.launch {
-            databaseManagerRepository.importData(uri.toString())
+            val isDone = databaseManagerRepository.importData(uri.toString(), password)
+            onFinish(isDone)
         }
     }
 

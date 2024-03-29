@@ -45,12 +45,11 @@ fun generateRandomPassword(
     }
 }
 
-fun copyToClipboard(context: Context, text: String?, label: String = "Text"): Boolean {
+fun copyToClipboard(context: Context, text: String?, label: String = "Text") {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clipData)
     Toast.makeText(context, "Copied to Clipboard", Toast.LENGTH_SHORT).show()
-    return true
 }
 
 fun <T> debounce(

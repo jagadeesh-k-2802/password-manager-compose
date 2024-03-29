@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jagadeesh.passwordmanager.presentation.navigation.Routes
@@ -48,7 +49,7 @@ fun BottomNavigationBar(navController: NavController) {
             NavigationBarItem(
                 selected = currentRoute?.equals(Routes.PasswordGenerator.route) == true,
                 onClick = { navController.navigateWithState(Routes.PasswordGenerator) },
-                label = { Text("Password Generator") },
+                label = { Text("Pass Gen", softWrap = true, textAlign = TextAlign.Center) },
                 icon = {
                     Icon(
                         Icons.Filled.Security,

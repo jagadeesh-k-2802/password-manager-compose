@@ -2,8 +2,6 @@ package com.jagadeesh.passwordmanager.presentation.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -51,11 +49,7 @@ fun Router(
                 HomeScreen(navController)
             }
 
-            composable(
-                route = Routes.AddPasswordItem.route,
-                enterTransition = { slideInVertically(initialOffsetY = { it / 2 }) },
-                exitTransition = { slideOutVertically(targetOffsetY = { it / 2 }) },
-            ) {
+            composable(route = Routes.AddPasswordItem.route) {
                 AddPasswordItemScreen(navController)
             }
 
@@ -83,11 +77,7 @@ fun Router(
                 ManageCategoriesScreen(navController)
             }
 
-            composable(
-                route = Routes.AddCategoryItem.route,
-                enterTransition = { slideInVertically(initialOffsetY = { it / 2 }) },
-                exitTransition = { slideOutVertically(targetOffsetY = { it / 2 }) },
-            ) {
+            composable(Routes.AddCategoryItem.route) {
                 AddCategoryItemScreen(navController)
             }
 

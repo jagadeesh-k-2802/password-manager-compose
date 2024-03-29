@@ -1,5 +1,6 @@
 package com.jagadeesh.passwordmanager.presentation.screens.password_item_detail
 
+import android.text.format.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +46,9 @@ import com.jagadeesh.passwordmanager.core.copyToClipboard
 import com.jagadeesh.passwordmanager.core.parseColor
 import com.jagadeesh.passwordmanager.presentation.navigation.Routes
 import com.jagadeesh.passwordmanager.presentation.theme.pagePadding
-import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -210,7 +213,10 @@ fun PasswordItemDetailScreen(
 
             OutlinedTextField(
                 value = if (passwordItem?.createdAt != null) {
-                    DateFormat.getInstance().format(passwordItem?.createdAt ?: 0)
+                    val is24Hours = DateFormat.is24HourFormat(context)
+                    val hours = if (is24Hours) "HH" else "hh"
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy $hours:mm", Locale.ENGLISH)
+                    dateFormat.format(Date(passwordItem?.createdAt!!))
                 } else {
                     ""
                 },

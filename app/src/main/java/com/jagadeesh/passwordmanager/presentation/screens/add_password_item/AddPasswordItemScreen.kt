@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -99,6 +100,7 @@ fun AddPasswordItemScreen(
                 },
                 label = { Text("Name") },
                 modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
 
             OutlinedTextField(
@@ -145,7 +147,8 @@ fun AddPasswordItemScreen(
                 onValueChange = { value -> notes = value },
                 label = { Text("Notes") },
                 modifier = Modifier.fillMaxWidth(),
-                maxLines = 5
+                maxLines = 5,
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
 
             Spacer(modifier = Modifier.height(20.dp))

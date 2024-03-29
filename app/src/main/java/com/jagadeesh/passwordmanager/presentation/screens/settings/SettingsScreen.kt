@@ -2,6 +2,7 @@ package com.jagadeesh.passwordmanager.presentation.screens.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,7 +31,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
@@ -47,6 +52,9 @@ fun SettingsScreen(
 ) {
     val scrollState = rememberScrollState()
     val state = viewModel.state
+    var isImportDatabaseDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var importFileUri by remember { mutableStateOf<Uri?>(null) }
+    var isInvalidPassword by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
     val isScreenLockAvailable = remember {
@@ -59,9 +67,8 @@ fun SettingsScreen(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.data
-            // TODO: Show dialog about data loss and new master password is db's password
-            if (uri != null) viewModel.importData(uri)
+            importFileUri = result.data?.data
+            isImportDatabaseDialogVisible = true
         }
     }
 
@@ -75,6 +82,16 @@ fun SettingsScreen(
             }
         }
     }
+
+    if (isImportDatabaseDialogVisible) ImportDatabaseDialog(
+        isInvalidPassword = isInvalidPassword,
+        onConfirm = { password ->
+            if (importFileUri != null) viewModel.importData(importFileUri!!, password) { isDone ->
+                if (!isDone) isInvalidPassword = true
+            }
+        },
+        onDismiss = { isImportDatabaseDialogVisible = false }
+    )
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("Settings") }) }

@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jagadeesh.passwordmanager"
+    namespace = "com.jackappsdev.password_manager"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jagadeesh.passwordmanager"
+        applicationId = "com.jackappsdev.password_manager"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

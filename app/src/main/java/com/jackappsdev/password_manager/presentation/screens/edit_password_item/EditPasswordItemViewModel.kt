@@ -23,22 +23,6 @@ class EditPasswordItemViewModel @Inject constructor(
     val passwordItem = passwordItemRepository.getPasswordItem(id.toInt())
     val categoryItems = categoryRepository.getAllCategories()
 
-    fun hasChanges(
-        name: String,
-        username: String,
-        password: String,
-        notes: String,
-        categoryId: Int?,
-        passwordCategoryModel: PasswordCategoryModel?
-    ): Boolean {
-        if (name != passwordCategoryModel?.name) return true
-        if (username != passwordCategoryModel.username) return true
-        if (password != passwordCategoryModel.password) return true
-        if (notes != passwordCategoryModel.notes) return true
-        if (categoryId != passwordCategoryModel.categoryId) return true
-        return false
-    }
-
     fun onEditComplete(
         name: String,
         username: String,

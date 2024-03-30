@@ -66,6 +66,7 @@ fun EditPasswordItemScreen(
     var username by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.username ?: "") }
     var password by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.password ?: "") }
     var notes by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.notes ?: "") }
+    var isChanged by rememberSaveable { mutableStateOf(false) }
 
     var category by remember(passwordItem) {
         mutableStateOf(
@@ -84,18 +85,10 @@ fun EditPasswordItemScreen(
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val dispatcher = backDispatcher.onBackPressedDispatcher
 
-    val backCallback = remember(name, username, password, notes, passwordItem) {
+    val backCallback = remember(name, username, password, notes, category, passwordItem) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.hasChanges(
-                        name,
-                        username,
-                        password,
-                        notes,
-                        category.id,
-                        passwordItem
-                    )
-                ) {
+                if (isChanged) {
                     isUnsavedChangesDialogVisible = true
                 } else {
                     navController.popBackStack()
@@ -134,7 +127,10 @@ fun EditPasswordItemScreen(
         ) {
             OutlinedTextField(
                 value = name,
-                onValueChange = { value -> name = value },
+                onValueChange = { value ->
+                    name = value
+                    isChanged = true
+                },
                 label = { Text("Name") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
@@ -144,7 +140,10 @@ fun EditPasswordItemScreen(
 
             OutlinedTextField(
                 value = username,
-                onValueChange = { value -> username = value },
+                onValueChange = { value ->
+                    username = value
+                    isChanged = true
+                },
                 label = { Text("Username") },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -153,7 +152,10 @@ fun EditPasswordItemScreen(
 
             OutlinedTextField(
                 value = password,
-                onValueChange = { value -> password = value },
+                onValueChange = { value ->
+                    password = value
+                    isChanged = true
+                },
                 label = { Text("Password") },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
@@ -179,7 +181,10 @@ fun EditPasswordItemScreen(
 
             OutlinedTextField(
                 value = notes,
-                onValueChange = { value -> notes = value },
+                onValueChange = { value ->
+                    notes = value
+                    isChanged = true
+                },
                 label = { Text("Notes") },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
@@ -226,6 +231,7 @@ fun EditPasswordItemScreen(
                         text = { Text(text = "No Category") },
                         onClick = {
                             category = CategoryModel(name = "No Category", color = "")
+                            isChanged = true
                             isCategoryDropdownVisible = false
                         }
                     )
@@ -243,6 +249,7 @@ fun EditPasswordItemScreen(
                             text = { Text(text = item.name) },
                             onClick = {
                                 category = item
+                                isChanged = true
                                 isCategoryDropdownVisible = false
                             }
                         )

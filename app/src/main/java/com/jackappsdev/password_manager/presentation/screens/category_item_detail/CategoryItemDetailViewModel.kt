@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,13 +16,7 @@ class CategoryItemDetailViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository
 ) : ViewModel() {
     private val id: String = checkNotNull(savedStateHandle["id"])
-    val categoryItem = categoryRepository.getCategoryItem(id.toInt())
-
-    fun hasChanges(name: String, color: String, categoryItem: CategoryModel?): Boolean {
-        if (name != categoryItem?.name) return true
-        if (color != categoryItem.color) return true
-        return false
-    }
+    val categoryItem = categoryRepository.getCategoryItem(id.toInt()).filterNotNull()
 
     fun onEditComplete(
         name: String,

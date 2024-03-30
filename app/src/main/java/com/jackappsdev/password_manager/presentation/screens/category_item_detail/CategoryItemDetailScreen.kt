@@ -65,6 +65,7 @@ fun CategoryItemDetailScreen(
     val categoryItem by viewModel.categoryItem.collectAsState(initial = null)
     var name by rememberSaveable(categoryItem) { mutableStateOf(categoryItem?.name ?: "") }
     var color by rememberSaveable(categoryItem) { mutableStateOf(categoryItem?.color ?: "") }
+    var isChanged by rememberSaveable { mutableStateOf(false) }
     var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
     var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
@@ -75,7 +76,7 @@ fun CategoryItemDetailScreen(
     val backCallback = remember(name, color, categoryItem) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.hasChanges(name, color, categoryItem)) {
+                if (isChanged) {
                     isUnsavedChangesDialogVisible = true
                 } else {
                     navController.popBackStack()
@@ -129,7 +130,10 @@ fun CategoryItemDetailScreen(
         ) {
             OutlinedTextField(
                 value = name,
-                onValueChange = { value -> name = value },
+                onValueChange = { value ->
+                    name = value
+                    isChanged = true
+                },
                 label = { Text("Name") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
@@ -147,7 +151,10 @@ fun CategoryItemDetailScreen(
                             .clip(CircleShape)
                             .background(parseColor(item))
                             .size(64.dp)
-                            .clickable { color = item }
+                            .clickable {
+                                color = item
+                                isChanged = true
+                            }
                     ) {
                         if (color == item) Icon(
                             imageVector = Icons.Filled.Done,

@@ -197,7 +197,7 @@ fun SettingsScreen(
 
             ListItem(
                 leadingContent = { Icon(Icons.Filled.Numbers, null) },
-                headlineContent = { Text("App Version: 1.0.0") },
+                headlineContent = { Text("App Version: 1.0.1") },
                 modifier = Modifier.clickable {}
             )
         }

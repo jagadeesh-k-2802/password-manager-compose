@@ -1,6 +1,6 @@
 # Offline Password Manager 🔑
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/01014942-db1e-4f22-a5e2-1b53a8752a2d" width="750" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/7a3b7444-2f33-4891-b5ee-350e219f15fa" width="750" />
 
 ## Technologies ⚙️
 
@@ -25,13 +25,11 @@
 
 ## Screenshots 📷
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/c6066462-5de1-46a5-955e-bc51c1bc32e1" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/645f5c1a-bf9a-40a0-bd84-41b2459fafe7" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/1c945f8b-842d-45a4-92a4-d25542693e7e" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/c73b4806-9a9e-48dd-b24c-733ab0484895" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/f1fdce5e-3374-4c5b-8c47-4fbdb7cc376e" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/c09bd291-7f3a-41da-bbe2-70e2a55ae927" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/db5fe12c-0773-496c-a38f-39a38b96f21b" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/d466833a-b073-4114-acb0-b98ec066ec97" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/ef2fe289-7884-4007-961d-e0a6dbb40a53" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/5bccd082-1181-459f-a684-ad91cd72a77b" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/8198d283-1dca-4ee2-a0b2-cae1a72f1508" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/d43f2911-75c9-4cb9-81d9-00e3c3a8ebfa" width="250" />
 
 ## Links 🔗
 

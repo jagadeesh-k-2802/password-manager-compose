@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ImportDatabaseDialog(
+fun ImportPasswordsDialog(
     isInvalidPassword: Boolean,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit
@@ -36,7 +36,7 @@ fun ImportDatabaseDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Import Data") },
+        title = { Text(text = "Import Passwords") },
         text = {
             Column {
                 OutlinedTextField(
@@ -48,9 +48,9 @@ fun ImportDatabaseDialog(
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
                                 if (showPassword) {
-                                    Icons.Filled.VisibilityOff
+                                    Icons.Outlined.VisibilityOff
                                 } else {
-                                    Icons.Filled.Visibility
+                                    Icons.Outlined.Visibility
                                 },
                                 contentDescription = "Toggle Password"
                             )
@@ -70,7 +70,7 @@ fun ImportDatabaseDialog(
 
                 Spacer(modifier = Modifier.height(14.dp))
                 Text(
-                    "WARNING: Importing new data will remove all of your existing passwords" +
+                    "Importing new passwords will remove all of your existing passwords" +
                             " thereafter, you must use this password to unlock this app."
                 )
             }

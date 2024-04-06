@@ -12,16 +12,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -112,12 +113,12 @@ fun CategoryItemDetailScreen(
                 title = { Text("Edit Category") },
                 navigationIcon = {
                     IconButton(onClick = { backCallback.handleOnBackPressed() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
                     }
                 },
                 actions = {
                     IconButton(onClick = { isDeleteDialogVisible = true }) {
-                        Icon(Icons.Filled.Delete, "Delete item")
+                        Icon(Icons.Outlined.Delete, "Delete item")
                     }
                 }
             )
@@ -157,7 +158,7 @@ fun CategoryItemDetailScreen(
                             }
                     ) {
                         if (color == item) Icon(
-                            imageVector = Icons.Filled.Done,
+                            imageVector = Icons.Outlined.Done,
                             tint = Color.Black,
                             contentDescription = "Selected color",
                             modifier = Modifier
@@ -198,8 +199,8 @@ fun CategoryItemDetailScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Filled.Done, "Confirm")
-                Spacer(modifier = Modifier.width(4.dp))
+                Icon(Icons.Rounded.Done, "Confirm")
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Confirm")
             }
         }

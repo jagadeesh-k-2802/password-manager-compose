@@ -9,15 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,7 +61,7 @@ fun AddCategoryItemScreen(
                 title = { Text("Add New Category") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
                     }
                 }
             )
@@ -101,7 +101,7 @@ fun AddCategoryItemScreen(
                             .clickable { color = item }
                     ) {
                         if (color == item) Icon(
-                            imageVector = Icons.Filled.Done,
+                            imageVector = Icons.Outlined.Done,
                             tint = Color.Black,
                             contentDescription = "Selected color",
                             modifier = Modifier
@@ -125,8 +125,8 @@ fun AddCategoryItemScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Filled.Done, "Create")
-                Spacer(modifier = Modifier.width(4.dp))
+                Icon(Icons.Outlined.Done, "Create")
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Create")
             }
         }

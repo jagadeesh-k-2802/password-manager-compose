@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.home
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,12 +12,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Sort
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.automirrored.outlined.Sort
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,6 +60,7 @@ fun HomeScreen(
     val filterBySheetState = rememberModalBottomSheetState()
     val sortBySheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val state = viewModel.state
     val keyboardController = LocalSoftwareKeyboardController.current
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -85,21 +89,29 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {
+                        Toast.makeText(context, "App Locked", Toast.LENGTH_SHORT).show()
+                        viewModel.lockApplication()
+                    }) {
+                        Icon(Icons.Outlined.Lock, contentDescription = "Lock Application")
+                    }
+                },
                 title = { Text("Passwords") },
                 actions = {
                     IconButton(onClick = { scope.launch { filterBySheetState.show() } }) {
-                        Icon(Icons.Filled.FilterAlt, contentDescription = "Filter")
+                        Icon(Icons.Outlined.FilterAlt, contentDescription = "Filter")
                     }
 
                     IconButton(onClick = { scope.launch { sortBySheetState.show() } }) {
-                        Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
+                        Icon(Icons.AutoMirrored.Outlined.Sort, contentDescription = "Sort")
                     }
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate(Routes.AddPasswordItem) }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add new item")
+                Icon(imageVector = Icons.Sharp.Add, contentDescription = "Add new item")
             }
         }
     ) { contentPadding ->
@@ -153,7 +165,7 @@ fun HomeScreen(
                         placeholder = { Text("Search") },
                         leadingIcon = {
                             Icon(
-                                imageVector = Icons.Filled.Search,
+                                imageVector = Icons.Outlined.Search,
                                 contentDescription = "Search"
                             )
                         },
@@ -165,7 +177,7 @@ fun HomeScreen(
                                     keyboardController?.hide()
                                     viewModel.searchItems(searchQuery)
                                 }) {
-                                    Icon(Icons.Filled.Clear, "Clear search")
+                                    Icon(Icons.Outlined.Clear, "Clear search")
                                 }
                             }
                         }
@@ -205,7 +217,11 @@ fun HomeScreen(
                     passwordItems?.let {
                         items(it.value) { item ->
                             PasswordItem(item) {
-                                navController.navigate(Routes.PasswordItemDetail.getPath(item.id ?: 0))
+                                navController.navigate(
+                                    Routes.PasswordItemDetail.getPath(
+                                        item.id ?: 0
+                                    )
+                                )
                             }
                         }
                     }

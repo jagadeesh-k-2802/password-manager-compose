@@ -11,8 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Block
-import androidx.compose.material.icons.filled.SelectAll
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -52,7 +52,7 @@ fun FilterByCategoryModalSheet(
         LazyColumn {
             item {
                 ListItem(
-                    leadingContent = { Icon(Icons.Filled.SelectAll, "All Items") },
+                    leadingContent = { Icon(Icons.Outlined.SelectAll, "All Items") },
                     headlineContent = { Text("All") },
                     modifier = Modifier.clickable { onValueChoose(FilterBy.All) }
                 )
@@ -60,7 +60,7 @@ fun FilterByCategoryModalSheet(
 
             item {
                 ListItem(
-                    leadingContent = { Icon(Icons.Filled.Block, "No Category Items") },
+                    leadingContent = { Icon(Icons.Outlined.Block, "No Category Items") },
                     headlineContent = { Text("No Category Items") },
                     modifier = Modifier.clickable { onValueChoose(FilterBy.NoCategoryItems) }
                 )

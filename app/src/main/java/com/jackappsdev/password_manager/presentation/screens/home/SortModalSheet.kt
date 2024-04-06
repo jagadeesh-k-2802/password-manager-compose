@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.SortByAlpha
+import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.SortByAlpha
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -41,7 +41,7 @@ fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
             modifier = Modifier.clickable { onValueSet(SortBy.ALPHABET_ASCENDING) },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Filled.SortByAlpha,
+                    imageVector = Icons.Outlined.SortByAlpha,
                     contentDescription = "Sort by ascending alphabet"
                 )
             }
@@ -52,7 +52,7 @@ fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
             modifier = Modifier.clickable { onValueSet(SortBy.ALPHABET_DESCENDING) },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Filled.SortByAlpha,
+                    imageVector = Icons.Outlined.SortByAlpha,
                     contentDescription = "Sort by descending alphabet"
                 )
             }
@@ -63,7 +63,7 @@ fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
             modifier = Modifier.clickable { onValueSet(SortBy.NEWEST) },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Filled.AccessTime,
+                    imageVector = Icons.Outlined.AccessTime,
                     contentDescription = "Sort by newest"
                 )
             }
@@ -74,7 +74,7 @@ fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
             modifier = Modifier.clickable { onValueSet(SortBy.OLDEST) },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Filled.AccessTime,
+                    imageVector = Icons.Outlined.AccessTime,
                     contentDescription = "Sort by oldest"
                 )
             }

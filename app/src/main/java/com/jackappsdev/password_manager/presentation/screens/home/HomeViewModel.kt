@@ -85,4 +85,8 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun lockApplication() {
+        Runtime.getRuntime().exit(0)
+    }
 }

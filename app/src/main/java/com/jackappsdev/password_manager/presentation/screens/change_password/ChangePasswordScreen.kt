@@ -5,15 +5,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,7 +61,7 @@ fun ChangePasswordScreen(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
 
                     }
                 },
@@ -95,9 +96,9 @@ fun ChangePasswordScreen(
                     IconButton(onClick = { showPassword = !showPassword }) {
                         Icon(
                             if (showPassword) {
-                                Icons.Filled.VisibilityOff
+                                Icons.Outlined.VisibilityOff
                             } else {
-                                Icons.Filled.Visibility
+                                Icons.Outlined.Visibility
                             },
                             contentDescription = "Toggle Password"
                         )
@@ -149,8 +150,8 @@ fun ChangePasswordScreen(
                     }
                 }
             ) {
-                Icon(Icons.Filled.Done, "Confirm")
-                Spacer(modifier = Modifier.width(4.dp))
+                Icon(Icons.Outlined.Done, "Confirm")
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Confirm")
             }
         }

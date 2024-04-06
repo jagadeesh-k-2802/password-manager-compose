@@ -10,17 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Block
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -113,7 +113,7 @@ fun EditPasswordItemScreen(
                 title = { Text("Edit Item") },
                 navigationIcon = {
                     IconButton(onClick = { backCallback.handleOnBackPressed() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
                     }
                 }
             )
@@ -162,9 +162,9 @@ fun EditPasswordItemScreen(
                     IconButton(onClick = { showPassword = !showPassword }) {
                         Icon(
                             if (showPassword) {
-                                Icons.Filled.VisibilityOff
+                                Icons.Outlined.VisibilityOff
                             } else {
-                                Icons.Filled.Visibility
+                                Icons.Outlined.Visibility
                             },
                             contentDescription = "Toggle Password"
                         )
@@ -200,7 +200,7 @@ fun EditPasswordItemScreen(
                 OutlinedTextField(
                     leadingIcon = {
                         if (category.id == null) {
-                            Icon(Icons.Filled.Block, null)
+                            Icon(Icons.Outlined.Block, null)
                         } else {
                             Box(
                                 modifier = Modifier
@@ -227,7 +227,7 @@ fun EditPasswordItemScreen(
                     onDismissRequest = { isCategoryDropdownVisible = false },
                 ) {
                     DropdownMenuItem(
-                        leadingIcon = { Icon(Icons.Filled.Block, "No category") },
+                        leadingIcon = { Icon(Icons.Outlined.Block, "No category") },
                         text = { Text(text = "No Category") },
                         onClick = {
                             category = CategoryModel(name = "No Category", color = "")
@@ -256,7 +256,7 @@ fun EditPasswordItemScreen(
                     }
 
                     DropdownMenuItem(
-                        leadingIcon = { Icon(Icons.Filled.Add, "Add category") },
+                        leadingIcon = { Icon(Icons.Outlined.Add, "Add category") },
                         text = { Text(text = "Create New Category") },
                         onClick = {
                             navController.navigate(Routes.AddCategoryItem)
@@ -283,8 +283,8 @@ fun EditPasswordItemScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Filled.Done, "Confirm Edit")
-                Spacer(modifier = Modifier.width(4.dp))
+                Icon(Icons.Outlined.Done, "Confirm Edit")
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Confirm")
             }
         }

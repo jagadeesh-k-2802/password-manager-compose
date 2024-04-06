@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,7 +45,7 @@ fun ManageCategoriesScreen(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
                     }
                 },
                 title = { Text("Categories") }
@@ -53,7 +53,7 @@ fun ManageCategoriesScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate(Routes.AddCategoryItem) }) {
-                Icon(Icons.Filled.Add, "Add category")
+                Icon(Icons.Rounded.Add, "Add category")
             }
         }
     ) { contentPadding ->

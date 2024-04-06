@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_generator
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,8 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,10 +30,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.generateRandomPassword
+import com.jackappsdev.password_manager.core.parseColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,11 +88,25 @@ fun PasswordGeneratorScreen() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            when (lengthValue) {
-                                in (1..6) -> "Weak"
-                                in (6..16) -> "Medium"
+                            text = when (lengthValue) {
+                                in (1..8) -> "Weak"
+                                in (8..12) -> "Medium"
                                 else -> "Strong"
-                            }
+                            },
+                            color = if (isSystemInDarkTheme()) {
+                                when (lengthValue) {
+                                    in (1..8) -> parseColor("#FF8C69")
+                                    in (8..12) -> parseColor("#FFD700")
+                                    else -> parseColor("#32CD32")
+                                }
+                            } else {
+                                when (lengthValue) {
+                                    in (1..8) -> parseColor("#A61B11")
+                                    in (8..12) -> parseColor("#D1A000")
+                                    else -> parseColor("#3D9050")
+                                }
+                            },
+                            fontWeight = FontWeight.SemiBold
                         )
 
                         Row {
@@ -103,14 +120,14 @@ fun PasswordGeneratorScreen() {
                                 )
                             }) {
                                 Icon(
-                                    Icons.Filled.Refresh,
+                                    Icons.Outlined.Refresh,
                                     contentDescription = "Generate again"
                                 )
                             }
 
                             IconButton(onClick = { copyToClipboard(context, generatedPassword) }) {
                                 Icon(
-                                    Icons.Filled.ContentCopy,
+                                    Icons.Outlined.ContentCopy,
                                     contentDescription = "Copy password"
                                 )
                             }

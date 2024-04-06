@@ -1,14 +1,18 @@
 package com.jackappsdev.password_manager.presentation.screens.settings
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings.ACTION_BIOMETRIC_ENROLL
+import android.provider.Settings.ACTION_SECURITY_SETTINGS
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -17,14 +21,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Category
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.LockOpen
-import androidx.compose.material.icons.filled.Numbers
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.LockOpen
+import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,6 +50,7 @@ import androidx.navigation.NavController
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 
+@SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -54,14 +59,14 @@ fun SettingsScreen(
 ) {
     val scrollState = rememberScrollState()
     val state = viewModel.state
-    var isImportDatabaseDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var isImportPasswordsDialogVisible by rememberSaveable { mutableStateOf(false) }
     var importFileUri by remember { mutableStateOf<Uri?>(null) }
     var isInvalidPassword by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
     val isScreenLockAvailable = remember {
         val manager = BiometricManager.from(context)
-        val credentials = BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+        val credentials = BIOMETRIC_WEAK or BIOMETRIC_STRONG or DEVICE_CREDENTIAL
         manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
     }
 
@@ -71,7 +76,7 @@ fun SettingsScreen(
         if (result.resultCode == Activity.RESULT_OK) {
             val uri = result.data?.data
             importFileUri = uri
-            isImportDatabaseDialogVisible = true
+            isImportPasswordsDialogVisible = true
         }
     }
 
@@ -82,20 +87,42 @@ fun SettingsScreen(
             val uri = result.data?.data
 
             if (uri != null) viewModel.exportData(uri) {
-                Toast.makeText(context, "Database Exported Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Passwords Exported Successfully", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    if (isImportDatabaseDialogVisible) ImportDatabaseDialog(
+    if (isImportPasswordsDialogVisible) ImportPasswordsDialog(
         isInvalidPassword = isInvalidPassword,
         onConfirm = { password ->
             if (importFileUri != null) viewModel.importData(importFileUri!!, password) { isDone ->
                 if (!isDone) isInvalidPassword = true
             }
         },
-        onDismiss = { isImportDatabaseDialogVisible = false }
+        onDismiss = { isImportPasswordsDialogVisible = false }
     )
+
+    val onNoLockScreen = remember {
+        {
+            Toast
+                .makeText(
+                    context,
+                    "Please, Setup your device lock screen first.",
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+
+            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Intent(ACTION_BIOMETRIC_ENROLL)
+            } else {
+                Intent(ACTION_SECURITY_SETTINGS)
+            }
+
+            if (intent.resolveActivity(context.packageManager) != null) {
+                context.startActivity(intent)
+            }
+        }
+    }
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("Settings") }) }
@@ -106,21 +133,21 @@ fun SettingsScreen(
                 .scrollable(scrollState, Orientation.Vertical)
         ) {
             ListItem(
-                leadingContent = { Icon(Icons.Filled.Lock, null) },
-                trailingContent = { Icon(Icons.Filled.ChevronRight, null) },
+                leadingContent = { Icon(Icons.Outlined.Lock, null) },
+                trailingContent = { Icon(Icons.Outlined.ChevronRight, null) },
                 headlineContent = { Text("Change Lock Password") },
                 modifier = Modifier.clickable { navController.navigate(Routes.ChangePassword) }
             )
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.Category, null) },
-                trailingContent = { Icon(Icons.Filled.ChevronRight, null) },
+                leadingContent = { Icon(Icons.Outlined.Category, null) },
+                trailingContent = { Icon(Icons.Outlined.ChevronRight, null) },
                 headlineContent = { Text("Manage Categories") },
                 modifier = Modifier.clickable { navController.navigate(Routes.ManageCategories) }
             )
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.LockOpen, null) },
+                leadingContent = { Icon(Icons.Outlined.LockOpen, null) },
                 headlineContent = { Text("Use Screen Lock to Unlock") },
                 trailingContent = {
                     Switch(
@@ -129,13 +156,7 @@ fun SettingsScreen(
                             if (isScreenLockAvailable) {
                                 viewModel.setBiometricUnlock(value)
                             } else {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "Please, Setup your device lock screen first.",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
+                                onNoLockScreen()
                             }
                         }
                     )
@@ -145,20 +166,14 @@ fun SettingsScreen(
                         if (isScreenLockAvailable) {
                             viewModel.setBiometricUnlock(state.useScreenLockToUnlock != true)
                         } else {
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Please, Setup your device lock screen first.",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
+                            onNoLockScreen()
                         }
                     }
                     .alpha(if (isScreenLockAvailable) 1f else 0.5f)
             )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ListItem(
-                leadingContent = { Icon(Icons.Filled.Palette, null) },
+                leadingContent = { Icon(Icons.Outlined.Palette, null) },
                 headlineContent = { Text("Dynamic Colors") },
                 trailingContent = {
                     Switch(
@@ -173,8 +188,8 @@ fun SettingsScreen(
             )
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.Download, null) },
-                headlineContent = { Text("Import Data") },
+                leadingContent = { Icon(Icons.Outlined.Download, null) },
+                headlineContent = { Text("Import Passwords") },
                 modifier = Modifier.clickable {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -184,8 +199,8 @@ fun SettingsScreen(
             )
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.Upload, null) },
-                headlineContent = { Text("Export Data") },
+                leadingContent = { Icon(Icons.Outlined.Upload, null) },
+                headlineContent = { Text("Export Passwords") },
                 modifier = Modifier.clickable {
                     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -196,8 +211,8 @@ fun SettingsScreen(
             )
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.Numbers, null) },
-                headlineContent = { Text("App Version: 1.0.1") },
+                leadingContent = { Icon(Icons.Outlined.Numbers, null) },
+                headlineContent = { Text("App Version: 1.1.1") },
                 modifier = Modifier.clickable {}
             )
         }

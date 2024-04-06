@@ -1,9 +1,12 @@
 package com.jackappsdev.password_manager.presentation.composables
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.VpnKey
+import androidx.compose.material.icons.sharp.Home
+import androidx.compose.material.icons.sharp.Settings
+import androidx.compose.material.icons.sharp.VpnKey
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -39,10 +42,17 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = { navController.navigateWithState(Routes.Home) },
                 label = { Text("Home") },
                 icon = {
-                    Icon(
-                        Icons.Filled.Home,
-                        contentDescription = "Home Screen"
-                    )
+                    if (currentRoute?.equals(Routes.Home.route) == true) {
+                        Icon(
+                            Icons.Sharp.Home,
+                            contentDescription = "Home Screen"
+                        )
+                    } else {
+                        Icon(
+                            Icons.Outlined.Home,
+                            contentDescription = "Home Screen"
+                        )
+                    }
                 },
             )
 
@@ -51,10 +61,18 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = { navController.navigateWithState(Routes.PasswordGenerator) },
                 label = { Text("Generator", softWrap = true, textAlign = TextAlign.Center) },
                 icon = {
-                    Icon(
-                        Icons.Filled.Security,
-                        contentDescription = "Password Generator Screen"
-                    )
+                    if (currentRoute?.equals(Routes.PasswordGenerator.route) == true) {
+                        Icon(
+                            Icons.Sharp.VpnKey,
+                            contentDescription = "Password Generator Screen"
+                        )
+                    } else {
+                        Icon(
+                            Icons.Outlined.VpnKey,
+                            contentDescription = "Password Generator Screen"
+                        )
+                    }
+
                 }
             )
 
@@ -63,10 +81,17 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = { navController.navigateWithState(Routes.Settings) },
                 label = { Text("Settings") },
                 icon = {
-                    Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = "Settings Screen"
-                    )
+                    if (currentRoute?.equals(Routes.Settings.route) == true) {
+                        Icon(
+                            Icons.Sharp.Settings,
+                            contentDescription = "Settings Screen"
+                        )
+                    } else {
+                        Icon(
+                            Icons.Outlined.Settings,
+                            contentDescription = "Settings Screen"
+                        )
+                    }
                 }
             )
         }

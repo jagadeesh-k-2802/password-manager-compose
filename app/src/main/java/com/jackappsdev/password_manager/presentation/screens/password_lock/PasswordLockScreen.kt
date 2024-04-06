@@ -1,6 +1,8 @@
 package com.jackappsdev.password_manager.presentation.screens.password_lock
 
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.Column
@@ -8,17 +10,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.LockOpen
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -67,28 +72,35 @@ fun PasswordLockScreen(
     val state = viewModel.state
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
 
+    val isScreenLockAvailable = remember {
+        val manager = BiometricManager.from(context)
+        val credentials = BIOMETRIC_WEAK or BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+        manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
+    val promptInfo = remember {
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Unlock Password Manager")
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+            .build()
+    }
+
+    val biometricPrompt = remember {
+        BiometricPrompt(
+            context,
+            context.mainExecutor,
+            object :
+                BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    navController.replace(Routes.Home)
+                }
+            }
+        )
+    }
+
     LaunchedEffect(state.hasPasswordSet, state.useScreenLockToUnlock) {
         if (state.hasPasswordSet == true && state.useScreenLockToUnlock == true) {
-            val executor = context.mainExecutor
-
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Unlock Password Manager")
-                .setSubtitle("Continue by using the same unlocking method as you would on your lock screen.")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-                .build()
-
-            val biometricPrompt = BiometricPrompt(
-                context,
-                executor,
-                object :
-                    BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        super.onAuthenticationSucceeded(result)
-                        navController.replace(Routes.Home)
-                    }
-                }
-            )
-
             biometricPrompt.authenticate(promptInfo)
         }
     }
@@ -122,9 +134,9 @@ fun PasswordLockScreen(
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
                                 if (showPassword) {
-                                    Icons.Filled.VisibilityOff
+                                    Icons.Outlined.VisibilityOff
                                 } else {
-                                    Icons.Filled.Visibility
+                                    Icons.Outlined.Visibility
                                 },
                                 contentDescription = "Toggle Password"
                             )
@@ -154,9 +166,20 @@ fun PasswordLockScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(Icons.Filled.Done, "Confirm")
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(Icons.Outlined.Done, "Confirm")
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                     Text("Confirm")
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                if (state.useScreenLockToUnlock == true && isScreenLockAvailable) OutlinedButton(
+                    onClick = { biometricPrompt.authenticate(promptInfo) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Outlined.LockOpen, "Use Device Lock Screen ")
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Use Device Lock Screen")
                 }
             } else {
                 CenterAlignedTopAppBar(title = { Text("Create Your Password") })
@@ -177,9 +200,9 @@ fun PasswordLockScreen(
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
                                 if (showPassword) {
-                                    Icons.Filled.VisibilityOff
+                                    Icons.Outlined.VisibilityOff
                                 } else {
-                                    Icons.Filled.Visibility
+                                    Icons.Outlined.Visibility
                                 },
                                 contentDescription = "Toggle Password"
                             )
@@ -218,11 +241,11 @@ fun PasswordLockScreen(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    "WARNING: Do not forgot this password else you will lose " +
-                            "access to all of your saved passwords."
+                    "Please note that this password is essential for unlocking access to the application." +
+                            " Losing it means losing access to all your passwords."
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -237,8 +260,8 @@ fun PasswordLockScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(Icons.Filled.Done, "Confirm")
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(Icons.Outlined.Done, "Confirm")
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                     Text("Confirm")
                 }
             }

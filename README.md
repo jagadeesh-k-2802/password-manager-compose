@@ -29,7 +29,7 @@
 <img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/ef2fe289-7884-4007-961d-e0a6dbb40a53" width="250" />
 <img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/5bccd082-1181-459f-a684-ad91cd72a77b" width="250" />
 <img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/8198d283-1dca-4ee2-a0b2-cae1a72f1508" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/d2e61e70-2221-490c-a11f-8cd5adadeabb" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/4fc0a870-c1f0-4dc9-a352-7d3b69f7fdb2" width="250" />
 
 ## Links 🔗
 

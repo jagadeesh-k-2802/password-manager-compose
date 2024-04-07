@@ -19,12 +19,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,6 +40,7 @@ import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.generateRandomPassword
 import com.jackappsdev.password_manager.core.parseColor
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +51,9 @@ fun PasswordGeneratorScreen() {
     var includeUppercase by rememberSaveable { mutableStateOf(true) }
     var includeNumbers by rememberSaveable { mutableStateOf(true) }
     var includeSymbols by rememberSaveable { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Generate new password whenever one of the arg changes
     LaunchedEffect(
@@ -65,8 +72,26 @@ fun PasswordGeneratorScreen() {
         )
     }
 
+    val isLastOne: (Boolean) -> Boolean = remember {
+        { value ->
+            var count = 0
+            if (!includeLowercase) count++
+            if (!includeUppercase) count++
+            if (!includeNumbers) count++
+            if (!includeSymbols) count++
+
+            if (count == 3 && !value) {
+                scope.launch { snackbarHostState.showSnackbar("Cannot Turn Off All Options") }
+                false
+            } else {
+                true
+            }
+        }
+    }
+
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("Password Generator") }) }
+        topBar = { CenterAlignedTopAppBar(title = { Text("Password Generator") }) },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -151,25 +176,25 @@ fun PasswordGeneratorScreen() {
             OptionSwitch(
                 title = "Include Lowercase (abc)",
                 isItemChecked = includeLowercase,
-                onItemCheckChange = { value -> includeLowercase = value }
+                onItemCheckChange = { value -> if (isLastOne(value)) includeLowercase = value }
             )
 
             OptionSwitch(
                 title = "Include Uppercase (ABC)",
                 isItemChecked = includeUppercase,
-                onItemCheckChange = { value -> includeUppercase = value }
+                onItemCheckChange = { value -> if (isLastOne(value)) includeUppercase = value }
             )
 
             OptionSwitch(
                 title = "Include Numbers (123)",
                 isItemChecked = includeNumbers,
-                onItemCheckChange = { value -> includeNumbers = value }
+                onItemCheckChange = { value -> if (isLastOne(value)) includeNumbers = value }
             )
 
             OptionSwitch(
                 title = "Include Symbols (!$@)",
                 isItemChecked = includeSymbols,
-                onItemCheckChange = { value -> includeSymbols = value }
+                onItemCheckChange = { value -> if (isLastOne(value)) includeSymbols = value }
             )
         }
     }

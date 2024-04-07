@@ -14,9 +14,3 @@ fun NavController.navigateWithState(route: Routes) {
         restoreState = true
     }
 }
-
-fun NavController.replace(route: Routes) {
-    navigate(route.route) {
-        popUpTo(graph.findStartDestination().id) { inclusive = true }
-    }
-}

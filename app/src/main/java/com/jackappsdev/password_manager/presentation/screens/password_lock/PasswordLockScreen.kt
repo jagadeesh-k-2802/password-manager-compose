@@ -49,9 +49,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.replace
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -59,7 +56,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordLockScreen(
-    navController: NavController,
     viewModel: PasswordLockViewModel = hiltViewModel()
 ) {
     var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -93,7 +89,7 @@ fun PasswordLockScreen(
                 BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    navController.replace(Routes.Home)
+                    viewModel.setUnlocked()
                 }
             }
         )
@@ -160,7 +156,7 @@ fun PasswordLockScreen(
                         scope.launch {
                             if (viewModel.verifyPassword(passwordValue)) {
                                 keyboardController?.hide()
-                                navController.replace(Routes.Home)
+                                viewModel.setUnlocked()
                             }
                         }
                     },
@@ -255,7 +251,7 @@ fun PasswordLockScreen(
                         keyboardController?.hide()
 
                         viewModel.setNewPassword(passwordValue, confirmPasswordValue) {
-                            navController.replace(Routes.Home)
+                            viewModel.setUnlocked()
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

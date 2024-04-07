@@ -34,55 +34,36 @@ fun Router(
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { contentPadding ->
-        NavHost(
-            navController,
-            startDestination = Routes.PasswordLock.route,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            modifier = Modifier.padding(contentPadding)
-        ) {
-            composable(Routes.PasswordLock.route) {
-                PasswordLockScreen(navController, passwordLockViewModel)
-            }
+        val state = passwordLockViewModel.state
 
-            composable(Routes.Home.route) {
-                HomeScreen(navController)
+        if (!state.hasBeenUnlocked) {
+            NavHost(
+                navController,
+                startDestination = Routes.PasswordLock.route,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                modifier = Modifier.padding(contentPadding)
+            ) {
+                composable(Routes.PasswordLock.route) { PasswordLockScreen(passwordLockViewModel) }
             }
-
-            composable(route = Routes.AddPasswordItem.route) {
-                AddPasswordItemScreen(navController)
-            }
-
-            composable(Routes.PasswordItemDetail.route) {
-                PasswordItemDetailScreen(navController)
-            }
-
-            composable(Routes.EditPasswordItem.route) {
-                EditPasswordItemScreen(navController)
-            }
-
-            composable(Routes.PasswordGenerator.route) {
-                PasswordGeneratorScreen()
-            }
-
-            composable(Routes.Settings.route) {
-                SettingsScreen(navController)
-            }
-
-            composable(Routes.ChangePassword.route) {
-                ChangePasswordScreen(navController)
-            }
-
-            composable(Routes.ManageCategories.route) {
-                ManageCategoriesScreen(navController)
-            }
-
-            composable(Routes.AddCategoryItem.route) {
-                AddCategoryItemScreen(navController)
-            }
-
-            composable(Routes.CategoryItemDetail.route) {
-                CategoryItemDetailScreen(navController)
+        } else {
+            NavHost(
+                navController,
+                startDestination = Routes.Home.route,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                modifier = Modifier.padding(contentPadding)
+            ) {
+                composable(Routes.Home.route) { HomeScreen(navController) }
+                composable(Routes.AddPasswordItem.route) { AddPasswordItemScreen(navController) }
+                composable(Routes.PasswordItemDetail.route) { PasswordItemDetailScreen(navController) }
+                composable(Routes.EditPasswordItem.route) { EditPasswordItemScreen(navController) }
+                composable(Routes.PasswordGenerator.route) { PasswordGeneratorScreen() }
+                composable(Routes.Settings.route) { SettingsScreen(navController) }
+                composable(Routes.ChangePassword.route) { ChangePasswordScreen(navController) }
+                composable(Routes.ManageCategories.route) { ManageCategoriesScreen(navController) }
+                composable(Routes.AddCategoryItem.route) { AddCategoryItemScreen(navController) }
+                composable(Routes.CategoryItemDetail.route) { CategoryItemDetailScreen(navController) }
             }
         }
     }

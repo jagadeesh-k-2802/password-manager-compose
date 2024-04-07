@@ -48,6 +48,10 @@ class PasswordLockViewModel @Inject constructor(
         }
     }
 
+    fun setUnlocked() {
+        state = state.copy(hasBeenUnlocked = true)
+    }
+
     suspend fun verifyPassword(password: String): Boolean {
         val isMatching = userPreferencesRepository.verifyPassword(password)
 

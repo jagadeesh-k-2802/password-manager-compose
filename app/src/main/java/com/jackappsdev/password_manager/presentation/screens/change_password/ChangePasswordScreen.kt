@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Done
@@ -53,6 +55,7 @@ fun ChangePasswordScreen(
     var showPassword by rememberSaveable { mutableStateOf(false) }
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 
     Scaffold(
@@ -72,6 +75,7 @@ fun ChangePasswordScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .verticalScroll(scrollState)
                 .fillMaxWidth()
         ) {
             Text("Changing your password won't affect your current passwords.")

@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Block
@@ -39,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -61,6 +64,7 @@ fun PasswordItemDetailScreen(
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     if (isDeleteDialogVisible) PasswordItemDeleteDialog(
         onConfirm = {
@@ -76,7 +80,13 @@ fun PasswordItemDetailScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(passwordItem?.name ?: "") },
+                title = {
+                    Text(
+                        passwordItem?.name ?: "",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
@@ -105,6 +115,7 @@ fun PasswordItemDetailScreen(
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
                 .fillMaxWidth()
+                .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
                 value = passwordItem?.name ?: "",

@@ -1,6 +1,8 @@
 package com.jackappsdev.password_manager.presentation.screens.home
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.Clear
@@ -65,22 +68,27 @@ fun HomeScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var isSearching by rememberSaveable { mutableStateOf(false) }
+    val lazyColumnState = rememberLazyListState()
     val passwordItems = state.items?.collectAsState()
     val filteredItems = state.filteredItems?.collectAsState()
     val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
 
     val debouncedFilter = remember {
-        debounce<Unit>(1000, Dispatchers.IO) { viewModel.searchItems(searchQuery) }
+        debounce<Unit>(400, Dispatchers.IO) { viewModel.searchItems(searchQuery) }
     }
 
-    if (sortBySheetState.isVisible) SortModalSheet(sortBySheetState) { sortBy ->
+    if (sortBySheetState.isVisible) SortModalSheet(
+        sheetState = sortBySheetState,
+        currentSortBy = state.sortBy
+    ) { sortBy ->
         viewModel.setSortBy(sortBy)
         scope.launch { sortBySheetState.hide() }
     }
 
     if (filterBySheetState.isVisible) FilterByCategoryModalSheet(
-        filterBySheetState,
-        categoryItems
+        sheetState = filterBySheetState,
+        currentFilterBy = state.filterBy,
+        categoryItems = categoryItems
     ) { filterBy ->
         viewModel.filterByCategory(filterBy)
         scope.launch { filterBySheetState.hide() }
@@ -106,6 +114,12 @@ fun HomeScreen(
                     IconButton(onClick = { scope.launch { sortBySheetState.show() } }) {
                         Icon(Icons.AutoMirrored.Outlined.Sort, contentDescription = "Sort")
                     }
+                },
+                modifier = Modifier.clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    scope.launch { lazyColumnState.animateScrollToItem(0) }
                 }
             )
         },
@@ -144,6 +158,7 @@ fun HomeScreen(
             }
         } else {
             LazyColumn(
+                state = lazyColumnState,
                 modifier = Modifier
                     .padding(contentPadding)
                     .fillMaxSize()

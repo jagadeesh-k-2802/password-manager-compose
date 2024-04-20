@@ -15,11 +15,10 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -99,7 +98,10 @@ fun SettingsScreen(
                 if (!isDone) isInvalidPassword = true
             }
         },
-        onDismiss = { isImportPasswordsDialogVisible = false }
+        onDismiss = {
+            isImportPasswordsDialogVisible = false
+            isInvalidPassword = false
+        }
     )
 
     val onNoLockScreen = remember {
@@ -130,7 +132,7 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .scrollable(scrollState, Orientation.Vertical)
+                .verticalScroll(scrollState)
         ) {
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Lock, null) },

@@ -1,5 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.manage_categories
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Info
@@ -23,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +45,8 @@ fun ManageCategoriesScreen(
 ) {
     val state = viewModel.state
     val categoryItems = state.items?.collectAsState()
+    val scope = rememberCoroutineScope()
+    val lazyColumnState = rememberLazyListState()
 
     Scaffold(
         topBar = {
@@ -48,7 +56,13 @@ fun ManageCategoriesScreen(
                         Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
                     }
                 },
-                title = { Text("Categories") }
+                title = { Text("Categories") },
+                modifier = Modifier.clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    scope.launch { lazyColumnState.animateScrollToItem(0) }
+                }
             )
         },
         floatingActionButton = {
@@ -85,7 +99,10 @@ fun ManageCategoriesScreen(
                 Text("No Categories Available")
             }
         } else {
-            LazyColumn(modifier = Modifier.padding(contentPadding)) {
+            LazyColumn(
+                state = lazyColumnState,
+                modifier = Modifier.padding(contentPadding)
+            ) {
                 categoryItems?.let {
                     items(it.value) { item ->
                         CategoryItem(item) {

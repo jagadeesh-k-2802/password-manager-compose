@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
@@ -25,7 +26,7 @@ fun CategoryItem(item: CategoryModel, onClick: () -> Unit) {
                     .size(24.dp)
             ) {}
         },
-        headlineContent = { Text(item.name) },
+        headlineContent = { Text(item.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         modifier = Modifier.clickable(onClick = onClick)
     )
 }

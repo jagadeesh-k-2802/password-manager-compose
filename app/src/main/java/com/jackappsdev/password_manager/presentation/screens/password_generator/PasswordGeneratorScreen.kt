@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Refresh
@@ -53,6 +55,7 @@ fun PasswordGeneratorScreen() {
     var includeSymbols by rememberSaveable { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Generate new password whenever one of the arg changes
@@ -97,6 +100,7 @@ fun PasswordGeneratorScreen() {
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .verticalScroll(scrollState)
         ) {
             SelectionContainer {
                 Column(

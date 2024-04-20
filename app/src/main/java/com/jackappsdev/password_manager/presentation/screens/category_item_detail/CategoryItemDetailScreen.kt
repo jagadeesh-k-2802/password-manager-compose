@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Done
@@ -70,6 +72,7 @@ fun CategoryItemDetailScreen(
     var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
     var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val dispatcher = backDispatcher.onBackPressedDispatcher
@@ -128,6 +131,7 @@ fun CategoryItemDetailScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
                 value = name,

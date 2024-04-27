@@ -44,9 +44,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.debounce
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
@@ -99,20 +101,33 @@ fun HomeScreen(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = {
-                        Toast.makeText(context, "App Locked", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.toast_app_locked), Toast.LENGTH_SHORT
+                        ).show()
+
                         viewModel.lockApplication()
                     }) {
-                        Icon(Icons.Outlined.Lock, contentDescription = "Lock Application")
+                        Icon(
+                            Icons.Outlined.Lock,
+                            stringResource(R.string.accessibility_lock_application)
+                        )
                     }
                 },
-                title = { Text("Passwords") },
+                title = { Text(stringResource(R.string.title_passwords)) },
                 actions = {
                     IconButton(onClick = { scope.launch { filterBySheetState.show() } }) {
-                        Icon(Icons.Outlined.FilterAlt, contentDescription = "Filter")
+                        Icon(
+                            Icons.Outlined.FilterAlt,
+                            contentDescription = stringResource(R.string.accessibility_filter)
+                        )
                     }
 
                     IconButton(onClick = { scope.launch { sortBySheetState.show() } }) {
-                        Icon(Icons.AutoMirrored.Outlined.Sort, contentDescription = "Sort")
+                        Icon(
+                            Icons.AutoMirrored.Outlined.Sort,
+                            contentDescription = stringResource(R.string.accessibility_sort)
+                        )
                     }
                 },
                 modifier = Modifier.clickable(
@@ -125,7 +140,10 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate(Routes.AddPasswordItem) }) {
-                Icon(imageVector = Icons.Sharp.Add, contentDescription = "Add new item")
+                Icon(
+                    imageVector = Icons.Sharp.Add,
+                    contentDescription = stringResource(R.string.accessibility_add_item)
+                )
             }
         }
     ) { contentPadding ->
@@ -149,12 +167,12 @@ fun HomeScreen(
             ) {
                 Icon(
                     Icons.Outlined.Info,
-                    "No passwords",
+                    stringResource(R.string.accessibility_no_passwords),
                     modifier = Modifier.size(64.dp)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("No Passwords Saved")
+                Text(stringResource(R.string.text_no_passwords))
             }
         } else {
             LazyColumn(
@@ -177,11 +195,11 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = pagePadding),
-                        placeholder = { Text("Search") },
+                        placeholder = { Text(stringResource(R.string.label_search)) },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Search,
-                                contentDescription = "Search"
+                                contentDescription = stringResource(R.string.accessibility_search)
                             )
                         },
                         trailingIcon = {
@@ -192,7 +210,10 @@ fun HomeScreen(
                                     keyboardController?.hide()
                                     viewModel.searchItems(searchQuery)
                                 }) {
-                                    Icon(Icons.Outlined.Clear, "Clear search")
+                                    Icon(
+                                        Icons.Outlined.Clear,
+                                        stringResource(R.string.accessibility_clear_search)
+                                    )
                                 }
                             }
                         }
@@ -212,12 +233,12 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 Icons.Outlined.Info,
-                                "No items",
+                                stringResource(R.string.accessibility_no_items),
                                 modifier = Modifier.size(64.dp)
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text("No Items Found")
+                            Text(stringResource(R.string.text_no_items_found))
                         }
                     }
                 }

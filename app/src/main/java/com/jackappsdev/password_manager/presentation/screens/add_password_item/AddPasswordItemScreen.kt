@@ -45,16 +45,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.navigation.Routes
@@ -68,13 +72,16 @@ fun AddPasswordItemScreen(
     navController: NavController,
     viewModel: AddPasswordItemViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     var name by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isCategoryDropdownVisible by rememberSaveable { mutableStateOf(false) }
-    var category by remember { mutableStateOf(CategoryModel(name = "No Category", color = "")) }
+    val noCategoryString = remember { getString(context, R.string.text_no_category) }
+    val noCategoryModel = remember { CategoryModel(name = noCategoryString, color = "") }
+    var category by remember { mutableStateOf(noCategoryModel) }
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -89,10 +96,13 @@ fun AddPasswordItemScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Add New Password") },
+                title = { Text(stringResource(R.string.title_add_new_password)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(R.string.accessibility_go_back)
+                        )
                     }
                 }
             )
@@ -111,10 +121,10 @@ fun AddPasswordItemScreen(
                 isError = error is AddPasswordItemError.NameError,
                 supportingText = {
                     error?.let {
-                        if (it is AddPasswordItemError.NameError) Text(text = it.error)
+                        if (it is AddPasswordItemError.NameError) Text(stringResource(it.error))
                     }
                 },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.label_name)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
@@ -130,7 +140,7 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = username,
                 onValueChange = { value -> username = value },
-                label = { Text("Username") },
+                label = { Text(stringResource(R.string.label_username)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
@@ -145,24 +155,16 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { value -> password = value },
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
+                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { showPassword = !showPassword }) {
                         Icon(
-                            if (showPassword) {
-                                Icons.Outlined.VisibilityOff
-                            } else {
-                                Icons.Outlined.Visibility
-                            },
-                            contentDescription = "Toggle Password"
+                            if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                            contentDescription = stringResource(R.string.accessibility_toggle_password)
                         )
                     }
-                },
-                visualTransformation = if (showPassword) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
@@ -178,7 +180,7 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = notes,
                 onValueChange = { value -> notes = value },
-                label = { Text("Notes") },
+                label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
@@ -198,7 +200,7 @@ fun AddPasswordItemScreen(
             ) {
                 OutlinedTextField(
                     leadingIcon = {
-                        if (category.name == "No Category") {
+                        if (category.name == stringResource(R.string.text_no_category)) {
                             Icon(Icons.Outlined.Block, null)
                         } else {
                             Box(
@@ -212,7 +214,7 @@ fun AddPasswordItemScreen(
                     value = category.name,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.label_category)) },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryDropdownVisible)
                     },
@@ -226,10 +228,15 @@ fun AddPasswordItemScreen(
                     onDismissRequest = { isCategoryDropdownVisible = false },
                 ) {
                     DropdownMenuItem(
-                        leadingIcon = { Icon(Icons.Outlined.Block, "No category") },
-                        text = { Text(text = "No Category") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.Block,
+                                stringResource(R.string.text_no_category)
+                            )
+                        },
+                        text = { Text(stringResource(R.string.text_no_category)) },
                         onClick = {
-                            category = CategoryModel(name = "No Category", color = "")
+                            category = noCategoryModel
                             isCategoryDropdownVisible = false
                         }
                     )
@@ -253,8 +260,13 @@ fun AddPasswordItemScreen(
                     }
 
                     DropdownMenuItem(
-                        leadingIcon = { Icon(Icons.Outlined.Add, "Add category") },
-                        text = { Text(text = "Create New Category") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.Add,
+                                stringResource(R.string.accessibility_add_category)
+                            )
+                        },
+                        text = { Text(text = stringResource(R.string.label_create_new_category)) },
                         onClick = {
                             navController.navigate(Routes.AddCategoryItem)
                             isCategoryDropdownVisible = false
@@ -275,9 +287,9 @@ fun AddPasswordItemScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Outlined.Done, "Create")
+                Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_create))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Create")
+                Text(stringResource(R.string.btn_create))
             }
         }
     }

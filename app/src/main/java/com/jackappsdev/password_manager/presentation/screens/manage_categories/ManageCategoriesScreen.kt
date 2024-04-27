@@ -30,9 +30,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 import kotlinx.coroutines.launch
@@ -53,10 +55,13 @@ fun ManageCategoriesScreen(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(R.string.accessibility_go_back)
+                        )
                     }
                 },
-                title = { Text("Categories") },
+                title = { Text(stringResource(R.string.title_categories)) },
                 modifier = Modifier.clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -67,7 +72,7 @@ fun ManageCategoriesScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate(Routes.AddCategoryItem) }) {
-                Icon(Icons.Rounded.Add, "Add category")
+                Icon(Icons.Rounded.Add, stringResource(R.string.accessibility_add_category))
             }
         }
     ) { contentPadding ->
@@ -91,12 +96,12 @@ fun ManageCategoriesScreen(
             ) {
                 Icon(
                     Icons.Outlined.Info,
-                    "No categories",
+                    stringResource(R.string.accessibility_no_categories),
                     modifier = Modifier.size(64.dp)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("No Categories Available")
+                Text(stringResource(R.string.text_no_categories_available))
             }
         } else {
             LazyColumn(

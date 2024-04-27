@@ -43,13 +43,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.navigation.Routes
@@ -62,6 +66,7 @@ fun EditPasswordItemScreen(
     navController: NavController,
     viewModel: EditPasswordItemViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val passwordItem by viewModel.passwordItem.collectAsState(initial = null)
     val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
     var name by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.name ?: "") }
@@ -113,10 +118,13 @@ fun EditPasswordItemScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Edit Item") },
+                title = { Text(stringResource(R.string.title_edit_item)) },
                 navigationIcon = {
                     IconButton(onClick = { backCallback.handleOnBackPressed() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(R.string.accessibility_go_back)
+                        )
                     }
                 }
             )
@@ -135,7 +143,7 @@ fun EditPasswordItemScreen(
                     name = value
                     isChanged = true
                 },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
@@ -148,7 +156,7 @@ fun EditPasswordItemScreen(
                     username = value
                     isChanged = true
                 },
-                label = { Text("Username") },
+                label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -160,24 +168,16 @@ fun EditPasswordItemScreen(
                     password = value
                     isChanged = true
                 },
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
+                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { showPassword = !showPassword }) {
                         Icon(
-                            if (showPassword) {
-                                Icons.Outlined.VisibilityOff
-                            } else {
-                                Icons.Outlined.Visibility
-                            },
-                            contentDescription = "Toggle Password"
+                            if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                            contentDescription = stringResource(R.string.accessibility_toggle_password)
                         )
                     }
-                },
-                visualTransformation = if (showPassword) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
                 }
             )
 
@@ -189,7 +189,7 @@ fun EditPasswordItemScreen(
                     notes = value
                     isChanged = true
                 },
-                label = { Text("Notes") },
+                label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
@@ -217,7 +217,7 @@ fun EditPasswordItemScreen(
                     value = category.name,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.label_category)) },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryDropdownVisible)
                     },
@@ -231,10 +231,18 @@ fun EditPasswordItemScreen(
                     onDismissRequest = { isCategoryDropdownVisible = false },
                 ) {
                     DropdownMenuItem(
-                        leadingIcon = { Icon(Icons.Outlined.Block, "No category") },
-                        text = { Text(text = "No Category") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.Block,
+                                stringResource(R.string.text_no_category)
+                            )
+                        },
+                        text = { Text(text = stringResource(R.string.text_no_category)) },
                         onClick = {
-                            category = CategoryModel(name = "No Category", color = "")
+                            category = CategoryModel(
+                                name = getString(context, R.string.text_no_category),
+                                color = ""
+                            )
                             isChanged = true
                             isCategoryDropdownVisible = false
                         }
@@ -260,8 +268,13 @@ fun EditPasswordItemScreen(
                     }
 
                     DropdownMenuItem(
-                        leadingIcon = { Icon(Icons.Outlined.Add, "Add category") },
-                        text = { Text(text = "Create New Category") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.Add,
+                                stringResource(R.string.accessibility_add_category)
+                            )
+                        },
+                        text = { Text(text = stringResource(R.string.label_create_new_category)) },
                         onClick = {
                             navController.navigate(Routes.AddCategoryItem)
                             isCategoryDropdownVisible = false
@@ -287,9 +300,9 @@ fun EditPasswordItemScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Outlined.Done, "Confirm Edit")
+                Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_confirm))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Confirm")
+                Text(stringResource(R.string.btn_confirm))
             }
         }
     }

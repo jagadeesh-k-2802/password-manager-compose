@@ -40,10 +40,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
@@ -56,6 +59,7 @@ fun AddCategoryItemScreen(
     viewModel: AddCategoryItemViewModel = hiltViewModel()
 ) {
     var name by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
     var color by rememberSaveable { mutableStateOf(colorList.first()) }
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
     val focusRequester = remember { FocusRequester() }
@@ -67,10 +71,13 @@ fun AddCategoryItemScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Add New Category") },
+                title = { Text(stringResource(R.string.title_add_new_category)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(R.string.accessibility_go_back)
+                        )
                     }
                 }
             )
@@ -90,7 +97,7 @@ fun AddCategoryItemScreen(
                     }
                 },
                 onValueChange = { value -> name = value },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
@@ -98,7 +105,10 @@ fun AddCategoryItemScreen(
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "Category Color", style = MaterialTheme.typography.labelLarge)
+            Text(
+                text = stringResource(R.string.label_category_color),
+                style = MaterialTheme.typography.labelLarge
+            )
             Spacer(modifier = Modifier.height(10.dp))
 
             LazyRow {
@@ -114,7 +124,7 @@ fun AddCategoryItemScreen(
                         if (color == item) Icon(
                             imageVector = Icons.Outlined.Done,
                             tint = Color.Black,
-                            contentDescription = "Selected color",
+                            contentDescription = context.getString(R.string.accessibility_selected_color),
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth()
@@ -136,9 +146,9 @@ fun AddCategoryItemScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Outlined.Done, "Create")
+                Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_create))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Create")
+                Text(stringResource(R.string.btn_create))
             }
         }
     }

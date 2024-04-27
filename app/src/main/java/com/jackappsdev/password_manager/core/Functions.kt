@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
+import com.jackappsdev.password_manager.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -49,7 +50,7 @@ fun copyToClipboard(context: Context, text: String?, label: String = "Text") {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clipData)
-    Toast.makeText(context, "Copied to Clipboard", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, context.getString(R.string.toast_copy_to_clipboard), Toast.LENGTH_SHORT).show()
 }
 
 fun <T> debounce(

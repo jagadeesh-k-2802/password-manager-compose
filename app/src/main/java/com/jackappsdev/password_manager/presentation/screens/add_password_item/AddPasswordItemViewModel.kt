@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
@@ -31,7 +32,7 @@ class AddPasswordItemViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             if (name.isEmpty()) {
-                errorChannel.send(AddPasswordItemError.NameError("Name should not be empty"))
+                errorChannel.send(AddPasswordItemError.NameError(R.string.error_name_not_empty))
             } else {
                 passwordItemRepository.insertPasswordItem(
                     PasswordItemModel(

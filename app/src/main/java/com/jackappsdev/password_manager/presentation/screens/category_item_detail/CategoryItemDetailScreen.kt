@@ -47,10 +47,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.UnsavedChangesDialog
@@ -113,15 +115,21 @@ fun CategoryItemDetailScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Edit Category") },
+                title = { Text(stringResource(R.string.title_edit_category)) },
                 navigationIcon = {
                     IconButton(onClick = { backCallback.handleOnBackPressed() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(R.string.accessibility_go_back)
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = { isDeleteDialogVisible = true }) {
-                        Icon(Icons.Outlined.Delete, "Delete item")
+                        Icon(
+                            Icons.Outlined.Delete,
+                            stringResource(R.string.accessibility_delete_item)
+                        )
                     }
                 }
             )
@@ -139,13 +147,16 @@ fun CategoryItemDetailScreen(
                     name = value
                     isChanged = true
                 },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "Category Color", style = MaterialTheme.typography.labelLarge)
+            Text(
+                text = stringResource(R.string.label_category_color),
+                style = MaterialTheme.typography.labelLarge
+            )
             Spacer(modifier = Modifier.height(10.dp))
 
             LazyRow {
@@ -164,7 +175,7 @@ fun CategoryItemDetailScreen(
                         if (color == item) Icon(
                             imageVector = Icons.Outlined.Done,
                             tint = Color.Black,
-                            contentDescription = "Selected color",
+                            contentDescription = stringResource(R.string.accessibility_selected_color),
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth()
@@ -189,7 +200,7 @@ fun CategoryItemDetailScreen(
                 },
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Last Updated At") },
+                label = { Text(stringResource(R.string.label_last_updated_at)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -203,9 +214,9 @@ fun CategoryItemDetailScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Rounded.Done, "Confirm")
+                Icon(Icons.Rounded.Done, stringResource(R.string.accessibility_confirm))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Confirm")
+                Text(stringResource(R.string.btn_confirm))
             }
         }
     }

@@ -19,6 +19,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Router
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
@@ -35,7 +36,8 @@ class MainActivity : FragmentActivity() {
 
     private val installStateUpdatedListener = InstallStateUpdatedListener { installState ->
         if (installState.installStatus() == InstallStatus.DOWNLOADED) {
-            Toast.makeText(this, "Updating in 5 Seconds...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_app_update_msg), Toast.LENGTH_SHORT)
+                .show()
 
             lifecycleScope.launch {
                 delay(5.seconds)
@@ -80,7 +82,11 @@ class MainActivity : FragmentActivity() {
                 ActivityResultContracts.StartIntentSenderForResult()
             ) { activityResult ->
                 if (activityResult.resultCode != RESULT_OK) {
-                    Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.toast_update_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 

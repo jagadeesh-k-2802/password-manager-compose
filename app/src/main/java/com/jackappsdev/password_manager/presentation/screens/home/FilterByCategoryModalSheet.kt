@@ -25,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
@@ -46,7 +48,7 @@ fun FilterByCategoryModalSheet(
         sheetState = sheetState
     ) {
         Text(
-            "Filter By Category",
+            stringResource(R.string.text_filter_by_category),
             modifier = Modifier.padding(pagePadding),
             style = MaterialTheme.typography.titleLarge
         )
@@ -55,10 +57,13 @@ fun FilterByCategoryModalSheet(
             item {
                 ListItem(
                     leadingContent = {
-                        Icon(Icons.Outlined.SelectAll, "All Items")
+                        Icon(
+                            Icons.Outlined.SelectAll,
+                            stringResource(R.string.accessibility_all_items)
+                        )
                     },
                     headlineContent = {
-                        Text("All")
+                        Text(stringResource(R.string.label_all))
                     },
                     trailingContent = {
                         RadioButton(
@@ -73,10 +78,13 @@ fun FilterByCategoryModalSheet(
             item {
                 ListItem(
                     leadingContent = {
-                        Icon(Icons.Outlined.Block, "No Category Items")
+                        Icon(
+                            Icons.Outlined.Block,
+                            stringResource(R.string.accessibility_no_category_items)
+                        )
                     },
                     headlineContent = {
-                        Text("No Category Items")
+                        Text(stringResource(R.string.label_no_category_items))
                     },
                     trailingContent = {
                         RadioButton(

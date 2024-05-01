@@ -55,7 +55,7 @@ import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
-import com.jackappsdev.password_manager.presentation.screens.edit_password_item.UnsavedChangesDialog
+import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import java.text.SimpleDateFormat
 import java.util.Date

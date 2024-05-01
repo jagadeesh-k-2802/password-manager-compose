@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -35,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,22 +46,35 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.core.debounce
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
+import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.receiveAsFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,14 +83,51 @@ fun EditPasswordItemScreen(
     viewModel: EditPasswordItemViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val state = viewModel.state
     val passwordItem by viewModel.passwordItem.collectAsState(initial = null)
     val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
-    var name by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.name ?: "") }
-    var username by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.username ?: "") }
-    var password by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.password ?: "") }
-    var notes by rememberSaveable(passwordItem) { mutableStateOf(passwordItem?.notes ?: "") }
+    val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
+    var isSuggestionSelected by remember { mutableStateOf(false) }
     var isChanged by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+    var showPassword by rememberSaveable { mutableStateOf(false) }
+    var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var isCategoryDropdownVisible by rememberSaveable { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
+    val dispatcher = backDispatcher.onBackPressedDispatcher
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    var username by remember(passwordItem) {
+        mutableStateOf(
+            TextFieldValue(
+                passwordItem?.username ?: "", TextRange(passwordItem?.username?.length ?: 0)
+            )
+        )
+    }
+
+    var name by remember(passwordItem) {
+        mutableStateOf(
+            TextFieldValue(
+                passwordItem?.name ?: "", TextRange(passwordItem?.name?.length ?: 0)
+            )
+        )
+    }
+
+    var password by remember(passwordItem) {
+        mutableStateOf(
+            TextFieldValue(passwordItem?.password ?: "", TextRange(passwordItem?.password?.length ?: 0)
+            )
+        )
+    }
+
+    var notes by remember(passwordItem) {
+        mutableStateOf(
+            TextFieldValue(passwordItem?.notes ?: "", TextRange(passwordItem?.notes?.length ?: 0))
+        )
+    }
 
     var category by remember(passwordItem) {
         mutableStateOf(
@@ -86,13 +139,6 @@ fun EditPasswordItemScreen(
         )
     }
 
-    var showPassword by rememberSaveable { mutableStateOf(false) }
-    var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
-    var isCategoryDropdownVisible by rememberSaveable { mutableStateOf(false) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
-    val dispatcher = backDispatcher.onBackPressedDispatcher
-
     val backCallback = remember(name, username, password, notes, category, passwordItem) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -103,6 +149,18 @@ fun EditPasswordItemScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
+    val debouncedUniqueUsernamesQuery = remember {
+        debounce<Unit>(500, Dispatchers.IO) { viewModel.getUniqueUsernames(username.text) }
+    }
+
+    LaunchedEffect(username) {
+        if (!isSuggestionSelected) debouncedUniqueUsernamesQuery(Unit)
     }
 
     DisposableEffect(lifecycleOwner, backDispatcher) {
@@ -140,33 +198,79 @@ fun EditPasswordItemScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { value ->
+                    if (name.text != value.text) isChanged = true
                     name = value
-                    isChanged = true
+                },
+                isError = error is EditPasswordItemError.NameError,
+                supportingText = {
+                    error?.let {
+                        if (it is EditPasswordItemError.NameError) Text(stringResource(it.error))
+                    }
                 },
                 label = { Text(stringResource(R.string.label_name)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
-                value = username,
-                onValueChange = { value ->
-                    username = value
-                    isChanged = true
-                },
-                label = { Text(stringResource(R.string.label_username)) },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            ExposedDropdownMenuBox(
+                expanded = state.usernameSuggestions.isNotEmpty(),
+                onExpandedChange = { value -> if (!value) { viewModel.clearUsernameSuggestions() } },
+            ) {
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { value ->
+                        if (username.text != value.text) isChanged = true
+                        username = value
+                        isSuggestionSelected = false
+                    },
+                    label = { Text(stringResource(R.string.label_username)) },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = state.usernameSuggestions.isNotEmpty(),
+                    onDismissRequest = { viewModel.clearUsernameSuggestions() },
+                    modifier = Modifier.requiredSizeIn(maxHeight = 110.dp)
+                ) {
+                    state.usernameSuggestions.forEach { item ->
+                        DropdownMenuItem(
+                            text = { Text(item) },
+                            onClick = {
+                                isSuggestionSelected = true
+                                username = TextFieldValue(item, TextRange(item.length))
+                                viewModel.clearUsernameSuggestions()
+                            }
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = password,
                 onValueChange = { value ->
+                    if (password.text != value.text) isChanged = true
                     password = value
-                    isChanged = true
                 },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -178,7 +282,13 @@ fun EditPasswordItemScreen(
                             contentDescription = stringResource(R.string.accessibility_toggle_password)
                         )
                     }
-                }
+                },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                )
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -186,20 +296,26 @@ fun EditPasswordItemScreen(
             OutlinedTextField(
                 value = notes,
                 onValueChange = { value ->
+                    if (notes.text != value.text) isChanged = true
                     notes = value
-                    isChanged = true
                 },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             ExposedDropdownMenuBox(
                 expanded = isCategoryDropdownVisible,
-                onExpandedChange = { value -> isCategoryDropdownVisible = value },
+                onExpandedChange = { value -> isCategoryDropdownVisible = value }
             ) {
                 OutlinedTextField(
                     leadingIcon = {
@@ -229,6 +345,7 @@ fun EditPasswordItemScreen(
                 ExposedDropdownMenu(
                     expanded = isCategoryDropdownVisible,
                     onDismissRequest = { isCategoryDropdownVisible = false },
+                    modifier = Modifier.requiredSizeIn(maxHeight = 150.dp)
                 ) {
                     DropdownMenuItem(
                         leadingIcon = {
@@ -287,11 +404,13 @@ fun EditPasswordItemScreen(
 
             Button(
                 onClick = {
+                    keyboardController?.hide()
+
                     viewModel.onEditComplete(
-                        name,
-                        username,
-                        password,
-                        notes,
+                        name.text,
+                        username.text,
+                        password.text,
+                        notes.text,
                         category.id,
                         passwordItem
                     ) {

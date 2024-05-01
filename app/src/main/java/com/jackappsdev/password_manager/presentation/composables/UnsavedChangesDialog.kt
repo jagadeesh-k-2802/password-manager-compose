@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.edit_password_item
+package com.jackappsdev.password_manager.presentation.composables
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

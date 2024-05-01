@@ -42,7 +42,7 @@
     <string name="label_dynamic_colors">Dynamic Colors</string>
     <string name="label_import_passwords">Import Passwords</string>
     <string name="label_export_passwords">Export Passwords</string>
-    <string name="label_app_version">App Version: 1.1.2</string>
+    <string name="label_app_version">App Version: 1.2.0</string>
     <string name="label_current_password">Current Password</string>
     <string name="label_new_password">New Password</string>
     <string name="label_all">All</string>

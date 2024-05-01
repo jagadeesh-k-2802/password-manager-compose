@@ -1,5 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -33,6 +36,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,23 +51,30 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.core.debounce
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
+import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,12 +84,15 @@ fun AddPasswordItemScreen(
     viewModel: AddPasswordItemViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val state = viewModel.state
     var name by rememberSaveable { mutableStateOf("") }
-    var username by rememberSaveable { mutableStateOf("") }
+    var username by remember { mutableStateOf(TextFieldValue(text = "")) }
+    var isSuggestionSelected by remember { mutableStateOf(false) }
     var password by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isCategoryDropdownVisible by rememberSaveable { mutableStateOf(false) }
+    var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
     val noCategoryString = remember { getString(context, R.string.text_no_category) }
     val noCategoryModel = remember { CategoryModel(name = noCategoryString, color = "") }
     var category by remember { mutableStateOf(noCategoryModel) }
@@ -88,17 +102,50 @@ fun AddPasswordItemScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
+    val dispatcher = backDispatcher.onBackPressedDispatcher
+
+    val backCallback = remember(name, username, password, notes) {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (name.isNotEmpty() || username.text.isNotEmpty() || password.isNotEmpty() || notes.isNotEmpty()) {
+                    isUnsavedChangesDialogVisible = true
+                } else {
+                    navController.popBackStack()
+                }
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+
+    val debouncedUniqueUsernamesQuery = remember {
+        debounce<Unit>(500, Dispatchers.IO) { viewModel.getUniqueUsernames(username.text) }
+    }
+
+    LaunchedEffect(username) {
+        if (!isSuggestionSelected) debouncedUniqueUsernamesQuery(Unit)
+    }
+
+    DisposableEffect(lifecycleOwner, backDispatcher) {
+        dispatcher.addCallback(lifecycleOwner, backCallback)
+        onDispose { backCallback.remove() }
+    }
+
+    if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
+        onConfirm = { navController.popBackStack() },
+        onDismiss = { isUnsavedChangesDialogVisible = false }
+    )
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_add_new_password)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { backCallback.handleOnBackPressed() }) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
                             stringResource(R.string.accessibility_go_back)
@@ -126,7 +173,6 @@ fun AddPasswordItemScreen(
                 },
                 label = { Text(stringResource(R.string.label_name)) },
                 keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
@@ -137,20 +183,54 @@ fun AddPasswordItemScreen(
                     .focusRequester(focusRequester)
             )
 
-            OutlinedTextField(
-                value = username,
-                onValueChange = { value -> username = value },
-                label = { Text(stringResource(R.string.label_username)) },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
+            ExposedDropdownMenuBox(
+                expanded = state.usernameSuggestions.isNotEmpty(),
+                onExpandedChange = { value ->
+                    if (!value) {
+                        viewModel.clearUsernameSuggestions()
+                    }
+                },
+            ) {
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { value ->
+                        username = value
+                        if (isSuggestionSelected) isSuggestionSelected = false
+                    },
+                    label = { Text(stringResource(R.string.label_username)) },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
 
-            Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+
+                ExposedDropdownMenu(
+                    expanded = state.usernameSuggestions.isNotEmpty(),
+                    onDismissRequest = { viewModel.clearUsernameSuggestions() },
+                    modifier = Modifier.requiredSizeIn(maxHeight = 110.dp)
+                ) {
+                    state.usernameSuggestions.forEach { item ->
+                        DropdownMenuItem(
+                            text = { Text(item, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                            onClick = {
+                                isSuggestionSelected = true
+                                username = TextFieldValue(item, TextRange(item.length))
+                                viewModel.clearUsernameSuggestions()
+                            }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = password,
@@ -175,7 +255,7 @@ fun AddPasswordItemScreen(
                 ),
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = notes,
@@ -192,11 +272,11 @@ fun AddPasswordItemScreen(
                 ),
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
             ExposedDropdownMenuBox(
                 expanded = isCategoryDropdownVisible,
-                onExpandedChange = { value -> isCategoryDropdownVisible = value },
+                onExpandedChange = { value -> isCategoryDropdownVisible = value }
             ) {
                 OutlinedTextField(
                     leadingIcon = {
@@ -226,6 +306,7 @@ fun AddPasswordItemScreen(
                 ExposedDropdownMenu(
                     expanded = isCategoryDropdownVisible,
                     onDismissRequest = { isCategoryDropdownVisible = false },
+                    modifier = Modifier.requiredSizeIn(maxHeight = 150.dp)
                 ) {
                     DropdownMenuItem(
                         leadingIcon = {
@@ -275,13 +356,13 @@ fun AddPasswordItemScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Button(
                 onClick = {
                     keyboardController?.hide()
 
-                    viewModel.addPasswordItem(name, username, password, notes, category) {
+                    viewModel.addPasswordItem(name, username.text, password, notes, category) {
                         navController.popBackStack()
                     }
                 },

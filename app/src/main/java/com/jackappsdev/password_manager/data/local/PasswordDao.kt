@@ -14,6 +14,9 @@ interface PasswordDao {
     @RawQuery(observedEntities = [PasswordItemEntity::class])
     fun getAllPasswordEntities(query: SimpleSQLiteQuery): Flow<List<PasswordItemEntity>>
 
+    @Query("SELECT DISTINCT username FROM password_items WHERE username LIKE :username LIMIT :limit")
+    suspend fun getUniqueUsernames(username: String, limit: Int): List<String>
+
     @Query(
         "SELECT password_items.id AS id, " +
                 "password_items.name AS name, " +

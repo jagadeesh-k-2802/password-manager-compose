@@ -54,28 +54,27 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.core.debounce
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
+import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,10 +83,8 @@ fun AddPasswordItemScreen(
     viewModel: AddPasswordItemViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val state = viewModel.state
     var name by rememberSaveable { mutableStateOf("") }
     var username by remember { mutableStateOf(TextFieldValue(text = "")) }
-    var isSuggestionSelected by remember { mutableStateOf(false) }
     var password by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -95,7 +92,6 @@ fun AddPasswordItemScreen(
     var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
     val noCategoryString = remember { getString(context, R.string.text_no_category) }
     val noCategoryModel = remember { CategoryModel(name = noCategoryString, color = "") }
-    var category by remember { mutableStateOf(noCategoryModel) }
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -105,6 +101,16 @@ fun AddPasswordItemScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val dispatcher = backDispatcher.onBackPressedDispatcher
+    val savedStateHandle = navController.currentBackStackEntryAsState().value?.savedStateHandle
+
+    var category by remember(savedStateHandle) {
+        mutableStateOf(
+            if (savedStateHandle?.contains(CREATED_CATEGORY) == true) Json.decodeFromString(
+                savedStateHandle[CREATED_CATEGORY] ?: ""
+            )
+            else noCategoryModel
+        )
+    }
 
     val backCallback = remember(name, username, password, notes) {
         object : OnBackPressedCallback(true) {
@@ -120,14 +126,6 @@ fun AddPasswordItemScreen(
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-    }
-
-    val debouncedUniqueUsernamesQuery = remember {
-        debounce<Unit>(500, Dispatchers.IO) { viewModel.getUniqueUsernames(username.text) }
-    }
-
-    LaunchedEffect(username) {
-        if (!isSuggestionSelected) debouncedUniqueUsernamesQuery(Unit)
     }
 
     DisposableEffect(lifecycleOwner, backDispatcher) {
@@ -183,52 +181,19 @@ fun AddPasswordItemScreen(
                     .focusRequester(focusRequester)
             )
 
-            ExposedDropdownMenuBox(
-                expanded = state.usernameSuggestions.isNotEmpty(),
-                onExpandedChange = { value ->
-                    if (!value) {
-                        viewModel.clearUsernameSuggestions()
-                    }
-                },
-            ) {
-                OutlinedTextField(
-                    value = username,
-                    onValueChange = { value ->
-                        username = value
-                        if (isSuggestionSelected) isSuggestionSelected = false
-                    },
-                    label = { Text(stringResource(R.string.label_username)) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
+            OutlinedTextField(
+                value = username,
+                onValueChange = { value -> username = value },
+                label = { Text(stringResource(R.string.label_username)) },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                ExposedDropdownMenu(
-                    expanded = state.usernameSuggestions.isNotEmpty(),
-                    onDismissRequest = { viewModel.clearUsernameSuggestions() },
-                    modifier = Modifier.requiredSizeIn(maxHeight = 110.dp)
-                ) {
-                    state.usernameSuggestions.forEach { item ->
-                        DropdownMenuItem(
-                            text = { Text(item, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                            onClick = {
-                                isSuggestionSelected = true
-                                username = TextFieldValue(item, TextRange(item.length))
-                                viewModel.clearUsernameSuggestions()
-                            }
-                        )
-                    }
-                }
-            }
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 

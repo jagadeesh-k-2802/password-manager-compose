@@ -51,6 +51,10 @@ import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+const val CREATED_CATEGORY = "CREATED_CATEGORY_KEY"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -140,8 +144,10 @@ fun AddCategoryItemScreen(
 
             Button(
                 onClick = {
-                    viewModel.addItem(name, color) {
+                    viewModel.addItem(name, color) { categoryModel ->
                         navController.popBackStack()
+                        val savedState = navController.currentBackStackEntry?.savedStateHandle
+                        savedState?.set(CREATED_CATEGORY, Json.encodeToString(categoryModel))
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

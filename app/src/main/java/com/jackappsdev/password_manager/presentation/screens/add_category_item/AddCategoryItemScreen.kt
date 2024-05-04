@@ -1,5 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.add_category_item
 
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +29,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,6 +44,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -49,6 +53,7 @@ import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.serialization.encodeToString
@@ -66,18 +71,44 @@ fun AddCategoryItemScreen(
     val context = LocalContext.current
     var color by rememberSaveable { mutableStateOf(colorList.first()) }
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
+    var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
+    val dispatcher = backDispatcher.onBackPressedDispatcher
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
+    val backCallback = remember(name) {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (name.isNotEmpty()) {
+                    isUnsavedChangesDialogVisible = true
+                } else {
+                    navController.popBackStack()
+                }
+            }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner, backDispatcher) {
+        dispatcher.addCallback(lifecycleOwner, backCallback)
+        onDispose { backCallback.remove() }
+    }
+
+    if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
+        onConfirm = { navController.popBackStack() },
+        onDismiss = { isUnsavedChangesDialogVisible = false }
+    )
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_add_new_category)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { backCallback.handleOnBackPressed() }) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
                             stringResource(R.string.accessibility_go_back)

@@ -58,7 +58,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
@@ -84,7 +83,7 @@ fun AddPasswordItemScreen(
 ) {
     val context = LocalContext.current
     var name by rememberSaveable { mutableStateOf("") }
-    var username by remember { mutableStateOf(TextFieldValue(text = "")) }
+    var username by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -115,7 +114,7 @@ fun AddPasswordItemScreen(
     val backCallback = remember(name, username, password, notes) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (name.isNotEmpty() || username.text.isNotEmpty() || password.isNotEmpty() || notes.isNotEmpty()) {
+                if (name.isNotEmpty() || username.isNotEmpty() || password.isNotEmpty() || notes.isNotEmpty()) {
                     isUnsavedChangesDialogVisible = true
                 } else {
                     navController.popBackStack()
@@ -171,6 +170,7 @@ fun AddPasswordItemScreen(
                 },
                 label = { Text(stringResource(R.string.label_name)) },
                 keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
@@ -327,7 +327,7 @@ fun AddPasswordItemScreen(
                 onClick = {
                     keyboardController?.hide()
 
-                    viewModel.addPasswordItem(name, username.text, password, notes, category) {
+                    viewModel.addPasswordItem(name, username, password, notes, category) {
                         navController.popBackStack()
                     }
                 },

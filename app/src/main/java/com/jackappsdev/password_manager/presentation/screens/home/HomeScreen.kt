@@ -83,8 +83,12 @@ fun HomeScreen(
         sheetState = sortBySheetState,
         currentSortBy = state.sortBy
     ) { sortBy ->
+        scope.launch {
+            lazyColumnState.animateScrollToItem(0)
+            sortBySheetState.hide()
+        }
+
         viewModel.setSortBy(sortBy)
-        scope.launch { sortBySheetState.hide() }
     }
 
     if (filterBySheetState.isVisible) FilterByCategoryModalSheet(
@@ -92,8 +96,12 @@ fun HomeScreen(
         currentFilterBy = state.filterBy,
         categoryItems = categoryItems
     ) { filterBy ->
+        scope.launch {
+            lazyColumnState.animateScrollToItem(0)
+            filterBySheetState.hide()
+        }
+
         viewModel.filterByCategory(filterBy)
-        scope.launch { filterBySheetState.hide() }
     }
 
     Scaffold(

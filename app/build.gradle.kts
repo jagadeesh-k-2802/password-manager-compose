@@ -17,7 +17,7 @@ android {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = 28
         targetSdk = 34
-        versionCode = 6
+        versionCode = 9
         versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

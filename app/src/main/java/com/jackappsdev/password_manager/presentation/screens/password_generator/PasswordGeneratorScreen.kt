@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Refresh
@@ -34,8 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.generateRandomPassword
@@ -53,6 +57,7 @@ fun PasswordGeneratorScreen() {
     var includeSymbols by rememberSaveable { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Generate new password whenever one of the arg changes
@@ -81,7 +86,7 @@ fun PasswordGeneratorScreen() {
             if (!includeSymbols) count++
 
             if (count == 3 && !value) {
-                scope.launch { snackbarHostState.showSnackbar("Cannot Turn Off All Options") }
+                scope.launch { snackbarHostState.showSnackbar(context.getString(R.string.text_all_options_warning)) }
                 false
             } else {
                 true
@@ -90,13 +95,14 @@ fun PasswordGeneratorScreen() {
     }
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("Password Generator") }) },
+        topBar = { CenterAlignedTopAppBar(title = { Text(stringResource(R.string.title_password_generator)) }) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .verticalScroll(scrollState)
         ) {
             SelectionContainer {
                 Column(
@@ -114,9 +120,9 @@ fun PasswordGeneratorScreen() {
                     ) {
                         Text(
                             text = when (lengthValue) {
-                                in (1..8) -> "Weak"
-                                in (8..12) -> "Medium"
-                                else -> "Strong"
+                                in (1..8) -> stringResource(R.string.text_weak)
+                                in (8..12) -> stringResource(R.string.text_medium)
+                                else -> stringResource(R.string.text_strong)
                             },
                             color = if (isSystemInDarkTheme()) {
                                 when (lengthValue) {
@@ -146,14 +152,14 @@ fun PasswordGeneratorScreen() {
                             }) {
                                 Icon(
                                     Icons.Outlined.Refresh,
-                                    contentDescription = "Generate again"
+                                    contentDescription = stringResource(R.string.accessibility_generate_again)
                                 )
                             }
 
                             IconButton(onClick = { copyToClipboard(context, generatedPassword) }) {
                                 Icon(
                                     Icons.Outlined.ContentCopy,
-                                    contentDescription = "Copy password"
+                                    contentDescription = stringResource(R.string.accessibility_copy_text)
                                 )
                             }
                         }
@@ -162,7 +168,7 @@ fun PasswordGeneratorScreen() {
             }
 
             Column {
-                Text("Length: $lengthValue")
+                Text(stringResource(R.string.text_length, lengthValue))
 
                 Slider(
                     value = lengthValue.toFloat(),
@@ -174,25 +180,25 @@ fun PasswordGeneratorScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             OptionSwitch(
-                title = "Include Lowercase (abc)",
+                title = stringResource(R.string.label_include_lowercase),
                 isItemChecked = includeLowercase,
                 onItemCheckChange = { value -> if (isLastOne(value)) includeLowercase = value }
             )
 
             OptionSwitch(
-                title = "Include Uppercase (ABC)",
+                title = stringResource(R.string.label_include_uppercase),
                 isItemChecked = includeUppercase,
                 onItemCheckChange = { value -> if (isLastOne(value)) includeUppercase = value }
             )
 
             OptionSwitch(
-                title = "Include Numbers (123)",
+                title = stringResource(R.string.label_include_numbers),
                 isItemChecked = includeNumbers,
                 onItemCheckChange = { value -> if (isLastOne(value)) includeNumbers = value }
             )
 
             OptionSwitch(
-                title = "Include Symbols (!$@)",
+                title = stringResource(R.string.label_include_symbols),
                 isItemChecked = includeSymbols,
                 onItemCheckChange = { value -> if (isLastOne(value)) includeSymbols = value }
             )

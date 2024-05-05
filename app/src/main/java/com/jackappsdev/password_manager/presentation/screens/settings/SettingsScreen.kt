@@ -15,11 +15,10 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -45,8 +44,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 
@@ -87,7 +88,11 @@ fun SettingsScreen(
             val uri = result.data?.data
 
             if (uri != null) viewModel.exportData(uri) {
-                Toast.makeText(context, "Passwords Exported Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.toast_passwords_exported),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -99,7 +104,10 @@ fun SettingsScreen(
                 if (!isDone) isInvalidPassword = true
             }
         },
-        onDismiss = { isImportPasswordsDialogVisible = false }
+        onDismiss = {
+            isImportPasswordsDialogVisible = false
+            isInvalidPassword = false
+        }
     )
 
     val onNoLockScreen = remember {
@@ -107,7 +115,7 @@ fun SettingsScreen(
             Toast
                 .makeText(
                     context,
-                    "Please, Setup your device lock screen first.",
+                    context.getString(R.string.toast_setup_lock_screen),
                     Toast.LENGTH_SHORT
                 )
                 .show()
@@ -125,30 +133,30 @@ fun SettingsScreen(
     }
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("Settings") }) }
+        topBar = { CenterAlignedTopAppBar(title = { Text(stringResource(R.string.title_settings)) }) }
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .scrollable(scrollState, Orientation.Vertical)
+                .verticalScroll(scrollState)
         ) {
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Lock, null) },
                 trailingContent = { Icon(Icons.Outlined.ChevronRight, null) },
-                headlineContent = { Text("Change Lock Password") },
+                headlineContent = { Text(stringResource(R.string.label_change_lock_password)) },
                 modifier = Modifier.clickable { navController.navigate(Routes.ChangePassword) }
             )
 
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Category, null) },
                 trailingContent = { Icon(Icons.Outlined.ChevronRight, null) },
-                headlineContent = { Text("Manage Categories") },
+                headlineContent = { Text(stringResource(R.string.label_manage_categories)) },
                 modifier = Modifier.clickable { navController.navigate(Routes.ManageCategories) }
             )
 
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.LockOpen, null) },
-                headlineContent = { Text("Use Screen Lock to Unlock") },
+                headlineContent = { Text(stringResource(R.string.label_use_screen_lock_to_unlock)) },
                 trailingContent = {
                     Switch(
                         checked = state.useScreenLockToUnlock == true,
@@ -174,7 +182,7 @@ fun SettingsScreen(
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ListItem(
                 leadingContent = { Icon(Icons.Outlined.Palette, null) },
-                headlineContent = { Text("Dynamic Colors") },
+                headlineContent = { Text(stringResource(R.string.label_dynamic_colors)) },
                 trailingContent = {
                     Switch(
                         checked = state.useDynamicColors == true,
@@ -189,7 +197,7 @@ fun SettingsScreen(
 
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Download, null) },
-                headlineContent = { Text("Import Passwords") },
+                headlineContent = { Text(stringResource(R.string.label_import_passwords)) },
                 modifier = Modifier.clickable {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -200,7 +208,7 @@ fun SettingsScreen(
 
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Upload, null) },
-                headlineContent = { Text("Export Passwords") },
+                headlineContent = { Text(stringResource(R.string.label_export_passwords)) },
                 modifier = Modifier.clickable {
                     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -212,7 +220,7 @@ fun SettingsScreen(
 
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Numbers, null) },
-                headlineContent = { Text("App Version: 1.1.2") },
+                headlineContent = { Text(stringResource(R.string.label_app_version)) },
                 modifier = Modifier.clickable {}
             )
         }

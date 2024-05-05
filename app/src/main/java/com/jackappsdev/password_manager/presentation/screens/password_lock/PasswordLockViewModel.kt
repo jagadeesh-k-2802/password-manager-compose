@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -36,11 +37,11 @@ class PasswordLockViewModel @Inject constructor(
     fun setNewPassword(newPassword: String, confirmNewPassword: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             if (newPassword != confirmNewPassword) {
-                errorChannel.send(PasswordLockError.ConfirmPasswordError("Passwords Don't Match"))
+                errorChannel.send(PasswordLockError.ConfirmPasswordError(R.string.error_passwords_not_match))
             } else if (newPassword.isEmpty()) {
-                errorChannel.send(PasswordLockError.PasswordError("Password Should Not be Empty"))
+                errorChannel.send(PasswordLockError.PasswordError(R.string.error_password_not_empty))
             } else if (confirmNewPassword.isEmpty()) {
-                errorChannel.send(PasswordLockError.PasswordError("Confirm Password Should Not be Empty"))
+                errorChannel.send(PasswordLockError.PasswordError(R.string.error_confirm_password_not_empty))
             } else {
                 userPreferencesRepository.setPassword(newPassword)
                 onSuccess()
@@ -58,7 +59,7 @@ class PasswordLockViewModel @Inject constructor(
         return if (isMatching) {
             true
         } else {
-            errorChannel.send(PasswordLockError.PasswordError("Incorrect Password"))
+            errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_password))
             false
         }
     }

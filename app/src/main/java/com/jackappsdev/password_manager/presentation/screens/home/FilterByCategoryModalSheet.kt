@@ -18,13 +18,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
@@ -34,6 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun FilterByCategoryModalSheet(
     sheetState: SheetState,
+    currentFilterBy: FilterBy,
     categoryItems: List<CategoryModel>,
     onValueChoose: (FilterBy) -> Unit
 ) {
@@ -44,7 +48,7 @@ fun FilterByCategoryModalSheet(
         sheetState = sheetState
     ) {
         Text(
-            "Filter By Category",
+            stringResource(R.string.text_filter_by_category),
             modifier = Modifier.padding(pagePadding),
             style = MaterialTheme.typography.titleLarge
         )
@@ -52,16 +56,42 @@ fun FilterByCategoryModalSheet(
         LazyColumn {
             item {
                 ListItem(
-                    leadingContent = { Icon(Icons.Outlined.SelectAll, "All Items") },
-                    headlineContent = { Text("All") },
+                    leadingContent = {
+                        Icon(
+                            Icons.Outlined.SelectAll,
+                            stringResource(R.string.accessibility_all_items)
+                        )
+                    },
+                    headlineContent = {
+                        Text(stringResource(R.string.label_all))
+                    },
+                    trailingContent = {
+                        RadioButton(
+                            selected = currentFilterBy == FilterBy.All,
+                            onClick = { onValueChoose(FilterBy.All) }
+                        )
+                    },
                     modifier = Modifier.clickable { onValueChoose(FilterBy.All) }
                 )
             }
 
             item {
                 ListItem(
-                    leadingContent = { Icon(Icons.Outlined.Block, "No Category Items") },
-                    headlineContent = { Text("No Category Items") },
+                    leadingContent = {
+                        Icon(
+                            Icons.Outlined.Block,
+                            stringResource(R.string.accessibility_no_category_items)
+                        )
+                    },
+                    headlineContent = {
+                        Text(stringResource(R.string.label_no_category_items))
+                    },
+                    trailingContent = {
+                        RadioButton(
+                            selected = currentFilterBy == FilterBy.NoCategoryItems,
+                            onClick = { onValueChoose(FilterBy.NoCategoryItems) }
+                        )
+                    },
                     modifier = Modifier.clickable { onValueChoose(FilterBy.NoCategoryItems) }
                 )
             }
@@ -76,8 +106,18 @@ fun FilterByCategoryModalSheet(
                                 .size(24.dp)
                         ) {}
                     },
-                    headlineContent = { Text(item.name) },
-                    modifier = Modifier.clickable { onValueChoose(FilterBy.Category(item.id ?: 0)) }
+                    headlineContent = {
+                        Text(item.name)
+                    },
+                    trailingContent = {
+                        RadioButton(
+                            selected = currentFilterBy == item.id?.let { FilterBy.Category(it) },
+                            onClick = { onValueChoose(FilterBy.Category(item.id ?: 0)) }
+                        )
+                    },
+                    modifier = Modifier.clickable {
+                        onValueChoose(FilterBy.Category(item.id ?: 0))
+                    }
                 )
             }
 

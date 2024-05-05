@@ -9,17 +9,30 @@ plugins {
     alias(libs.plugins.googleDevToolsKsp)
 }
 
+// Version Management
+val versionMajor = 1
+val versionMinor = 2
+val versionPatch = 1
+val minimumSdkVersion = 28
+
+fun generateVersionCode(): Int {
+    return minimumSdkVersion * 10000000 + versionMajor * 10000 + versionMinor * 200 + versionPatch
+}
+
+fun generateVersionName(): String {
+    return "${versionMajor}." + "${versionMinor}." + "$versionPatch"
+}
+
 android {
     namespace = "com.jackappsdev.password_manager"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
-        minSdk = 28
+        minSdk = minimumSdkVersion
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.1.2"
-
+        versionCode = generateVersionCode()
+        versionName = generateVersionName()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables {
@@ -30,8 +43,11 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            isShrinkResources  = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("debug")
         }
     }

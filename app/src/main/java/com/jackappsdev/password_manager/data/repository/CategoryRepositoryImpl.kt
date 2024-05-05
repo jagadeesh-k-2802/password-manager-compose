@@ -21,8 +21,8 @@ class CategoryRepositoryImpl(
         return categoryDao.getCategory(id).map { it?.toModel() }
     }
 
-    override suspend fun insertCategoryItem(item: CategoryModel) {
-        categoryDao.insertCategory(item.toEntity())
+    override suspend fun insertCategoryItem(item: CategoryModel): Long {
+        return categoryDao.insertCategory(item.toEntity())
     }
 
     override suspend fun deleteCategoryItem(item: CategoryModel) {

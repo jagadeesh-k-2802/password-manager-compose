@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +24,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
+fun SortModalSheet(
+    sheetState: SheetState,
+    currentSortBy: SortBy,
+    onValueChoose: (SortBy) -> Unit
+) {
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
@@ -37,47 +42,79 @@ fun SortModalSheet(sheetState: SheetState, onValueSet: (SortBy) -> Unit) {
         )
 
         ListItem(
-            headlineContent = { Text("A -> Z") },
-            modifier = Modifier.clickable { onValueSet(SortBy.ALPHABET_ASCENDING) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.SortByAlpha,
                     contentDescription = "Sort by ascending alphabet"
                 )
-            }
+            },
+            headlineContent = {
+                Text("A -> Z")
+            },
+            trailingContent = {
+                RadioButton(
+                    selected = currentSortBy == SortBy.ALPHABET_ASCENDING,
+                    onClick = { onValueChoose(SortBy.ALPHABET_ASCENDING) }
+                )
+            },
+            modifier = Modifier.clickable { onValueChoose(SortBy.ALPHABET_ASCENDING) }
         )
 
         ListItem(
-            headlineContent = { Text("Z -> A") },
-            modifier = Modifier.clickable { onValueSet(SortBy.ALPHABET_DESCENDING) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.SortByAlpha,
                     contentDescription = "Sort by descending alphabet"
                 )
-            }
+            },
+            headlineContent = {
+                Text("Z -> A")
+            },
+            trailingContent = {
+                RadioButton(
+                    selected = currentSortBy == SortBy.ALPHABET_DESCENDING,
+                    onClick = { onValueChoose(SortBy.ALPHABET_DESCENDING) }
+                )
+            },
+            modifier = Modifier.clickable { onValueChoose(SortBy.ALPHABET_DESCENDING) }
         )
 
         ListItem(
-            headlineContent = { Text("Newest -> Oldest") },
-            modifier = Modifier.clickable { onValueSet(SortBy.NEWEST) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.AccessTime,
                     contentDescription = "Sort by newest"
                 )
-            }
+            },
+            headlineContent = {
+                Text("Newest -> Oldest")
+            },
+            trailingContent = {
+                RadioButton(
+                    selected = currentSortBy == SortBy.NEWEST,
+                    onClick = { onValueChoose(SortBy.NEWEST) }
+                )
+            },
+            modifier = Modifier.clickable { onValueChoose(SortBy.NEWEST) }
         )
 
         ListItem(
-            headlineContent = { Text("Oldest -> Newest") },
-            modifier = Modifier.clickable { onValueSet(SortBy.OLDEST) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.AccessTime,
                     contentDescription = "Sort by oldest"
                 )
-            }
+            },
+            headlineContent = {
+                Text("Oldest -> Newest")
+            },
+            trailingContent = {
+                RadioButton(
+                    selected = currentSortBy == SortBy.OLDEST,
+                    onClick = { onValueChoose(SortBy.OLDEST) }
+                )
+            },
+            modifier = Modifier.clickable { onValueChoose(SortBy.OLDEST) }
         )
 
         Spacer(modifier = Modifier.height(48.dp))

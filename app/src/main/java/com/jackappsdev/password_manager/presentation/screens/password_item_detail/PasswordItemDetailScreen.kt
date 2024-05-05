@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Block
@@ -37,11 +39,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.navigation.Routes
@@ -61,6 +66,7 @@ fun PasswordItemDetailScreen(
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     if (isDeleteDialogVisible) PasswordItemDeleteDialog(
         onConfirm = {
@@ -76,10 +82,19 @@ fun PasswordItemDetailScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(passwordItem?.name ?: "") },
+                title = {
+                    Text(
+                        passwordItem?.name ?: "",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Go back")
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(R.string.accessibility_go_back)
+                        )
                     }
                 },
                 actions = {
@@ -90,11 +105,17 @@ fun PasswordItemDetailScreen(
                             )
                         )
                     }) {
-                        Icon(Icons.Outlined.Edit, "Edit item")
+                        Icon(
+                            Icons.Outlined.Edit,
+                            stringResource(R.string.accessibility_edit_item)
+                        )
                     }
 
                     IconButton(onClick = { isDeleteDialogVisible = true }) {
-                        Icon(Icons.Outlined.Delete, "Delete item")
+                        Icon(
+                            Icons.Outlined.Delete,
+                            stringResource(R.string.accessibility_delete_item)
+                        )
                     }
                 }
             )
@@ -104,13 +125,14 @@ fun PasswordItemDetailScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .verticalScroll(scrollState)
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
                 value = passwordItem?.name ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.label_name)) },
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 modifier = Modifier.fillMaxWidth()
@@ -122,10 +144,13 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.username ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Username") },
+                label = { Text(stringResource(R.string.label_username)) },
                 trailingIcon = {
                     IconButton(onClick = { copyToClipboard(context, passwordItem?.username) }) {
-                        Icon(Icons.Outlined.ContentCopy, "Copy")
+                        Icon(
+                            Icons.Outlined.ContentCopy,
+                            stringResource(R.string.accessibility_copy_text)
+                        )
                     }
                 },
                 enabled = false,
@@ -139,33 +164,28 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.password ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
+                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Row {
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
-                                if (showPassword) {
-                                    Icons.Outlined.VisibilityOff
-                                } else {
-                                    Icons.Outlined.Visibility
-                                },
-                                contentDescription = "Toggle Password"
+                                if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                                contentDescription = stringResource(R.string.accessibility_toggle_password)
                             )
                         }
 
                         IconButton(onClick = { copyToClipboard(context, passwordItem?.password) }) {
-                            Icon(Icons.Outlined.ContentCopy, "Copy")
+                            Icon(
+                                Icons.Outlined.ContentCopy,
+                                stringResource(R.string.accessibility_copy_text)
+                            )
                         }
                     }
                 },
-                visualTransformation = if (showPassword) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -174,14 +194,17 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.notes ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Notes") },
+                label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 trailingIcon = {
                     IconButton(onClick = { copyToClipboard(context, passwordItem?.notes) }) {
-                        Icon(Icons.Outlined.ContentCopy, "Copy")
+                        Icon(
+                            Icons.Outlined.ContentCopy,
+                            stringResource(R.string.accessibility_copy_text)
+                        )
                     }
                 },
             )
@@ -208,7 +231,7 @@ fun PasswordItemDetailScreen(
                     value = passwordItem?.categoryName ?: "",
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.label_category)) },
                     enabled = false,
                     colors = disabledButEnabledOutlinedTextFieldColors(),
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
@@ -233,7 +256,7 @@ fun PasswordItemDetailScreen(
                 },
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Last Updated At") },
+                label = { Text(stringResource(R.string.label_last_updated_at)) },
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 modifier = Modifier.fillMaxWidth()

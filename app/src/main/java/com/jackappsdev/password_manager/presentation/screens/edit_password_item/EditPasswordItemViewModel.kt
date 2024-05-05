@@ -3,12 +3,14 @@ package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.PasswordCategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -20,6 +22,7 @@ class EditPasswordItemViewModel @Inject constructor(
     categoryRepository: CategoryRepository
 ) : ViewModel() {
     private val id: String = checkNotNull(savedStateHandle["id"])
+    val errorChannel = Channel<EditPasswordItemError>()
     val passwordItem = passwordItemRepository.getPasswordItem(id.toInt())
     val categoryItems = categoryRepository.getAllCategories()
 
@@ -33,20 +36,24 @@ class EditPasswordItemViewModel @Inject constructor(
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
-            // It will update because onConflict is set to Replace
-            passwordItemRepository.insertPasswordItem(
-                PasswordItemModel(
-                    id = passwordItemModel?.id,
-                    name = name,
-                    username = username,
-                    password = password,
-                    notes = notes,
-                    categoryId = categoryId,
-                    createdAt = System.currentTimeMillis()
+            if (name.isEmpty()) {
+                errorChannel.send(EditPasswordItemError.NameError(R.string.error_name_not_empty))
+            } else {
+                // It will update because onConflict is set to Replace
+                passwordItemRepository.insertPasswordItem(
+                    PasswordItemModel(
+                        id = passwordItemModel?.id,
+                        name = name,
+                        username = username,
+                        password = password,
+                        notes = notes,
+                        categoryId = categoryId,
+                        createdAt = System.currentTimeMillis()
+                    )
                 )
-            )
 
-            withContext(Dispatchers.Main) { onSuccess() }
+                withContext(Dispatchers.Main) { onSuccess() }
+            }
         }
     }
 }

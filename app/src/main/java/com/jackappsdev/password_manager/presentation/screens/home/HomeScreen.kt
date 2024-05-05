@@ -76,32 +76,32 @@ fun HomeScreen(
     val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
 
     val debouncedFilter = remember {
-        debounce<Unit>(500, Dispatchers.IO) { viewModel.searchItems(searchQuery) }
+        debounce<Unit>(400, Dispatchers.IO) { viewModel.searchItems(searchQuery) }
     }
 
     if (sortBySheetState.isVisible) SortModalSheet(
         sheetState = sortBySheetState,
-        currentSortBy = viewModel.state.sortBy,
+        currentSortBy = state.sortBy
     ) { sortBy ->
-        viewModel.setSortBy(sortBy)
-
         scope.launch {
             if (categoryItems.isNotEmpty()) lazyColumnState.animateScrollToItem(0)
             sortBySheetState.hide()
         }
+
+        viewModel.setSortBy(sortBy)
     }
 
     if (filterBySheetState.isVisible) FilterByCategoryModalSheet(
         sheetState = filterBySheetState,
-        currentFilterBy = viewModel.state.filterBy,
+        currentFilterBy = state.filterBy,
         categoryItems = categoryItems
     ) { filterBy ->
-        viewModel.filterByCategory(filterBy)
-
         scope.launch {
             if (categoryItems.isNotEmpty()) lazyColumnState.animateScrollToItem(0)
             filterBySheetState.hide()
         }
+
+        viewModel.filterByCategory(filterBy)
     }
 
     Scaffold(
@@ -113,6 +113,7 @@ fun HomeScreen(
                             context,
                             context.getString(R.string.toast_app_locked), Toast.LENGTH_SHORT
                         ).show()
+
                         viewModel.lockApplication()
                     }) {
                         Icon(

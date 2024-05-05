@@ -69,8 +69,6 @@
     <string name="toast_passwords_exported">Passwords Exported Successfully</string>
     <string name="toast_setup_lock_screen">Please, Setup your device lock screen first.</string>
     <string name="toast_password_changed_successfully">Password Changed Successfully</string>
-    <string name="toast_app_update_msg">Updating in 5 Seconds…</string>
-    <string name="toast_update_failed">Update Failed</string>
     <string name="toast_copy_to_clipboard">Copied to Clipboard</string>
 
     <!--  Accessibility  -->
@@ -112,15 +110,18 @@
     <string name="dialog_btn_confirm">Confirm</string>
 
     <!--  Errors  -->
+    <string name="error_name_not_empty">Name should not be empty</string>
     <string name="error_passwords_not_match">Passwords Don\'t Match</string>
     <string name="error_password_not_empty">Password Should Not be Empty</string>
+    <string name="error_password_not_same">Passwords Should Not be Same</string>
+    <string name="error_new_password_not_empty">New Password should not be empty</string>
     <string name="error_confirm_password_not_empty">Confirm Password Should Not be Empty</string>
     <string name="error_incorrect_password">Incorrect Password</string>
     <string name="error_password_does_not_match">The Password does not match</string>
+    <string name="error_wrong_password">Wrong Password</string>
 
     <!--  Navigation  -->
     <string name="nav_home">Home</string>
     <string name="nav_generator">Generator</string>
     <string name="nav_settings">Settings</string>
-    <string name="error_name_not_empty">Name should not be empty</string>
 </resources>

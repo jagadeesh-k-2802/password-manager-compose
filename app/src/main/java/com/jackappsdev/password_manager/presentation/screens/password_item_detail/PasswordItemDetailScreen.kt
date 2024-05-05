@@ -105,10 +105,7 @@ fun PasswordItemDetailScreen(
                             )
                         )
                     }) {
-                        Icon(
-                            Icons.Outlined.Edit,
-                            stringResource(R.string.accessibility_edit_item)
-                        )
+                        Icon(Icons.Outlined.Edit, stringResource(R.string.accessibility_edit_item))
                     }
 
                     IconButton(onClick = { isDeleteDialogVisible = true }) {
@@ -125,8 +122,8 @@ fun PasswordItemDetailScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
-                .verticalScroll(scrollState)
                 .fillMaxWidth()
+                .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
                 value = passwordItem?.name ?: "",

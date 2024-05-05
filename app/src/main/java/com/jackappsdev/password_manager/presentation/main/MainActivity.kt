@@ -25,7 +25,7 @@ class MainActivity : FragmentActivity() {
             passwordLockViewModel.state.hasPasswordSet == null && mainViewModel.useDynamicColors == null
         }
 
-        // Disable screenshots
+        // Disable screenshots & screen recordings
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SECURE,
             WindowManager.LayoutParams.FLAG_SECURE

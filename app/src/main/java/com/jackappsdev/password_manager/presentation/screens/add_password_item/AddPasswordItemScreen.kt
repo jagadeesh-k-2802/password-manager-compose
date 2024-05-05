@@ -92,12 +92,12 @@ fun AddPasswordItemScreen(
     var isAlreadyAutoFocused by rememberSaveable { mutableStateOf(false) }
     val noCategoryString = remember { getString(context, R.string.text_no_category) }
     val noCategoryModel = remember { CategoryModel(name = noCategoryString, color = "") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
-    val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
+    val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
     val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val dispatcher = backDispatcher.onBackPressedDispatcher
@@ -112,7 +112,7 @@ fun AddPasswordItemScreen(
         )
     }
 
-    val backCallback = remember(name, username, password, notes, category) {
+    val backCallback = remember(name, username, password, notes) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (name.isNotBlank() || username.isNotBlank() || password.isNotBlank() || notes.isNotBlank()) {
@@ -169,13 +169,10 @@ fun AddPasswordItemScreen(
                 isError = error is AddPasswordItemError.NameError,
                 supportingText = {
                     error?.let {
-                        if (it is AddPasswordItemError.NameError) Text(text = it.error)
+                        if (it is AddPasswordItemError.NameError) Text(stringResource(it.error))
                     }
                 },
                 label = { Text(stringResource(R.string.label_name)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
@@ -183,6 +180,9 @@ fun AddPasswordItemScreen(
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
             )
 
             OutlinedTextField(
@@ -230,8 +230,8 @@ fun AddPasswordItemScreen(
                 value = notes,
                 onValueChange = { value -> notes = value },
                 label = { Text(stringResource(R.string.label_notes)) },
-                maxLines = 5,
                 modifier = Modifier.fillMaxWidth(),
+                maxLines = 5,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Done
@@ -245,7 +245,7 @@ fun AddPasswordItemScreen(
 
             ExposedDropdownMenuBox(
                 expanded = isCategoryDropdownVisible,
-                onExpandedChange = { value -> isCategoryDropdownVisible = value },
+                onExpandedChange = { value -> isCategoryDropdownVisible = value }
             ) {
                 OutlinedTextField(
                     leadingIcon = {

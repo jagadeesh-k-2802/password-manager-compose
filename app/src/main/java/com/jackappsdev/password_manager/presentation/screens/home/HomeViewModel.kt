@@ -79,7 +79,7 @@ class HomeViewModel @Inject constructor(
                     filteredItems = passwordItemRepository.getPasswordItems(
                         state.sortBy.orderBy(),
                         state.filterBy.where(),
-                        searchQuery
+                        searchQuery.trim()
                     ).stateIn(viewModelScope)
                 )
             }

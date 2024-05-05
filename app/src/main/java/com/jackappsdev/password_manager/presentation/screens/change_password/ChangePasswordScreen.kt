@@ -69,7 +69,6 @@ fun ChangePasswordScreen(
                             Icons.AutoMirrored.Rounded.ArrowBack,
                             stringResource(R.string.accessibility_go_back)
                         )
-
                     }
                 },
                 title = { Text(stringResource(R.string.title_change_password)) }
@@ -94,7 +93,7 @@ fun ChangePasswordScreen(
                 isError = error is ChangePasswordError.CurrentPasswordError,
                 supportingText = {
                     error?.let {
-                        if (it is ChangePasswordError.CurrentPasswordError) Text(it.error)
+                        if (it is ChangePasswordError.CurrentPasswordError) Text(stringResource(it.error))
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -119,7 +118,7 @@ fun ChangePasswordScreen(
                 isError = error is ChangePasswordError.NewPasswordError,
                 supportingText = {
                     error?.let {
-                        if (it is ChangePasswordError.NewPasswordError) Text(it.error)
+                        if (it is ChangePasswordError.NewPasswordError) Text(stringResource(it.error))
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

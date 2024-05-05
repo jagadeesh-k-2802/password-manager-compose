@@ -34,6 +34,10 @@ class PasswordItemRepositoryImpl(
         }
     }
 
+    override suspend fun getUniqueUsernames(username: String, limit: Int): List<String> {
+        return passwordDao.getUniqueUsernames("%$username%", limit)
+    }
+
     override fun getPasswordItem(id: Int): Flow<PasswordCategoryModel?> {
         return passwordDao.getPasswordEntity(id).map { it?.toModel() }
     }

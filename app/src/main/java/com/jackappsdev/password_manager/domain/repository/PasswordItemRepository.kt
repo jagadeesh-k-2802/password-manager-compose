@@ -11,6 +11,7 @@ interface PasswordItemRepository {
         query: String
     ): Flow<List<PasswordItemModel>>
 
+    suspend fun getUniqueUsernames(username: String, limit: Int): List<String>
     fun getPasswordItem(id: Int): Flow<PasswordCategoryModel?>
     suspend fun insertPasswordItem(item: PasswordItemModel)
     suspend fun deletePasswordItem(item: PasswordCategoryModel)

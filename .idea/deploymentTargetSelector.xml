@@ -2,7 +2,18 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="wear">
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2024-05-12T11:29:39.662733600Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Jack\.android\avd\Pixel_7_API_34.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
+      </SelectionState>
+      <SelectionState runConfigName="mobile">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

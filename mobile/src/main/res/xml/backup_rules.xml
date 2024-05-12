@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 or lower  -->
+<full-backup-content>
+    <include domain="database" />
+    <include domain="file" path="datastore/." />
+</full-backup-content>

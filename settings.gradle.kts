@@ -9,6 +9,7 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+
         mavenCentral()
         gradlePluginPortal()
     }
@@ -24,4 +25,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "PasswordManager"
-include(":app")
+include(":mobile")
+include(":wear")

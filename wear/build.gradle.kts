@@ -5,8 +5,8 @@ plugins {
 
 // Version Management
 val versionMajor = 1
-val versionMinor = 2
-val versionPatch = 1
+val versionMinor = 0
+val versionPatch = 0
 val minimumSdkVersion = 28
 
 fun generateVersionCode(): Int {
@@ -31,16 +31,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -80,6 +76,13 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material.icons.extended)
+
+    // Navigation
+    implementation(libs.androidx.compose.navigation)
+
+    // Horologist
+    implementation(libs.horologist.compose.layout)
 
     // Testing
     androidTestImplementation(platform(libs.androidx.compose.bom))

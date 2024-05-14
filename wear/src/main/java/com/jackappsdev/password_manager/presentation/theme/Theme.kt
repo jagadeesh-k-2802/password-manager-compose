@@ -7,7 +7,5 @@ import androidx.wear.compose.material.MaterialTheme
 fun PasswordManagerTheme(
     content: @Composable () -> Unit
 ) {
-    MaterialTheme(
-        content = content
-    )
+    MaterialTheme(content = content)
 }

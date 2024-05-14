@@ -3,11 +3,9 @@ package com.jackappsdev.password_manager.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.jackappsdev.password_manager.presentation.navigation.Router
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,17 +15,11 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp()
-        }
-    }
-}
+            val navController = rememberSwipeDismissableNavController()
 
-@Composable
-fun WearApp() {
-    PasswordManagerTheme {
-        Scaffold {
-            TimeText()
-            Text("Hello Wear OS App")
+            PasswordManagerTheme {
+                Router(navController)
+            }
         }
     }
 }

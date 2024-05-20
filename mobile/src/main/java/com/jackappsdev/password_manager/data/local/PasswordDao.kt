@@ -23,6 +23,8 @@ interface PasswordDao {
                 "password_items.username AS username, " +
                 "password_items.password AS password, " +
                 "password_items.notes AS notes, " +
+                "password_items.website AS website, " +
+                "password_items.is_added_to_watch AS is_added_to_watch, " +
                 "categories.id AS category_id, " +
                 "categories.name AS category_name, " +
                 "categories.color AS category_color, " +

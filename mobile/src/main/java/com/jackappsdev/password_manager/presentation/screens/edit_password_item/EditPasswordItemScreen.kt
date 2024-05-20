@@ -125,6 +125,14 @@ fun EditPasswordItemScreen(
         )
     }
 
+    var website by remember(passwordItem) {
+        mutableStateOf(
+            TextFieldValue(
+                passwordItem?.website ?: "", TextRange(passwordItem?.website?.length ?: 0)
+            )
+        )
+    }
+
     var notes by remember(passwordItem) {
         mutableStateOf(
             TextFieldValue(passwordItem?.notes ?: "", TextRange(passwordItem?.notes?.length ?: 0))
@@ -267,6 +275,22 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
+                value = website,
+                onValueChange = { value -> website = value },
+                label = { Text(stringResource(R.string.label_website)) },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
                 value = notes,
                 onValueChange = { value ->
                     if (notes.text != value.text) isChanged = true
@@ -383,6 +407,7 @@ fun EditPasswordItemScreen(
                         name.text,
                         username.text,
                         password.text,
+                        website.text,
                         notes.text,
                         category.id,
                         passwordItem

@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.ContentCopy
@@ -48,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.copyToClipboard
+import com.jackappsdev.password_manager.core.launchUrl
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
@@ -143,11 +145,13 @@ fun PasswordItemDetailScreen(
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_username)) },
                 trailingIcon = {
-                    IconButton(onClick = { copyToClipboard(context, passwordItem?.username) }) {
-                        Icon(
-                            Icons.Outlined.ContentCopy,
-                            stringResource(R.string.accessibility_copy_text)
-                        )
+                    if ((passwordItem?.username?.length ?: 0) > 0) {
+                        IconButton(onClick = { copyToClipboard(context, passwordItem?.username) }) {
+                            Icon(
+                                Icons.Outlined.ContentCopy,
+                                stringResource(R.string.accessibility_copy_text)
+                            )
+                        }
                     }
                 },
                 enabled = false,
@@ -167,22 +171,48 @@ fun PasswordItemDetailScreen(
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    Row {
-                        IconButton(onClick = { showPassword = !showPassword }) {
-                            Icon(
-                                if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                                contentDescription = stringResource(R.string.accessibility_toggle_password)
-                            )
-                        }
+                    if ((passwordItem?.password?.length ?: 0) > 0) {
+                        Row {
+                            IconButton(onClick = { showPassword = !showPassword }) {
+                                Icon(
+                                    if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                                    contentDescription = stringResource(R.string.accessibility_toggle_password)
+                                )
+                            }
 
-                        IconButton(onClick = { copyToClipboard(context, passwordItem?.password) }) {
+                            IconButton(onClick = {
+                                copyToClipboard(context, passwordItem?.password)
+                            }) {
+                                Icon(
+                                    Icons.Outlined.ContentCopy,
+                                    stringResource(R.string.accessibility_copy_text)
+                                )
+                            }
+                        }
+                    }
+                },
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = passwordItem?.website ?: "",
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(stringResource(R.string.label_website)) },
+                trailingIcon = {
+                    if ((passwordItem?.website?.length ?: 0) > 0) {
+                        IconButton(onClick = { launchUrl(context, passwordItem?.website ?: "") }) {
                             Icon(
-                                Icons.Outlined.ContentCopy,
-                                stringResource(R.string.accessibility_copy_text)
+                                Icons.AutoMirrored.Outlined.OpenInNew,
+                                stringResource(R.string.accessibility_open_website)
                             )
                         }
                     }
                 },
+                enabled = false,
+                colors = disabledButEnabledOutlinedTextFieldColors(),
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -197,11 +227,13 @@ fun PasswordItemDetailScreen(
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 trailingIcon = {
-                    IconButton(onClick = { copyToClipboard(context, passwordItem?.notes) }) {
-                        Icon(
-                            Icons.Outlined.ContentCopy,
-                            stringResource(R.string.accessibility_copy_text)
-                        )
+                    if ((passwordItem?.notes?.length ?: 0) > 0) {
+                        IconButton(onClick = { copyToClipboard(context, passwordItem?.notes) }) {
+                            Icon(
+                                Icons.Outlined.ContentCopy,
+                                stringResource(R.string.accessibility_copy_text)
+                            )
+                        }
                     }
                 },
             )

@@ -6,6 +6,8 @@ data class PasswordItemModel(
     val username: String,
     val password: String,
     val notes: String,
+    val website: String,
+    val isAddedToWatch: Boolean,
     val categoryId: Int? = null,
     val createdAt: Long? = null
 )

@@ -92,7 +92,7 @@ fun PasswordLockScreen(
                 BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    viewModel.setUnlocked()
+                    viewModel.setUnlocked(true)
                 }
             }
         )
@@ -151,7 +151,7 @@ fun PasswordLockScreen(
                         scope.launch {
                             if (viewModel.verifyPassword(passwordValue)) {
                                 keyboardController?.hide()
-                                viewModel.setUnlocked()
+                                viewModel.setUnlocked(true)
                             }
                         }
                     },
@@ -237,7 +237,7 @@ fun PasswordLockScreen(
                         keyboardController?.hide()
 
                         viewModel.setNewPassword(passwordValue, confirmPasswordValue) {
-                            viewModel.setUnlocked()
+                            viewModel.setUnlocked(true)
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

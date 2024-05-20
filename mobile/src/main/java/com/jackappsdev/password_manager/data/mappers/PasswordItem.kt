@@ -11,6 +11,8 @@ fun PasswordItemEntity.toModel(): PasswordItemModel {
         password = password,
         notes = notes,
         categoryId = categoryId,
+        website = website,
+        isAddedToWatch = isAddedToWatch,
         createdAt = createdAt
     )
 }
@@ -24,6 +26,8 @@ fun PasswordItemModel.toEntity(): PasswordItemEntity {
             password = password,
             notes = notes,
             categoryId = categoryId,
+            website = website,
+            isAddedToWatch = isAddedToWatch,
             createdAt = createdAt
         )
     } else {
@@ -32,6 +36,8 @@ fun PasswordItemModel.toEntity(): PasswordItemEntity {
             username = username,
             notes = notes,
             password = password,
+            website = website,
+            isAddedToWatch = isAddedToWatch,
             categoryId = categoryId
         )
     }

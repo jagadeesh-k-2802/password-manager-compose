@@ -26,6 +26,7 @@ class AddPasswordItemViewModel @Inject constructor(
         name: String,
         username: String,
         password: String,
+        website: String,
         notes: String,
         categoryModel: CategoryModel,
         onSuccess: () -> Unit
@@ -39,8 +40,10 @@ class AddPasswordItemViewModel @Inject constructor(
                         name = name,
                         username = username,
                         password = password,
+                        website = website,
                         notes = notes,
-                        categoryId = categoryModel.id
+                        categoryId = categoryModel.id,
+                        isAddedToWatch = false
                     )
                 )
 

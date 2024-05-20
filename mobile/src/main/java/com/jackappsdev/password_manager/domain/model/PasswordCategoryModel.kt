@@ -6,6 +6,8 @@ data class PasswordCategoryModel(
     val username: String,
     val password: String,
     val notes: String,
+    val website: String,
+    val isAddedToWatch: Boolean,
     val categoryId: Int? = null,
     val categoryName: String? = null,
     val categoryColor: String? = null,

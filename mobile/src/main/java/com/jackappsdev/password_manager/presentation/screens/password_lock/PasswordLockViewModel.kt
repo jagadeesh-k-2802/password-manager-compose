@@ -51,8 +51,8 @@ class PasswordLockViewModel @Inject constructor(
         }
     }
 
-    fun setUnlocked() {
-        state = state.copy(hasBeenUnlocked = true)
+    fun setUnlocked(hasBeenUnlocked: Boolean) {
+        state = state.copy(hasBeenUnlocked = hasBeenUnlocked)
     }
 
     suspend fun verifyPassword(password: String): Boolean {

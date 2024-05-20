@@ -14,6 +14,8 @@ fun PasswordCategory.toModel(): PasswordCategoryModel {
         categoryId = categoryId,
         categoryName = categoryName,
         categoryColor = categoryColor,
+        website = website,
+        isAddedToWatch = isAddedToWatch,
         createdAt = createdAt
     )
 }
@@ -27,6 +29,8 @@ fun PasswordCategoryModel.toPasswordItemEntity(): PasswordItemEntity {
             password = password,
             notes = notes,
             categoryId = categoryId,
+            website = website,
+            isAddedToWatch = isAddedToWatch,
             createdAt = createdAt
         )
     } else {
@@ -35,6 +39,8 @@ fun PasswordCategoryModel.toPasswordItemEntity(): PasswordItemEntity {
             username = username,
             notes = notes,
             password = password,
+            website = website,
+            isAddedToWatch = isAddedToWatch,
             categoryId = categoryId
         )
     }

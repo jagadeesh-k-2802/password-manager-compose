@@ -3,6 +3,8 @@ package com.jackappsdev.password_manager.core
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import com.jackappsdev.password_manager.R
@@ -23,6 +25,7 @@ fun generateRandomPassword(
 ): String {
     @Suppress("SpellCheckingInspection")
     val lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
+
     @Suppress("SpellCheckingInspection")
     val uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     val numberChars = "0123456789"
@@ -50,7 +53,21 @@ fun copyToClipboard(context: Context, text: String?, label: String = "Text") {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clipData)
-    Toast.makeText(context, context.getString(R.string.toast_copy_to_clipboard), Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, context.getString(R.string.toast_copy_to_clipboard), Toast.LENGTH_SHORT)
+        .show()
+}
+
+fun launchUrl(context: Context, url: String) {
+    var currUrl = url
+    if (!url.startsWith("http://") && !url.startsWith("https://")) currUrl = "http://$url"
+
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(currUrl))
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        Toast.makeText(context, context.getString(R.string.toast_invalid_url), Toast.LENGTH_SHORT)
+            .show()
+    }
 }
 
 fun <T> debounce(

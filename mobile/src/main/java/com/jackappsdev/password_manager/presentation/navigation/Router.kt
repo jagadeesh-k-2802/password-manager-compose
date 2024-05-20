@@ -5,7 +5,11 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,6 +39,21 @@ fun Router(
         bottomBar = { BottomNavigationBar(navController) }
     ) { contentPadding ->
         val state = passwordLockViewModel.state
+        val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+        DisposableEffect(lifecycle) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_PAUSE) {
+                    passwordLockViewModel.setUnlocked(false)
+                }
+            }
+
+            lifecycle.addObserver(observer)
+
+            onDispose {
+                lifecycle.removeObserver(observer)
+            }
+        }
 
         if (!state.hasBeenUnlocked) {
             NavHost(

@@ -30,6 +30,7 @@ class EditPasswordItemViewModel @Inject constructor(
         name: String,
         username: String,
         password: String,
+        website: String,
         notes: String,
         categoryId: Int?,
         passwordItemModel: PasswordCategoryModel?,
@@ -46,8 +47,10 @@ class EditPasswordItemViewModel @Inject constructor(
                         name = name,
                         username = username,
                         password = password,
+                        website = website,
                         notes = notes,
                         categoryId = categoryId,
+                        isAddedToWatch = false,
                         createdAt = System.currentTimeMillis()
                     )
                 )

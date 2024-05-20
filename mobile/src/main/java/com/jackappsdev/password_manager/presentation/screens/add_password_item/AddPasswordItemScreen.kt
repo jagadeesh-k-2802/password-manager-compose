@@ -85,6 +85,7 @@ fun AddPasswordItemScreen(
     var name by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var website by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isCategoryDropdownVisible by rememberSaveable { mutableStateOf(false) }
@@ -227,6 +228,22 @@ fun AddPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
+                value = website,
+                onValueChange = { value -> website = value },
+                label = { Text(stringResource(R.string.label_website)) },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
                 value = notes,
                 onValueChange = { value -> notes = value },
                 label = { Text(stringResource(R.string.label_notes)) },
@@ -331,7 +348,7 @@ fun AddPasswordItemScreen(
                 onClick = {
                     keyboardController?.hide()
 
-                    viewModel.addPasswordItem(name, username, password, notes, category) {
+                    viewModel.addPasswordItem(name, username, password, website, notes, category) {
                         navController.popBackStack()
                     }
                 },

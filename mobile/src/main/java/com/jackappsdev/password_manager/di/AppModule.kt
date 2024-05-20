@@ -8,6 +8,7 @@ import androidx.room.Room
 import com.jackappsdev.password_manager.core.CryptoManager
 import com.jackappsdev.password_manager.data.local.CategoryDao
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
+import com.jackappsdev.password_manager.data.local.MIGRATION_1_2
 import com.jackappsdev.password_manager.data.local.PasswordDao
 import com.jackappsdev.password_manager.data.local.PasswordDatabase
 import com.jackappsdev.password_manager.data.models.UserSettings
@@ -125,6 +126,7 @@ object AppModule {
         supportFactory: SupportFactory
     ): PasswordDatabase {
         return Room.databaseBuilder(appContext, PasswordDatabase::class.java, DATABASE_NAME)
+            .addMigrations(MIGRATION_1_2)
             .openHelperFactory(supportFactory)
             .fallbackToDestructiveMigration()
             .build()

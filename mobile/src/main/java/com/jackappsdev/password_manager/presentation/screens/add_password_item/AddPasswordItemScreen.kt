@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
@@ -71,6 +73,7 @@ import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesD
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
+import com.jackappsdev.password_manager.presentation.screens.password_generator.generatePassword
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.serialization.json.Json
@@ -209,11 +212,28 @@ fun AddPasswordItemScreen(
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    IconButton(onClick = { showPassword = !showPassword }) {
-                        Icon(
-                            if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                            contentDescription = stringResource(R.string.accessibility_toggle_password)
-                        )
+                    Row {
+                        IconButton(onClick = {
+                            password = generatePassword(
+                                lengthValue = 12,
+                                includeLowercase = true,
+                                includeUppercase = true,
+                                includeNumbers = true,
+                                includeSymbols = true,
+                            )
+                        }) {
+                            Icon(
+                                Icons.Outlined.Refresh,
+                                contentDescription = stringResource(R.string.accessibility_toggle_password)
+                            )
+                        }
+
+                        IconButton(onClick = { showPassword = !showPassword }) {
+                            Icon(
+                                if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                                contentDescription = stringResource(R.string.accessibility_toggle_password)
+                            )
+                        }
                     }
                 },
                 keyboardOptions = KeyboardOptions(

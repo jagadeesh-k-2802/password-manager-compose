@@ -1,3 +1,37 @@
 <resources>
+    <!--  Core  -->
     <string name="app_name">Password Manager</string>
+
+    <!-- Title -->
+    <string name="title_passwords">Passwords</string>
+
+    <!--  Buttons  -->
+    <string name="btn_open_app">Open App</string>
+    <string name="btn_one" translatable="false">1</string>
+    <string name="btn_two" translatable="false">2</string>
+    <string name="btn_three" translatable="false">3</string>
+    <string name="btn_four" translatable="false">4</string>
+    <string name="btn_five" translatable="false">5</string>
+    <string name="btn_six" translatable="false">6</string>
+    <string name="btn_seven" translatable="false">7</string>
+    <string name="btn_eight" translatable="false">8</string>
+    <string name="btn_nine" translatable="false">9</string>
+    <string name="btn_zero" translatable="false">0</string>
+
+    <!--  Text  -->
+    <string name="text_enable_watch_support">Please Enable Android Watch option on Mobile App.</string>
+    <string name="text_no_passwords">No Passwords Saved</string>
+    <string name="text_password_dot" translatable="false">•</string>
+
+    <!-- Toast -->
+    <string name="toast_opened_phone_app">Opened Phone App</string>
+    <string name="toast_cannot_open_phone_app">Cannot Open Phone App</string>
+
+    <!--  Accessibility  -->
+    <string name="accessibility_warning_icon">Warning icon</string>
+    <string name="accessibility_backspace">Backspace</string>
+    <string name="accessibility_done">Done</string>
+
+    <!--  Errors  -->
+    <string name="error_incorrect_password">Incorrect Password</string>
 </resources>

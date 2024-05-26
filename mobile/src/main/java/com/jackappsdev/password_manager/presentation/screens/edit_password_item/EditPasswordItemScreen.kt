@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
@@ -66,15 +68,22 @@ import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.android.gms.wearable.PutDataMapRequest
+import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.navigation.navigate
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
+import com.jackappsdev.password_manager.presentation.screens.password_generator.generatePassword
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
+import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -257,11 +266,31 @@ fun EditPasswordItemScreen(
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    IconButton(onClick = { showPassword = !showPassword }) {
-                        Icon(
-                            if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                            contentDescription = stringResource(R.string.accessibility_toggle_password)
-                        )
+                    Row {
+                        IconButton(onClick = {
+                            password = TextFieldValue(
+                                text = generatePassword(
+                                    lengthValue = 12,
+                                    includeLowercase = true,
+                                    includeUppercase = true,
+                                    includeNumbers = true,
+                                    includeSymbols = true,
+                                ),
+                                selection = TextRange(index = 12)
+                            )
+                        }) {
+                            Icon(
+                                Icons.Outlined.Refresh,
+                                contentDescription = stringResource(R.string.accessibility_toggle_password)
+                            )
+                        }
+
+                        IconButton(onClick = { showPassword = !showPassword }) {
+                            Icon(
+                                if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                                contentDescription = stringResource(R.string.accessibility_toggle_password)
+                            )
+                        }
                     }
                 },
                 keyboardOptions = KeyboardOptions(
@@ -411,8 +440,21 @@ fun EditPasswordItemScreen(
                         notes.text,
                         category.id,
                         passwordItem
-                    ) {
-                        navController.popBackStack()
+                    ) { newPasswordItemModel ->
+                        val dataClient = Wearable.getDataClient(context)
+
+                        val putDataRequest = PutDataMapRequest.create(UPSERT_PASSWORD).run {
+                            dataMap.putString(
+                                KEY_PASSWORD,
+                                Json.encodeToString(newPasswordItemModel.toPasswordItemDto())
+                            )
+                            setUrgent()
+                            asPutDataRequest()
+                        }
+
+                        dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                            navController.popBackStack()
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

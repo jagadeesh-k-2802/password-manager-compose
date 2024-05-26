@@ -3,7 +3,7 @@ package com.jackappsdev.password_manager.data.repository
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.jackappsdev.password_manager.core.EncryptedSQLiteOpenHelper
+import com.jackappsdev.password_manager.shared.core.EncryptedSQLiteOpenHelper
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.PasswordDao
 import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
@@ -36,7 +36,12 @@ class DatabaseManagerRepositoryImpl(
         }
 
         try {
-            val db = EncryptedSQLiteOpenHelper(appContext, tempDatabaseName, null, 1)
+            val db = EncryptedSQLiteOpenHelper(
+                appContext,
+                tempDatabaseName,
+                null,
+                1
+            )
             db.getReadableDatabase(password.toCharArray())
         } catch (_: SQLiteException) {
             return false

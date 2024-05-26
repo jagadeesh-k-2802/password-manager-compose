@@ -34,28 +34,27 @@ class EditPasswordItemViewModel @Inject constructor(
         notes: String,
         categoryId: Int?,
         passwordItemModel: PasswordCategoryModel?,
-        onSuccess: () -> Unit
+        onSuccess: (PasswordItemModel) -> Unit
     ) {
         viewModelScope.launch {
             if (name.isEmpty()) {
                 errorChannel.send(EditPasswordItemError.NameError(R.string.error_name_not_empty))
             } else {
                 // It will update because onConflict is set to Replace
-                passwordItemRepository.insertPasswordItem(
-                    PasswordItemModel(
-                        id = passwordItemModel?.id,
-                        name = name,
-                        username = username,
-                        password = password,
-                        website = website,
-                        notes = notes,
-                        categoryId = categoryId,
-                        isAddedToWatch = false,
-                        createdAt = System.currentTimeMillis()
-                    )
+                val newPasswordItemModel = PasswordItemModel(
+                    id = passwordItemModel?.id,
+                    name = name,
+                    username = username,
+                    password = password,
+                    website = website,
+                    notes = notes,
+                    categoryId = categoryId,
+                    isAddedToWatch = false,
+                    createdAt = System.currentTimeMillis()
                 )
 
-                withContext(Dispatchers.Main) { onSuccess() }
+                passwordItemRepository.insertPasswordItem(newPasswordItemModel)
+                withContext(Dispatchers.Main) { onSuccess(newPasswordItemModel) }
             }
         }
     }

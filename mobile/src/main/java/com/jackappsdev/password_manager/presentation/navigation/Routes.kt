@@ -7,6 +7,7 @@ sealed class Routes(val route: String) {
     data object PasswordGenerator : Routes("password-generator")
     data object Settings : Routes("settings")
     data object ChangePassword : Routes("change-password")
+    data object AndroidWatch : Routes("android-watch")
     data object ManageCategories: Routes("manage-categories")
     data object PasswordItemDetail : Routes("password-item-detail/{id}") {
         fun getPath(id: Int) = route.replace("{id}", id.toString())

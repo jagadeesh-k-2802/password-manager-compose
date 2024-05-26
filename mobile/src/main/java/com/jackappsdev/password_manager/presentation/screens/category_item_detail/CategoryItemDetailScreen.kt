@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.shared.constants.colorList
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import java.text.SimpleDateFormat

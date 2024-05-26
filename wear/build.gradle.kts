@@ -1,6 +1,12 @@
+@file:Suppress("SpellCheckingInspection")
+
 plugins {
+    kotlin("kapt")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.googleDaggerHiltAndroid)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.googleDevToolsKsp)
 }
 
 // Version Management
@@ -65,10 +71,16 @@ android {
 }
 
 dependencies {
+    // Modules
+    implementation(project(":shared"))
+
     // Core
     implementation(libs.play.services.wearable)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.wear.remote.interactions)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))
@@ -81,6 +93,26 @@ dependencies {
     // Navigation
     implementation(libs.androidx.compose.navigation)
 
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // Room DB
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // SQLCipher
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.androidx.sqlite)
+
     // Horologist
     implementation(libs.horologist.compose.layout)
 
@@ -89,4 +121,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+kapt {
+    correctErrorTypes = true
 }

@@ -1,6 +1,7 @@
 [versions]
-# Mobile
 googleDevToolsKsp = "1.9.0-1.0.13"
+kotlinxCoroutinesCore = "1.6.4"
+kotlinxCoroutinesPlayServices = "1.7.3"
 kotlinxSerialization = "1.7.0"
 hiltAndroid = "2.49"
 coreKtx = "1.13.1"
@@ -12,18 +13,13 @@ hiltNavigationCompose = "1.2.0"
 biometric = "1.2.0-alpha05"
 espressoCore = "3.5.1"
 navigationCompose = "2.7.7"
-lifecycleRuntimeKtx = "2.7.0"
-kotlinxSerializationJsonVersion = "1.6.0"
+lifecycleRuntimeKtx = "2.8.0"
+kotlinxSerializationJsonVersion = "1.6.3"
 junit = "4.13.2"
 junitVersion = "1.1.5"
-
-# Wear OS
 composeNavigation = "1.3.1"
-horologistComposeLayout = "0.5.4"
-playServicesWearable = "18.1.0"
-
-# Mobile & Wear OS
-agp = "8.4.0"
+horologistComposeLayout = "0.6.12"
+agp = "8.4.1"
 kotlin = "1.9.0"
 coreSplashscreen = "1.0.1"
 activityCompose = "1.9.0"
@@ -31,9 +27,12 @@ composeBom = "2024.05.00"
 composeMaterial = "1.3.1"
 composeFoundation = "1.3.1"
 materialIconsExtended = "1.6.7"
+appcompat = "1.6.1"
+material = "1.12.0"
+wearRemoteInteractions = "1.0.0"
+playServicesWearable = "18.1.0"
 
 [libraries]
-# Mobile
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 android-database-sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "androidDatabaseSqlcipher" }
 androidx-sqlite = { module = "androidx.sqlite:sqlite", version.ref = "sqlite" }
@@ -42,6 +41,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-wear-remote-interactions = { module = "androidx.wear:wear-remote-interactions", version.ref = "wearRemoteInteractions" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -51,14 +51,12 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
-
-# Wear OS
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
 androidx-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "composeNavigation" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologistComposeLayout" }
-
-# Mobile && Wear OS
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
@@ -71,13 +69,13 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
-# Mobile
 googleDaggerHiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 kotlinSerialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref= "kotlinxSerialization"}
 googleDevToolsKsp = {id = "com.google.devtools.ksp", version.ref= "googleDevToolsKsp"}
-
-# Mobile && Wear OS
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }

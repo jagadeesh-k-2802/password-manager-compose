@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.core
+package com.jackappsdev.password_manager.shared.core
 
 import android.content.Context
 import net.sqlcipher.database.SQLiteDatabase

@@ -11,4 +11,8 @@ interface UserPreferencesRepository {
     suspend fun setUseScreenLockToUnlock(newValue: Boolean)
     suspend fun getUseDynamicColors(): Flow<Boolean>
     suspend fun setUseDynamicColors(newValue: Boolean)
+    suspend fun getUseAndroidWatch(): Boolean
+    suspend fun setUseAndroidWatch(newValue: Boolean)
+    suspend fun hasAndroidWatchPinSet(): Boolean
+    suspend fun setAndroidWatchPinSet(newPin: String)
 }

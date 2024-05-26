@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Upload
+import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -152,6 +153,13 @@ fun SettingsScreen(
                 trailingContent = { Icon(Icons.Outlined.ChevronRight, null) },
                 headlineContent = { Text(stringResource(R.string.label_manage_categories)) },
                 modifier = Modifier.clickable { navController.navigate(Routes.ManageCategories) }
+            )
+
+            ListItem(
+                leadingContent = { Icon(Icons.Outlined.Watch, null) },
+                headlineContent = { Text(stringResource(R.string.label_android_watch)) },
+                trailingContent = { Icon(Icons.Outlined.ChevronRight, null) },
+                modifier = Modifier.clickable { navController.navigate(Routes.AndroidWatch) }
             )
 
             ListItem(

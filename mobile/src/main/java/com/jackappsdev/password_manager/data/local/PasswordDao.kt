@@ -38,6 +38,9 @@ interface PasswordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPasswordEntity(item: PasswordItemEntity)
 
+    @Delete
+    suspend fun deletePasswordEntity(item: PasswordItemEntity)
+
     @RawQuery
     suspend fun executeQuery(query: SimpleSQLiteQuery): List<Any>
 
@@ -49,7 +52,4 @@ interface PasswordDao {
     suspend fun checkpoint() {
         executeQuery(SimpleSQLiteQuery("PRAGMA wal_checkpoint"))
     }
-
-    @Delete
-    suspend fun deletePasswordEntity(item: PasswordItemEntity)
 }

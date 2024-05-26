@@ -76,8 +76,8 @@ fun HomeScreen(
     var isSearching by rememberSaveable { mutableStateOf(false) }
     val lazyColumnState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val passwordItems = state.items?.collectAsState()
-    val filteredItems = state.filteredItems?.collectAsState()
+    val passwordItems = state.items?.collectAsState()?.value
+    val filteredItems = state.filteredItems?.collectAsState()?.value
     val categoryItems by viewModel.categoryItems.collectAsState(initial = listOf())
     val focusManager = LocalFocusManager.current
 
@@ -179,7 +179,7 @@ fun HomeScreen(
             ) {
                 CircularProgressIndicator()
             }
-        } else if (passwordItems?.value?.isEmpty() == true) {
+        } else if (passwordItems?.isEmpty() == true) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -247,7 +247,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
-                if (searchQuery.isNotEmpty() && filteredItems?.value?.isEmpty() == true) {
+                if (searchQuery.isNotEmpty() && filteredItems?.isEmpty() == true) {
                     item {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -269,14 +269,14 @@ fun HomeScreen(
                 }
 
                 if (filteredItems != null) {
-                    items(filteredItems.value) { item ->
+                    items(filteredItems) { item ->
                         PasswordItem(item) {
                             navController.navigate(Routes.PasswordItemDetail.getPath(item.id ?: 0))
                         }
                     }
                 } else {
                     passwordItems?.let {
-                        items(it.value) { item ->
+                        items(it) { item ->
                             PasswordItem(item) {
                                 navController.navigate(
                                     Routes.PasswordItemDetail.getPath(

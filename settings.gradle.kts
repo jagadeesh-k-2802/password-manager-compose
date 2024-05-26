@@ -27,3 +27,4 @@ dependencyResolutionManagement {
 rootProject.name = "PasswordManager"
 include(":mobile")
 include(":wear")
+include(":shared")

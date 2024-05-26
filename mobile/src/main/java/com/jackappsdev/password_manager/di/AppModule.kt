@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.room.Room
-import com.jackappsdev.password_manager.core.CryptoManager
+import com.jackappsdev.password_manager.shared.core.CryptoManager
 import com.jackappsdev.password_manager.data.local.CategoryDao
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.MIGRATION_1_2

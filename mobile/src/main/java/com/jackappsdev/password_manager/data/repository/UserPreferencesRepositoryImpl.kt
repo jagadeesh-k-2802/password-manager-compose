@@ -65,4 +65,21 @@ class UserPreferencesRepositoryImpl(
     override suspend fun setUseDynamicColors(newValue: Boolean) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(useDynamicColors = newValue) }
     }
+
+    override suspend fun getUseAndroidWatch(): Boolean {
+        return dataStore.data.first().useAndroidWatch
+    }
+
+    override suspend fun setUseAndroidWatch(newValue: Boolean) {
+        dataStore.updateData { prevUserSettings -> prevUserSettings.copy(useAndroidWatch = newValue) }
+    }
+
+    override suspend fun hasAndroidWatchPinSet(): Boolean {
+        val userSettings = dataStore.data.first()
+        return !userSettings.androidWatchPin.isNullOrBlank()
+    }
+
+    override suspend fun setAndroidWatchPinSet(newPin: String) {
+        dataStore.updateData { prevUserSettings -> prevUserSettings.copy(androidWatchPin = newPin) }
+    }
 }

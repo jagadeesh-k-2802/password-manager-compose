@@ -44,10 +44,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -77,6 +74,9 @@ android {
 }
 
 dependencies {
+    // Modules
+    implementation(project(":shared"))
+
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -116,6 +116,12 @@ dependencies {
     // SQLCipher
     implementation(libs.android.database.sqlcipher)
     implementation(libs.androidx.sqlite)
+
+    // Wearable Services
+    implementation(libs.play.services.wearable)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.wear.remote.interactions)
 
     // Testing
     testImplementation(libs.junit)

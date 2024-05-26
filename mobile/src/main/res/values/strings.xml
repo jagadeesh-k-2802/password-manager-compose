@@ -13,6 +13,7 @@
     <string name="title_add_new_category">Add New Category</string>
     <string name="title_edit_category">Edit Category</string>
     <string name="title_change_password">Change Password</string>
+    <string name="title_android_watch">Android Watch</string>
     <string name="title_categories">Categories</string>
     <string name="title_settings">Settings</string>
 
@@ -20,6 +21,7 @@
     <string name="btn_confirm">Confirm</string>
     <string name="btn_use_device_lock_screen">Use Device Lock Screen</string>
     <string name="btn_create">Create</string>
+    <string name="btn_set_pin">Set PIN</string>
 
     <!--  Label  -->
     <string name="label_name">Name</string>
@@ -41,6 +43,8 @@
     <string name="label_manage_categories">Manage Categories</string>
     <string name="label_use_screen_lock_to_unlock">Use Screen Lock to Unlock</string>
     <string name="label_dynamic_colors">Dynamic Colors</string>
+    <string name="label_android_watch">Android Watch</string>
+    <string name="label_enable_android_watch">Enable Sharing With Android Watch</string>
     <string name="label_import_passwords">Import Passwords</string>
     <string name="label_export_passwords">Export Passwords</string>
     <string name="label_app_version">App Version: 1.2.1</string>
@@ -49,9 +53,11 @@
     <string name="label_all">All</string>
     <string name="label_database_password">Database Password</string>
     <string name="label_no_category_items">No Category Items</string>
+    <string name="label_enter_pin">Set PIN For Watch</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note that this password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
+    <string name="text_android_watch_note">Selected Passwords will be shared with your Wear OS Watch with end-to-end encryption.</string>
     <string name="text_no_passwords">No Passwords Saved</string>
     <string name="text_no_items_found">No Items Found</string>
     <string name="text_no_category">No Category</string>
@@ -70,7 +76,10 @@
     <string name="toast_passwords_exported">Passwords Exported Successfully</string>
     <string name="toast_setup_lock_screen">Please, Setup your device lock screen first.</string>
     <string name="toast_password_changed_successfully">Password changed successfully</string>
+    <string name="toast_watch_pin_set">Watch PIN has been set successfully</string>
     <string name="toast_copy_to_clipboard">Copied to clipboard</string>
+    <string name="toast_added_to_watch">Password Shared to Watch</string>
+    <string name="toast_removed_from_watch">Password Removed from Watch</string>
     <string name="toast_invalid_url">Invalid URL</string>
 
     <!--  Accessibility  -->
@@ -88,10 +97,10 @@
     <string name="accessibility_go_back">Go back</string>
     <string name="accessibility_add_category">Add a new category</string>
     <string name="accessibility_create">Create</string>
+    <string name="accessibility_set_pin">Set PIN</string>
     <string name="accessibility_edit_item">Edit item</string>
     <string name="accessibility_delete_item">Delete item</string>
     <string name="accessibility_copy_text">Copy text</string>
-    <string name="accessibility_confirm_edit">Confirm edit</string>
     <string name="accessibility_selected_color">Selected color</string>
     <string name="accessibility_generate_again">Generate again</string>
     <string name="accessibility_home_screen">Home screen</string>
@@ -101,6 +110,9 @@
     <string name="accessibility_all_items">All items</string>
     <string name="accessibility_no_category_items">No category items</string>
     <string name="accessibility_open_website">Open website in browser</string>
+    <string name="accessibility_options">More Options</string>
+    <string name="accessibility_add_to_watch">Add to Watch</string>
+    <string name="accessibility_remove_from_watch">Remove from Watch</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">You Have Unsaved Changes</string>
@@ -116,6 +128,7 @@
     <string name="error_name_not_empty">Name should not be empty</string>
     <string name="error_passwords_not_match">Passwords don\'t Match</string>
     <string name="error_password_not_empty">Password should not be empty</string>
+    <string name="error_pin_not_empty">Pin should not be empty</string>
     <string name="error_password_not_same">Passwords should not be same</string>
     <string name="error_new_password_not_empty">New Password should not be empty</string>
     <string name="error_confirm_password_not_empty">Confirm password should not be empty</string>

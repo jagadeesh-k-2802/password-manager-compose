@@ -22,6 +22,7 @@
     <string name="btn_use_device_lock_screen">Use Device Lock Screen</string>
     <string name="btn_create">Create</string>
     <string name="btn_set_pin">Set PIN</string>
+    <string name="btn_update_pin">Update PIN</string>
 
     <!--  Label  -->
     <string name="label_name">Name</string>
@@ -53,7 +54,8 @@
     <string name="label_all">All</string>
     <string name="label_database_password">Database Password</string>
     <string name="label_no_category_items">No Category Items</string>
-    <string name="label_enter_pin">Set PIN For Watch</string>
+    <string name="label_enter_pin">Set Watch PIN</string>
+    <string name="label_update_pin">Update Watch PIN</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note that this password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
@@ -81,6 +83,7 @@
     <string name="toast_added_to_watch">Password Shared to Watch</string>
     <string name="toast_removed_from_watch">Password Removed from Watch</string>
     <string name="toast_invalid_url">Invalid URL</string>
+    <string name="toast_android_watch_disabled">Disabled sharing with Android Watch</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Toggle password</string>
@@ -97,7 +100,8 @@
     <string name="accessibility_go_back">Go back</string>
     <string name="accessibility_add_category">Add a new category</string>
     <string name="accessibility_create">Create</string>
-    <string name="accessibility_set_pin">Set PIN</string>
+    <string name="accessibility_set_watch_pin">Set Watch PIN</string>
+    <string name="accessibility_update_watch_pin">Update Watch PIN</string>
     <string name="accessibility_edit_item">Edit item</string>
     <string name="accessibility_delete_item">Delete item</string>
     <string name="accessibility_copy_text">Copy text</string>
@@ -118,8 +122,10 @@
     <string name="dialog_title_unsaved_changes">You Have Unsaved Changes</string>
     <string name="dialog_title_delete_password">Delete Password Item</string>
     <string name="dialog_title_import_passwords">Import Passwords</string>
+    <string name="dialog_title_disable_android_watch">Disable Android Watch ?</string>
     <string name="dialog_text_unsaved">Do you want to exit without saving these changes ?</string>
     <string name="dialog_text_password_delete">Do you want to delete this password ?</string>
+    <string name="dialog_text_disable_android_watch">Disabling password sharing with Android Watch will remove all passwords from your watch.</string>
     <string name="dialog_btn_yes">Yes</string>
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">Confirm</string>

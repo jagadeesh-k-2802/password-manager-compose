@@ -50,6 +50,7 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN_PATH
+import com.jackappsdev.password_manager.shared.constants.WIPE_DATA_PATH
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,8 +64,37 @@ fun AndroidWatchScreen(
     val scrollState = rememberScrollState()
     var pin by rememberSaveable { mutableStateOf("") }
     var showPin by rememberSaveable { mutableStateOf(false) }
+    var showDisableAndroidWatchDialog by rememberSaveable { mutableStateOf(false) }
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    if (showDisableAndroidWatchDialog) DisableAndroidWatchDialog(
+        onConfirm = {
+            viewModel.setUseAndroidWatch(false)
+            showDisableAndroidWatchDialog = false
+
+            viewModel.setAndroidWatchPin(null) {
+                val dataClient = Wearable.getDataClient(context)
+
+                val putDataRequest = PutDataMapRequest.create(WIPE_DATA_PATH).run {
+                    dataMap.putString(KEY_PIN, System.currentTimeMillis().toString())
+                    setUrgent()
+                    asPutDataRequest()
+                }
+
+                dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.toast_android_watch_disabled),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    navController.popBackStack()
+                }
+            }
+        },
+        onDismiss = { showDisableAndroidWatchDialog = false }
+    )
 
     Scaffold(
         topBar = {
@@ -93,10 +123,16 @@ fun AndroidWatchScreen(
                 trailingContent = {
                     Switch(
                         checked = state.useAndroidWatch == true,
-                        onCheckedChange = { value -> viewModel.setUseAndroidWatch(value) }
+                        onCheckedChange = { value ->
+                            if (value) viewModel.setUseAndroidWatch(true)
+                            else showDisableAndroidWatchDialog = true
+                        }
                     )
                 },
-                modifier = Modifier.clickable { viewModel.setUseAndroidWatch(state.useAndroidWatch != true) }
+                modifier = Modifier.clickable {
+                    if (state.useAndroidWatch == false) viewModel.setUseAndroidWatch(true)
+                    else showDisableAndroidWatchDialog = true
+                }
             )
 
             if (state.useAndroidWatch == true) Column {
@@ -105,7 +141,14 @@ fun AndroidWatchScreen(
                 OutlinedTextField(
                     value = pin,
                     onValueChange = { value -> if (value.length <= 4) pin = value },
-                    label = { Text(stringResource(R.string.label_enter_pin)) },
+                    label = {
+                        Text(
+                            stringResource(
+                                if (state.hasAndroidWatchPinSet != true) R.string.label_enter_pin
+                                else R.string.label_update_pin
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .padding(horizontal = pagePadding)
                         .fillMaxWidth(),
@@ -159,9 +202,20 @@ fun AndroidWatchScreen(
                         .padding(horizontal = pagePadding)
                         .fillMaxWidth()
                 ) {
-                    Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_set_pin))
+                    Icon(
+                        Icons.Outlined.Done,
+                        stringResource(
+                            if (state.hasAndroidWatchPinSet != true) R.string.accessibility_set_watch_pin
+                            else R.string.accessibility_update_watch_pin
+                        )
+                    )
                     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(stringResource(R.string.btn_set_pin))
+                    Text(
+                        stringResource(
+                            if (state.hasAndroidWatchPinSet != true) R.string.btn_set_pin
+                            else R.string.btn_update_pin
+                        )
+                    )
                 }
             }
         }

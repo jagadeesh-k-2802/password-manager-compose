@@ -22,7 +22,7 @@ class UserPreferencesRepositoryImpl(
     /**
      * Set password for the first time only
      */
-    override suspend fun setPin(newPin: String) {
+    override suspend fun setPin(newPin: String?) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(pin = newPin) }
     }
 

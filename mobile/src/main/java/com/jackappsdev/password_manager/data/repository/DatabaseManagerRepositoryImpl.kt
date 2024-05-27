@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.jackappsdev.password_manager.shared.core.EncryptedSQLiteOpenHelper
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
+import com.jackappsdev.password_manager.data.local.DATABASE_VERSION
 import com.jackappsdev.password_manager.data.local.PasswordDao
 import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
@@ -40,10 +41,11 @@ class DatabaseManagerRepositoryImpl(
                 appContext,
                 tempDatabaseName,
                 null,
-                1
+                DATABASE_VERSION
             )
             db.getReadableDatabase(password.toCharArray())
-        } catch (_: SQLiteException) {
+        } catch (e: SQLiteException) {
+            println(e)
             return false
         }
 

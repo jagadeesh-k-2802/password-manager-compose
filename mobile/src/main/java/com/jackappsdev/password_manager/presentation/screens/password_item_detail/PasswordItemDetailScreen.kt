@@ -129,9 +129,7 @@ fun PasswordItemDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        dropDownMenuExpanded = true
-                    }) {
+                    IconButton(onClick = { dropDownMenuExpanded = true }) {
                         Icon(
                             Icons.Outlined.MoreVert,
                             stringResource(R.string.accessibility_options)
@@ -157,7 +155,8 @@ fun PasswordItemDetailScreen(
                                         passwordItem?.id ?: 0
                                     )
                                 )
-                            })
+                            }
+                        )
 
                         DropdownMenuItem(
                             leadingIcon = {
@@ -204,25 +203,22 @@ fun PasswordItemDetailScreen(
                                     asPutDataRequest()
                                 }
 
-                                dataClient.putDataItem(putDataRequest)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(
-                                            context,
-                                            if (passwordItem?.isAddedToWatch != true) context.getString(
-                                                R.string.toast_added_to_watch
-                                            )
-                                            else context.getString(
-                                                R.string.toast_removed_from_watch
-                                            ),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                                    Toast.makeText(
+                                        context,
+                                        if (passwordItem?.isAddedToWatch != true) context.getString(
+                                            R.string.toast_added_to_watch
+                                        )
+                                        else context.getString(
+                                            R.string.toast_removed_from_watch
+                                        ),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
-                                        passwordItem?.let { passwordCategoryModel ->
-                                            viewModel.toggleIsAddedToWatch(
-                                                passwordCategoryModel
-                                            )
-                                        }
+                                    passwordItem?.let { passwordCategoryModel ->
+                                        viewModel.toggleIsAddedToWatch(passwordCategoryModel)
                                     }
+                                }
                             }
                         )
                     }

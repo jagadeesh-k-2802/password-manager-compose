@@ -6,6 +6,7 @@ import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.WearableListenerService
+import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
@@ -16,6 +17,7 @@ import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN_PATH
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
+import com.jackappsdev.password_manager.shared.constants.WIPE_DATA_PATH
 import com.jackappsdev.password_manager.shared.data.dto.PasswordItemDto
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -103,6 +105,14 @@ class DataLayerListenerService : WearableListenerService() {
                                         }
                                     }
                                 }
+                            }
+                        }
+
+                        WIPE_DATA_PATH -> {
+                            scope.launch {
+                                userPreferencesRepository.setPin(null)
+                                passwordItemRepository.deleteAllPasswords()
+                                applicationContext.deleteDatabase(DATABASE_NAME)
                             }
                         }
                     }

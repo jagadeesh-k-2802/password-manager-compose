@@ -30,4 +30,7 @@ interface PasswordDao {
         executeQuery(SimpleSQLiteQuery("PRAGMA key = '$oldPassword'"))
         executeQuery(SimpleSQLiteQuery("PRAGMA rekey = '$newPassword'"))
     }
+
+    @Query("DELETE FROM password_items")
+    fun deleteAllPasswords()
 }

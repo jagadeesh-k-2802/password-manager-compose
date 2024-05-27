@@ -28,7 +28,7 @@ class AndroidWatchViewModel @Inject constructor(
     private fun getInitialData() {
         viewModelScope.launch {
             state = state.copy(
-                useAndroidWatch = userPreferencesRepository.getUseAndroidWatch(),
+                useAndroidWatch = userPreferencesRepository.hasAndroidWatchPinSet(),
                 hasAndroidWatchPinSet = userPreferencesRepository.hasAndroidWatchPinSet()
             )
         }
@@ -37,13 +37,12 @@ class AndroidWatchViewModel @Inject constructor(
     fun setUseAndroidWatch(newValue: Boolean) {
         viewModelScope.launch {
             state = state.copy(useAndroidWatch = newValue)
-            userPreferencesRepository.setUseAndroidWatch(newValue)
         }
     }
 
-    fun setAndroidWatchPin(newPin: String, onSuccess: () -> Unit) {
+    fun setAndroidWatchPin(newPin: String?, onSuccess: () -> Unit) {
         viewModelScope.launch {
-            if (newPin.isEmpty()) {
+            if (newPin?.isEmpty() == true) {
                 errorChannel.send(AndroidWatchError.PinError(R.string.error_pin_not_empty))
             } else {
                 state = state.copy(hasAndroidWatchPinSet = true)

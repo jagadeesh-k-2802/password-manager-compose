@@ -8,4 +8,5 @@ interface PasswordItemRepository {
     fun getPasswordItem(id: Int): Flow<PasswordItemModel?>
     suspend fun insertPasswordItem(item: PasswordItemModel)
     suspend fun deletePasswordItem(item: PasswordItemModel)
+    suspend fun deleteAllPasswords()
 }

@@ -26,4 +26,8 @@ class PasswordItemRepositoryImpl(
     override suspend fun deletePasswordItem(item: PasswordItemModel) {
         passwordDao.deletePasswordEntity(item.toEntity())
     }
+
+    override suspend fun deleteAllPasswords() {
+        passwordDao.deleteAllPasswords()
+    }
 }

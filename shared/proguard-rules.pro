@@ -2,6 +2,9 @@
 
 -keepattributes InnerClasses
 
+# Keep the shared module's classes
+-keep class com.jackappsdev.password_manager.shared.** { *; }
+
 -if @kotlinx.serialization.Serializable class
 com.jackappsdev.password_manager.shared.data.dto.PasswordItemDto
 {

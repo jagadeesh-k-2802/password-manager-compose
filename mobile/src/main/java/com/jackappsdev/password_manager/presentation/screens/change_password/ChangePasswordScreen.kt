@@ -64,7 +64,7 @@ fun ChangePasswordScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
                             stringResource(R.string.accessibility_go_back)
@@ -136,7 +136,7 @@ fun ChangePasswordScreen(
                 onClick = {
                     viewModel.updatePassword(currentPassword, newPassword) {
                         scope.launch {
-                            navController.popBackStack()
+                            navController.navigateUp()
                             Toast.makeText(
                                 context,
                                 context.getString(R.string.toast_password_changed_successfully),

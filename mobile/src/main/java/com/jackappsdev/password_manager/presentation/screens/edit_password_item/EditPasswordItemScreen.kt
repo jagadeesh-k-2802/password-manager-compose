@@ -168,7 +168,7 @@ fun EditPasswordItemScreen(
                 if (isChanged) {
                     isUnsavedChangesDialogVisible = true
                 } else {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         }
@@ -187,7 +187,7 @@ fun EditPasswordItemScreen(
     }
 
     if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
-        onConfirm = { navController.popBackStack() },
+        onConfirm = { navController.navigateUp() },
         onDismiss = { isUnsavedChangesDialogVisible = false }
     )
 
@@ -453,7 +453,7 @@ fun EditPasswordItemScreen(
                         }
 
                         dataClient.putDataItem(putDataRequest).addOnSuccessListener {
-                            navController.popBackStack()
+                            navController.navigateUp()
                         }
                     }
                 },

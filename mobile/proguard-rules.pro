@@ -3,7 +3,8 @@
 -keepattributes InnerClasses
 
 -if @kotlinx.serialization.Serializable class
-com.jackappsdev.password_manager.domain.model.CategoryModel
+com.jackappsdev.password_manager.domain.model.CategoryModel,
+com.jackappsdev.password_manager.shared.constants.ConstantsKt
 {
     static **$* *;
 }

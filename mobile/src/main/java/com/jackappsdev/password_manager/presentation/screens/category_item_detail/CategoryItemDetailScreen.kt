@@ -85,7 +85,7 @@ fun CategoryItemDetailScreen(
                 if (isChanged) {
                     isUnsavedChangesDialogVisible = true
                 } else {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         }
@@ -97,7 +97,7 @@ fun CategoryItemDetailScreen(
     }
 
     if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
-        onConfirm = { navController.popBackStack() },
+        onConfirm = { navController.navigateUp() },
         onDismiss = { isUnsavedChangesDialogVisible = false }
     )
 
@@ -106,7 +106,7 @@ fun CategoryItemDetailScreen(
             categoryItem?.let {
                 isDeleteDialogVisible = false
                 viewModel.deleteItem(it)
-                navController.popBackStack()
+                navController.navigateUp()
             }
         },
         onDismiss = { isDeleteDialogVisible = false }
@@ -209,7 +209,7 @@ fun CategoryItemDetailScreen(
             Button(
                 onClick = {
                     viewModel.onEditComplete(name, color, categoryItem) {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

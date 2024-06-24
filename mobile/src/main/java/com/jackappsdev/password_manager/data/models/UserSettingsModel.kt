@@ -7,6 +7,5 @@ data class UserSettings(
     val password: String? = null,
     val androidWatchPin: String? = null,
     val useDynamicColors: Boolean = true,
-    val useScreenLockToUnlock: Boolean = true,
-    val useAndroidWatch: Boolean = false,
+    val useScreenLockToUnlock: Boolean = true
 )

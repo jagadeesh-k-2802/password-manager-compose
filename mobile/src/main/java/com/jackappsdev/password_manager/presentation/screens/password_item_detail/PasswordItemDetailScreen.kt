@@ -103,7 +103,7 @@ fun PasswordItemDetailScreen(
 
                 dataClient.putDataItem(putDataRequest).addOnSuccessListener {
                     viewModel.deleteItem(passwordCategoryModel)
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         },
@@ -121,7 +121,7 @@ fun PasswordItemDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
                             stringResource(R.string.accessibility_go_back)

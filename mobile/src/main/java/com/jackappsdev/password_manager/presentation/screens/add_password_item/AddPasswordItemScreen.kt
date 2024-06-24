@@ -122,7 +122,7 @@ fun AddPasswordItemScreen(
                 if (name.isNotBlank() || username.isNotBlank() || password.isNotBlank() || notes.isNotBlank()) {
                     isUnsavedChangesDialogVisible = true
                 } else {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         }
@@ -141,7 +141,7 @@ fun AddPasswordItemScreen(
     }
 
     if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
-        onConfirm = { navController.popBackStack() },
+        onConfirm = { navController.navigateUp() },
         onDismiss = { isUnsavedChangesDialogVisible = false }
     )
 
@@ -369,7 +369,7 @@ fun AddPasswordItemScreen(
                     keyboardController?.hide()
 
                     viewModel.addPasswordItem(name, username, password, website, notes, category) {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

@@ -89,7 +89,7 @@ fun AndroidWatchScreen(
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         },
@@ -100,7 +100,7 @@ fun AndroidWatchScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
                             stringResource(R.string.accessibility_go_back)
@@ -194,7 +194,7 @@ fun AndroidWatchScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                navController.popBackStack()
+                                navController.navigateUp()
                             }
                         }
                     },

@@ -91,7 +91,7 @@ fun AddCategoryItemScreen(
                 if (name.isNotEmpty()) {
                     isUnsavedChangesDialogVisible = true
                 } else {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         }
@@ -103,7 +103,7 @@ fun AddCategoryItemScreen(
     }
 
     if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
-        onConfirm = { navController.popBackStack() },
+        onConfirm = { navController.navigateUp() },
         onDismiss = { isUnsavedChangesDialogVisible = false }
     )
 
@@ -184,7 +184,7 @@ fun AddCategoryItemScreen(
             Button(
                 onClick = {
                     viewModel.addItem(name, color) { categoryModel ->
-                        navController.popBackStack()
+                        navController.navigateUp()
                         val savedState = navController.currentBackStackEntry?.savedStateHandle
                         savedState?.set(CREATED_CATEGORY, Json.encodeToString(categoryModel))
                     }

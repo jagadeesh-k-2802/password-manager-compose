@@ -55,12 +55,16 @@ class DataLayerListenerService : WearableListenerService() {
                             DataMapItem.fromDataItem(dataEvent.dataItem).dataMap.apply {
                                 scope.launch {
                                     getString(KEY_PIN)?.let { newPin ->
+                                        // Split the time part it is added to the same
+                                        // PIN can be set again in short span of time
+                                        val pin = newPin.split(" ").first()
+
                                         if (userPreferencesRepository.hasPinSet()) {
                                             // Update existing PIN & Database
-                                            passphraseRepository.updatePin(newPin)
+                                            passphraseRepository.updatePin(pin)
                                         } else {
                                             // Create NEW PIN
-                                            userPreferencesRepository.setPin(newPin)
+                                            userPreferencesRepository.setPin(pin)
                                         }
                                     }
                                 }.invokeOnCompletion {

@@ -182,7 +182,9 @@ fun AndroidWatchScreen(
                             val dataClient = Wearable.getDataClient(context)
 
                             val putDataRequest = PutDataMapRequest.create(SET_PIN_PATH).run {
-                                dataMap.putString(KEY_PIN, pin)
+                                // Adding time part of data to allow setting the same PIN within
+                                // short span of time
+                                dataMap.putString(KEY_PIN, "$pin ${System.currentTimeMillis()}")
                                 setUrgent()
                                 asPutDataRequest()
                             }

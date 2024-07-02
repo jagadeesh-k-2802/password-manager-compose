@@ -23,6 +23,11 @@
     <string name="text_no_passwords">No Passwords Saved</string>
     <string name="text_password_dot" translatable="false">•</string>
 
+    <!--  Label  -->
+    <string name="label_username">Username</string>
+    <string name="label_password">Password</string>
+    <string name="label_notes">Notes</string>
+
     <!-- Toast -->
     <string name="toast_opened_phone_app">Opened Phone App</string>
     <string name="toast_cannot_open_phone_app">Cannot Open Phone App</string>

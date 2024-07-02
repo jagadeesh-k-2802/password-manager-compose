@@ -67,15 +67,6 @@ class DataLayerListenerService : WearableListenerService() {
                                             userPreferencesRepository.setPin(pin)
                                         }
                                     }
-                                }.invokeOnCompletion {
-                                    Intent(
-                                        applicationContext,
-                                        MainActivity::class.java
-                                    ).addFlags(
-                                        Intent.FLAG_ACTIVITY_NEW_TASK
-                                    ).apply {
-                                        startActivity(this)
-                                    }
                                 }
                             }
                         }
@@ -114,9 +105,11 @@ class DataLayerListenerService : WearableListenerService() {
 
                         WIPE_DATA_PATH -> {
                             scope.launch {
-                                userPreferencesRepository.setPin(null)
-                                passwordItemRepository.deleteAllPasswords()
-                                applicationContext.deleteDatabase(DATABASE_NAME)
+                                if (userPreferencesRepository.hasPinSet()) {
+                                    userPreferencesRepository.setPin(null)
+                                    passwordItemRepository.deleteAllPasswords()
+                                    applicationContext.deleteDatabase(DATABASE_NAME)
+                                }
                             }
                         }
                     }

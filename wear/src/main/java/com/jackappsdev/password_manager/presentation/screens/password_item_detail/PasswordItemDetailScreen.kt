@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.Card
@@ -19,6 +21,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.jackappsdev.password_manager.R
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
@@ -52,9 +55,11 @@ fun PasswordItemDetailScreen(
                         endBackgroundColor = MaterialTheme.colors.surface,
                     )
                 ) {
-                    Text(passwordItem?.username ?: "")
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(passwordItem?.password ?: "")
+                    Text(stringResource(R.string.label_username), fontWeight = FontWeight.Bold)
+                    Text("${passwordItem?.username}")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(stringResource(R.string.label_password), fontWeight = FontWeight.Bold)
+                    Text("${passwordItem?.password}")
                 }
             }
 
@@ -68,6 +73,7 @@ fun PasswordItemDetailScreen(
                             endBackgroundColor = MaterialTheme.colors.surface,
                         )
                     ) {
+                        Text(stringResource(R.string.label_notes), fontWeight = FontWeight.Bold)
                         Text(passwordItem?.notes ?: "")
                     }
                 }

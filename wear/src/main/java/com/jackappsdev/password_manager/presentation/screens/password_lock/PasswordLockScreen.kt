@@ -82,6 +82,7 @@ fun PasswordLockScreen(
                     haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 } else {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    pin = ""
 
                     Toast.makeText(
                         context,

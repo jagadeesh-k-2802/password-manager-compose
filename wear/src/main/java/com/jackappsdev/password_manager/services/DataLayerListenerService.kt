@@ -67,6 +67,8 @@ class DataLayerListenerService : WearableListenerService() {
                                             userPreferencesRepository.setPin(pin)
                                         }
                                     }
+                                }.invokeOnCompletion {
+                                    sendBroadcast(Intent(MainActivity.PIN_CHANGE_ACTION))
                                 }
                             }
                         }
@@ -110,6 +112,8 @@ class DataLayerListenerService : WearableListenerService() {
                                     passwordItemRepository.deleteAllPasswords()
                                     applicationContext.deleteDatabase(DATABASE_NAME)
                                 }
+                            }.invokeOnCompletion {
+                                sendBroadcast(Intent(MainActivity.PIN_CHANGE_ACTION))
                             }
                         }
                     }

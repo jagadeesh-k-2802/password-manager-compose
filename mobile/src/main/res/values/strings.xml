@@ -79,6 +79,7 @@
     <string name="toast_setup_lock_screen">Please, Setup your device lock screen first.</string>
     <string name="toast_password_changed_successfully">Password changed successfully</string>
     <string name="toast_watch_pin_set">Watch PIN has been set successfully</string>
+    <string name="toast_connect_watch">Ensure your Wear OS watch is connected and App is installed</string>
     <string name="toast_copy_to_clipboard">Copied to clipboard</string>
     <string name="toast_added_to_watch">Password Shared to Watch</string>
     <string name="toast_removed_from_watch">Password Removed from Watch</string>

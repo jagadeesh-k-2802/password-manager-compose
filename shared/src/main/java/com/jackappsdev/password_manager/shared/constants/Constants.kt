@@ -7,6 +7,7 @@ const val UPSERT_PASSWORD = "/upsert-password"
 const val DELETE_PASSWORD = "/delete-password"
 const val KEY_PASSWORD = "KEY-PASSWORD"
 const val WIPE_DATA_PATH = "/wipe-data"
+const val VERIFY_WEAR_APP = "verify_remote_wear_app"
 
 // URI
 const val PLAY_STORE_APP_URI = "https://play.google.com/store/apps/details?id=com.jackappsdev.password_manager"

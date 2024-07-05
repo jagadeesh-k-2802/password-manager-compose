@@ -53,7 +53,7 @@ fun Router(
                 startDestination = Routes.Home.route
             ) {
                 composable(Routes.Home.route) { HomeScreen(navController) }
-                composable(Routes.PasswordItemDetail.route) { PasswordItemDetailScreen() }
+                composable(Routes.PasswordItemDetail.route) { PasswordItemDetailScreen(navController) }
             }
         }
     }

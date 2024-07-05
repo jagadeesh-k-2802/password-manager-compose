@@ -31,6 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -44,14 +46,20 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN_PATH
+import com.jackappsdev.password_manager.shared.constants.VERIFY_WEAR_APP
 import com.jackappsdev.password_manager.shared.constants.WIPE_DATA_PATH
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +69,7 @@ fun AndroidWatchScreen(
 ) {
     val state = viewModel.state
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     var pin by rememberSaveable { mutableStateOf("") }
     var showPin by rememberSaveable { mutableStateOf(false) }
@@ -96,6 +105,46 @@ fun AndroidWatchScreen(
         onDismiss = { showDisableAndroidWatchDialog = false }
     )
 
+    val checkIfWatchIsAvailableAndAppInstalled = remember<(onComplete: () -> Unit) -> Unit> {
+        { onComplete ->
+            var isWatchConnectedAndAppInstalled = false
+            val nodeClient = Wearable.getNodeClient(context)
+            val capabilityClient = Wearable.getCapabilityClient(context)
+
+            // Check if Wear OS Watch is connected & app is installed
+            scope.launch {
+                val nodes = nodeClient.connectedNodes.await()
+
+                withContext(Dispatchers.IO) {
+                    try {
+                        if (nodes.isNotEmpty()) {
+                            val capabilityInfo = capabilityClient.getCapability(
+                                VERIFY_WEAR_APP,
+                                CapabilityClient.FILTER_REACHABLE
+                            ).await()
+
+                            if (capabilityInfo.nodes.isNotEmpty()) {
+                                isWatchConnectedAndAppInstalled = true
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // Do Nothing
+                    }
+                }
+            }.invokeOnCompletion {
+                if (!isWatchConnectedAndAppInstalled) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.toast_connect_watch),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    onComplete()
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -124,14 +173,18 @@ fun AndroidWatchScreen(
                     Switch(
                         checked = state.useAndroidWatch == true,
                         onCheckedChange = { value ->
-                            if (value) viewModel.setUseAndroidWatch(true)
-                            else showDisableAndroidWatchDialog = true
+                            checkIfWatchIsAvailableAndAppInstalled {
+                                if (value) viewModel.setUseAndroidWatch(true)
+                                else showDisableAndroidWatchDialog = true
+                            }
                         }
                     )
                 },
                 modifier = Modifier.clickable {
-                    if (state.useAndroidWatch == false) viewModel.setUseAndroidWatch(true)
-                    else showDisableAndroidWatchDialog = true
+                    checkIfWatchIsAvailableAndAppInstalled {
+                        if (state.useAndroidWatch == false) viewModel.setUseAndroidWatch(true)
+                        else showDisableAndroidWatchDialog = true
+                    }
                 }
             )
 
@@ -178,25 +231,27 @@ fun AndroidWatchScreen(
                 Button(
                     onClick = {
                         keyboardController?.hide()
-                        viewModel.setAndroidWatchPin(pin) {
-                            val dataClient = Wearable.getDataClient(context)
+                        val dataClient = Wearable.getDataClient(context)
 
-                            val putDataRequest = PutDataMapRequest.create(SET_PIN_PATH).run {
-                                // Adding time part of data to allow setting the same PIN within
-                                // short span of time
-                                dataMap.putString(KEY_PIN, "$pin ${System.currentTimeMillis()}")
-                                setUrgent()
-                                asPutDataRequest()
-                            }
+                        checkIfWatchIsAvailableAndAppInstalled {
+                            viewModel.setAndroidWatchPin(pin) {
+                                val putDataRequest = PutDataMapRequest.create(SET_PIN_PATH).run {
+                                    // Adding time part of data to allow setting the same PIN within
+                                    // short span of time
+                                    dataMap.putString(KEY_PIN, "$pin ${System.currentTimeMillis()}")
+                                    setUrgent()
+                                    asPutDataRequest()
+                                }
 
-                            dataClient.putDataItem(putDataRequest).addOnSuccessListener {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.toast_watch_pin_set),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.toast_watch_pin_set),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
-                                navController.navigateUp()
+                                    navController.navigateUp()
+                                }
                             }
                         }
                     },

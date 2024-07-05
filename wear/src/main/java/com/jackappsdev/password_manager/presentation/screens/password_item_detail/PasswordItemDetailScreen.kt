@@ -4,13 +4,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.wear.compose.material.Card
 import androidx.wear.compose.material.CardDefaults
 import androidx.wear.compose.material.ListHeader
@@ -26,9 +31,11 @@ import com.jackappsdev.password_manager.R
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun PasswordItemDetailScreen(
+    navController: NavController,
     viewModel: PasswordItemDetailViewModel = hiltViewModel()
 ) {
     val passwordItem by viewModel.passwordItem.collectAsState(initial = null)
+    var isValueAlreadySetOnce by rememberSaveable { mutableStateOf(false) }
 
     val columnState = rememberResponsiveColumnState(
         contentPadding = ScalingLazyColumnDefaults.padding(
@@ -36,6 +43,14 @@ fun PasswordItemDetailScreen(
             last = ScalingLazyColumnDefaults.ItemType.Card
         )
     )
+
+    LaunchedEffect(passwordItem) {
+        if (passwordItem == null && isValueAlreadySetOnce) {
+            navController.navigateUp()
+        } else {
+            isValueAlreadySetOnce = true
+        }
+    }
 
     ScreenScaffold(scrollState = columnState) {
         ScalingLazyColumn(

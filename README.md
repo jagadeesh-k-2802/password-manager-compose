@@ -1,6 +1,6 @@
 # Offline Password Manager 🔑
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/7a3b7444-2f33-4891-b5ee-350e219f15fa" width="750" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/7802fea5-7816-4d69-8bcc-2922612e4a02" width="750" />
 
 ## Technologies ⚙️
 
@@ -16,21 +16,30 @@
 - 🔓 Use Biometric or Screen Lock Password to Unlock
 - 📂 Use Categories to Organize your Passwords
 - ⏬ Filter Passwords Based on Category
-- 📃 Custom Sort Order by Name or When Last Updated
+- 📃Custom Sort Order by Name or When Last Updated
+- ⌚ Wear OS Support with secure end-to-end encryption
+- 🔒 Auto App Lock
+- 🌐 Add Website Address for each password entry
 
 ## Running The Application 🧑🏻‍💻
 - `git clone https://github.com/jagadeesh-k-2802/password-manager-compose`
 - Open the directory in Android Studio
+- Place your secret key for encryption in `./wear/secrets.defaults.properties` and remove the defaults from the filename
 - Click run as you would do with any other project
 
-## Screenshots 📷
+## Screenshots (Phone) 📷
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/d466833a-b073-4114-acb0-b98ec066ec97" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/ef2fe289-7884-4007-961d-e0a6dbb40a53" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/5bccd082-1181-459f-a684-ad91cd72a77b" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/8198d283-1dca-4ee2-a0b2-cae1a72f1508" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/29ee3a01-38e9-44c1-a526-ffc2859f1489" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/1e4dd416-bf0f-4665-a891-98049abf3100" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/8e357628-e100-454d-be8b-91e10ac214d8" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/f2ac0891-2f39-4d07-8156-5771bb00fbe2" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/73a10911-8b09-4ba0-bf10-187a6dd00e9f" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/82be899e-d915-4710-97d3-c996154763de" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/3cc9b95f-b55b-4fd1-9efe-75116a352423" width="250" />
 
+## Screenshots (Wear OS) 📷
+
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/557b759f-b5b8-4908-9504-46a95db7b103" width="250" />
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/bcac8132-be15-48eb-8359-ff1eaa66de5d" width="250" />
 
 ## Links 🔗
 

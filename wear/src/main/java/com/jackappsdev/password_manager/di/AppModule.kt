@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.room.Room
+import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.PasswordDao
 import com.jackappsdev.password_manager.data.local.PasswordDatabase
@@ -47,13 +48,9 @@ object AppModule {
     @Provides
     @Singleton
     fun providePassphraseRepository(
-        dataStore: DataStore<UserSettings>,
-        passwordDao: PasswordDao
+        dataStore: DataStore<UserSettings>
     ): PassphraseRepository {
-        return PassphraseRepositoryImpl(
-            dataStore = dataStore,
-            passwordDao = passwordDao
-        )
+        return PassphraseRepositoryImpl(dataStore = dataStore)
     }
 
     @Singleton
@@ -89,11 +86,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSupportFactory(
-        userPreferencesRepository: UserPreferencesRepository
-    ): SupportFactory {
-        val userPassphrase = userPreferencesRepository.getPin()?.toCharArray()
-        val passphrase = SQLiteDatabase.getBytes(userPassphrase)
+    fun provideSupportFactory(): SupportFactory {
+        val encryptionKey = BuildConfig.ENCRYPTION_SECRET_KEY.toCharArray()
+        val passphrase = SQLiteDatabase.getBytes(encryptionKey)
         return SupportFactory(passphrase)
     }
 

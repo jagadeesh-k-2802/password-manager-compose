@@ -67,8 +67,6 @@ class DataLayerListenerService : WearableListenerService() {
                                             userPreferencesRepository.setPin(pin)
                                         }
                                     }
-                                }.invokeOnCompletion {
-                                    sendBroadcast(Intent(MainActivity.PIN_CHANGE_ACTION))
                                 }
                             }
                         }

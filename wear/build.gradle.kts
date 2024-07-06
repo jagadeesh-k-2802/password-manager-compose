@@ -1,4 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
+import org.gradle.util.internal.GUtil.loadProperties
+import java.util.Properties
 
 plugins {
     kotlin("kapt")
@@ -8,6 +10,11 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.googleDevToolsKsp)
 }
+
+// Secrets
+val secretsFile = file("secrets.properties")
+val secrets: Properties = loadProperties(secretsFile)
+val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 
 // Version Management
 val versionMajor = 1
@@ -33,6 +40,7 @@ android {
         targetSdk = 34
         versionCode = generateVersionCode()
         versionName = generateVersionName()
+        buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)
 
         vectorDrawables {
             useSupportLibrary = true
@@ -59,6 +67,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {

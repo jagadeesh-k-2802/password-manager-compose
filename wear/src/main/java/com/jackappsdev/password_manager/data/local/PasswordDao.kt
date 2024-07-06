@@ -26,11 +26,6 @@ interface PasswordDao {
     @RawQuery
     suspend fun executeQuery(query: SimpleSQLiteQuery): List<Any>
 
-    suspend fun changePassword(oldPassword: String?, newPassword: String) {
-        executeQuery(SimpleSQLiteQuery("PRAGMA key = '$oldPassword'"))
-        executeQuery(SimpleSQLiteQuery("PRAGMA rekey = '$newPassword'"))
-    }
-
     @Query("DELETE FROM password_items")
     fun deleteAllPasswords()
 }

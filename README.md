@@ -38,6 +38,7 @@
 
 ## Screenshots (Wear OS) 📷
 
+<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/b9493319-661e-4d71-8928-563f59461455" width="250" />
 <img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/557b759f-b5b8-4908-9504-46a95db7b103" width="250" />
 <img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/bcac8132-be15-48eb-8359-ff1eaa66de5d" width="250" />
 

@@ -23,7 +23,7 @@ val versionPatch = 0
 val minimumSdkVersion = 28
 
 fun generateVersionCode(): Int {
-    return minimumSdkVersion * 10000000 + versionMajor * 10000 + versionMinor * 300 + versionPatch
+    return minimumSdkVersion * 20000000 + versionMajor * 10000 + versionMinor * 300 + versionPatch
 }
 
 fun generateVersionName(): String {
@@ -100,6 +100,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.compose.ui.tooling)
 
     // Navigation
     implementation(libs.androidx.compose.navigation)

@@ -1,7 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_lock
 
 import android.content.Intent
-import android.graphics.Color.BLACK
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -45,11 +43,15 @@ import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
+import androidx.wear.compose.ui.tooling.preview.WearPreviewLargeRound
+import androidx.wear.compose.ui.tooling.preview.WearPreviewSmallRound
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.google.android.gms.wearable.Wearable
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
+import com.jackappsdev.password_manager.presentation.theme.isLargeDisplay
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import kotlinx.coroutines.launch
@@ -58,13 +60,15 @@ import java.util.concurrent.Executors
 
 @Composable
 fun PasswordLockScreen(
-    viewModel: PasswordLockViewModel = hiltViewModel()
+     viewModel: PasswordLockViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var pin by rememberSaveable { mutableStateOf("") }
     val haptic = LocalHapticFeedback.current
+    val numButtonPadding = if (isLargeDisplay()) 20.dp else 18.dp
+    val outerScreenPadding = if (isLargeDisplay()) 16.dp else 12.dp
 
     val onNumberButtonClick = remember {
         { character: String -> if (pin.length < 4) pin += character }
@@ -158,7 +162,7 @@ fun PasswordLockScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(outerScreenPadding)
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -181,7 +185,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_one)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_one),
@@ -194,7 +198,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_two)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_two),
@@ -207,7 +211,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_three)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_three),
@@ -242,7 +246,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_four)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_four),
@@ -255,7 +259,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_five)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_five),
@@ -268,7 +272,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_six)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_six),
@@ -304,7 +308,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_seven)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_seven),
@@ -317,7 +321,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_eight)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_eight),
@@ -330,7 +334,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_nine)) },
                         modifier = Modifier.weight(0.5f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_nine),
@@ -354,7 +358,7 @@ fun PasswordLockScreen(
                         onClick = { onNumberButtonClick(context.getString(R.string.btn_zero)) },
                         modifier = Modifier.weight(1f),
                         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = numButtonPadding),
                         label = {
                             Text(
                                 stringResource(R.string.btn_zero),
@@ -370,20 +374,9 @@ fun PasswordLockScreen(
     }
 }
 
-@Preview(
-    name = "Wear OS Small",
-    device = "id:wearos_small_round",
-    showBackground = true,
-    backgroundColor = BLACK.toLong(),
-    showSystemUi = true
-)
-@Preview(
-    name = "Wear OS Large",
-    device = "id:wearos_large_round",
-    showBackground = true,
-    backgroundColor = BLACK.toLong(),
-    showSystemUi = true
-)
+@WearPreviewSmallRound
+@WearPreviewLargeRound
+@WearPreviewFontScales
 @Composable
 fun PasswordLockScreenPreview() {
     PasswordManagerTheme { PasswordLockScreen() }

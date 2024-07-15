@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.filled.CheckCircle
@@ -32,11 +34,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.CompactChip
@@ -52,21 +59,22 @@ import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 import com.jackappsdev.password_manager.presentation.theme.isLargeDisplay
-import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.Executors
 
+@OptIn(ExperimentalWearFoundationApi::class)
 @Composable
 fun PasswordLockScreen(
-     viewModel: PasswordLockViewModel = hiltViewModel()
+    viewModel: PasswordLockViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var pin by rememberSaveable { mutableStateOf("") }
     val haptic = LocalHapticFeedback.current
+    val scrollState = rememberScrollState()
     val numButtonPadding = if (isLargeDisplay()) 20.dp else 18.dp
     val outerScreenPadding = if (isLargeDisplay()) 16.dp else 12.dp
 
@@ -102,15 +110,22 @@ fun PasswordLockScreen(
         if (state.hasPinSet != true) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = if (isLargeDisplay()) Arrangement.Center else Arrangement.Top,
                 modifier = Modifier
-                    .padding(pagePadding)
+                    .padding(20.dp)
                     .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .rotaryScrollable(
+                        RotaryScrollableDefaults.behavior(scrollState),
+                        rememberActiveFocusRequester()
+                    )
             ) {
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Icon(
                     Icons.Default.WarningAmber,
                     contentDescription = stringResource(R.string.accessibility_warning_icon),
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(32.dp)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -118,7 +133,8 @@ fun PasswordLockScreen(
                 Text(
                     text = stringResource(R.string.text_enable_watch_support),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.caption1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.body2,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -154,8 +170,15 @@ fun PasswordLockScreen(
                             }
                         }
                     },
-                    label = { Text(stringResource(R.string.btn_open_app)) },
-                    colors = ChipDefaults.primaryChipColors(backgroundColor = MaterialTheme.colors.surface)
+                    label = {
+                        Text(
+                            text = stringResource(R.string.btn_open_app),
+                            style = MaterialTheme.typography.button
+                        )
+                    },
+                    colors = ChipDefaults.primaryChipColors(
+                        backgroundColor = MaterialTheme.colors.surface
+                    )
                 )
             }
         } else {

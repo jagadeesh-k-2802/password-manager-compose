@@ -452,7 +452,7 @@ fun EditPasswordItemScreen(
                             asPutDataRequest()
                         }
 
-                        dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                        dataClient.putDataItem(putDataRequest).addOnCompleteListener {
                             navController.navigateUp()
                         }
                     }

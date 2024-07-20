@@ -12,8 +12,8 @@ plugins {
 // Version Management
 val versionMajor = 2
 val versionMinor = 0
-val versionPatch = 0
-val minimumSdkVersion = 28
+val versionPatch = 1
+val minimumSdkVersion = 29
 
 fun generateVersionCode(): Int {
     return minimumSdkVersion * 20000000 + versionMajor * 10000 + versionMinor * 300 + versionPatch

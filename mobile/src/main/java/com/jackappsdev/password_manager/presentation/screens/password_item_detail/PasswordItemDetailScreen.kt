@@ -101,7 +101,7 @@ fun PasswordItemDetailScreen(
                     asPutDataRequest()
                 }
 
-                dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                dataClient.putDataItem(putDataRequest).addOnCompleteListener {
                     viewModel.deleteItem(passwordCategoryModel)
                     navController.navigateUp()
                 }

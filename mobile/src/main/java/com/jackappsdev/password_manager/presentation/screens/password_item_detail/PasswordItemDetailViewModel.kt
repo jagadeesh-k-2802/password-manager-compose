@@ -51,7 +51,7 @@ class PasswordItemDetailViewModel @Inject constructor(
                     categoryId = passwordCategoryModel.categoryId,
                     website = passwordCategoryModel.website,
                     isAddedToWatch = !passwordCategoryModel.isAddedToWatch,
-                    createdAt = System.currentTimeMillis()
+                    createdAt = passwordCategoryModel.createdAt // Use prev createdAt
                 )
             )
         }

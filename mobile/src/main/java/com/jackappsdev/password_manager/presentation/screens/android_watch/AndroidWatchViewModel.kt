@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AndroidWatchViewModel @Inject constructor(
+    private val passwordItemRepository: PasswordItemRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     var state by mutableStateOf(AndroidWatchState())
@@ -37,6 +39,10 @@ class AndroidWatchViewModel @Inject constructor(
     fun setUseAndroidWatch(newValue: Boolean) {
         viewModelScope.launch {
             state = state.copy(useAndroidWatch = newValue)
+
+            if (!newValue) {
+                passwordItemRepository.removePasswordsFromWatch()
+            }
         }
     }
 

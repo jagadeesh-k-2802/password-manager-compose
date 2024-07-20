@@ -91,7 +91,7 @@ fun AndroidWatchScreen(
                     asPutDataRequest()
                 }
 
-                dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                dataClient.putDataItem(putDataRequest).addOnCompleteListener {
                     Toast.makeText(
                         context,
                         context.getString(R.string.toast_android_watch_disabled),
@@ -113,10 +113,10 @@ fun AndroidWatchScreen(
 
             // Check if Wear OS Watch is connected & app is installed
             scope.launch {
-                val nodes = nodeClient.connectedNodes.await()
-
                 withContext(Dispatchers.IO) {
                     try {
+                        val nodes = nodeClient.connectedNodes.await()
+
                         if (nodes.isNotEmpty()) {
                             val capabilityInfo = capabilityClient.getCapability(
                                 VERIFY_WEAR_APP,

@@ -31,9 +31,13 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         setTheme(android.R.style.Theme_DeviceDefault)
+
+        splashScreen.setKeepOnScreenCondition {
+            passwordLockViewModel.state.hasPinSet == null
+        }
 
         setContent {
             PasswordManagerTheme {

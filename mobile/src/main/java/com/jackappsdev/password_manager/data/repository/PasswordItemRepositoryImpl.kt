@@ -27,7 +27,7 @@ class PasswordItemRepositoryImpl(
             )
         } else {
             SimpleSQLiteQuery(
-                "SELECT * FROM password_items WHERE $likeParam AND $filterBy ORDER BY $orderBy"
+                "SELECT * FROM password_items WHERE ($likeParam) AND $filterBy ORDER BY $orderBy"
             )
         }
 
@@ -46,6 +46,10 @@ class PasswordItemRepositoryImpl(
 
     override suspend fun insertPasswordItem(item: PasswordItemModel) {
         passwordDao.insertPasswordEntity(item.toEntity())
+    }
+
+    override suspend fun removePasswordsFromWatch() {
+        passwordDao.removePasswordsFromWatch()
     }
 
     override suspend fun deletePasswordItem(item: PasswordCategoryModel) {

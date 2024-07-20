@@ -101,12 +101,17 @@ fun PasswordGeneratorScreen() {
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(horizontal = pagePadding)
                 .verticalScroll(scrollState)
         ) {
             SelectionContainer {
                 Column(
-                    modifier = Modifier.padding(top = 12.dp, bottom = 20.dp)
+                    modifier = Modifier
+                        .padding(
+                            top = 12.dp,
+                            bottom = 20.dp,
+                            start = pagePadding,
+                            end = pagePadding
+                        )
                 ) {
                     Text(
                         text = generatedPassword,
@@ -167,7 +172,10 @@ fun PasswordGeneratorScreen() {
                 }
             }
 
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = pagePadding)
+            ) {
                 Text(stringResource(R.string.text_length, lengthValue))
 
                 Slider(

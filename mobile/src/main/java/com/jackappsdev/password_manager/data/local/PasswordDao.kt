@@ -38,6 +38,9 @@ interface PasswordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPasswordEntity(item: PasswordItemEntity)
 
+    @Query("UPDATE password_items SET is_added_to_watch = 0")
+    suspend fun removePasswordsFromWatch()
+
     @Delete
     suspend fun deletePasswordEntity(item: PasswordItemEntity)
 

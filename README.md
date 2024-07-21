@@ -1,6 +1,6 @@
 # Offline Password Manager 🔑
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/7802fea5-7816-4d69-8bcc-2922612e4a02" width="750" />
+<img src="https://github.com/user-attachments/assets/10cfbe69-bd33-4b99-a7b8-5249b9318347" width="750" />
 
 ## Technologies ⚙️
 
@@ -29,18 +29,18 @@
 
 ## Screenshots (Phone) 📷
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/1e4dd416-bf0f-4665-a891-98049abf3100" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/8e357628-e100-454d-be8b-91e10ac214d8" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/f2ac0891-2f39-4d07-8156-5771bb00fbe2" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/73a10911-8b09-4ba0-bf10-187a6dd00e9f" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/82be899e-d915-4710-97d3-c996154763de" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/3cc9b95f-b55b-4fd1-9efe-75116a352423" width="250" />
+<img src="https://github.com/user-attachments/assets/1f4e673e-b660-48fb-a1b1-a4b6d17d7e62" width="250" />
+<img src="https://github.com/user-attachments/assets/956057de-be55-4605-9f6e-33b0ef78d5e7" width="250" />
+<img src="https://github.com/user-attachments/assets/3b74750c-0eee-40c7-9f6e-f793a3af989d" width="250" />
+<img src="https://github.com/user-attachments/assets/2fdec55b-16a2-44dc-91aa-ef8b41d885c3" width="250" />
+<img src="https://github.com/user-attachments/assets/373ffe96-0ec5-47bc-98be-1b162bc27559" width="250" />
+<img src="https://github.com/user-attachments/assets/cb67d36a-cece-4031-b584-6dd29f287f6d" width="250" />
 
 ## Screenshots (Wear OS) 📷
 
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/b9493319-661e-4d71-8928-563f59461455" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/557b759f-b5b8-4908-9504-46a95db7b103" width="250" />
-<img src="https://github.com/jagadeesh-k-2802/password-manager-compose/assets/63912668/bcac8132-be15-48eb-8359-ff1eaa66de5d" width="250" />
+<img src="https://github.com/user-attachments/assets/3b740650-8071-4423-a42b-0c41e3aff2eb" width="250" />
+<img src="https://github.com/user-attachments/assets/e2ca4201-a30c-4236-ac64-2edfcbb06450" width="250" />
+<img src="https://github.com/user-attachments/assets/60763b61-4ef5-4d86-b623-2036c169b7d5" width="250" />
 
 ## Links 🔗
 

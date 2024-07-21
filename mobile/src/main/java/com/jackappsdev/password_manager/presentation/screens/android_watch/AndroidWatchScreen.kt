@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -145,6 +146,35 @@ fun AndroidWatchScreen(
         }
     }
 
+    val onPinChange = remember {
+        {
+            keyboardController?.hide()
+            val dataClient = Wearable.getDataClient(context)
+
+            checkIfWatchIsAvailableAndAppInstalled {
+                viewModel.setAndroidWatchPin(pin) {
+                    val putDataRequest = PutDataMapRequest.create(SET_PIN_PATH).run {
+                        // Adding time part of data to allow setting the same PIN within
+                        // short span of time
+                        dataMap.putString(KEY_PIN, "$pin ${System.currentTimeMillis()}")
+                        setUrgent()
+                        asPutDataRequest()
+                    }
+
+                    dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.toast_watch_pin_set),
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        navController.navigateUp()
+                    }
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -206,6 +236,7 @@ fun AndroidWatchScreen(
                         .padding(horizontal = pagePadding)
                         .fillMaxWidth(),
                     isError = error is AndroidWatchError.PinError,
+                    singleLine = true,
                     supportingText = {
                         error?.let {
                             if (it is AndroidWatchError.PinError) Text(stringResource(it.error))
@@ -223,38 +254,16 @@ fun AndroidWatchScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { onPinChange() }
                     )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
-                    onClick = {
-                        keyboardController?.hide()
-                        val dataClient = Wearable.getDataClient(context)
-
-                        checkIfWatchIsAvailableAndAppInstalled {
-                            viewModel.setAndroidWatchPin(pin) {
-                                val putDataRequest = PutDataMapRequest.create(SET_PIN_PATH).run {
-                                    // Adding time part of data to allow setting the same PIN within
-                                    // short span of time
-                                    dataMap.putString(KEY_PIN, "$pin ${System.currentTimeMillis()}")
-                                    setUrgent()
-                                    asPutDataRequest()
-                                }
-
-                                dataClient.putDataItem(putDataRequest).addOnSuccessListener {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.toast_watch_pin_set),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    navController.navigateUp()
-                                }
-                            }
-                        }
-                    },
+                    onClick = { onPinChange() },
                     modifier = Modifier
                         .padding(horizontal = pagePadding)
                         .fillMaxWidth()

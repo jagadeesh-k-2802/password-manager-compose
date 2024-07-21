@@ -31,12 +31,10 @@
     <!-- Toast -->
     <string name="toast_opened_phone_app">Opened Phone App</string>
     <string name="toast_cannot_open_phone_app">Cannot Open Phone App</string>
+    <string name="toast_incorrect_password">Incorrect Password</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_warning_icon">Warning icon</string>
     <string name="accessibility_backspace">Backspace</string>
     <string name="accessibility_done">Done</string>
-
-    <!--  Errors  -->
-    <string name="error_incorrect_password">Incorrect Password</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.FilterAlt
+import androidx.compose.material.icons.outlined.FilterAltOff
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.sharp.Add
@@ -132,7 +133,8 @@ fun HomeScreen(
                 actions = {
                     IconButton(onClick = { scope.launch { filterBySheetState.show() } }) {
                         Icon(
-                            Icons.Outlined.FilterAlt,
+                            if (state.filterBy == FilterBy.All) Icons.Outlined.FilterAltOff
+                            else Icons.Outlined.FilterAlt,
                             contentDescription = stringResource(R.string.accessibility_filter)
                         )
                     }

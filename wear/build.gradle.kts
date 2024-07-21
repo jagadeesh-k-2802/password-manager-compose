@@ -23,7 +23,7 @@ val versionPatch = 1
 val minimumSdkVersion = 28
 
 fun generateVersionCode(): Int {
-    return minimumSdkVersion * 40000000 + versionMajor * 10000 + versionMinor * 300 + versionPatch
+    return minimumSdkVersion * 50000000 + versionMajor * 10000 + versionMinor * 300 + versionPatch
 }
 
 fun generateVersionName(): String {

@@ -66,6 +66,11 @@ fun SettingsScreen(
     var isInvalidPassword by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
+    val version = rememberSaveable {
+        val packageManager = context.packageManager.getPackageInfo(context.packageName, 0)
+        packageManager.versionName
+    }
+
     val isScreenLockAvailable = remember {
         val manager = BiometricManager.from(context)
         val credentials = BIOMETRIC_WEAK or BIOMETRIC_STRONG or DEVICE_CREDENTIAL
@@ -228,7 +233,7 @@ fun SettingsScreen(
 
             ListItem(
                 leadingContent = { Icon(Icons.Outlined.Numbers, null) },
-                headlineContent = { Text(stringResource(R.string.label_app_version)) },
+                headlineContent = { Text(stringResource(R.string.label_app_version, version)) },
                 modifier = Modifier.clickable {}
             )
         }

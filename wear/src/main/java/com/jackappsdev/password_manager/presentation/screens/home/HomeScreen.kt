@@ -71,7 +71,7 @@ fun HomeScreen(
                             Text(
                                 text = stringResource(R.string.text_no_passwords),
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.caption1
+                                style = MaterialTheme.typography.body2
                             )
                         }
                     }

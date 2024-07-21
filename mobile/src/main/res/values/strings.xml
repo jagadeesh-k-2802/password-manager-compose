@@ -48,7 +48,7 @@
     <string name="label_enable_android_watch">Enable Sharing With Android Watch</string>
     <string name="label_import_passwords">Import Passwords</string>
     <string name="label_export_passwords">Export Passwords</string>
-    <string name="label_app_version">App Version: 2.0.0</string>
+    <string name="label_app_version">App Version: %s</string>
     <string name="label_current_password">Current Password</string>
     <string name="label_new_password">New Password</string>
     <string name="label_all">All</string>

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Done
@@ -98,6 +99,17 @@ fun PasswordLockScreen(
         )
     }
 
+    val onPasswordVerify = remember {
+        {
+            scope.launch {
+                if (viewModel.verifyPassword(passwordValue)) {
+                    keyboardController?.hide()
+                    viewModel.setUnlocked(true)
+                }
+            }
+        }
+    }
+
     LaunchedEffect(state.hasPasswordSet, state.useScreenLockToUnlock) {
         if (state.hasPasswordSet == true && state.useScreenLockToUnlock == true) {
             biometricPrompt.authenticate(promptInfo)
@@ -125,6 +137,7 @@ fun PasswordLockScreen(
                     modifier = Modifier.fillMaxWidth(),
                     isError = error is PasswordLockError.PasswordError,
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    singleLine = true,
                     supportingText = {
                         error?.let {
                             if (it is PasswordLockError.PasswordError) Text(stringResource(it.error))
@@ -141,20 +154,16 @@ fun PasswordLockScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { onPasswordVerify() }
                     )
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Button(
-                    onClick = {
-                        scope.launch {
-                            if (viewModel.verifyPassword(passwordValue)) {
-                                keyboardController?.hide()
-                                viewModel.setUnlocked(true)
-                            }
-                        }
-                    },
+                    onClick = { onPasswordVerify() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(
@@ -189,6 +198,7 @@ fun PasswordLockScreen(
                     modifier = Modifier.fillMaxWidth(),
                     isError = error is PasswordLockError.PasswordError,
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    singleLine = true,
                     supportingText = {
                         error?.let {
                             if (it is PasswordLockError.PasswordError) Text(stringResource(it.error))
@@ -217,6 +227,7 @@ fun PasswordLockScreen(
                     modifier = Modifier.fillMaxWidth(),
                     isError = error is PasswordLockError.ConfirmPasswordError,
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    singleLine = true,
                     supportingText = {
                         error?.let {
                             if (it is PasswordLockError.ConfirmPasswordError) Text(stringResource(it.error))

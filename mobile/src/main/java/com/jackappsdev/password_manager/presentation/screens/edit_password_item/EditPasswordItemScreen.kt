@@ -226,6 +226,7 @@ fun EditPasswordItemScreen(
                     }
                 },
                 label = { Text(stringResource(R.string.label_name)) },
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
@@ -245,6 +246,7 @@ fun EditPasswordItemScreen(
                 onValueChange = { value -> username = value },
                 label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -264,6 +266,7 @@ fun EditPasswordItemScreen(
                 },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Row {
@@ -308,6 +311,7 @@ fun EditPasswordItemScreen(
                 onValueChange = { value -> website = value },
                 label = { Text(stringResource(R.string.label_website)) },
                 modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next

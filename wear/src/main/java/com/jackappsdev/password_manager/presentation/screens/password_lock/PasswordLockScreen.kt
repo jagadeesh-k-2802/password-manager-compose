@@ -98,7 +98,7 @@ fun PasswordLockScreen(
 
                     Toast.makeText(
                         context,
-                        context.getString(R.string.error_incorrect_password),
+                        context.getString(R.string.toast_incorrect_password),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

@@ -33,10 +33,7 @@ fun Router(
         }
 
         lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycle.removeObserver(observer)
-        }
+        onDispose { lifecycle.removeObserver(observer) }
     }
 
     AppScaffold {

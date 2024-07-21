@@ -46,6 +46,7 @@ class PasswordLockViewModel @Inject constructor(
                 errorChannel.send(PasswordLockError.PasswordError(R.string.error_confirm_password_not_empty))
             } else {
                 userPreferencesRepository.setPassword(newPassword)
+                state = state.copy(hasPasswordSet = true)
                 onSuccess()
             }
         }

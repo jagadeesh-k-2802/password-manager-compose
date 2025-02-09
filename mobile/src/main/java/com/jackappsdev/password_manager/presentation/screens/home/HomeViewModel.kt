@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setSortBy(sortBy: SortBy) {
+    fun setSortBy(sortBy: SortBy, searchQuery: String) {
         viewModelScope.launch {
             state = state.copy(
                 sortBy = sortBy,
@@ -50,13 +50,16 @@ class HomeViewModel @Inject constructor(
                     sortBy.orderBy(),
                     state.filterBy.where(),
                     ""
-                )
-                    .stateIn(viewModelScope)
+                ).stateIn(viewModelScope)
             )
+
+            if (searchQuery.isNotEmpty()) {
+                searchItems(searchQuery)
+            }
         }
     }
 
-    fun filterByCategory(filterBy: FilterBy) {
+    fun filterByCategory(filterBy: FilterBy, searchQuery: String) {
         viewModelScope.launch {
             state = state.copy(
                 filterBy = filterBy,
@@ -64,9 +67,12 @@ class HomeViewModel @Inject constructor(
                     state.sortBy.orderBy(),
                     filterBy.where(),
                     ""
-                )
-                    .stateIn(viewModelScope)
+                ).stateIn(viewModelScope)
             )
+
+            if (searchQuery.isNotEmpty()) {
+                searchItems(searchQuery)
+            }
         }
     }
 

@@ -45,7 +45,8 @@ fun FilterByCategoryModalSheet(
 
     ModalBottomSheet(
         onDismissRequest = { scope.launch { sheetState.hide() } },
-        sheetState = sheetState
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         Text(
             stringResource(R.string.text_filter_by_category),

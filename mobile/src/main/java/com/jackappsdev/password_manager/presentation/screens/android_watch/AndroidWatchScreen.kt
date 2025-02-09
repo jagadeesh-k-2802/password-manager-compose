@@ -52,6 +52,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN_PATH
 import com.jackappsdev.password_manager.shared.constants.VERIFY_WEAR_APP
@@ -186,7 +187,8 @@ fun AndroidWatchScreen(
                         )
                     }
                 },
-                title = { Text(stringResource(R.string.title_android_watch)) }
+                title = { Text(stringResource(R.string.title_android_watch)) },
+                windowInsets = windowinsetsVerticalZero
             )
         },
     ) { contentPadding ->

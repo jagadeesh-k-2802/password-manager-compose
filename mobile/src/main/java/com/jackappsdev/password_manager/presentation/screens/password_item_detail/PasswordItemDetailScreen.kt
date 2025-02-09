@@ -34,6 +34,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -63,6 +64,7 @@ import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
@@ -90,6 +92,13 @@ fun PasswordItemDetailScreen(
         onConfirm = {
             passwordItem?.let { passwordCategoryModel ->
                 isDeleteDialogVisible = false
+
+                if (passwordItem?.isAddedToWatch == false) {
+                    viewModel.deleteItem(passwordCategoryModel)
+                    navController.navigateUp()
+                    return@PasswordItemDeleteDialog
+                }
+
                 val dataClient = Wearable.getDataClient(context)
 
                 val putDataRequest = PutDataMapRequest.create(DELETE_PASSWORD).run {
@@ -151,9 +160,7 @@ fun PasswordItemDetailScreen(
                             onClick = {
                                 dropDownMenuExpanded = false
                                 navController.navigate(
-                                    Routes.EditPasswordItem.getPath(
-                                        passwordItem?.id ?: 0
-                                    )
+                                    Routes.EditPasswordItem(passwordItem?.id ?: 0)
                                 )
                             }
                         )
@@ -222,7 +229,8 @@ fun PasswordItemDetailScreen(
                             }
                         )
                     }
-                }
+                },
+                windowInsets = windowinsetsVerticalZero
             )
         }
     ) { contentPadding ->
@@ -314,6 +322,7 @@ fun PasswordItemDetailScreen(
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_website)) },
+                maxLines = 1,
                 trailingIcon = {
                     if ((passwordItem?.website?.length ?: 0) > 0) {
                         IconButton(onClick = {
@@ -393,7 +402,7 @@ fun PasswordItemDetailScreen(
                     colors = disabledButEnabledOutlinedTextFieldColors(),
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
                     modifier = Modifier
-                        .menuAnchor()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth()
                 )
 

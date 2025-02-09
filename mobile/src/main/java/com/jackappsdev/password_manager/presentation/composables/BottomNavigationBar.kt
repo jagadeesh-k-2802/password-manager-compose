@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Routes
@@ -28,23 +29,23 @@ import com.jackappsdev.password_manager.presentation.navigation.navigateWithStat
 fun BottomNavigationBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var bottomBarVisible by rememberSaveable { mutableStateOf(true) }
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination
 
-    bottomBarVisible = when (currentRoute) {
-        Routes.Home.route -> true
-        Routes.PasswordGenerator.route -> true
-        Routes.Settings.route -> true
+    bottomBarVisible = when {
+        (currentRoute?.hasRoute<Routes.Home>() == true) -> true
+        (currentRoute?.hasRoute<Routes.PasswordGenerator>() == true) -> true
+        (currentRoute?.hasRoute<Routes.Settings>() == true) -> true
         else -> false
     }
 
     if (bottomBarVisible) {
         NavigationBar {
             NavigationBarItem(
-                selected = currentRoute?.equals(Routes.Home.route) == true,
+                selected = currentRoute?.hasRoute<Routes.Home>() == true,
                 onClick = { navController.navigateWithState(Routes.Home) },
                 label = { Text(stringResource(R.string.nav_home)) },
                 icon = {
-                    if (currentRoute?.equals(Routes.Home.route) == true) {
+                    if (currentRoute?.hasRoute<Routes.Home>() == true) {
                         Icon(
                             Icons.Sharp.Home,
                             contentDescription = stringResource(R.string.accessibility_home_screen)
@@ -59,11 +60,11 @@ fun BottomNavigationBar(navController: NavController) {
             )
 
             NavigationBarItem(
-                selected = currentRoute?.equals(Routes.PasswordGenerator.route) == true,
+                selected = currentRoute?.hasRoute<Routes.PasswordGenerator>() == true,
                 onClick = { navController.navigateWithState(Routes.PasswordGenerator) },
                 label = { Text(stringResource(R.string.nav_generator), softWrap = true, textAlign = TextAlign.Center) },
                 icon = {
-                    if (currentRoute?.equals(Routes.PasswordGenerator.route) == true) {
+                    if (currentRoute?.hasRoute<Routes.PasswordGenerator>() == true) {
                         Icon(
                             Icons.Sharp.VpnKey,
                             contentDescription = stringResource(R.string.accessibility_password_generator_screen)
@@ -79,11 +80,11 @@ fun BottomNavigationBar(navController: NavController) {
             )
 
             NavigationBarItem(
-                selected = currentRoute?.equals(Routes.Settings.route) == true,
+                selected = currentRoute?.hasRoute<Routes.Settings>() == true,
                 onClick = { navController.navigateWithState(Routes.Settings) },
                 label = { Text(stringResource(R.string.nav_settings)) },
                 icon = {
-                    if (currentRoute?.equals(Routes.Settings.route) == true) {
+                    if (currentRoute?.hasRoute<Routes.Settings>() == true) {
                         Icon(
                             Icons.Sharp.Settings,
                             contentDescription = stringResource(R.string.accessibility_settings_screen)

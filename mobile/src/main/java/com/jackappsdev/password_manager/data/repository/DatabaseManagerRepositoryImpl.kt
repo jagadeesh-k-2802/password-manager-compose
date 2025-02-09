@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.data.repository
 
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteException
 import android.net.Uri
 import com.jackappsdev.password_manager.shared.core.EncryptedSQLiteOpenHelper
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
@@ -12,7 +13,6 @@ import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.presentation.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.sqlcipher.database.SQLiteException
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

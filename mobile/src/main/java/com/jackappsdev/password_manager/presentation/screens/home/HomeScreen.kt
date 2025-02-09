@@ -32,6 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -56,8 +57,8 @@ import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.debounce
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.navigate
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -95,7 +96,7 @@ fun HomeScreen(
             sortBySheetState.hide()
         }
 
-        viewModel.setSortBy(sortBy)
+        viewModel.setSortBy(sortBy, searchQuery)
     }
 
     if (filterBySheetState.isVisible) FilterByCategoryModalSheet(
@@ -108,7 +109,7 @@ fun HomeScreen(
             filterBySheetState.hide()
         }
 
-        viewModel.filterByCategory(filterBy)
+        viewModel.filterByCategory(filterBy, searchQuery)
     }
 
     Scaffold(
@@ -150,6 +151,7 @@ fun HomeScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     scrolledContainerColor = MaterialTheme.colorScheme.surface
                 ),
+                windowInsets = windowinsetsVerticalZero,
                 modifier = Modifier
                     .clickable(
                         indication = null,
@@ -207,43 +209,52 @@ fun HomeScreen(
             ) {
                 item {
                     SearchBar(
-                        query = searchQuery,
-                        onQueryChange = { query ->
-                            searchQuery = query
-                            isSearching = true
-                            debouncedFilter(Unit)
+                        inputField = {
+                            SearchBarDefaults.InputField(
+                                query = searchQuery,
+                                onQueryChange = { query ->
+                                    searchQuery = query
+                                    isSearching = true
+                                    debouncedFilter(Unit)
+                                },
+                                onSearch = {
+                                    keyboardController?.hide()
+                                    focusManager.clearFocus()
+                                },
+                                expanded = false,
+                                onExpandedChange = { },
+                                placeholder = { Text(stringResource(R.string.label_search)) },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Search,
+                                        contentDescription = stringResource(R.string.accessibility_search)
+                                    )
+                                },
+                                trailingIcon = {
+                                    if (searchQuery.isNotEmpty()) {
+                                        IconButton(onClick = {
+                                            searchQuery = ""
+                                            isSearching = true
+                                            keyboardController?.hide()
+                                            focusManager.clearFocus()
+                                            viewModel.searchItems(searchQuery)
+                                        }) {
+                                            Icon(
+                                                Icons.Outlined.Clear,
+                                                stringResource(R.string.accessibility_clear_search)
+                                            )
+                                        }
+                                    }
+                                },
+                                interactionSource = null,
+                            )
                         },
-                        onSearch = {
-                            keyboardController?.hide()
-                            focusManager.clearFocus()
-                        },
-                        active = false,
-                        onActiveChange = { },
+                        expanded = false,
+                        onExpandedChange = { },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = pagePadding),
-                        placeholder = { Text(stringResource(R.string.label_search)) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Search,
-                                contentDescription = stringResource(R.string.accessibility_search)
-                            )
-                        },
-                        trailingIcon = {
-                            if (searchQuery.isNotEmpty()) {
-                                IconButton(onClick = {
-                                    searchQuery = ""
-                                    isSearching = true
-                                    keyboardController?.hide()
-                                    viewModel.searchItems(searchQuery)
-                                }) {
-                                    Icon(
-                                        Icons.Outlined.Clear,
-                                        stringResource(R.string.accessibility_clear_search)
-                                    )
-                                }
-                            }
-                        }
+                        windowInsets = windowinsetsVerticalZero,
                     ) {}
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -273,7 +284,7 @@ fun HomeScreen(
                 if (filteredItems != null) {
                     items(filteredItems) { item ->
                         PasswordItem(item) {
-                            navController.navigate(Routes.PasswordItemDetail.getPath(item.id ?: 0))
+                            navController.navigate(Routes.PasswordItemDetail(item.id ?: 0))
                         }
                     }
                 } else {
@@ -281,9 +292,7 @@ fun HomeScreen(
                         items(it) { item ->
                             PasswordItem(item) {
                                 navController.navigate(
-                                    Routes.PasswordItemDetail.getPath(
-                                        item.id ?: 0
-                                    )
+                                    Routes.PasswordItemDetail(item.id ?: 0)
                                 )
                             }
                         }

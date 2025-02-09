@@ -3,8 +3,10 @@ package com.jackappsdev.password_manager.presentation.screens.category_item_deta
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -15,8 +17,8 @@ class CategoryItemDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val categoryRepository: CategoryRepository
 ) : ViewModel() {
-    private val id: String = checkNotNull(savedStateHandle["id"])
-    val categoryItem = categoryRepository.getCategoryItem(id.toInt()).filterNotNull()
+    private val categoryItemDetail = savedStateHandle.toRoute<Routes.CategoryItemDetail>()
+    val categoryItem = categoryRepository.getCategoryItem(categoryItemDetail.id).filterNotNull()
 
     fun onEditComplete(
         name: String,

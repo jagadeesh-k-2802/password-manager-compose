@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import com.jackappsdev.password_manager.R
@@ -93,4 +94,8 @@ fun parseColor(string: String): Color {
     val green = hexString.substring(2, 4).toInt(16)
     val blue = hexString.substring(4, 6).toInt(16)
     return Color(red, green, blue)
+}
+
+fun isAndroid(sdkVersion: Int): Boolean {
+    return Build.VERSION.SDK_INT >= sdkVersion
 }

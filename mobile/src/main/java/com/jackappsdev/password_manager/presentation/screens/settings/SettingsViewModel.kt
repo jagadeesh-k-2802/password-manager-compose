@@ -36,10 +36,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setBiometricUnlock(newValue: Boolean) {
+    fun toggleBiometricUnlock() {
         viewModelScope.launch {
-            state = state.copy(useScreenLockToUnlock = newValue)
-            userPreferencesRepository.setUseScreenLockToUnlock(newValue)
+            val toggleValue = state.useScreenLockToUnlock != true
+            state = state.copy(useScreenLockToUnlock = toggleValue)
+            userPreferencesRepository.setUseScreenLockToUnlock(toggleValue)
         }
     }
 

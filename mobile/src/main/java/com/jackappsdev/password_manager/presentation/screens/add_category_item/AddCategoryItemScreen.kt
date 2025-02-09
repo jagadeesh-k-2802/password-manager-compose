@@ -46,22 +46,26 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.shared.constants.colorList
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+/**
+ * Used to auto-select category in Add/Edit Password Screens
+ */
 const val CREATED_CATEGORY = "CREATED_CATEGORY_KEY"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -118,7 +122,8 @@ fun AddCategoryItemScreen(
                             stringResource(R.string.accessibility_go_back)
                         )
                     }
-                }
+                },
+                windowInsets = windowinsetsVerticalZero
             )
         }
     ) { contentPadding ->

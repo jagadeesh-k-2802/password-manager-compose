@@ -4,6 +4,7 @@
 
     <!--  Title  -->
     <string name="title_biometric">Unlock Password Manager</string>
+    <string name="title_verify_user">Verify Password</string>
     <string name="title_enter_password">Enter Your Password</string>
     <string name="title_create_password">Create Your Password</string>
     <string name="title_passwords">Passwords</string>
@@ -48,6 +49,7 @@
     <string name="label_enable_android_watch">Enable Sharing With Android Watch</string>
     <string name="label_import_passwords">Import Passwords</string>
     <string name="label_export_passwords">Export Passwords</string>
+    <string name="label_rate_app">Rate on Google Play Store</string>
     <string name="label_app_version">App Version: %s</string>
     <string name="label_current_password">Current Password</string>
     <string name="label_new_password">New Password</string>

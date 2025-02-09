@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_lock
 
+import androidx.activity.compose.LocalActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
@@ -54,6 +55,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -67,7 +69,8 @@ fun PasswordLockScreen(
     var confirmPasswordValue by rememberSaveable { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val context = LocalContext.current as FragmentActivity
+    val context = LocalContext.current
+    val activity = LocalActivity.current as FragmentActivity
     val scope = rememberCoroutineScope()
     val state = viewModel.state
     val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
@@ -87,8 +90,8 @@ fun PasswordLockScreen(
 
     val biometricPrompt = remember {
         BiometricPrompt(
-            context,
-            context.mainExecutor,
+            activity,
+            activity.mainExecutor,
             object :
                 BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -117,6 +120,19 @@ fun PasswordLockScreen(
     }
 
     Scaffold(
+        topBar = {
+            if (state.hasPasswordSet == true) {
+                CenterAlignedTopAppBar(
+                    title = { Text(stringResource(R.string.title_enter_password)) },
+                    windowInsets = windowinsetsVerticalZero
+                )
+            } else {
+                CenterAlignedTopAppBar(
+                    title = { Text(stringResource(R.string.title_create_password)) },
+                    windowInsets = windowinsetsVerticalZero
+                )
+            }
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { contentPadding ->
         Column(
@@ -127,8 +143,7 @@ fun PasswordLockScreen(
                 .padding(horizontal = pagePadding)
         ) {
             if (state.hasPasswordSet == true) {
-                CenterAlignedTopAppBar(title = { Text(stringResource(R.string.title_enter_password)) })
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = passwordValue,
@@ -188,8 +203,7 @@ fun PasswordLockScreen(
                     Text(stringResource(R.string.btn_use_device_lock_screen))
                 }
             } else {
-                CenterAlignedTopAppBar(title = { Text(stringResource(R.string.title_create_password)) })
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = passwordValue,

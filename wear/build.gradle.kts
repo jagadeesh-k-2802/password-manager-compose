@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.googleDaggerHiltAndroid)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.googleDevToolsKsp)
+    alias(libs.plugins.compose.compiler)
 }
 
 // Secrets
@@ -18,12 +19,12 @@ val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 
 // Version Management
 val versionMajor = 1
-val versionMinor = 0
-val versionPatch = 1
+val versionMinor = 1
+val versionPatch = 0
 val minimumSdkVersion = 28
 
 fun generateVersionCode(): Int {
-    return minimumSdkVersion * 50000000 + versionMajor * 10000 + versionMinor * 300 + versionPatch
+    return minimumSdkVersion * 50000000 + versionMajor * 20000 + versionMinor * 300 + versionPatch
 }
 
 fun generateVersionName(): String {
@@ -32,12 +33,12 @@ fun generateVersionName(): String {
 
 android {
     namespace = "com.jackappsdev.password_manager"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = minimumSdkVersion
-        targetSdk = 34
+        targetSdk = 35
         versionCode = generateVersionCode()
         versionName = generateVersionName()
         buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)
@@ -70,15 +71,16 @@ android {
         buildConfig = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    stabilityConfigurationFiles = listOf(rootProject.layout.projectDirectory.file("stability_config.conf"))
 }
 
 dependencies {

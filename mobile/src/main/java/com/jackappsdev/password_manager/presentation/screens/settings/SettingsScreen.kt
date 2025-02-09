@@ -8,12 +8,14 @@ import android.os.Build
 import android.provider.Settings.ACTION_BIOMETRIC_ENROLL
 import android.provider.Settings.ACTION_SECURITY_SETTINGS
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -46,11 +49,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat.getString
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.navigate
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,16 +71,38 @@ fun SettingsScreen(
     var importFileUri by remember { mutableStateOf<Uri?>(null) }
     var isInvalidPassword by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val activity = LocalActivity.current as FragmentActivity
 
     val version = rememberSaveable {
         val packageManager = context.packageManager.getPackageInfo(context.packageName, 0)
-        packageManager.versionName
+        packageManager.versionName ?: ""
     }
 
     val isScreenLockAvailable = remember {
         val manager = BiometricManager.from(context)
         val credentials = BIOMETRIC_WEAK or BIOMETRIC_STRONG or DEVICE_CREDENTIAL
         manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
+    val promptInfo = remember {
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(context, R.string.title_verify_user))
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+            .build()
+    }
+
+    val biometricPrompt = remember {
+        BiometricPrompt(
+            activity,
+            context.mainExecutor,
+            object :
+                BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    viewModel.toggleBiometricUnlock()
+                }
+            }
+        )
     }
 
     val importIntent = rememberLauncherForActivityResult(
@@ -139,7 +167,12 @@ fun SettingsScreen(
     }
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text(stringResource(R.string.title_settings)) }) }
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(stringResource(R.string.title_settings)) },
+                windowInsets = windowinsetsVerticalZero
+            )
+        }
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -173,9 +206,9 @@ fun SettingsScreen(
                 trailingContent = {
                     Switch(
                         checked = state.useScreenLockToUnlock == true,
-                        onCheckedChange = { value ->
+                        onCheckedChange = {
                             if (isScreenLockAvailable) {
-                                viewModel.setBiometricUnlock(value)
+                                biometricPrompt.authenticate(promptInfo)
                             } else {
                                 onNoLockScreen()
                             }
@@ -185,7 +218,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .clickable {
                         if (isScreenLockAvailable) {
-                            viewModel.setBiometricUnlock(state.useScreenLockToUnlock != true)
+                            biometricPrompt.authenticate(promptInfo)
                         } else {
                             onNoLockScreen()
                         }
@@ -214,7 +247,7 @@ fun SettingsScreen(
                 modifier = Modifier.clickable {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("application/*")
+                    intent.setType("application/vnd.sqlite3")
                     importIntent.launch(intent)
                 }
             )
@@ -228,6 +261,25 @@ fun SettingsScreen(
                     intent.setType("application/vnd.sqlite3")
                     intent.putExtra(Intent.EXTRA_TITLE, "passwords.db")
                     exportIntent.launch(intent)
+                }
+            )
+
+            ListItem(
+                leadingContent = { Icon(Icons.Outlined.StarOutline, null) },
+                headlineContent = { Text(stringResource(R.string.label_rate_app)) },
+                modifier = Modifier.clickable {
+                    val intent = try {
+                        Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("market://details?id=${context.packageName}")
+                            flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                        }
+                    } catch (e: Exception) {
+                        Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse(PLAY_STORE_APP_URI)
+                        }
+                    }
+
+                    context.startActivity(intent)
                 }
             )
 

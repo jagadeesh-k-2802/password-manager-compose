@@ -3,11 +3,13 @@ package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.PasswordCategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -21,9 +23,9 @@ class EditPasswordItemViewModel @Inject constructor(
     private val passwordItemRepository: PasswordItemRepository,
     categoryRepository: CategoryRepository
 ) : ViewModel() {
-    private val id: String = checkNotNull(savedStateHandle["id"])
+    private val editPasswordItem = savedStateHandle.toRoute<Routes.EditPasswordItem>()
     val errorChannel = Channel<EditPasswordItemError>()
-    val passwordItem = passwordItemRepository.getPasswordItem(id.toInt())
+    val passwordItem = passwordItemRepository.getPasswordItem(editPasswordItem.id)
     val categoryItems = categoryRepository.getAllCategories()
 
     fun onEditComplete(

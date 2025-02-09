@@ -34,6 +34,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,7 +54,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -66,6 +66,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.android.gms.wearable.PutDataMapRequest
@@ -76,10 +77,10 @@ import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.navigate
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
 import com.jackappsdev.password_manager.presentation.screens.password_generator.generatePassword
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -202,7 +203,8 @@ fun EditPasswordItemScreen(
                             stringResource(R.string.accessibility_go_back)
                         )
                     }
-                }
+                },
+                windowInsets = windowinsetsVerticalZero
             )
         }
     ) { contentPadding ->
@@ -334,11 +336,8 @@ fun EditPasswordItemScreen(
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
+                    imeAction = ImeAction.Default
+                )
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -368,7 +367,7 @@ fun EditPasswordItemScreen(
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryDropdownVisible)
                     },
                     modifier = Modifier
-                        .menuAnchor()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth()
                 )
 
@@ -445,6 +444,11 @@ fun EditPasswordItemScreen(
                         category.id,
                         passwordItem
                     ) { newPasswordItemModel ->
+                        if (passwordItem?.isAddedToWatch == false) {
+                            navController.navigateUp()
+                            return@onEditComplete
+                        }
+
                         val dataClient = Wearable.getDataClient(context)
 
                         val putDataRequest = PutDataMapRequest.create(UPSERT_PASSWORD).run {

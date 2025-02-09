@@ -6,10 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.domain.model.PasswordCategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,8 +22,8 @@ class PasswordItemDetailViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val passwordItemRepository: PasswordItemRepository
 ) : ViewModel() {
-    private val id: String = checkNotNull(savedStateHandle["id"])
-    val passwordItem = passwordItemRepository.getPasswordItem(id.toInt())
+    private val passwordItemDetail = savedStateHandle.toRoute<Routes.PasswordItemDetail>()
+    val passwordItem = passwordItemRepository.getPasswordItem(passwordItemDetail.id)
 
     var state by mutableStateOf(PasswordItemDetailState())
         private set

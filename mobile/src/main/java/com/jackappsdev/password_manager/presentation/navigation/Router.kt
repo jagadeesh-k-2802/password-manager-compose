@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -54,7 +54,7 @@ fun Router(
                 }
 
                 if (event == Lifecycle.Event.ON_PAUSE) {
-                    handler.postDelayed(runnable, 30000)
+                    handler.postDelayed(runnable, 30 * 1000)
                 }
             }
 
@@ -65,32 +65,32 @@ fun Router(
         if (!state.hasBeenUnlocked) {
             NavHost(
                 navController,
-                startDestination = Routes.PasswordLock.route,
+                startDestination = Routes.PasswordLock,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None },
                 modifier = Modifier.padding(contentPadding)
             ) {
-                composable(Routes.PasswordLock.route) { PasswordLockScreen(passwordLockViewModel) }
+                composable<Routes.PasswordLock> { PasswordLockScreen(passwordLockViewModel) }
             }
         } else {
             NavHost(
                 navController,
-                startDestination = Routes.Home.route,
+                startDestination = Routes.Home,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None },
                 modifier = Modifier.padding(contentPadding)
             ) {
-                composable(Routes.Home.route) { HomeScreen(navController) }
-                composable(Routes.AddPasswordItem.route) { AddPasswordItemScreen(navController) }
-                composable(Routes.PasswordItemDetail.route) { PasswordItemDetailScreen(navController) }
-                composable(Routes.EditPasswordItem.route) { EditPasswordItemScreen(navController) }
-                composable(Routes.PasswordGenerator.route) { PasswordGeneratorScreen() }
-                composable(Routes.Settings.route) { SettingsScreen(navController) }
-                composable(Routes.AndroidWatch.route) { AndroidWatchScreen(navController) }
-                composable(Routes.ChangePassword.route) { ChangePasswordScreen(navController) }
-                composable(Routes.ManageCategories.route) { ManageCategoriesScreen(navController) }
-                composable(Routes.AddCategoryItem.route) { AddCategoryItemScreen(navController) }
-                composable(Routes.CategoryItemDetail.route) { CategoryItemDetailScreen(navController) }
+                composable<Routes.Home> { HomeScreen(navController) }
+                composable<Routes.AddPasswordItem> { AddPasswordItemScreen(navController) }
+                composable<Routes.PasswordItemDetail> { PasswordItemDetailScreen(navController) }
+                composable<Routes.EditPasswordItem> { EditPasswordItemScreen(navController) }
+                composable<Routes.PasswordGenerator> { PasswordGeneratorScreen() }
+                composable<Routes.Settings> { SettingsScreen(navController) }
+                composable<Routes.AndroidWatch> { AndroidWatchScreen(navController) }
+                composable<Routes.ChangePassword> { ChangePasswordScreen(navController) }
+                composable<Routes.ManageCategories> { ManageCategoriesScreen(navController) }
+                composable<Routes.AddCategoryItem> { AddCategoryItemScreen(navController) }
+                composable<Routes.CategoryItemDetail> { CategoryItemDetailScreen(navController) }
             }
         }
     }

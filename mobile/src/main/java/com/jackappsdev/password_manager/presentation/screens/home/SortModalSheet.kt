@@ -33,7 +33,8 @@ fun SortModalSheet(
 
     ModalBottomSheet(
         onDismissRequest = { scope.launch { sheetState.hide() } },
-        sheetState = sheetState
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         Text(
             "Sort By",

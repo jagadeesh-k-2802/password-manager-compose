@@ -32,7 +32,6 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     suspend fun verifyPin(password: String): Boolean {
-        val isMatching = userPreferencesRepository.verifyPin(password)
-        return isMatching
+        return userPreferencesRepository.verifyPin(password)
     }
 }

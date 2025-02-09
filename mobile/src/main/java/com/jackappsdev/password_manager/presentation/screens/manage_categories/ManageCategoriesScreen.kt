@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.navigate
+import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +75,8 @@ fun ManageCategoriesScreen(
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
                     scope.launch { lazyColumnState.animateScrollToItem(0) }
-                }
+                },
+                windowInsets = windowinsetsVerticalZero
             )
         },
         floatingActionButton = {
@@ -122,7 +123,7 @@ fun ManageCategoriesScreen(
                 categoryItems?.let {
                     items(it.value) { item ->
                         CategoryItem(item) {
-                            navController.navigate(Routes.CategoryItemDetail.getPath(item.id ?: 0))
+                            navController.navigate(Routes.CategoryItemDetail(item.id ?: 0))
                         }
                     }
                 }

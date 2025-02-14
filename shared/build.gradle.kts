@@ -37,6 +37,9 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 

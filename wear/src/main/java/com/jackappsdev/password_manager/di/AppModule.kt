@@ -13,11 +13,10 @@ import com.jackappsdev.password_manager.data.models.UserSettings
 import com.jackappsdev.password_manager.data.repository.PassphraseRepositoryImpl
 import com.jackappsdev.password_manager.data.repository.PasswordItemRepositoryImpl
 import com.jackappsdev.password_manager.data.repository.UserPreferencesRepositoryImpl
-import com.jackappsdev.password_manager.data.serializers.UserSettingsSerializer
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
-import com.jackappsdev.password_manager.shared.core.CryptoManager
+import com.jackappsdev.password_manager.shared.core.DataStoreEncryptionSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -77,7 +76,10 @@ object AppModule {
         @ApplicationContext appContext: Context
     ): DataStore<UserSettings> {
         return DataStoreFactory.create(
-            serializer = UserSettingsSerializer(cryptoManager = CryptoManager()),
+            serializer = DataStoreEncryptionSerializer(
+                serializer = UserSettings.serializer(),
+                defaultValue = UserSettings()
+            ),
             produceFile = { appContext.dataStoreFile(USER_PREFERENCES) },
             corruptionHandler = null,
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob())

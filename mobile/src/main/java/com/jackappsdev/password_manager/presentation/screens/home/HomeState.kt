@@ -1,6 +1,8 @@
 package com.jackappsdev.password_manager.presentation.screens.home
 
+import com.jackappsdev.password_manager.domain.model.FilterBy
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
+import com.jackappsdev.password_manager.domain.model.SortBy
 import kotlinx.coroutines.flow.StateFlow
 
 data class HomeState(

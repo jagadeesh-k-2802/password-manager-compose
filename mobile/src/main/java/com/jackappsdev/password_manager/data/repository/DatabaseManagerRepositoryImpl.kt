@@ -22,7 +22,7 @@ class DatabaseManagerRepositoryImpl(
     private val passwordDao: PasswordDao,
     private val passphraseRepository: PassphraseRepository
 ) : DatabaseManagerRepository {
-    override suspend fun importData(path: String, password: String): Boolean {
+    override suspend fun importDatabase(path: String, password: String): Boolean {
         val tempDatabaseName = "temp.db"
 
         withContext(Dispatchers.IO) {
@@ -76,10 +76,11 @@ class DatabaseManagerRepositoryImpl(
             Runtime.getRuntime().exit(0)
         }
 
-        return true // Application will restart before it returns so we only care for 'false' value
+        // Application will restart before it returns so we only care for 'false' value
+        return true
     }
 
-    override suspend fun exportData(path: String) {
+    override suspend fun exportDatabase(path: String) {
         withContext(Dispatchers.IO) {
             passwordDao.checkpoint() // To save changes without it DB will be empty
             val from = File(appContext.getDatabasePath(DATABASE_NAME).absolutePath)

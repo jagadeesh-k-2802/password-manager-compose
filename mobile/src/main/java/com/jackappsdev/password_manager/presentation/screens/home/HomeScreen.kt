@@ -56,7 +56,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.debounce
+import com.jackappsdev.password_manager.domain.model.FilterBy
 import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.screens.home.composables.FilterByCategoryModalSheet
+import com.jackappsdev.password_manager.presentation.screens.home.composables.PasswordItem
+import com.jackappsdev.password_manager.presentation.screens.home.composables.SortModalSheet
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.Dispatchers

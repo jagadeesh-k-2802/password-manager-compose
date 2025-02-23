@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.home
+package com.jackappsdev.password_manager.presentation.screens.home.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
+import com.jackappsdev.password_manager.domain.model.FilterBy
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.launch
 

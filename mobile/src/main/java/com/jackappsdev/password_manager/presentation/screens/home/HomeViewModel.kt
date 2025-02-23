@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jackappsdev.password_manager.domain.model.FilterBy
+import com.jackappsdev.password_manager.domain.model.SortBy
+import com.jackappsdev.password_manager.domain.model.orderBy
+import com.jackappsdev.password_manager.domain.model.where
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

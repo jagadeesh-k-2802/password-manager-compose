@@ -44,6 +44,7 @@ import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.generateRandomPassword
 import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.presentation.screens.password_generator.composables.OptionSwitch
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.launch
 

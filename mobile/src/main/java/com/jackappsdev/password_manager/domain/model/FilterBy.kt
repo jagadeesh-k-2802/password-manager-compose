@@ -1,4 +1,6 @@
-package com.jackappsdev.password_manager.presentation.screens.home
+package com.jackappsdev.password_manager.domain.model
+
+import com.jackappsdev.password_manager.data.local.PasswordItemEntity
 
 sealed interface FilterBy {
     data object All : FilterBy
@@ -6,6 +8,10 @@ sealed interface FilterBy {
     data object NoCategoryItems : FilterBy
 }
 
+/**
+ * The string mapping SHOULD match the column names of [PasswordItemEntity]
+ * else will result in Runtime Error
+ */
 fun FilterBy.where(): String {
     return when(this) {
         FilterBy.All -> ""

@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.manage_categories
+package com.jackappsdev.password_manager.presentation.screens.manage_categories.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

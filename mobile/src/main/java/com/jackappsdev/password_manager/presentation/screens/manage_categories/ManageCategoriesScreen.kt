@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.composables.CategoryItem
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.home
+package com.jackappsdev.password_manager.presentation.screens.home.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.ListItem

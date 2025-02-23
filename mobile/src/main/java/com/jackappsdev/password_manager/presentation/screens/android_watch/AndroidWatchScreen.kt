@@ -51,6 +51,7 @@ import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.screens.android_watch.composables.DisableAndroidWatchDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN

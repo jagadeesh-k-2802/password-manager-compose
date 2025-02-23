@@ -1,4 +1,6 @@
-package com.jackappsdev.password_manager.presentation.screens.home
+package com.jackappsdev.password_manager.domain.model
+
+import com.jackappsdev.password_manager.data.local.PasswordItemEntity
 
 enum class SortBy {
     ALPHABET_ASCENDING,
@@ -8,7 +10,7 @@ enum class SortBy {
 }
 
 /**
- * The string mapping SHOULD match the column names of PasswordItemEntity
+ * The string mapping SHOULD match the column names of [PasswordItemEntity]
  * else will result in Runtime Error
  */
 fun SortBy.orderBy(): String {

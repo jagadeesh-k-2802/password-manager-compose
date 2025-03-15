@@ -24,17 +24,17 @@
 ## Running The Application 🧑🏻‍💻
 - `git clone https://github.com/jagadeesh-k-2802/password-manager-compose`
 - Open the directory in Android Studio
-- Place your secret key for encryption in `./wear/secrets.defaults.properties` and remove the defaults from the filename
+- Place your secret key for encryption in `./wear/secrets.defaults.properties` and remove the `defaults`
 - Click run as you would do with any other project
 
 ## Screenshots (Phone) 📷
 
-<img src="https://github.com/user-attachments/assets/1f4e673e-b660-48fb-a1b1-a4b6d17d7e62" width="250" />
-<img src="https://github.com/user-attachments/assets/956057de-be55-4605-9f6e-33b0ef78d5e7" width="250" />
-<img src="https://github.com/user-attachments/assets/3b74750c-0eee-40c7-9f6e-f793a3af989d" width="250" />
-<img src="https://github.com/user-attachments/assets/2fdec55b-16a2-44dc-91aa-ef8b41d885c3" width="250" />
-<img src="https://github.com/user-attachments/assets/373ffe96-0ec5-47bc-98be-1b162bc27559" width="250" />
-<img src="https://github.com/user-attachments/assets/cb67d36a-cece-4031-b584-6dd29f287f6d" width="250" />
+<img src="https://github.com/user-attachments/assets/d5e16cbb-43ce-495f-878f-6989a1001086" width="250" />
+<img src="https://github.com/user-attachments/assets/b5a541e9-122b-4f6c-81be-85b6edb8ff3c" width="250" />
+<img src="https://github.com/user-attachments/assets/976268dc-667c-4d1f-9ff4-4cf6e26e0693" width="250" />
+<img src="https://github.com/user-attachments/assets/e093ea78-bc16-4636-90df-404128d844ae" width="250" />
+<img src="https://github.com/user-attachments/assets/ee05d927-3379-4e74-9819-baad3822a788" width="250" />
+<img src="https://github.com/user-attachments/assets/cd4c9c19-5d78-4afa-9a75-637e51cb4a9c" width="250" />
 
 ## Screenshots (Wear OS) 📷
 

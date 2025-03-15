@@ -40,7 +40,7 @@ fun generateRandomPassword(config: GeneratePasswordConfig): String {
     }
 
     return buildString {
-        repeat(length) {
+        repeat(config.length) {
             append(availableChars[Random.nextInt(availableChars.length)])
         }
     }

@@ -38,7 +38,7 @@ android {
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = minimumSdkVersion
-        targetSdk = 35
+        targetSdk = 34
         versionCode = generateVersionCode()
         versionName = generateVersionName()
         buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)

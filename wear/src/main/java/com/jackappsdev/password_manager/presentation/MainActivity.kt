@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onResume() {
         super.onResume()
         registerReceiver()

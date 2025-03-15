@@ -20,7 +20,6 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.FilterAltOff
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -50,6 +49,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -196,9 +196,10 @@ fun HomeScreen(
                     .fillMaxSize()
             ) {
                 Icon(
-                    Icons.Outlined.Info,
-                    stringResource(R.string.accessibility_no_passwords),
-                    modifier = Modifier.size(64.dp)
+                    painter = painterResource(R.drawable.task_empty_state),
+                    contentDescription = stringResource(R.string.accessibility_no_passwords),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(180.dp)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -274,13 +275,14 @@ fun HomeScreen(
                                 .fillMaxSize()
                         ) {
                             Icon(
-                                Icons.Outlined.Info,
-                                stringResource(R.string.accessibility_no_items),
-                                modifier = Modifier.size(64.dp)
+                                painter = painterResource(R.drawable.search_empty_state),
+                                contentDescription = stringResource(R.string.accessibility_no_items),
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(180.dp)
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text(stringResource(R.string.text_no_items_found))
+                            Text(stringResource(R.string.text_no_matching_passwords_found))
                         }
                     }
                 }

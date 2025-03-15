@@ -55,9 +55,9 @@ import com.jackappsdev.password_manager.presentation.screens.android_watch.compo
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
-import com.jackappsdev.password_manager.shared.constants.SET_PIN_PATH
+import com.jackappsdev.password_manager.shared.constants.SET_PIN
 import com.jackappsdev.password_manager.shared.constants.VERIFY_WEAR_APP
-import com.jackappsdev.password_manager.shared.constants.WIPE_DATA_PATH
+import com.jackappsdev.password_manager.shared.constants.WIPE_DATA
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -88,7 +88,7 @@ fun AndroidWatchScreen(
             viewModel.setAndroidWatchPin(null) {
                 val dataClient = Wearable.getDataClient(context)
 
-                val putDataRequest = PutDataMapRequest.create(WIPE_DATA_PATH).run {
+                val putDataRequest = PutDataMapRequest.create(WIPE_DATA).run {
                     dataMap.putString(KEY_PIN, System.currentTimeMillis().toString())
                     setUrgent()
                     asPutDataRequest()
@@ -155,7 +155,7 @@ fun AndroidWatchScreen(
 
             checkIfWatchIsAvailableAndAppInstalled {
                 viewModel.setAndroidWatchPin(pin) {
-                    val putDataRequest = PutDataMapRequest.create(SET_PIN_PATH).run {
+                    val putDataRequest = PutDataMapRequest.create(SET_PIN).run {
                         // Adding time part of data to allow setting the same PIN within
                         // short span of time
                         dataMap.putString(KEY_PIN, "$pin ${System.currentTimeMillis()}")

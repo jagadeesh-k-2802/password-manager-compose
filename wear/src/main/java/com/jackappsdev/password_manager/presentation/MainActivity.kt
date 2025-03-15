@@ -5,11 +5,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.jackappsdev.password_manager.presentation.navigation.Router
@@ -21,6 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val passwordLockViewModel: PasswordLockViewModel by viewModels()
 
+    /**
+     * If PIN is updated, then close the activity
+     */
     private val pinChangeBroadcastReceiver = object : BroadcastReceiver() {
         @SuppressLint("UnsafeIntentLaunch")
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -50,13 +53,16 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onResume() {
         super.onResume()
-        val intentFilter = IntentFilter(PIN_CHANGE_ACTION)
+        registerReceiver()
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(pinChangeBroadcastReceiver, intentFilter, RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(pinChangeBroadcastReceiver, intentFilter)
-        }
+    private fun registerReceiver() {
+        ContextCompat.registerReceiver(
+            this,
+            pinChangeBroadcastReceiver,
+            IntentFilter(PIN_CHANGE_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onPause() {

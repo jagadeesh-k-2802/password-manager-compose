@@ -62,8 +62,8 @@
     <!--  Text  -->
     <string name="text_password_warning_note">Please note that this password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
     <string name="text_android_watch_note">Selected Passwords will be shared with your Wear OS Watch with end-to-end encryption.</string>
-    <string name="text_no_passwords">No Passwords Saved</string>
-    <string name="text_no_items_found">No Items Found</string>
+    <string name="text_no_passwords">Looks a Bit Empty Here!</string>
+    <string name="text_no_matching_passwords_found">No Matching Passwords Found</string>
     <string name="text_no_category">No Category</string>
     <string name="text_no_categories_available">No Categories Available</string>
     <string name="text_all_options_warning">Cannot turn off all options</string>
@@ -99,7 +99,7 @@
     <string name="accessibility_no_passwords">No passwords icon</string>
     <string name="accessibility_search">Search</string>
     <string name="accessibility_clear_search">Clear search</string>
-    <string name="accessibility_no_items">No items</string>
+    <string name="accessibility_no_items">No passwords found</string>
     <string name="accessibility_go_back">Go back</string>
     <string name="accessibility_add_category">Add a new category</string>
     <string name="accessibility_create">Create</string>

@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.core.GeneratePasswordConfig
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.generateRandomPassword
@@ -70,12 +71,14 @@ fun PasswordGeneratorScreen() {
         includeNumbers,
         includeSymbols
     ) {
-        generatedPassword = generatePassword(
-            lengthValue,
-            includeLowercase,
-            includeUppercase,
-            includeNumbers,
-            includeSymbols
+        generatedPassword = generateRandomPassword(
+            GeneratePasswordConfig(
+                lengthValue,
+                includeLowercase,
+                includeUppercase,
+                includeNumbers,
+                includeSymbols
+            )
         )
     }
 
@@ -156,12 +159,14 @@ fun PasswordGeneratorScreen() {
 
                         Row {
                             IconButton(onClick = {
-                                generatedPassword = generatePassword(
-                                    lengthValue,
-                                    includeLowercase,
-                                    includeUppercase,
-                                    includeNumbers,
-                                    includeSymbols
+                                generatedPassword = generateRandomPassword(
+                                    GeneratePasswordConfig(
+                                        lengthValue,
+                                        includeLowercase,
+                                        includeUppercase,
+                                        includeNumbers,
+                                        includeSymbols
+                                    )
                                 )
                             }) {
                                 Icon(
@@ -222,17 +227,3 @@ fun PasswordGeneratorScreen() {
         }
     }
 }
-
-fun generatePassword(
-    lengthValue: Int,
-    includeLowercase: Boolean,
-    includeUppercase: Boolean,
-    includeNumbers: Boolean,
-    includeSymbols: Boolean
-) = generateRandomPassword(
-    lengthValue,
-    includeLowercase,
-    includeUppercase,
-    includeNumbers,
-    includeSymbols
-)

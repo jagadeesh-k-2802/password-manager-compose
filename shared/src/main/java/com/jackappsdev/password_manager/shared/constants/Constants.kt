@@ -1,12 +1,15 @@
 package com.jackappsdev.password_manager.shared.constants
 
-// Data Communications Between Wear OS & Mobile (Change in AndroidManifest.xml Also)
-const val SET_PIN_PATH = "/set-watch-pin"
+// Data Communications Between Mobile & Wear OS (Change in [AndroidManifest.xml] for Wear OS)
+
 const val KEY_PIN = "KEY-PIN"
+const val KEY_PASSWORD = "KEY-PASSWORD"
+
+const val SET_PIN = "/set-watch-pin"
 const val UPSERT_PASSWORD = "/upsert-password"
 const val DELETE_PASSWORD = "/delete-password"
-const val KEY_PASSWORD = "KEY-PASSWORD"
-const val WIPE_DATA_PATH = "/wipe-data"
+const val WIPE_DATA = "/wipe-data"
+
 const val VERIFY_WEAR_APP = "verify_remote_wear_app"
 
 // URI

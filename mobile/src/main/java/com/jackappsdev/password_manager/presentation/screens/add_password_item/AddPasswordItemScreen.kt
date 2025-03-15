@@ -68,12 +68,13 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.core.GeneratePasswordConfig
+import com.jackappsdev.password_manager.core.generateRandomPassword
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
-import com.jackappsdev.password_manager.presentation.screens.password_generator.generatePassword
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -219,13 +220,7 @@ fun AddPasswordItemScreen(
                 trailingIcon = {
                     Row {
                         IconButton(onClick = {
-                            password = generatePassword(
-                                lengthValue = 12,
-                                includeLowercase = true,
-                                includeUppercase = true,
-                                includeNumbers = true,
-                                includeSymbols = true,
-                            )
+                            password = generateRandomPassword(GeneratePasswordConfig(length = 12))
                         }) {
                             Icon(
                                 Icons.Outlined.Refresh,

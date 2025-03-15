@@ -18,7 +18,7 @@ interface PasswordDao {
     fun getPasswordEntity(id: Int): Flow<PasswordItemEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPasswordEntity(item: PasswordItemEntity)
+    suspend fun upsertPasswordEntity(item: PasswordItemEntity)
 
     @Delete
     suspend fun deletePasswordEntity(item: PasswordItemEntity)

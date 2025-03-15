@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
@@ -14,16 +13,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import androidx.core.net.toUri
 import kotlin.random.Random
 
-fun generateRandomPassword(
-    length: Int,
-    includeLowercase: Boolean = true,
-    includeUppercase: Boolean = true,
-    includeNumbers: Boolean = true,
-    includeSymbols: Boolean = true,
-    additionalCharacters: String? = null
-): String {
+/**
+ * Generate a random password based on the configuration
+ */
+fun generateRandomPassword(config: GeneratePasswordConfig): String {
     @Suppress("SpellCheckingInspection")
     val lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
 
@@ -33,11 +29,11 @@ fun generateRandomPassword(
     val symbolChars = "!@#$%^&*()-_+=[]{}|;:,.<>?/`~"
 
     var availableChars = ""
-    if (includeLowercase) availableChars += lowercaseChars
-    if (includeUppercase) availableChars += uppercaseChars
-    if (includeNumbers) availableChars += numberChars
-    if (includeSymbols) availableChars += symbolChars
-    additionalCharacters?.let { availableChars += it }
+    if (config.includeLowercase) availableChars += lowercaseChars
+    if (config.includeUppercase) availableChars += uppercaseChars
+    if (config.includeNumbers) availableChars += numberChars
+    if (config.includeSymbols) availableChars += symbolChars
+    config.additionalCharacters?.let { availableChars += it }
 
     if (availableChars.isEmpty()) {
         throw IllegalArgumentException("At least one character set must be included")
@@ -50,20 +46,25 @@ fun generateRandomPassword(
     }
 }
 
+/**
+ * Copy the [text] to clipboard
+ */
 fun copyToClipboard(context: Context, text: String?, label: String = "Text") {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clipData)
-    Toast.makeText(context, context.getString(R.string.toast_copy_to_clipboard), Toast.LENGTH_SHORT)
-        .show()
+    Toast.makeText(context, context.getString(R.string.toast_copy_to_clipboard), Toast.LENGTH_SHORT).show()
 }
 
+/**
+ * Launch URL in browser
+ */
 fun launchUrl(context: Context, url: String) {
     var currUrl = url
     if (!url.startsWith("http://") && !url.startsWith("https://")) currUrl = "http://$url"
 
     try {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(currUrl))
+        val intent = Intent(Intent.ACTION_VIEW, currUrl.toUri())
         context.startActivity(intent)
     } catch (e: Exception) {
         Toast.makeText(context, context.getString(R.string.toast_invalid_url), Toast.LENGTH_SHORT)
@@ -71,11 +72,10 @@ fun launchUrl(context: Context, url: String) {
     }
 }
 
-fun <T> debounce(
-    delayMs: Long = 500L,
-    coroutineContext: CoroutineContext,
-    f: (T) -> Unit
-): (T) -> Unit {
+/**
+ * Debounce function to prevent multiple calls in a short period of time
+ */
+fun <T> debounce(delayMs: Long = 500L, coroutineContext: CoroutineContext, f: (T) -> Unit): (T) -> Unit {
     var debounceJob: Job? = null
 
     return { param: T ->
@@ -88,6 +88,9 @@ fun <T> debounce(
     }
 }
 
+/**
+ * Parse [String] Hex color to [Color]
+ */
 fun parseColor(string: String): Color {
     val hexString = string.removePrefix("#")
     val red = hexString.substring(0, 2).toInt(16)
@@ -96,6 +99,9 @@ fun parseColor(string: String): Color {
     return Color(red, green, blue)
 }
 
+/**
+ * Check if the device is running Android version greater than or equal to [sdkVersion]
+ */
 fun isAndroid(sdkVersion: Int): Boolean {
     return Build.VERSION.SDK_INT >= sdkVersion
 }

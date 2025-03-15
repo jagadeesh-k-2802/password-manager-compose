@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.jackappsdev.password_manager.constants.APP_AUTO_LOCK_DELAY
 import com.jackappsdev.password_manager.presentation.composables.BottomNavigationBar
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.AddCategoryItemScreen
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.AddPasswordItemScreen
@@ -54,7 +55,7 @@ fun Router(
                 }
 
                 if (event == Lifecycle.Event.ON_PAUSE) {
-                    handler.postDelayed(runnable, 30 * 1000)
+                    handler.postDelayed(runnable, APP_AUTO_LOCK_DELAY)
                 }
             }
 

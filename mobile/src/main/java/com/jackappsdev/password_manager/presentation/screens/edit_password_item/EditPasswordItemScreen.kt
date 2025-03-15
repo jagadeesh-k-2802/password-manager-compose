@@ -72,13 +72,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.core.GeneratePasswordConfig
+import com.jackappsdev.password_manager.core.generateRandomPassword
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
-import com.jackappsdev.password_manager.presentation.screens.password_generator.generatePassword
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
@@ -274,13 +275,7 @@ fun EditPasswordItemScreen(
                     Row {
                         IconButton(onClick = {
                             password = TextFieldValue(
-                                text = generatePassword(
-                                    lengthValue = 12,
-                                    includeLowercase = true,
-                                    includeUppercase = true,
-                                    includeNumbers = true,
-                                    includeSymbols = true,
-                                ),
+                                text = generateRandomPassword(GeneratePasswordConfig(length = 12)),
                                 selection = TextRange(index = 12)
                             )
                         }) {

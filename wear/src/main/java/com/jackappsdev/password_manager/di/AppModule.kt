@@ -16,6 +16,8 @@ import com.jackappsdev.password_manager.data.repository.UserPreferencesRepositor
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
+import com.jackappsdev.password_manager.services.DataLayerListenerActions
+import com.jackappsdev.password_manager.services.DataLayerListenerActionsImpl
 import com.jackappsdev.password_manager.shared.core.DataStoreEncryptionSerializer
 import dagger.Module
 import dagger.Provides
@@ -67,6 +69,22 @@ object AppModule {
     ): PasswordItemRepository {
         return PasswordItemRepositoryImpl(
             passwordDao = passwordDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun providesDataLayerListenerActions(
+        @ApplicationContext appContext: Context,
+        userPreferencesRepository: UserPreferencesRepository,
+        passphraseRepository: PassphraseRepository,
+        passwordItemRepository: PasswordItemRepository
+    ): DataLayerListenerActions {
+        return DataLayerListenerActionsImpl(
+            appContext,
+            passphraseRepository = passphraseRepository,
+            userPreferencesRepository = userPreferencesRepository,
+            passwordItemRepository = passwordItemRepository
         )
     }
 

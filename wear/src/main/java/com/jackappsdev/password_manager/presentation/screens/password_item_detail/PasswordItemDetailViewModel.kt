@@ -11,6 +11,7 @@ class PasswordItemDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     passwordItemRepository: PasswordItemRepository
 ) : ViewModel() {
+
     private val id: String = checkNotNull(savedStateHandle["id"])
     val passwordItem = passwordItemRepository.getPasswordItem(id.toInt())
 }

@@ -14,6 +14,7 @@ import javax.inject.Inject
 class PasswordLockViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
+
     var state by mutableStateOf(PasswordLockState())
         private set
 

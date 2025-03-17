@@ -1,7 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_lock
 
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.rememberActiveFocusRequester
@@ -49,6 +49,7 @@ import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import androidx.wear.compose.ui.tooling.preview.WearPreviewLargeRound
@@ -106,8 +107,11 @@ fun PasswordLockScreen(
         }
     }
 
-    ScreenScaffold(modifier = Modifier.fillMaxSize()) {
-        if (state.hasPinSet != true) {
+    if (state.hasPinSet != true) {
+        ScreenScaffold(
+            modifier = Modifier.fillMaxSize(),
+            positionIndicator = { PositionIndicator(scrollState = scrollState) }
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = if (isLargeDisplay()) Arrangement.Center else Arrangement.Top,
@@ -148,7 +152,7 @@ fun PasswordLockScreen(
 
                         val intent = Intent(Intent.ACTION_VIEW)
                             .addCategory(Intent.CATEGORY_BROWSABLE)
-                            .setData(Uri.parse(PLAY_STORE_APP_URI))
+                            .setData(PLAY_STORE_APP_URI.toUri())
 
                         scope.launch {
                             try {
@@ -181,7 +185,9 @@ fun PasswordLockScreen(
                     )
                 )
             }
-        } else {
+        }
+    } else {
+        ScreenScaffold(modifier = Modifier.fillMaxSize()) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,

@@ -15,14 +15,15 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val passwordItemRepository: PasswordItemRepository,
 ) : ViewModel() {
+
     var state by mutableStateOf(HomeState())
         private set
 
     init {
-        onInit()
+        getPasswordItems()
     }
 
-    private fun onInit() {
+    private fun getPasswordItems() {
         viewModelScope.launch {
             if (state.isLoading) {
                 state = state.copy(

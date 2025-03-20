@@ -33,7 +33,7 @@
 <img src="https://github.com/user-attachments/assets/b5a541e9-122b-4f6c-81be-85b6edb8ff3c" width="250" />
 <img src="https://github.com/user-attachments/assets/976268dc-667c-4d1f-9ff4-4cf6e26e0693" width="250" />
 <img src="https://github.com/user-attachments/assets/e093ea78-bc16-4636-90df-404128d844ae" width="250" />
-<img src="https://github.com/user-attachments/assets/ee05d927-3379-4e74-9819-baad3822a788" width="250" />
+<img src="https://github.com/user-attachments/assets/68ee68d6-cc7c-40ac-aad5-e87902cf3a3a" width="250" />
 <img src="https://github.com/user-attachments/assets/cd4c9c19-5d78-4afa-9a75-637e51cb4a9c" width="250" />
 
 ## Screenshots (Wear OS) 📷

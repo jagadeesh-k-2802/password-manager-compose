@@ -95,6 +95,7 @@ object AppModule {
     ): DataStore<UserSettings> {
         return DataStoreFactory.create(
             serializer = DataStoreEncryptionSerializer(
+                context = appContext,
                 serializer = UserSettings.serializer(),
                 defaultValue = UserSettings()
             ),

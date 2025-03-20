@@ -3,7 +3,6 @@ package com.jackappsdev.password_manager.data.repository
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteException
-import android.net.Uri
 import com.jackappsdev.password_manager.shared.core.EncryptedSQLiteOpenHelper
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.DATABASE_VERSION
@@ -16,6 +15,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import androidx.core.net.toUri
 
 class DatabaseManagerRepositoryImpl(
     private val appContext: Context,
@@ -28,7 +28,7 @@ class DatabaseManagerRepositoryImpl(
         withContext(Dispatchers.IO) {
             val tempDB = File(appContext.getDatabasePath(tempDatabaseName).absolutePath)
             tempDB.createNewFile()
-            val input = appContext.contentResolver.openInputStream(Uri.parse(path))
+            val input = appContext.contentResolver.openInputStream(path.toUri())
             val outputStream = FileOutputStream(tempDB)
             input?.copyTo(outputStream)
             input?.close()
@@ -55,7 +55,7 @@ class DatabaseManagerRepositoryImpl(
         withContext(Dispatchers.IO) {
             // Copy to current database if password is valid
             val output = File(appContext.getDatabasePath(DATABASE_NAME).absolutePath)
-            val input = appContext.contentResolver.openInputStream(Uri.parse(path))
+            val input = appContext.contentResolver.openInputStream(path.toUri())
             val outputStream = FileOutputStream(output)
             input?.copyTo(outputStream)
             input?.close()
@@ -85,7 +85,7 @@ class DatabaseManagerRepositoryImpl(
             passwordDao.checkpoint() // To save changes without it DB will be empty
             val from = File(appContext.getDatabasePath(DATABASE_NAME).absolutePath)
             val input = FileInputStream(from)
-            val output = appContext.contentResolver.openOutputStream(Uri.parse(path))
+            val output = appContext.contentResolver.openOutputStream(path.toUri())
             if (output != null) input.copyTo(output)
             output?.flush()
             output?.close()

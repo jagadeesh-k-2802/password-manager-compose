@@ -58,6 +58,7 @@ import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.settings.composables.ImportPasswordsDialog
 import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
+import androidx.core.net.toUri
 
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -248,7 +249,7 @@ fun SettingsScreen(
                 modifier = Modifier.clickable {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("application/vnd.sqlite3")
+                    intent.setType("application/*")
                     importIntent.launch(intent)
                 }
             )
@@ -271,12 +272,12 @@ fun SettingsScreen(
                 modifier = Modifier.clickable {
                     val intent = try {
                         Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse("market://details?id=${context.packageName}")
+                            data = "market://details?id=${context.packageName}".toUri()
                             flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
                         }
                     } catch (e: Exception) {
                         Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse(PLAY_STORE_APP_URI)
+                            data = PLAY_STORE_APP_URI.toUri()
                         }
                     }
 

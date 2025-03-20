@@ -1,6 +1,5 @@
 package com.jackappsdev.password_manager.shared.core
 
-
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.io.ByteArrayInputStream
@@ -13,7 +12,11 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
-class CryptoManager {
+/**
+ * Manages encryption and decryption of data using Android KeyStore encryption.
+ * Meant to be used with [DataStoreEncryptionSerializer] for encrypting data in Jetpack DataStore.
+ */
+internal class CryptoManager {
     private val keyStore = KeyStore.getInstance("AndroidKeyStore").apply {
         load(null)
     }

@@ -25,11 +25,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getPasswordItems() {
         viewModelScope.launch {
+            val items = passwordItemRepository.getPasswordItems().stateIn(viewModelScope)
+
             if (state.isLoading) {
-                state = state.copy(
-                    isLoading = false,
-                    items = passwordItemRepository.getPasswordItems().stateIn(viewModelScope)
-                )
+                state = state.copy(isLoading = false, items = items)
             }
         }
     }

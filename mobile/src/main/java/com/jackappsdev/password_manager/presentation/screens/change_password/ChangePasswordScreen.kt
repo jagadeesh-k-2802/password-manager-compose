@@ -43,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -73,7 +73,7 @@ fun ChangePasswordScreen(
                     }
                 },
                 title = { Text(stringResource(R.string.title_change_password)) },
-                windowInsets = windowinsetsVerticalZero
+                windowInsets = windowInsetsVerticalZero
             )
         },
     ) { contentPadding ->

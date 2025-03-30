@@ -55,9 +55,9 @@ import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.shared.constants.colorList
-import com.jackappsdev.password_manager.presentation.composables.UnsavedChangesDialog
+import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -133,7 +133,7 @@ fun CategoryItemDetailScreen(
                         )
                     }
                 },
-                windowInsets = windowinsetsVerticalZero
+                windowInsets = windowInsetsVerticalZero
             )
         }
     ) { contentPadding ->

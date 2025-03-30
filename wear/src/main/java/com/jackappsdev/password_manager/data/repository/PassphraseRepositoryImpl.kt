@@ -12,6 +12,7 @@ import com.jackappsdev.password_manager.domain.repository.UserPreferencesReposit
 class PassphraseRepositoryImpl(
     private val dataStore: DataStore<UserSettings>
 ) : PassphraseRepository {
+
     override suspend fun updatePin(newPin: String) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(pin = newPin) }
     }

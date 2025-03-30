@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.jackappsdev.password_manager.constants.APP_AUTO_LOCK_DELAY
-import com.jackappsdev.password_manager.presentation.composables.BottomNavigationBar
+import com.jackappsdev.password_manager.presentation.components.BottomNavigationBar
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.AddCategoryItemScreen
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.AddPasswordItemScreen
 import com.jackappsdev.password_manager.presentation.screens.android_watch.AndroidWatchScreen

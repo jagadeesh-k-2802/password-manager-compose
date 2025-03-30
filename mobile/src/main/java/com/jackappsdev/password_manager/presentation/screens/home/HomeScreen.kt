@@ -62,7 +62,7 @@ import com.jackappsdev.password_manager.presentation.screens.home.composables.Fi
 import com.jackappsdev.password_manager.presentation.screens.home.composables.PasswordItem
 import com.jackappsdev.password_manager.presentation.screens.home.composables.SortModalSheet
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -155,7 +155,7 @@ fun HomeScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     scrolledContainerColor = MaterialTheme.colorScheme.surface
                 ),
-                windowInsets = windowinsetsVerticalZero,
+                windowInsets = windowInsetsVerticalZero,
                 modifier = Modifier
                     .clickable(
                         indication = null,
@@ -259,7 +259,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = pagePadding),
-                        windowInsets = windowinsetsVerticalZero,
+                        windowInsets = windowInsetsVerticalZero,
                     ) {}
 
                     Spacer(modifier = Modifier.height(8.dp))

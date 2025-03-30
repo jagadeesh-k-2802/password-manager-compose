@@ -4,6 +4,6 @@ sealed class Routes(val route: String) {
     data object PasswordLock : Routes("password-lock")
     data object Home : Routes("home")
     data object PasswordItemDetail : Routes("password-item-detail/{id}") {
-        fun getPath(id: Int) = route.replace("{id}", id.toString())
+        operator fun invoke(id: Int) = route.replace("{id}", id.toString())
     }
 }

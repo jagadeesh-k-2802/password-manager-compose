@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 class UserPreferencesRepositoryImpl(
     private val dataStore: DataStore<UserSettings>
 ) : UserPreferencesRepository {
+
     /**
      * Return the password for DB encryption purpose
      */

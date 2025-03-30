@@ -7,4 +7,4 @@ import androidx.compose.ui.unit.dp
 val pagePadding = 16.dp
 
 // Window Insets
-val windowinsetsVerticalZero = WindowInsets(top = 0.dp, bottom = 0.dp)
+val windowInsetsVerticalZero = WindowInsets(top = 0.dp, bottom = 0.dp)

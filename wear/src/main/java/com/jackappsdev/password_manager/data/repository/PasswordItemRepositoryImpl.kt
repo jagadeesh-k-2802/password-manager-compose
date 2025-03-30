@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 class PasswordItemRepositoryImpl(
     private val passwordDao: PasswordDao
 ) : PasswordItemRepository {
+
     override fun getPasswordItems(): Flow<List<PasswordItemModel>> {
         return passwordDao.getAllPasswordEntities().map { items -> items.map { it.toModel() } }
     }

@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.composables
+package com.jackappsdev.password_manager.presentation.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home

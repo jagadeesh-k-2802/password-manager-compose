@@ -5,8 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.RawQuery
-import androidx.sqlite.db.SimpleSQLiteQuery
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,9 +20,6 @@ interface PasswordDao {
 
     @Delete
     suspend fun deletePasswordEntity(item: PasswordItemEntity)
-
-    @RawQuery
-    suspend fun executeQuery(query: SimpleSQLiteQuery): List<Any>
 
     @Query("DELETE FROM password_items")
     fun deleteAllPasswords()

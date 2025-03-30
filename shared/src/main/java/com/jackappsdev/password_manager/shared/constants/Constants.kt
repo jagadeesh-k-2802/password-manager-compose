@@ -1,7 +1,6 @@
 package com.jackappsdev.password_manager.shared.constants
 
 // Data Communications Between Mobile & Wear OS (Change in [AndroidManifest.xml] for Wear OS)
-
 const val KEY_PIN = "KEY-PIN"
 const val KEY_PASSWORD = "KEY-PASSWORD"
 

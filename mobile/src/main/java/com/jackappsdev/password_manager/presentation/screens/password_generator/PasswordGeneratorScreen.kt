@@ -46,7 +46,7 @@ import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.generateRandomPassword
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.screens.password_generator.composables.OptionSwitch
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,7 +103,7 @@ fun PasswordGeneratorScreen() {
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_password_generator)) },
-                windowInsets = windowinsetsVerticalZero
+                windowInsets = windowInsetsVerticalZero
             )
         },
         snackbarHost = {

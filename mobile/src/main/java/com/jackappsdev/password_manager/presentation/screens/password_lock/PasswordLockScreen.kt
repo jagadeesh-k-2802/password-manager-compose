@@ -55,7 +55,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -124,12 +124,12 @@ fun PasswordLockScreen(
             if (state.hasPasswordSet == true) {
                 CenterAlignedTopAppBar(
                     title = { Text(stringResource(R.string.title_enter_password)) },
-                    windowInsets = windowinsetsVerticalZero
+                    windowInsets = windowInsetsVerticalZero
                 )
             } else {
                 CenterAlignedTopAppBar(
                     title = { Text(stringResource(R.string.title_create_password)) },
-                    windowInsets = windowinsetsVerticalZero
+                    windowInsets = windowInsetsVerticalZero
                 )
             }
         },

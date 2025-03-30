@@ -53,7 +53,7 @@ import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.android_watch.composables.DisableAndroidWatchDialog
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN
 import com.jackappsdev.password_manager.shared.constants.VERIFY_WEAR_APP
@@ -189,7 +189,7 @@ fun AndroidWatchScreen(
                     }
                 },
                 title = { Text(stringResource(R.string.title_android_watch)) },
-                windowInsets = windowinsetsVerticalZero
+                windowInsets = windowInsetsVerticalZero
             )
         },
     ) { contentPadding ->

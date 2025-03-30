@@ -65,7 +65,7 @@ import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.composables.PasswordItemDeleteDialog
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowinsetsVerticalZero
+import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
@@ -231,7 +231,7 @@ fun PasswordItemDetailScreen(
                         )
                     }
                 },
-                windowInsets = windowinsetsVerticalZero
+                windowInsets = windowInsetsVerticalZero
             )
         }
     ) { contentPadding ->

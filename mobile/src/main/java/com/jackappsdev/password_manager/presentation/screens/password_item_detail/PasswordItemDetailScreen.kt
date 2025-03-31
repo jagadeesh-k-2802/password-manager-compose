@@ -62,7 +62,7 @@ import com.jackappsdev.password_manager.core.launchUrl
 import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.screens.password_item_detail.composables.PasswordItemDeleteDialog
+import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDeleteDialog
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero

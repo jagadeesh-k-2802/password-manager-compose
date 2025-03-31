@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.data.local
+package com.jackappsdev.password_manager.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RawQuery
+import androidx.room.Transaction
 import androidx.sqlite.db.SimpleSQLiteQuery
+import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
+import com.jackappsdev.password_manager.data.local.entity.PasswordWithCategoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,23 +20,9 @@ interface PasswordDao {
     @Query("SELECT DISTINCT username FROM password_items WHERE username LIKE :username LIMIT :limit")
     suspend fun getUniqueUsernames(username: String, limit: Int): List<String>
 
-    @Query(
-        "SELECT password_items.id AS id, " +
-                "password_items.name AS name, " +
-                "password_items.username AS username, " +
-                "password_items.password AS password, " +
-                "password_items.notes AS notes, " +
-                "password_items.website AS website, " +
-                "password_items.is_added_to_watch AS is_added_to_watch, " +
-                "categories.id AS category_id, " +
-                "categories.name AS category_name, " +
-                "categories.color AS category_color, " +
-                "password_items.created_at AS created_at " +
-                "FROM password_items " +
-                "LEFT JOIN categories ON password_items.category_id = categories.id " +
-                "WHERE password_items.id = :id"
-    )
-    fun getPasswordEntity(id: Int): Flow<PasswordCategory?>
+    @Transaction
+    @Query("SELECT * FROM password_items WHERE id = :id")
+    fun getPasswordItem(id: Int): Flow<PasswordWithCategoryEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPasswordEntity(item: PasswordItemEntity)

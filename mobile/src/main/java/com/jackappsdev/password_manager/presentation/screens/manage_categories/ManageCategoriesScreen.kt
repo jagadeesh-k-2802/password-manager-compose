@@ -2,22 +2,12 @@ package com.jackappsdev.password_manager.presentation.screens.manage_categories
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -27,33 +17,47 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.EmptyStateView
+import com.jackappsdev.password_manager.presentation.components.LoadingStateView
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.screens.manage_categories.composables.CategoryItem
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.components.CategoryItemsView
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesEventHandler
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEffect
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEvent
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageCategoriesScreen(
     navController: NavController,
-    viewModel: ManageCategoriesViewModel = hiltViewModel()
+    state: ManageCategoriesState,
+    effectFlow: Flow<ManageCategoriesUiEffect>,
+    eventHandler: ManageCategoriesEventHandler,
+    onEvent: (ManageCategoriesUiEvent) -> Unit
 ) {
-    val state = viewModel.state
     val categoryItems = state.items?.collectAsState()
-    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyColumnState = rememberLazyListState()
+
+    LaunchedEffect(key1 = Unit) {
+        effectFlow.collectLatest { effect ->
+            with(eventHandler) {
+                when(effect) {
+                    ManageCategoriesUiEffect.ScrollToTop -> onScrollToTop(lazyColumnState)
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -61,8 +65,8 @@ fun ManageCategoriesScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack,
-                            stringResource(R.string.accessibility_go_back)
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = stringResource(R.string.accessibility_go_back)
                         )
                     }
                 },
@@ -75,7 +79,7 @@ fun ManageCategoriesScreen(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    scope.launch { lazyColumnState.animateScrollToItem(0) }
+                    onEvent(ManageCategoriesUiEvent.ScrollToTop)
                 },
                 windowInsets = windowInsetsVerticalZero
             )
@@ -89,45 +93,17 @@ fun ManageCategoriesScreen(
             scrollBehavior.nestedScrollConnection
         )
     ) { contentPadding ->
-        if (state.isLoading) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .fillMaxSize()
-            ) {
-                CircularProgressIndicator()
-            }
-        } else if (categoryItems?.value?.isEmpty() == true) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .fillMaxSize()
-            ) {
-                Icon(
-                    Icons.Outlined.Info,
-                    stringResource(R.string.accessibility_no_categories),
-                    modifier = Modifier.size(64.dp)
-                )
+        val modifier = Modifier.padding(contentPadding)
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(stringResource(R.string.text_no_categories_available))
+        when {
+            state.isLoading -> {
+                LoadingStateView(modifier)
             }
-        } else {
-            LazyColumn(
-                state = lazyColumnState,
-                modifier = Modifier.padding(contentPadding)
-            ) {
-                categoryItems?.let {
-                    items(it.value) { item ->
-                        CategoryItem(item) {
-                            navController.navigate(Routes.CategoryItemDetail(item.id ?: 0))
-                        }
-                    }
-                }
+            categoryItems?.value?.isEmpty() == true -> {
+                EmptyStateView(modifier = modifier, title = R.string.text_no_categories_available)
+            }
+            else -> {
+                CategoryItemsView(modifier, lazyColumnState, navController, categoryItems)
             }
         }
     }

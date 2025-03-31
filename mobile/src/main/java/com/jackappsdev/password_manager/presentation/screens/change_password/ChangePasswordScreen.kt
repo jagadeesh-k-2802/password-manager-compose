@@ -1,6 +1,5 @@
 package com.jackappsdev.password_manager.presentation.screens.change_password
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,40 +25,47 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordEventHandler
+import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEffect
+import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangePasswordScreen(
     navController: NavController,
-    viewModel: ChangePasswordViewModel = hiltViewModel()
+    state: ChangePasswordState,
+    effectFlow: Flow<ChangePasswordUiEffect>,
+    eventHandler: ChangePasswordEventHandler,
+    errorFlow: Flow<ChangePasswordError>,
+    onEvent: (ChangePasswordUiEvent) -> Unit
 ) {
-    var currentPassword by rememberSaveable { mutableStateOf("") }
-    var newPassword by rememberSaveable { mutableStateOf("") }
-    var showPassword by rememberSaveable { mutableStateOf(false) }
-    val error by viewModel.errorChannel.receiveAsFlow().collectAsState(initial = null)
-    val context = LocalContext.current
+    val error by errorFlow.collectAsState(initial = null)
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = Unit) {
+        effectFlow.collectLatest { effect ->
+            with(eventHandler) {
+                when(effect) {
+                    ChangePasswordUiEffect.OnPasswordChanged -> onPasswordChanged()
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -67,8 +73,8 @@ fun ChangePasswordScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack,
-                            stringResource(R.string.accessibility_go_back)
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = stringResource(R.string.accessibility_go_back)
                         )
                     }
                 },
@@ -88,8 +94,8 @@ fun ChangePasswordScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = currentPassword,
-                onValueChange = { currentPassword = it },
+                value = state.currentPassword,
+                onValueChange = { onEvent(ChangePasswordUiEvent.OnPasswordEnter(it)) },
                 label = { Text(stringResource(R.string.label_current_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 isError = error is ChangePasswordError.CurrentPasswordError,
@@ -100,12 +106,20 @@ fun ChangePasswordScreen(
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
-                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (state.showPassword) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
                 keyboardActions = KeyboardActions(onDone = {}),
                 trailingIcon = {
-                    IconButton(onClick = { showPassword = !showPassword }) {
+                    IconButton(onClick = { onEvent(ChangePasswordUiEvent.ToggleShowPassword) }) {
                         Icon(
-                            if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                            imageVector = if (state.showPassword) {
+                                Icons.Outlined.VisibilityOff
+                            } else {
+                                Icons.Outlined.Visibility
+                            },
                             contentDescription = stringResource(R.string.accessibility_toggle_password)
                         )
                     }
@@ -115,8 +129,8 @@ fun ChangePasswordScreen(
             Spacer(modifier = Modifier.height(4.dp))
 
             OutlinedTextField(
-                value = newPassword,
-                onValueChange = { newPassword = it },
+                value = state.newPassword,
+                onValueChange = { onEvent(ChangePasswordUiEvent.OnNewPasswordEnter(it)) },
                 label = { Text(stringResource(R.string.label_new_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 isError = error is ChangePasswordError.NewPasswordError,
@@ -127,26 +141,31 @@ fun ChangePasswordScreen(
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
-                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardActions = KeyboardActions(onDone = { })
+                visualTransformation = if (state.showPassword) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                keyboardActions = KeyboardActions(onDone = {}),
+                trailingIcon = {
+                    IconButton(onClick = { onEvent(ChangePasswordUiEvent.ToggleShowNewPassword) }) {
+                        Icon(
+                            imageVector = if (state.showPassword) {
+                                Icons.Outlined.VisibilityOff
+                            } else {
+                                Icons.Outlined.Visibility
+                            },
+                            contentDescription = stringResource(R.string.accessibility_toggle_password)
+                        )
+                    }
+                },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    viewModel.updatePassword(currentPassword, newPassword) {
-                        scope.launch {
-                            navController.navigateUp()
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.toast_password_changed_successfully),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
+                onClick = { onEvent(ChangePasswordUiEvent.OnPasswordChanged) }
             ) {
                 Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_confirm))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

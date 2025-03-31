@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.jackappsdev.password_manager.core.isAndroid
+import com.jackappsdev.password_manager.core.isAtLeastAndroid
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -99,7 +99,7 @@ fun PasswordManagerTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        dynamicColor && isAtLeastAndroid(Build.VERSION_CODES.S) -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
@@ -114,7 +114,7 @@ fun PasswordManagerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            if (isAndroid(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
+            if (isAtLeastAndroid(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
                 window.statusBarColor = colorScheme.surface.toArgb()
             }
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme

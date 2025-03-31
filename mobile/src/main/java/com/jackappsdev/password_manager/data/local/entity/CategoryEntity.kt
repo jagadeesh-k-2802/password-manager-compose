@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.data.local
+package com.jackappsdev.password_manager.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

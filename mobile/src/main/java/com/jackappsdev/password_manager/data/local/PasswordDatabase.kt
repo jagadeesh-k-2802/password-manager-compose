@@ -4,6 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.jackappsdev.password_manager.data.local.dao.CategoryDao
+import com.jackappsdev.password_manager.data.local.entity.CategoryEntity
+import com.jackappsdev.password_manager.data.local.dao.PasswordDao
+import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
 
 const val DATABASE_NAME = "passwords_db"
 const val DATABASE_VERSION = 2

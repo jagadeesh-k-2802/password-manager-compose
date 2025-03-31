@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
-import com.jackappsdev.password_manager.presentation.screens.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,25 +37,22 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     fun lockApp() {
-        state = state.copy(hasBeenUnlocked = false)
+        state = state.copy(hasBeenUnlocked = false, pin = "")
     }
 
-    private fun onNumberPress(number: String): PasswordLockUiEffect? {
+    private fun onNumberPress(number: String) {
         state = state.copy(pin = state.pin + number)
-        return null
     }
 
-    private fun onBackSpacePress(): PasswordLockUiEffect? {
+    private fun onBackSpacePress() {
         if (state.pin.isNotEmpty()) {
             state = state.copy(pin = state.pin.dropLast(1))
         }
-
-        return null
     }
 
     private suspend fun verifyPin(): PasswordLockUiEffect {
         return if (userPreferencesRepository.verifyPin(state.pin)) {
-            state = state.copy(hasBeenUnlocked = true)
+            state = state.copy(hasBeenUnlocked = true, pin = "")
             PasswordLockUiEffect.Unlock
         } else {
             state = state.copy(pin = "")
@@ -72,7 +69,7 @@ class PasswordLockViewModel @Inject constructor(
                 is PasswordLockUiEvent.OpenPhoneApp -> PasswordLockUiEffect.OpenPhoneApp
             }
 
-            effect?.let { _effectChannel.send(effect) }
+            if (effect is PasswordLockUiEffect) { _effectChannel.send(effect) }
         }
     }
 }

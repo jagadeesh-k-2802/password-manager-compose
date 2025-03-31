@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -47,12 +46,12 @@ fun BottomNavigationBar(navController: NavController) {
                 icon = {
                     if (currentRoute?.hasRoute<Routes.Home>() == true) {
                         Icon(
-                            Icons.Sharp.Home,
+                            imageVector = Icons.Sharp.Home,
                             contentDescription = stringResource(R.string.accessibility_home_screen)
                         )
                     } else {
                         Icon(
-                            Icons.Outlined.Home,
+                            imageVector = Icons.Outlined.Home,
                             contentDescription = stringResource(R.string.accessibility_home_screen)
                         )
                     }
@@ -62,16 +61,16 @@ fun BottomNavigationBar(navController: NavController) {
             NavigationBarItem(
                 selected = currentRoute?.hasRoute<Routes.PasswordGenerator>() == true,
                 onClick = { navController.navigateWithState(Routes.PasswordGenerator) },
-                label = { Text(stringResource(R.string.nav_generator), softWrap = true, textAlign = TextAlign.Center) },
+                label = { Text(stringResource(R.string.nav_generator)) },
                 icon = {
                     if (currentRoute?.hasRoute<Routes.PasswordGenerator>() == true) {
                         Icon(
-                            Icons.Sharp.VpnKey,
+                            imageVector = Icons.Sharp.VpnKey,
                             contentDescription = stringResource(R.string.accessibility_password_generator_screen)
                         )
                     } else {
                         Icon(
-                            Icons.Outlined.VpnKey,
+                            imageVector = Icons.Outlined.VpnKey,
                             contentDescription = stringResource(R.string.accessibility_password_generator_screen)
                         )
                     }
@@ -86,12 +85,12 @@ fun BottomNavigationBar(navController: NavController) {
                 icon = {
                     if (currentRoute?.hasRoute<Routes.Settings>() == true) {
                         Icon(
-                            Icons.Sharp.Settings,
+                            imageVector = Icons.Sharp.Settings,
                             contentDescription = stringResource(R.string.accessibility_settings_screen)
                         )
                     } else {
                         Icon(
-                            Icons.Outlined.Settings,
+                            imageVector = Icons.Outlined.Settings,
                             contentDescription = stringResource(R.string.accessibility_settings_screen)
                         )
                     }

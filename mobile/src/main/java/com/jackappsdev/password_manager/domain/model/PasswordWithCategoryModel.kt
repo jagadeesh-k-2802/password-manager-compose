@@ -1,6 +1,6 @@
 package com.jackappsdev.password_manager.domain.model
 
-data class PasswordCategoryModel(
+data class PasswordWithCategoryModel(
     val id: Int? = null,
     val name: String,
     val username: String,

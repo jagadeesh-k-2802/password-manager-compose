@@ -1,6 +1,6 @@
 package com.jackappsdev.password_manager.domain.model
 
-import com.jackappsdev.password_manager.data.local.PasswordItemEntity
+import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
 
 sealed interface FilterBy {
     data object All : FilterBy

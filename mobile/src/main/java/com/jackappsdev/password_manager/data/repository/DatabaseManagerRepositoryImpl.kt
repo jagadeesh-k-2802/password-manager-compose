@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteException
 import com.jackappsdev.password_manager.shared.core.EncryptedSQLiteOpenHelper
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.DATABASE_VERSION
-import com.jackappsdev.password_manager.data.local.PasswordDao
+import com.jackappsdev.password_manager.data.local.dao.PasswordDao
 import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.presentation.main.MainActivity
@@ -22,6 +22,7 @@ class DatabaseManagerRepositoryImpl(
     private val passwordDao: PasswordDao,
     private val passphraseRepository: PassphraseRepository
 ) : DatabaseManagerRepository {
+
     override suspend fun importDatabase(path: String, password: String): Boolean {
         val tempDatabaseName = "temp.db"
 

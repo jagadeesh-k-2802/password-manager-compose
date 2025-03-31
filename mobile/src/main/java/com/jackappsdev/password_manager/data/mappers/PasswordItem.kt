@@ -1,6 +1,6 @@
 package com.jackappsdev.password_manager.data.mappers
 
-import com.jackappsdev.password_manager.data.local.PasswordItemEntity
+import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 
 fun PasswordItemEntity.toModel(): PasswordItemModel {

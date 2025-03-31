@@ -8,8 +8,8 @@ import androidx.core.net.toUri
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.core.showToast
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
+import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -46,7 +46,7 @@ class PasswordLockEventHandler(
                 val node = nodeClient.connectedNodes.await().first()
                 remoteActivityHelper.startRemoteActivity(intent, node.id)
                 context.showToast(context.getString(R.string.toast_opened_phone_app))
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 context.showToast(context.getString(R.string.toast_cannot_open_phone_app))
             }
         }

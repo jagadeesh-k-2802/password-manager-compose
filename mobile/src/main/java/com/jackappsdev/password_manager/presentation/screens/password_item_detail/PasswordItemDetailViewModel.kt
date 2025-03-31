@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.jackappsdev.password_manager.domain.model.PasswordCategoryModel
+import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -22,6 +22,7 @@ class PasswordItemDetailViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val passwordItemRepository: PasswordItemRepository
 ) : ViewModel() {
+
     private val passwordItemDetail = savedStateHandle.toRoute<Routes.PasswordItemDetail>()
     val passwordItem = passwordItemRepository.getPasswordItem(passwordItemDetail.id)
 
@@ -40,26 +41,25 @@ class PasswordItemDetailViewModel @Inject constructor(
         }
     }
 
-    fun toggleIsAddedToWatch(passwordCategoryModel: PasswordCategoryModel) {
+    fun toggleIsAddedToWatch(passwordWithCategoryModel: PasswordWithCategoryModel) {
         viewModelScope.launch {
-            // It will update because onConflict is set to Replace
             passwordItemRepository.insertPasswordItem(
                 PasswordItemModel(
-                    id = passwordCategoryModel.id,
-                    name = passwordCategoryModel.name,
-                    username = passwordCategoryModel.username,
-                    password = passwordCategoryModel.password,
-                    notes = passwordCategoryModel.notes,
-                    categoryId = passwordCategoryModel.categoryId,
-                    website = passwordCategoryModel.website,
-                    isAddedToWatch = !passwordCategoryModel.isAddedToWatch,
-                    createdAt = passwordCategoryModel.createdAt // Use prev createdAt
+                    id = passwordWithCategoryModel.id,
+                    name = passwordWithCategoryModel.name,
+                    username = passwordWithCategoryModel.username,
+                    password = passwordWithCategoryModel.password,
+                    notes = passwordWithCategoryModel.notes,
+                    categoryId = passwordWithCategoryModel.categoryId,
+                    website = passwordWithCategoryModel.website,
+                    isAddedToWatch = !passwordWithCategoryModel.isAddedToWatch,
+                    createdAt = passwordWithCategoryModel.createdAt
                 )
             )
         }
     }
 
-    fun deleteItem(item: PasswordCategoryModel) {
+    fun deleteItem(item: PasswordWithCategoryModel) {
         viewModelScope.launch {
             passwordItemRepository.deletePasswordItem(item)
         }

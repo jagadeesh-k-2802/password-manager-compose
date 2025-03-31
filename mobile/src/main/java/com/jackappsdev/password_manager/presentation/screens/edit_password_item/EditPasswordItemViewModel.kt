@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.domain.model.PasswordCategoryModel
+import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
@@ -35,7 +35,7 @@ class EditPasswordItemViewModel @Inject constructor(
         website: String,
         notes: String,
         categoryId: Int?,
-        passwordItemModel: PasswordCategoryModel?,
+        passwordItemModel: PasswordWithCategoryModel?,
         onSuccess: (PasswordItemModel) -> Unit
     ) {
         viewModelScope.launch {

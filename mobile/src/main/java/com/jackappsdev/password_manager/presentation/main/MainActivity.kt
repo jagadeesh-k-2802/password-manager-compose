@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+
     private val passwordLockViewModel: PasswordLockViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -24,15 +25,11 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
 
         splashScreen.setKeepOnScreenCondition {
-            passwordLockViewModel.state.hasPasswordSet == null
-                    && mainViewModel.useDynamicColors == null
+            passwordLockViewModel.state.hasPasswordSet == null && mainViewModel.useDynamicColors == null
         }
 
         // Disable screenshots & screen recordings
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         setContent {
             PasswordManagerTheme(dynamicColor = mainViewModel.useDynamicColors == true) {

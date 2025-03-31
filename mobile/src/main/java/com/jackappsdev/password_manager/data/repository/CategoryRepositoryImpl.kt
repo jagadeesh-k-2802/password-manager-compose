@@ -1,6 +1,6 @@
 package com.jackappsdev.password_manager.data.repository
 
-import com.jackappsdev.password_manager.data.local.CategoryDao
+import com.jackappsdev.password_manager.data.local.dao.CategoryDao
 import com.jackappsdev.password_manager.data.mappers.toEntity
 import com.jackappsdev.password_manager.data.mappers.toModel
 import com.jackappsdev.password_manager.domain.model.CategoryModel
@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 class CategoryRepositoryImpl(
     private val categoryDao: CategoryDao
 ) : CategoryRepository {
+
     override fun getAllCategories(): Flow<List<CategoryModel>> {
         return categoryDao.getAllCategories().map { items ->
             items.map { it.toModel() }

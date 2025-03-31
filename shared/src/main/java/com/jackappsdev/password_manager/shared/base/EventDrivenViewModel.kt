@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.base
+package com.jackappsdev.password_manager.shared.base
 
 import kotlinx.coroutines.flow.Flow
 

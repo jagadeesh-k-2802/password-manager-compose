@@ -96,10 +96,8 @@
     <string name="accessibility_filter">Filter</string>
     <string name="accessibility_sort">Sort</string>
     <string name="accessibility_add_item">Add new item</string>
-    <string name="accessibility_no_passwords">No passwords icon</string>
     <string name="accessibility_search">Search</string>
     <string name="accessibility_clear_search">Clear search</string>
-    <string name="accessibility_no_items">No passwords found</string>
     <string name="accessibility_go_back">Go back</string>
     <string name="accessibility_add_category">Add a new category</string>
     <string name="accessibility_create">Create</string>

@@ -12,13 +12,12 @@ import kotlinx.coroutines.runBlocking
 class UserPreferencesRepositoryImpl(
     private val dataStore: DataStore<UserSettings>
 ) : UserPreferencesRepository {
+
     /**
      * Return the password for DB encryption purpose
      */
     override fun getPassword(): String? {
-        return runBlocking(Dispatchers.IO) {
-            return@runBlocking dataStore.data.first().password
-        }
+        return runBlocking(Dispatchers.IO) { dataStore.data.first().password }
     }
 
     /**

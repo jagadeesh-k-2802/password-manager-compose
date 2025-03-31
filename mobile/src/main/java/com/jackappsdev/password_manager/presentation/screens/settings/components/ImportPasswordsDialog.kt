@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.settings.composables
+package com.jackappsdev.password_manager.presentation.screens.settings.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,8 +24,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
 @Composable
 fun ImportPasswordsDialog(
@@ -55,7 +57,6 @@ fun ImportPasswordsDialog(
                             )
                         }
                     },
-
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done
@@ -72,4 +73,16 @@ fun ImportPasswordsDialog(
         confirmButton = { TextButton(onClick = { onConfirm(password) }) { Text(stringResource(R.string.dialog_btn_confirm)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_btn_cancel)) } }
     )
+}
+
+@Preview
+@Composable
+private fun ImportPasswordsDialogPreview() {
+    PasswordManagerTheme {
+        ImportPasswordsDialog(
+            isInvalidPassword = false,
+            onConfirm = {},
+            onDismiss = {}
+        )
+    }
 }

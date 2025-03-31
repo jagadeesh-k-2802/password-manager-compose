@@ -197,7 +197,7 @@ fun HomeScreen(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.task_empty_state),
-                    contentDescription = stringResource(R.string.accessibility_no_passwords),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(180.dp)
                 )
@@ -276,7 +276,7 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.search_empty_state),
-                                contentDescription = stringResource(R.string.accessibility_no_items),
+                                contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(180.dp)
                             )

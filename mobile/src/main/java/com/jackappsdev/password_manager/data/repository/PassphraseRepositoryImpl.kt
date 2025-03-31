@@ -1,7 +1,7 @@
 package com.jackappsdev.password_manager.data.repository
 
 import androidx.datastore.core.DataStore
-import com.jackappsdev.password_manager.data.local.PasswordDao
+import com.jackappsdev.password_manager.data.local.dao.PasswordDao
 import com.jackappsdev.password_manager.data.models.UserSettings
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -15,6 +15,7 @@ class PassphraseRepositoryImpl(
     private val passwordDao: PasswordDao,
     private val dataStore: DataStore<UserSettings>
 ) : PassphraseRepository {
+
     /**
      * Updates the Sqlite DB password also
      */

@@ -5,7 +5,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.widget.Toast
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.ui.graphics.Color
 import com.jackappsdev.password_manager.R
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import androidx.core.net.toUri
+import com.jackappsdev.password_manager.shared.core.showToast
 import kotlin.random.Random
 
 /**
@@ -53,7 +57,7 @@ fun copyToClipboard(context: Context, text: String?, label: String = "Text") {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clipData)
-    Toast.makeText(context, context.getString(R.string.toast_copy_to_clipboard), Toast.LENGTH_SHORT).show()
+    context.showToast(context.getString(R.string.toast_copy_to_clipboard))
 }
 
 /**
@@ -66,9 +70,8 @@ fun launchUrl(context: Context, url: String) {
     try {
         val intent = Intent(Intent.ACTION_VIEW, currUrl.toUri())
         context.startActivity(intent)
-    } catch (e: Exception) {
-        Toast.makeText(context, context.getString(R.string.toast_invalid_url), Toast.LENGTH_SHORT)
-            .show()
+    } catch (_: Exception) {
+        context.showToast(context.getString(R.string.toast_invalid_url))
     }
 }
 
@@ -102,6 +105,15 @@ fun parseColor(string: String): Color {
 /**
  * Check if the device is running Android version greater than or equal to [sdkVersion]
  */
-fun isAndroid(sdkVersion: Int): Boolean {
+fun isAtLeastAndroid(sdkVersion: Int): Boolean {
     return Build.VERSION.SDK_INT >= sdkVersion
+}
+
+/**
+ * Check if the device has screen lock setup
+ */
+fun isScreenLockAvailable(context: Context): Boolean {
+    val manager = BiometricManager.from(context)
+    val credentials = BIOMETRIC_WEAK or BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+    return manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
 }

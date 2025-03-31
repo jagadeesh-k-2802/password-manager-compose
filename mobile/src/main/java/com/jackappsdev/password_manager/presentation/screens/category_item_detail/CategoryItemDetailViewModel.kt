@@ -27,7 +27,6 @@ class CategoryItemDetailViewModel @Inject constructor(
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
-            // It will update because onConflict is set to Replace
             categoryRepository.insertCategoryItem(
                 CategoryModel(
                     id = categoryModel?.id,

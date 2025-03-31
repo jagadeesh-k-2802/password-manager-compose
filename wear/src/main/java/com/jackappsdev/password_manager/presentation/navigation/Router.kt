@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -50,17 +51,16 @@ fun Router(
                 startDestination = Routes.PasswordLock.route
             ) {
                 composable(Routes.PasswordLock.route) {
-                    val viewModel: PasswordLockViewModel = hiltViewModel()
                     val context = LocalContext.current
                     val haptic = LocalHapticFeedback.current
                     val scope = rememberCoroutineScope()
-                    val eventHandler = PasswordLockEventHandler(context, scope, haptic)
+                    val eventHandler = remember { PasswordLockEventHandler(context, scope, haptic) }
 
                     PasswordLockScreen(
-                        state = viewModel.state,
+                        state = passwordLockViewModel.state,
                         eventHandler = eventHandler,
-                        effectFlow = viewModel.effectFlow,
-                        onEvent = viewModel::onEvent
+                        effectFlow = passwordLockViewModel.effectFlow,
+                        onEvent = passwordLockViewModel::onEvent
                     )
                 }
             }

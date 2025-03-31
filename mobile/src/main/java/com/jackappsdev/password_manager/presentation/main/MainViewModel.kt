@@ -14,6 +14,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
+
     var useDynamicColors by mutableStateOf<Boolean?>(null)
 
     init {

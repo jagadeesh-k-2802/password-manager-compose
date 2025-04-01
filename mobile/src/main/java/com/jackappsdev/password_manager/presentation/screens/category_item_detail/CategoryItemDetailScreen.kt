@@ -1,6 +1,5 @@
 package com.jackappsdev.password_manager.presentation.screens.category_item_detail
 
-import android.text.format.DateFormat
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
@@ -35,12 +34,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,39 +51,51 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.shared.constants.colorList
 import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
+import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailEffectHandler
+import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEffect
+import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryItemDetailScreen(
     navController: NavController,
-    viewModel: CategoryItemDetailViewModel = hiltViewModel()
+    state: CategoryItemDetailState,
+    viewModel: CategoryItemDetailViewModel = hiltViewModel(),
+    effectFlow: Flow<CategoryItemDetailUiEffect>,
+    effectHandler: CategoryItemDetailEffectHandler,
+    onEvent: (CategoryItemDetailUiEvent) -> Unit
 ) {
     val categoryItem by viewModel.categoryItem.collectAsState(initial = null)
-    var name by rememberSaveable(categoryItem) { mutableStateOf(categoryItem?.name ?: "") }
-    var color by rememberSaveable(categoryItem) { mutableStateOf(categoryItem?.color ?: "") }
-    var isChanged by rememberSaveable { mutableStateOf(false) }
-    var isDeleteDialogVisible by rememberSaveable { mutableStateOf(false) }
-    var isUnsavedChangesDialogVisible by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val dispatcher = backDispatcher.onBackPressedDispatcher
 
-    val backCallback = remember(name, color, categoryItem) {
+    val backCallback = remember(state.isChanged) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (isChanged) {
-                    isUnsavedChangesDialogVisible = true
+                if (state.isChanged) {
+                    onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog)
                 } else {
                     navController.navigateUp()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        effectFlow.collectLatest { effect ->
+            with(effectHandler) {
+                when (effect) {
+                    is CategoryItemDetailUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -97,21 +106,19 @@ fun CategoryItemDetailScreen(
         onDispose { backCallback.remove() }
     }
 
-    if (isUnsavedChangesDialogVisible) UnsavedChangesDialog(
-        onConfirm = { navController.navigateUp() },
-        onDismiss = { isUnsavedChangesDialogVisible = false }
-    )
+    if (state.isUnsavedChangesDialogVisible) {
+        UnsavedChangesDialog(
+            onConfirm = { navController.navigateUp() },
+            onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog) }
+        )
+    }
 
-    if (isDeleteDialogVisible) CategoryItemDeleteDialog(
-        onConfirm = {
-            categoryItem?.let {
-                isDeleteDialogVisible = false
-                viewModel.deleteItem(it)
-                navController.navigateUp()
-            }
-        },
-        onDismiss = { isDeleteDialogVisible = false }
-    )
+    if (state.isDeleteDialogVisible) {
+        CategoryItemDeleteDialog(
+            onConfirm = { onEvent(CategoryItemDetailUiEvent.DeleteCategoryItem) },
+            onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialog) }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -120,16 +127,18 @@ fun CategoryItemDetailScreen(
                 navigationIcon = {
                     IconButton(onClick = { backCallback.handleOnBackPressed() }) {
                         Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack,
-                            stringResource(R.string.accessibility_go_back)
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = stringResource(R.string.accessibility_go_back)
                         )
                     }
                 },
                 actions = {
-                    IconButton(onClick = { isDeleteDialogVisible = true }) {
+                    IconButton(
+                        onClick = { onEvent(CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialog) }
+                    ) {
                         Icon(
-                            Icons.Outlined.Delete,
-                            stringResource(R.string.accessibility_delete_item)
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = stringResource(R.string.accessibility_delete_item)
                         )
                     }
                 },
@@ -144,21 +153,15 @@ fun CategoryItemDetailScreen(
                 .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
-                value = name,
-                onValueChange = { value ->
-                    name = value
-                    isChanged = true
-                },
+                value = state.categoryModel?.name ?: "",
+                onValueChange = { onEvent(CategoryItemDetailUiEvent.OnEnterName(it)) },
                 label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = stringResource(R.string.label_category_color),
-                style = MaterialTheme.typography.labelLarge
-            )
+            Text(text = stringResource(R.string.label_category_color), style = MaterialTheme.typography.labelLarge)
             Spacer(modifier = Modifier.height(10.dp))
 
             LazyRow {
@@ -169,22 +172,21 @@ fun CategoryItemDetailScreen(
                             .clip(CircleShape)
                             .background(parseColor(item))
                             .size(64.dp)
-                            .clickable {
-                                color = item
-                                isChanged = true
-                            }
+                            .clickable { onEvent(CategoryItemDetailUiEvent.OnSelectColor(item)) }
                     ) {
-                        if (color == item) Icon(
-                            imageVector = Icons.Outlined.Done,
-                            tint = Color.Black,
-                            contentDescription = stringResource(R.string.accessibility_selected_color),
-                            modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .fillMaxWidth()
-                                .padding(20.dp)
-                                .clip(CircleShape)
-                                .background(Color.White)
-                        )
+                        if (state.categoryModel?.color == item) {
+                            Icon(
+                                imageVector = Icons.Outlined.Done,
+                                tint = Color.Black,
+                                contentDescription = stringResource(R.string.accessibility_selected_color),
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .fillMaxWidth()
+                                    .padding(20.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.White)
+                            )
+                        }
                     }
                 }
             }
@@ -193,10 +195,7 @@ fun CategoryItemDetailScreen(
 
             OutlinedTextField(
                 value = if (categoryItem?.createdAt != null) {
-                    val is24Hours = DateFormat.is24HourFormat(context)
-                    val hours = if (is24Hours) "HH" else "hh"
-                    val dateFormat = SimpleDateFormat("dd/MM/yyyy $hours:mm", Locale.ENGLISH)
-                    dateFormat.format(Date(categoryItem?.createdAt!!))
+                    parseModifiedTime(context, categoryItem?.createdAt!!)
                 } else {
                     ""
                 },
@@ -209,14 +208,10 @@ fun CategoryItemDetailScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {
-                    viewModel.onEditComplete(name, color, categoryItem) {
-                        navController.navigateUp()
-                    }
-                },
+                onClick = { onEvent(CategoryItemDetailUiEvent.UpdateCategoryItem) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Rounded.Done, stringResource(R.string.accessibility_confirm))
+                Icon(imageVector = Icons.Rounded.Done, contentDescription = stringResource(R.string.accessibility_confirm))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.btn_confirm))
             }

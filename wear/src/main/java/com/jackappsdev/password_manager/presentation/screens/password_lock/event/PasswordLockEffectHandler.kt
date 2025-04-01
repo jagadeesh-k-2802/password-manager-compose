@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.Executors
 
-class PasswordLockEventHandler(
+class PasswordLockEffectHandler(
     private val context: Context,
     private val scope: CoroutineScope,
     private val hapticFeedback: HapticFeedback

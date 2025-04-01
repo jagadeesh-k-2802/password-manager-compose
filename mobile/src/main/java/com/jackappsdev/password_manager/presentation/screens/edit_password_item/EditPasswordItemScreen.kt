@@ -79,7 +79,7 @@ import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.screens.add_category_item.CREATED_CATEGORY
+import com.jackappsdev.password_manager.presentation.screens.add_category_item.constants.CREATED_CATEGORY
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD

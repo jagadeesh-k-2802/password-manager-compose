@@ -35,8 +35,8 @@ import com.jackappsdev.password_manager.core.isAtLeastAndroid
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.settings.components.ImportPasswordsDialog
 import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
-import com.jackappsdev.password_manager.presentation.screens.settings.components.ToggleSettingItem
-import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEventHandler
+import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
+import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
@@ -49,7 +49,7 @@ fun SettingsScreen(
     navController: NavController,
     state: SettingsState,
     effectFlow: Flow<SettingsUiEffect>,
-    eventHandler: SettingsEventHandler,
+    effectHandler: SettingsEffectHandler,
     onEvent: (SettingsUiEvent) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -72,7 +72,7 @@ fun SettingsScreen(
 
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
-            with(eventHandler) {
+            with(effectHandler) {
                 when (effect) {
                     SettingsUiEffect.OnImportPasswords -> onImportPasswords(importIntent)
                     SettingsUiEffect.OnExportPasswords -> onExportPasswords(exportIntent)

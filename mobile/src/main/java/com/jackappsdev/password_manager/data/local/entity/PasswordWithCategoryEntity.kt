@@ -6,5 +6,5 @@ import androidx.room.Relation
 data class PasswordWithCategoryEntity(
     @Embedded val passwordItem: PasswordItemEntity,
     @Relation(parentColumn = "category_id", entityColumn = "id")
-    val categoryEntity: CategoryEntity
+    val categoryEntity: CategoryEntity?
 )

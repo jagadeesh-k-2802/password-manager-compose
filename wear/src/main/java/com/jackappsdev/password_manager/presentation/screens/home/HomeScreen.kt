@@ -3,7 +3,7 @@ package com.jackappsdev.password_manager.presentation.screens.home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
@@ -16,10 +16,9 @@ import com.jackappsdev.password_manager.presentation.screens.home.components.Pas
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun HomeScreen(
-    navigateToDetail: (Int) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    navController: NavController,
+    state: HomeState,
 ) {
-    val state = viewModel.state
     val passwordItems = state.items?.collectAsState()?.value
 
     val columnState = rememberResponsiveColumnState(
@@ -33,7 +32,7 @@ fun HomeScreen(
         when {
             state.isLoading -> LoadingStateView()
             passwordItems?.isEmpty() == true -> EmptyStateView(text = stringResource(R.string.text_no_passwords))
-            else -> PasswordItemsView(passwordItems, navigateToDetail, columnState)
+            else -> PasswordItemsView(navController, passwordItems, columnState)
         }
     }
 }

@@ -2,25 +2,25 @@ package com.jackappsdev.password_manager.presentation.screens.password_item_deta
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.ItemView
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun PasswordItemDetailScreen(
-    viewModel: PasswordItemDetailViewModel = hiltViewModel(),
-    popBack: () -> Unit
+    navController: NavController,
+    passwordItem: State<PasswordItemModel?>
 ) {
-    val passwordItem by viewModel.passwordItem.collectAsState(initial = null)
     var isValueAlreadySetOnce by rememberSaveable { mutableStateOf(false) }
 
     val columnState = rememberResponsiveColumnState(
@@ -31,14 +31,14 @@ fun PasswordItemDetailScreen(
     )
 
     LaunchedEffect(passwordItem) {
-        if (passwordItem == null && isValueAlreadySetOnce) {
-            popBack()
+        if (passwordItem.value == null && isValueAlreadySetOnce) {
+            navController.navigateUp()
         } else {
             isValueAlreadySetOnce = true
         }
     }
 
     ScreenScaffold(scrollState = columnState) {
-        ItemView(passwordItem, columnState)
+        ItemView(passwordItem.value, columnState)
     }
 }

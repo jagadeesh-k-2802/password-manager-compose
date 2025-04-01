@@ -118,7 +118,7 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
             }
 
             else -> {
-                // Nothing To Handle
+                null
             }
         }
 

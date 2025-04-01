@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.settings.components
+package com.jackappsdev.password_manager.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
@@ -19,13 +19,15 @@ import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 fun ToggleSettingItem(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    leadingIcon: ImageVector,
+    leadingIcon: ImageVector? = null,
     title: String,
+    subtitle: String? = null,
     onClick: () -> Unit
 ) {
     ListItem(
-        leadingContent = { Icon(leadingIcon, null) },
+        leadingContent = leadingIcon?.let { { Icon(it, null) } },
         headlineContent = { Text(title) },
+        supportingContent = { subtitle?.let { Text(it) } },
         trailingContent = { Switch(checked = checked, onCheckedChange = { onClick.invoke() }) },
         modifier = modifier.clickable(onClick = onClick)
     )

@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.text.format.DateFormat
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
@@ -18,6 +19,9 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import androidx.core.net.toUri
 import com.jackappsdev.password_manager.shared.core.showToast
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.random.Random
 
 /**
@@ -100,6 +104,16 @@ fun parseColor(string: String): Color {
     val green = hexString.substring(2, 4).toInt(16)
     val blue = hexString.substring(4, 6).toInt(16)
     return Color(red, green, blue)
+}
+
+/**
+ *
+ */
+fun parseModifiedTime(context: Context, time: Long): String {
+    val is24Hours = DateFormat.is24HourFormat(context)
+    val hours = if (is24Hours) "HH" else "hh"
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy $hours:mm", Locale.ENGLISH)
+    return dateFormat.format(Date(time))
 }
 
 /**

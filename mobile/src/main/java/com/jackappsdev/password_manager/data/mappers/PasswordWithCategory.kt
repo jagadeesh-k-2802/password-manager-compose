@@ -11,9 +11,9 @@ fun PasswordWithCategoryEntity.toModel(): PasswordWithCategoryModel {
         username = passwordItem.username,
         password = passwordItem.password,
         notes = passwordItem.notes,
-        categoryId = passwordItem.categoryId,
-        categoryName = categoryEntity.name,
-        categoryColor = categoryEntity.color,
+        categoryId = categoryEntity?.id,
+        categoryName = categoryEntity?.name,
+        categoryColor = categoryEntity?.color,
         website = passwordItem.website,
         isAddedToWatch = passwordItem.isAddedToWatch,
         createdAt = passwordItem.createdAt

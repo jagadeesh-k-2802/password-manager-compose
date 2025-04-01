@@ -2,11 +2,6 @@ package com.jackappsdev.password_manager.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -14,13 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import com.google.android.horologist.compose.layout.AppScaffold
-import com.jackappsdev.password_manager.presentation.screens.home.HomeScreen
-import com.jackappsdev.password_manager.presentation.screens.home.HomeViewModel
-import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailScreen
-import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailViewModel
-import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockScreen
+import com.jackappsdev.password_manager.presentation.screens.home.HomeRoot
+import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailRoot
+import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockRoot
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
-import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockEventHandler
 
 /**
  * Manages all navigation routes
@@ -50,42 +42,15 @@ fun Router(
                 navController = navController,
                 startDestination = Routes.PasswordLock.route
             ) {
-                composable(Routes.PasswordLock.route) {
-                    val context = LocalContext.current
-                    val haptic = LocalHapticFeedback.current
-                    val scope = rememberCoroutineScope()
-                    val eventHandler = remember { PasswordLockEventHandler(context, scope, haptic) }
-
-                    PasswordLockScreen(
-                        state = passwordLockViewModel.state,
-                        eventHandler = eventHandler,
-                        effectFlow = passwordLockViewModel.effectFlow,
-                        onEvent = passwordLockViewModel::onEvent
-                    )
-                }
+                composable(Routes.PasswordLock.route) { PasswordLockRoot(passwordLockViewModel) }
             }
         } else {
             SwipeDismissableNavHost(
                 navController = navController,
                 startDestination = Routes.Home.route
             ) {
-                composable(Routes.Home.route) {
-                    val viewModel: HomeViewModel = hiltViewModel()
-
-                    HomeScreen(
-                        navigateToDetail = { navController.navigate(Routes.PasswordItemDetail(it)) },
-                        viewModel = viewModel
-                    )
-                }
-
-                composable(Routes.PasswordItemDetail.route) {
-                    val viewModel: PasswordItemDetailViewModel = hiltViewModel()
-
-                    PasswordItemDetailScreen(
-                        viewModel = viewModel,
-                        popBack = { navController.navigateUp() }
-                    )
-                }
+                composable(Routes.Home.route) { HomeRoot(navController) }
+                composable(Routes.PasswordItemDetail.route) { PasswordItemDetailRoot(navController) }
             }
         }
     }

@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordEventHandler
+import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEffect
 import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
@@ -50,7 +50,7 @@ fun ChangePasswordScreen(
     navController: NavController,
     state: ChangePasswordState,
     effectFlow: Flow<ChangePasswordUiEffect>,
-    eventHandler: ChangePasswordEventHandler,
+    effectHandler: ChangePasswordEffectHandler,
     errorFlow: Flow<ChangePasswordError>,
     onEvent: (ChangePasswordUiEvent) -> Unit
 ) {
@@ -59,7 +59,7 @@ fun ChangePasswordScreen(
 
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
-            with(eventHandler) {
+            with(effectHandler) {
                 when(effect) {
                     ChangePasswordUiEffect.OnPasswordChanged -> onPasswordChanged()
                 }

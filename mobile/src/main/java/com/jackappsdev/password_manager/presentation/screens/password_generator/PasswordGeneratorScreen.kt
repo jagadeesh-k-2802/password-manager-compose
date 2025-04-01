@@ -20,7 +20,7 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.password_generator.components.GeneratedPasswordView
 import com.jackappsdev.password_manager.presentation.screens.password_generator.components.LengthSliderView
 import com.jackappsdev.password_manager.presentation.screens.password_generator.components.OptionsView
-import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorEventHandler
+import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
@@ -34,14 +34,14 @@ fun PasswordGeneratorScreen(
     snackbarHostState: SnackbarHostState,
     state: PasswordGeneratorState,
     effectFlow: Flow<PasswordGeneratorUiEffect>,
-    eventHandler: PasswordGeneratorEventHandler,
+    effectHandler: PasswordGeneratorEffectHandler,
     onEvent: (PasswordGeneratorUiEvent) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
-            with(eventHandler) {
+            with(effectHandler) {
                 when (effect) {
                     is PasswordGeneratorUiEffect.OnCopyToClipboard -> onCopyText(effect.text)
                     is PasswordGeneratorUiEffect.OnShowSnackbarMessage -> onShowSnackbarMessage(effect.message)

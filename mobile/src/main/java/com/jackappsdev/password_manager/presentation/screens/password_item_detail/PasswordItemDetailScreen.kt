@@ -387,9 +387,7 @@ fun PasswordItemDetailScreen(
                                 modifier = Modifier
                                     .clip(CircleShape)
                                     .background(
-                                        parseColor(
-                                            passwordItem?.categoryColor ?: ""
-                                        )
+                                        parseColor(passwordItem?.categoryColor ?: "")
                                     )
                                     .size(24.dp)
                             ) {}

@@ -46,7 +46,7 @@
     <string name="label_use_screen_lock_to_unlock">Use Screen Lock to Unlock</string>
     <string name="label_dynamic_colors">Dynamic Colors</string>
     <string name="label_android_watch">Android Watch</string>
-    <string name="label_enable_android_watch">Enable Sharing With Android Watch</string>
+    <string name="label_enable_android_watch">Enable Android Watch Sharing</string>
     <string name="label_import_passwords">Import Passwords</string>
     <string name="label_export_passwords">Export Passwords</string>
     <string name="label_rate_app">Rate on Google Play Store</string>
@@ -101,8 +101,6 @@
     <string name="accessibility_go_back">Go back</string>
     <string name="accessibility_add_category">Add a new category</string>
     <string name="accessibility_create">Create</string>
-    <string name="accessibility_set_watch_pin">Set Watch PIN</string>
-    <string name="accessibility_update_watch_pin">Update Watch PIN</string>
     <string name="accessibility_edit_item">Edit item</string>
     <string name="accessibility_delete_item">Delete item</string>
     <string name="accessibility_copy_text">Copy text</string>

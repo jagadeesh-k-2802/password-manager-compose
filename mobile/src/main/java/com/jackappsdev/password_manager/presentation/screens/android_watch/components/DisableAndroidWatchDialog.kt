@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.android_watch.composables
+package com.jackappsdev.password_manager.presentation.screens.android_watch.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

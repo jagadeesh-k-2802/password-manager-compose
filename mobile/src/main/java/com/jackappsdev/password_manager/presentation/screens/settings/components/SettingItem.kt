@@ -25,7 +25,7 @@ fun SettingItem(
 ) {
     ListItem(
         leadingContent = { Icon(leadingIcon, null) },
-        trailingContent = { trailingIcon?.let { Icon(it, null) } },
+        trailingContent = trailingIcon?.let { { Icon(it, null) } },
         headlineContent = { Text(title) },
         modifier = modifier.clickable(onClick = onClick)
     )

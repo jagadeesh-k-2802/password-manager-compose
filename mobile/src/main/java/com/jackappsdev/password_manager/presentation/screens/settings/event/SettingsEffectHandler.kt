@@ -19,7 +19,7 @@ import com.jackappsdev.password_manager.core.isAtLeastAndroid
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import com.jackappsdev.password_manager.shared.core.showToast
 
-class SettingsEventHandler(
+class SettingsEffectHandler(
     activity: FragmentActivity,
     private val onEvent: (SettingsUiEvent) -> Unit
 ) {

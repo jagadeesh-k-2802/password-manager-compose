@@ -13,9 +13,7 @@ class CategoryRepositoryImpl(
 ) : CategoryRepository {
 
     override fun getAllCategories(): Flow<List<CategoryModel>> {
-        return categoryDao.getAllCategories().map { items ->
-            items.map { it.toModel() }
-        }
+        return categoryDao.getAllCategories().map { items -> items.map { it.toModel() } }
     }
 
     override fun getCategoryItem(id: Int): Flow<CategoryModel?> {

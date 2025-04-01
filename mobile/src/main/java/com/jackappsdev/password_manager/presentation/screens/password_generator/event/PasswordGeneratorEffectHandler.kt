@@ -7,7 +7,7 @@ import com.jackappsdev.password_manager.core.copyToClipboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class PasswordGeneratorEventHandler(
+class PasswordGeneratorEffectHandler(
     private val context: Context,
     private val scope: CoroutineScope,
     private val snackbarHostState: SnackbarHostState,

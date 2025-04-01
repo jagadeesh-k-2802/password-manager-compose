@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.shared.core.showToast
 
-class ChangePasswordEventHandler(
+class ChangePasswordEffectHandler(
     private val context: Context,
     private val navController: NavController
 ) {

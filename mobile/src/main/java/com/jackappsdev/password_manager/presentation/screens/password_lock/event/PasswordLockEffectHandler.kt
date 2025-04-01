@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat.getString
 import androidx.fragment.app.FragmentActivity
 import com.jackappsdev.password_manager.R
 
-class PasswordLockEventHandler(
+class PasswordLockEffectHandler(
     activity: FragmentActivity,
     private val keyboardController: SoftwareKeyboardController?,
     onEvent: (PasswordLockUiEvent) -> Unit

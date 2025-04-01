@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.password_lock.components.EnterPasswordView
 import com.jackappsdev.password_manager.presentation.screens.password_lock.components.SetupPasswordView
-import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockEventHandler
+import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun PasswordLockScreen(
     state: PasswordLockState,
     effectFlow: Flow<PasswordLockUiEffect>,
-    eventHandler: PasswordLockEventHandler,
+    effectHandler: PasswordLockEffectHandler,
     errorFlow: Flow<PasswordLockError>,
     onEvent: (PasswordLockUiEvent) -> Unit
 ) {
@@ -38,7 +38,7 @@ fun PasswordLockScreen(
 
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
-            with(eventHandler) {
+            with(effectHandler) {
                 when (effect) {
                     is PasswordLockUiEffect.HideKeyboard -> onHideKeyboard()
                     is PasswordLockUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()

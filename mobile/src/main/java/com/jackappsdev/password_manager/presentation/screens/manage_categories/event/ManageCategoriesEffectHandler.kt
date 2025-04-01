@@ -4,7 +4,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class ManageCategoriesEventHandler(
+class ManageCategoriesEffectHandler(
     private val scope: CoroutineScope
 ) {
     fun onScrollToTop(state: LazyListState) {

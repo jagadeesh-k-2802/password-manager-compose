@@ -29,7 +29,7 @@ import com.jackappsdev.password_manager.presentation.components.EmptyStateView
 import com.jackappsdev.password_manager.presentation.components.LoadingStateView
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.components.CategoryItemsView
-import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesEventHandler
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEffect
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEvent
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
@@ -42,7 +42,7 @@ fun ManageCategoriesScreen(
     navController: NavController,
     state: ManageCategoriesState,
     effectFlow: Flow<ManageCategoriesUiEffect>,
-    eventHandler: ManageCategoriesEventHandler,
+    effectHandler: ManageCategoriesEffectHandler,
     onEvent: (ManageCategoriesUiEvent) -> Unit
 ) {
     val categoryItems = state.items?.collectAsState()
@@ -51,7 +51,7 @@ fun ManageCategoriesScreen(
 
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
-            with(eventHandler) {
+            with(effectHandler) {
                 when(effect) {
                     ManageCategoriesUiEffect.ScrollToTop -> onScrollToTop(lazyColumnState)
                 }

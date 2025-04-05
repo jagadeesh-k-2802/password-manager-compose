@@ -99,9 +99,11 @@ fun ManageCategoriesScreen(
             state.isLoading -> {
                 LoadingStateView(modifier)
             }
+
             categoryItems?.value?.isEmpty() == true -> {
                 EmptyStateView(modifier = modifier, title = R.string.text_no_categories_available)
             }
+
             else -> {
                 CategoryItemsView(modifier, lazyColumnState, navController, categoryItems)
             }

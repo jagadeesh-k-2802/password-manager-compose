@@ -43,7 +43,7 @@ class ManageCategoriesViewModel @Inject constructor(
     override fun onEvent(event: ManageCategoriesUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                ManageCategoriesUiEvent.ScrollToTop -> ManageCategoriesUiEffect.ScrollToTop
+                is ManageCategoriesUiEvent.ScrollToTop -> ManageCategoriesUiEffect.ScrollToTop
             }
 
             _effectChannel.send(effect)

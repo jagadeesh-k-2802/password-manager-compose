@@ -99,11 +99,15 @@ fun <T> debounce(delayMs: Long = 500L, coroutineContext: CoroutineContext, f: (T
  * Parse [String] Hex color to [Color]
  */
 fun parseColor(string: String): Color {
-    val hexString = string.removePrefix("#")
-    val red = hexString.substring(0, 2).toInt(16)
-    val green = hexString.substring(2, 4).toInt(16)
-    val blue = hexString.substring(4, 6).toInt(16)
-    return Color(red, green, blue)
+    return try {
+        val hexString = string.removePrefix("#")
+        val red = hexString.substring(0, 2).toInt(16)
+        val green = hexString.substring(2, 4).toInt(16)
+        val blue = hexString.substring(4, 6).toInt(16)
+        Color(red, green, blue)
+    } catch (_: Exception) {
+        Color.Black
+    }
 }
 
 /**

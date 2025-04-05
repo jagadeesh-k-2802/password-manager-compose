@@ -137,8 +137,8 @@ class AddPasswordItemViewModel @Inject constructor(
                 is AddPasswordItemUiEvent.AddPasswordItem -> addPasswordItem()
                 is AddPasswordItemUiEvent.OnGenerateRandomPassword -> onGenerateRandomPassword()
                 is AddPasswordItemUiEvent.ToggleShowPassword -> toggleShowPassword()
-                is AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisible -> toggleIsCategoryDropdownVisible()
-                is AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisible -> toggleIsUnsavedDialogVisible()
+                is AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility -> toggleIsCategoryDropdownVisible()
+                is AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility -> toggleIsUnsavedDialogVisible()
                 is AddPasswordItemUiEvent.SetIsAlreadyAutoFocus -> setIsAlreadyAutoFocus()
                 is AddPasswordItemUiEvent.OnSelectCategory -> onSetCategory(event.category)
             }

@@ -93,7 +93,7 @@ fun AddCategoryItemScreen(
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (state.name.isNotEmpty()) {
-                    onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialog)
+                    onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility)
                 } else {
                     navController.navigateUp()
                 }
@@ -109,7 +109,7 @@ fun AddCategoryItemScreen(
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
             onConfirm = { navController.navigateUp() },
-            onDismiss = { onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialog) }
+            onDismiss = { onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility) }
         )
     }
 

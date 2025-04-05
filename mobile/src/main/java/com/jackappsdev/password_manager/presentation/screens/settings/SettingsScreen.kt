@@ -74,12 +74,12 @@ fun SettingsScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    SettingsUiEffect.OnImportPasswords -> onImportPasswords(importIntent)
-                    SettingsUiEffect.OnExportPasswords -> onExportPasswords(exportIntent)
-                    SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
-                    SettingsUiEffect.OpenScreenLockSettings -> onNoLockScreen()
-                    SettingsUiEffect.OnPasswordsExported -> onPasswordsExported()
-                    SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
+                    is SettingsUiEffect.OnImportPasswords -> onImportPasswords(importIntent)
+                    is SettingsUiEffect.OnExportPasswords -> onExportPasswords(exportIntent)
+                    is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
+                    is SettingsUiEffect.OpenScreenLockSettings -> onNoLockScreen()
+                    is SettingsUiEffect.OnPasswordsExported -> onPasswordsExported()
+                    is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
                 }
             }
         }

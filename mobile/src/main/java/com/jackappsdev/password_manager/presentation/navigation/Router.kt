@@ -23,11 +23,11 @@ import com.jackappsdev.password_manager.presentation.screens.add_password_item.A
 import com.jackappsdev.password_manager.presentation.screens.android_watch.AndroidWatchRoot
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.CategoryItemDetailRoot
 import com.jackappsdev.password_manager.presentation.screens.change_password.ChangePasswordRoot
-import com.jackappsdev.password_manager.presentation.screens.edit_password_item.EditPasswordItemScreen
+import com.jackappsdev.password_manager.presentation.screens.edit_password_item.EditPasswordItemRoot
 import com.jackappsdev.password_manager.presentation.screens.home.HomeScreen
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.ManageCategoriesRoot
 import com.jackappsdev.password_manager.presentation.screens.password_generator.PasswordGeneratorRoot
-import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailScreen
+import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailRoot
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockRoot
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.screens.settings.SettingsRoot
@@ -83,8 +83,8 @@ fun Router(
             ) {
                 composable<Routes.Home> { HomeScreen(navController) }
                 composable<Routes.AddPasswordItem> { AddPasswordItemRoot(navController) }
-                composable<Routes.PasswordItemDetail> { PasswordItemDetailScreen(navController) }
-                composable<Routes.EditPasswordItem> { EditPasswordItemScreen(navController) }
+                composable<Routes.PasswordItemDetail> { PasswordItemDetailRoot(navController) }
+                composable<Routes.EditPasswordItem> { EditPasswordItemRoot(navController) }
                 composable<Routes.PasswordGenerator> { PasswordGeneratorRoot() }
                 composable<Routes.Settings> { SettingsRoot(navController) }
                 composable<Routes.AndroidWatch> { AndroidWatchRoot(navController) }

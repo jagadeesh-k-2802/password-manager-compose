@@ -11,8 +11,8 @@ sealed class AddPasswordItemUiEvent {
     data object AddPasswordItem : AddPasswordItemUiEvent()
     data object OnGenerateRandomPassword : AddPasswordItemUiEvent()
     data object ToggleShowPassword : AddPasswordItemUiEvent()
-    data object ToggleIsCategoryDropdownVisible : AddPasswordItemUiEvent()
-    data object ToggleIsUnsavedDialogVisible : AddPasswordItemUiEvent()
+    data object ToggleIsCategoryDropdownVisibility : AddPasswordItemUiEvent()
+    data object ToggleIsUnsavedDialogVisibility : AddPasswordItemUiEvent()
     data object SetIsAlreadyAutoFocus : AddPasswordItemUiEvent()
     data class OnSelectCategory(val category: CategoryModel?) : AddPasswordItemUiEvent()
 }

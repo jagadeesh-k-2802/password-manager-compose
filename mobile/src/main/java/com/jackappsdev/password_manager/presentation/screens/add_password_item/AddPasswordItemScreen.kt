@@ -88,7 +88,7 @@ fun AddPasswordItemScreen(
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (state.hasUserEnteredDetails) {
-                    onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisible)
+                    onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility)
                 } else {
                     navController.navigateUp()
                 }
@@ -127,7 +127,7 @@ fun AddPasswordItemScreen(
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
             onConfirm = { navController.navigateUp() },
-            onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisible) }
+            onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility) }
         )
     }
 

@@ -70,6 +70,11 @@
     <string name="text_import_passwords_note">Importing new passwords will remove all of your existing passwords thereafter, you must use this password to unlock this app.</string>
     <string name="text_change_password_help">Changing your password won\'t affect your current passwords.</string>
     <string name="text_filter_by_category">Filter By Category</string>
+    <string name="text_sort_by">Sort By</string>
+    <string name="text_a_to_z">A -> Z</string>
+    <string name="text_z_to_a">Z -> A</string>
+    <string name="text_new_to_old">Newest -> Oldest</string>
+    <string name="text_old_to_new">Oldest -> Newest</string>
     <string name="text_weak">Weak</string>
     <string name="text_medium">Medium</string>
     <string name="text_strong">Strong</string>
@@ -116,6 +121,10 @@
     <string name="accessibility_options">More Options</string>
     <string name="accessibility_add_to_watch">Add to Watch</string>
     <string name="accessibility_remove_from_watch">Remove from Watch</string>
+    <string name="accessibility_sort_by_asc_alpha">Sort by ascending alphabet</string>
+    <string name="accessibility_sort_by_desc_alpha">Sort by descending alphabet</string>
+    <string name="accessibility_sort_by_new">Sort by newest</string>
+    <string name="accessibility_sort_by_old">Sort by oldest</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">You Have Unsaved Changes</string>

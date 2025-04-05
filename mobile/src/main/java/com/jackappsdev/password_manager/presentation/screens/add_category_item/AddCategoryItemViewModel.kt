@@ -58,7 +58,7 @@ class AddCategoryItemViewModel @Inject constructor(
         viewModelScope.launch {
             val effect = when(event) {
                 is AddCategoryItemUiEvent.AddCategoryItem -> addCategoryItem()
-                is AddCategoryItemUiEvent.ToggleUnsavedChangesDialog -> toggleUnsavedChangesDialog()
+                is AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility -> toggleUnsavedChangesDialog()
                 is AddCategoryItemUiEvent.OnEnterName -> onEnterName(event.name)
                 is AddCategoryItemUiEvent.OnSelectColor -> onSelectColor(event.color)
             }

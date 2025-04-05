@@ -31,7 +31,7 @@ class CategoryItemDetailViewModel @Inject constructor(
         private set
 
     private val categoryItemDetail = savedStateHandle.toRoute<Routes.CategoryItemDetail>()
-    val categoryItem = categoryRepository.getCategoryItem(categoryItemDetail.id).filterNotNull()
+    private val categoryItem = categoryRepository.getCategoryItem(categoryItemDetail.id).filterNotNull()
 
     private val _effectChannel = Channel<CategoryItemDetailUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()

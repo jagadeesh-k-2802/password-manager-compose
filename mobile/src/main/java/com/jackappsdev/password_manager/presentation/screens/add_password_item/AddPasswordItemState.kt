@@ -1,13 +1,14 @@
 package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
 import com.jackappsdev.password_manager.domain.model.CategoryModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 
 data class AddPasswordItemState(
-    val name: String = "",
-    val username: String = "",
-    val password: String = "",
-    val website: String = "",
-    val notes: String = "",
+    val name: String = EMPTY_STRING,
+    val username: String = EMPTY_STRING,
+    val password: String = EMPTY_STRING,
+    val website: String = EMPTY_STRING,
+    val notes: String = EMPTY_STRING,
     val category: CategoryModel? = null,
     val showPassword: Boolean = false,
     val isCategoryDropdownVisible: Boolean = false,

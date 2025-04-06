@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 
 @Composable
 fun ImportPasswordsDialog(
@@ -35,7 +36,7 @@ fun ImportPasswordsDialog(
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var password by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf(EMPTY_STRING) }
     var showPassword by rememberSaveable { mutableStateOf(false) }
 
     AlertDialog(
@@ -64,7 +65,7 @@ fun ImportPasswordsDialog(
                     onValueChange = { value -> password = value }
                 )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     stringResource(R.string.text_import_passwords_note)
                 )

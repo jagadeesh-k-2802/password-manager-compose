@@ -3,6 +3,7 @@ package com.jackappsdev.password_manager.presentation.screens.password_lock.comp
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.InfoText
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockError
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockState
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
@@ -80,7 +82,7 @@ fun SetupPasswordView(
         label = { Text(stringResource(R.string.label_confirm_password)) },
         modifier = Modifier.fillMaxWidth(),
         isError = error is PasswordLockError.ConfirmPasswordError,
-        visualTransformation = if (state.showPassword) {
+        visualTransformation = if (state.showConfirmPassword) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
@@ -91,6 +93,18 @@ fun SetupPasswordView(
                 if (it is PasswordLockError.ConfirmPasswordError) Text(stringResource(it.error))
             }
         },
+        trailingIcon = {
+            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowConfirmPassword) }) {
+                Icon(
+                    imageVector = if (state.showConfirmPassword) {
+                        Icons.Outlined.VisibilityOff
+                    } else {
+                        Icons.Outlined.Visibility
+                    },
+                    contentDescription = stringResource(R.string.accessibility_toggle_confirm_password)
+                )
+            }
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
@@ -98,7 +112,10 @@ fun SetupPasswordView(
     )
 
     Spacer(modifier = Modifier.height(12.dp))
-    Text(stringResource(R.string.text_password_warning_note))
+    InfoText(
+        modifier = Modifier.padding(vertical = pagePadding),
+        text = stringResource(R.string.text_password_warning_note)
+    )
     Spacer(modifier = Modifier.height(16.dp))
 
     Button(

@@ -12,6 +12,7 @@ import com.jackappsdev.password_manager.domain.repository.UserPreferencesReposit
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
@@ -80,7 +81,7 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun importData(password: String) {
         if (state.importFileUri != null) {
-            val uri = state.importFileUri ?: ""
+            val uri = state.importFileUri ?: EMPTY_STRING
             val isDone = databaseManagerRepository.importDatabase(uri, password)
             state = state.copy(isImportPasswordInvalid = !isDone)
         }

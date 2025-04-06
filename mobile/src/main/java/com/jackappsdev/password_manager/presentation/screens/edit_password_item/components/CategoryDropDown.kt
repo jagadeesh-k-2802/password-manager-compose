@@ -25,6 +25,7 @@ import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.EditPasswordItemState
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemUiEvent
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +47,7 @@ fun CategoryDropDown(
                     ColoredCircle(color = state.category.color)
                 }
             },
-            value = state.category?.name ?: "",
+            value = state.category?.name ?: EMPTY_STRING,
             onValueChange = {},
             readOnly = true,
             label = { Text(stringResource(R.string.label_category)) },

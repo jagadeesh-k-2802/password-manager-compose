@@ -49,6 +49,7 @@ import com.jackappsdev.password_manager.presentation.screens.password_item_detai
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -91,7 +92,7 @@ fun PasswordItemDetailScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        passwordItem?.name ?: "",
+                        passwordItem?.name ?: EMPTY_STRING,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -124,7 +125,7 @@ fun PasswordItemDetailScreen(
                 .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
-                value = passwordItem?.name ?: "",
+                value = passwordItem?.name ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_name)) },
@@ -136,7 +137,7 @@ fun PasswordItemDetailScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = passwordItem?.username ?: "",
+                value = passwordItem?.username ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_username)) },
@@ -160,7 +161,7 @@ fun PasswordItemDetailScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = passwordItem?.password ?: "",
+                value = passwordItem?.password ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_password)) },
@@ -202,7 +203,7 @@ fun PasswordItemDetailScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = passwordItem?.website ?: "",
+                value = passwordItem?.website ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_website)) },
@@ -210,7 +211,7 @@ fun PasswordItemDetailScreen(
                 trailingIcon = {
                     if ((passwordItem?.website?.length ?: 0) > 0) {
                         IconButton(onClick = {
-                            onEvent(PasswordItemDetailUiEvent.LaunchUrl(passwordItem?.website ?: ""))
+                            onEvent(PasswordItemDetailUiEvent.LaunchUrl(passwordItem?.website ?: EMPTY_STRING))
                         }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
@@ -227,7 +228,7 @@ fun PasswordItemDetailScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = passwordItem?.notes ?: "",
+                value = passwordItem?.notes ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.label_notes)) },
@@ -257,10 +258,10 @@ fun PasswordItemDetailScreen(
                         if (passwordItem?.categoryId == null) {
                             Icon(Icons.Outlined.Block, null)
                         } else {
-                            ColoredCircle(color = passwordItem?.categoryColor ?: "")
+                            ColoredCircle(color = passwordItem?.categoryColor ?: EMPTY_STRING)
                         }
                     },
-                    value = passwordItem?.categoryName ?: "",
+                    value = passwordItem?.categoryName ?: EMPTY_STRING,
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(R.string.label_category)) },
@@ -281,7 +282,7 @@ fun PasswordItemDetailScreen(
                 value = if (passwordItem?.createdAt != null) {
                     parseModifiedTime(context, passwordItem?.createdAt!!)
                 } else {
-                    ""
+                    EMPTY_STRING
                 },
                 onValueChange = {},
                 readOnly = true,

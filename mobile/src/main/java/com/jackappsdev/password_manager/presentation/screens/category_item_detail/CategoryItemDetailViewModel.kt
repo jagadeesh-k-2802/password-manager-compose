@@ -13,6 +13,7 @@ import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEffect
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -52,8 +53,8 @@ class CategoryItemDetailViewModel @Inject constructor(
         categoryRepository.insertCategoryItem(
             CategoryModel(
                 id = state.categoryModel?.id,
-                name = state.categoryModel?.name ?: "",
-                color = state.categoryModel?.color ?: "",
+                name = state.categoryModel?.name ?: EMPTY_STRING,
+                color = state.categoryModel?.color ?: EMPTY_STRING,
                 createdAt = System.currentTimeMillis()
             )
         )

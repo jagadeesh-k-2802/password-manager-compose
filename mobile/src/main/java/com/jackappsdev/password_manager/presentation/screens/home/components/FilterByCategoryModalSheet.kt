@@ -1,15 +1,11 @@
-package com.jackappsdev.password_manager.presentation.screens.home.composables
+package com.jackappsdev.password_manager.presentation.screens.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.SelectAll
@@ -24,13 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.model.FilterBy
+import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.launch
 
@@ -50,7 +45,7 @@ fun FilterByCategoryModalSheet(
         containerColor = MaterialTheme.colorScheme.surface
     ) {
         Text(
-            stringResource(R.string.text_filter_by_category),
+            text = stringResource(R.string.text_filter_by_category),
             modifier = Modifier.padding(pagePadding),
             style = MaterialTheme.typography.titleLarge
         )
@@ -60,8 +55,8 @@ fun FilterByCategoryModalSheet(
                 ListItem(
                     leadingContent = {
                         Icon(
-                            Icons.Outlined.SelectAll,
-                            stringResource(R.string.accessibility_all_items)
+                            imageVector = Icons.Outlined.SelectAll,
+                            contentDescription = stringResource(R.string.accessibility_all_items)
                         )
                     },
                     headlineContent = {
@@ -81,8 +76,8 @@ fun FilterByCategoryModalSheet(
                 ListItem(
                     leadingContent = {
                         Icon(
-                            Icons.Outlined.Block,
-                            stringResource(R.string.accessibility_no_category_items)
+                            imageVector = Icons.Outlined.Block,
+                            contentDescription = stringResource(R.string.accessibility_no_category_items)
                         )
                     },
                     headlineContent = {
@@ -101,12 +96,7 @@ fun FilterByCategoryModalSheet(
             items(categoryItems) { item ->
                 ListItem(
                     leadingContent = {
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .background(parseColor(item.color))
-                                .size(24.dp)
-                        ) {}
+                        ColoredCircle(color = item.color)
                     },
                     headlineContent = {
                         Text(item.name)

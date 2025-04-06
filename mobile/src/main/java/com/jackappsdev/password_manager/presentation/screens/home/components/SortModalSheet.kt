@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.home.composables
+package com.jackappsdev.password_manager.presentation.screens.home.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.SortBy
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import kotlinx.coroutines.launch
@@ -38,7 +40,7 @@ fun SortModalSheet(
         containerColor = MaterialTheme.colorScheme.surface
     ) {
         Text(
-            "Sort By",
+            text = stringResource(R.string.text_sort_by),
             modifier = Modifier.padding(pagePadding),
             style = MaterialTheme.typography.titleLarge
         )
@@ -47,11 +49,11 @@ fun SortModalSheet(
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.SortByAlpha,
-                    contentDescription = "Sort by ascending alphabet"
+                    contentDescription = stringResource(R.string.accessibility_sort_by_asc_alpha)
                 )
             },
             headlineContent = {
-                Text("A -> Z")
+                Text(stringResource(R.string.text_a_to_z))
             },
             trailingContent = {
                 RadioButton(
@@ -66,11 +68,11 @@ fun SortModalSheet(
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.SortByAlpha,
-                    contentDescription = "Sort by descending alphabet"
+                    contentDescription = stringResource(R.string.accessibility_sort_by_desc_alpha)
                 )
             },
             headlineContent = {
-                Text("Z -> A")
+                Text(stringResource(R.string.text_z_to_a))
             },
             trailingContent = {
                 RadioButton(
@@ -85,11 +87,11 @@ fun SortModalSheet(
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.AccessTime,
-                    contentDescription = "Sort by newest"
+                    contentDescription = stringResource(R.string.accessibility_sort_by_new)
                 )
             },
             headlineContent = {
-                Text("Newest -> Oldest")
+                Text(stringResource(R.string.text_new_to_old))
             },
             trailingContent = {
                 RadioButton(
@@ -104,11 +106,11 @@ fun SortModalSheet(
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.AccessTime,
-                    contentDescription = "Sort by oldest"
+                    contentDescription = stringResource(R.string.accessibility_sort_by_old)
                 )
             },
             headlineContent = {
-                Text("Oldest -> Newest")
+                Text(stringResource(R.string.text_old_to_new))
             },
             trailingContent = {
                 RadioButton(

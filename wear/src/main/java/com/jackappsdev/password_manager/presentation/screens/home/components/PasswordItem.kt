@@ -24,9 +24,7 @@ fun PasswordItem(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors = ChipDefaults.chipColors(backgroundColor = MaterialTheme.colors.surface),
-        icon = icon?.let {
-            { Icon(painter = icon, contentDescription = null) }
-        },
+        icon = icon?.let { { Icon(painter = icon, contentDescription = null) } },
         label = { Text(text = label, maxLines = maxLines) }
     )
 }

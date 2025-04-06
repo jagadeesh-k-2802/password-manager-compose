@@ -24,7 +24,7 @@ import com.jackappsdev.password_manager.presentation.screens.android_watch.Andro
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.CategoryItemDetailRoot
 import com.jackappsdev.password_manager.presentation.screens.change_password.ChangePasswordRoot
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.EditPasswordItemRoot
-import com.jackappsdev.password_manager.presentation.screens.home.HomeScreen
+import com.jackappsdev.password_manager.presentation.screens.home.HomeRoot
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.ManageCategoriesRoot
 import com.jackappsdev.password_manager.presentation.screens.password_generator.PasswordGeneratorRoot
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailRoot
@@ -81,7 +81,7 @@ fun Router(
                 exitTransition = { ExitTransition.None },
                 modifier = Modifier.padding(contentPadding)
             ) {
-                composable<Routes.Home> { HomeScreen(navController) }
+                composable<Routes.Home> { HomeRoot(navController) }
                 composable<Routes.AddPasswordItem> { AddPasswordItemRoot(navController) }
                 composable<Routes.PasswordItemDetail> { PasswordItemDetailRoot(navController) }
                 composable<Routes.EditPasswordItem> { EditPasswordItemRoot(navController) }

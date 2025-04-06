@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import androidx.core.net.toUri
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import com.jackappsdev.password_manager.shared.core.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -36,7 +37,7 @@ fun generateRandomPassword(config: GeneratePasswordConfig): String {
     val numberChars = "0123456789"
     val symbolChars = "!@#$%^&*()-_+=[]{}|;:,.<>?/`~"
 
-    var availableChars = ""
+    var availableChars = EMPTY_STRING
     if (config.includeLowercase) availableChars += lowercaseChars
     if (config.includeUppercase) availableChars += uppercaseChars
     if (config.includeNumbers) availableChars += numberChars

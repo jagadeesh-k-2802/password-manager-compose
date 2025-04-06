@@ -60,6 +60,7 @@ import com.jackappsdev.password_manager.presentation.screens.edit_password_item.
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.json.Json
@@ -113,7 +114,7 @@ fun EditPasswordItemScreen(
 
     LaunchedEffect(key1 = savedStateHandle) {
         if (savedStateHandle?.contains(CREATED_CATEGORY) == true) {
-            val json = savedStateHandle[CREATED_CATEGORY] ?: ""
+            val json = savedStateHandle[CREATED_CATEGORY] ?: EMPTY_STRING
             val model = Json.decodeFromString<CategoryModel>(json)
             onEvent(EditPasswordItemUiEvent.OnSelectCategory(model))
         }
@@ -155,7 +156,7 @@ fun EditPasswordItemScreen(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = state.passwordItem?.name ?: "",
+                value = state.passwordItem?.name ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterName(it)) },
                 isError = error is EditPasswordItemError.NameError,
                 supportingText = {
@@ -180,7 +181,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.username ?: "",
+                value = state.passwordItem?.username ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterUsername(it)) },
                 label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -197,7 +198,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.password ?: "",
+                value = state.passwordItem?.password ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterPassword(it)) },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -239,7 +240,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.website ?: "",
+                value = state.passwordItem?.website ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterWebsite(it)) },
                 label = { Text(stringResource(R.string.label_website)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -256,7 +257,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.notes ?: "",
+                value = state.passwordItem?.notes ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterNotes(it)) },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),

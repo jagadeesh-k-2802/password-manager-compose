@@ -95,6 +95,8 @@
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Toggle password</string>
+    <string name="accessibility_toggle_new_password">Toggle new password</string>
+    <string name="accessibility_toggle_confirm_password">Toggle confirm password</string>
     <string name="accessibility_confirm">Confirm</string>
     <string name="accessibility_use_device_lock_screen">Use device lock screen</string>
     <string name="accessibility_lock_application">Lock application</string>

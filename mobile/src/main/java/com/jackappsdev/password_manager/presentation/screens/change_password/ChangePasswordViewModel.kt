@@ -32,50 +32,68 @@ class ChangePasswordViewModel @Inject constructor(
     private val _errorChannel = Channel<ChangePasswordError>()
     val errorFlow = _errorChannel.receiveAsFlow()
 
-    private fun onPasswordChanged() {
-        viewModelScope.launch {
-            if (state.currentPassword.isEmpty()) {
-                _errorChannel.send(ChangePasswordError.CurrentPasswordError(R.string.error_password_not_empty))
-            } else if (state.newPassword.isEmpty()) {
-                _errorChannel.send(ChangePasswordError.NewPasswordError(R.string.error_new_password_not_empty))
-            } else if (state.newPassword.length < 8) {
-                _errorChannel.send(ChangePasswordError.NewPasswordError(R.string.error_password_is_small))
-            } else if (state.currentPassword == state.newPassword) {
-                _errorChannel.send(ChangePasswordError.NewPasswordError(R.string.error_password_not_same))
-            } else if (!userPreferencesRepository.verifyPassword(state.currentPassword)) {
-                _errorChannel.send(ChangePasswordError.CurrentPasswordError(R.string.error_wrong_password))
-            } else {
-                passphraseRepository.updatePassword(state.newPassword)
-                _effectChannel.send(ChangePasswordUiEffect.OnPasswordChanged)
+    private suspend fun onPasswordChanged(): ChangePasswordUiEffect? {
+        if (state.currentPassword.isEmpty()) {
+            _errorChannel.send(ChangePasswordError.CurrentPasswordError(R.string.error_password_not_empty))
+        } else if (state.newPassword.isEmpty()) {
+            _errorChannel.send(ChangePasswordError.NewPasswordError(R.string.error_new_password_not_empty))
+        } else if (state.newPassword.length < 8) {
+            _errorChannel.send(ChangePasswordError.NewPasswordError(R.string.error_password_is_small))
+        } else if (state.currentPassword == state.newPassword) {
+            _errorChannel.send(ChangePasswordError.NewPasswordError(R.string.error_password_not_same))
+        } else if (!userPreferencesRepository.verifyPassword(state.currentPassword)) {
+            _errorChannel.send(ChangePasswordError.CurrentPasswordError(R.string.error_wrong_password))
+        } else {
+            passphraseRepository.updatePassword(state.newPassword)
+            return ChangePasswordUiEffect.OnPasswordChanged
+        }
+
+        return null
+    }
+
+    private fun onEnterText(event: ChangePasswordUiEvent) {
+        when (event) {
+            is ChangePasswordUiEvent.OnPasswordEnter -> {
+                state = state.copy(currentPassword = event.password)
+            }
+
+            is ChangePasswordUiEvent.OnNewPasswordEnter -> {
+                state = state.copy(newPassword = event.password)
+            }
+
+            else -> {
+                null
             }
         }
     }
 
-    private fun onPasswordEnter(password: String) {
-        state = state.copy(currentPassword = password)
-    }
+    private fun toggleVisibility(event: ChangePasswordUiEvent) {
+        when (event) {
+            is ChangePasswordUiEvent.ToggleShowPassword -> {
+                state = state.copy(showPassword = !state.showPassword)
+            }
 
-    private fun onNewPasswordEnter(password: String) {
-        state = state.copy(newPassword = password)
-    }
+            is ChangePasswordUiEvent.ToggleShowNewPassword -> {
+                state = state.copy(showNewPassword = !state.showNewPassword)
+            }
 
-    private fun toggleShowPassword() {
-        state = state.copy(showPassword = !state.showPassword)
-    }
-
-    private fun toggleShowNewPassword() {
-        state = state.copy(showNewPassword = !state.showNewPassword)
+            else -> {
+                null
+            }
+        }
     }
 
     override fun onEvent(event: ChangePasswordUiEvent) {
         viewModelScope.launch {
-            when(event) {
-                is ChangePasswordUiEvent.OnNewPasswordEnter -> onNewPasswordEnter(event.password)
-                is ChangePasswordUiEvent.OnPasswordEnter -> onPasswordEnter(event.password)
-                is ChangePasswordUiEvent.ToggleShowNewPassword -> toggleShowPassword()
-                is ChangePasswordUiEvent.ToggleShowPassword -> toggleShowNewPassword()
+            val effect = when(event) {
+                is ChangePasswordUiEvent.OnNewPasswordEnter -> onEnterText(event)
+                is ChangePasswordUiEvent.OnPasswordEnter -> onEnterText(event)
+                is ChangePasswordUiEvent.ToggleShowPassword -> toggleVisibility(event)
+                is ChangePasswordUiEvent.ToggleShowNewPassword -> toggleVisibility(event)
                 is ChangePasswordUiEvent.OnPasswordChanged -> onPasswordChanged()
             }
+
+            if (effect is ChangePasswordUiEffect) _effectChannel.send(effect)
         }
     }
 }

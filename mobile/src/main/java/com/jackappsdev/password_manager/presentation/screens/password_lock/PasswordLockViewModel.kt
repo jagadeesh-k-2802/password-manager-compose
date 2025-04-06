@@ -12,6 +12,7 @@ import com.jackappsdev.password_manager.domain.repository.UserPreferencesReposit
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -67,15 +68,14 @@ class PasswordLockViewModel @Inject constructor(
         return PasswordLockUiEffect.HideKeyboard
     }
 
-    fun setUnlocked(hasBeenUnlocked: Boolean): PasswordLockUiEffect? {
+    fun setUnlocked(hasBeenUnlocked: Boolean) {
         state = state.copy(
             hasBeenUnlocked = hasBeenUnlocked,
-            password = "",
+            password = EMPTY_STRING,
             showPassword = false,
-            confirmPassword = "",
+            confirmPassword = EMPTY_STRING,
             showConfirmPassword = false
         )
-        return null
     }
 
     private suspend fun verifyPassword(): PasswordLockUiEffect? {
@@ -88,21 +88,36 @@ class PasswordLockViewModel @Inject constructor(
         }
     }
 
-    private fun enterPassword(password: String) {
-        state = state.copy(password = password)
+    private fun onEnterText(event: PasswordLockUiEvent) {
+        when (event) {
+            is PasswordLockUiEvent.EnterPassword -> {
+                state = state.copy(password = event.password)
+            }
+
+            is PasswordLockUiEvent.EnterConfirmPassword -> {
+                state = state.copy(confirmPassword = event.password)
+            }
+
+            else -> {
+                null
+            }
+        }
     }
 
-    private fun enterConfirmPassword(password: String) {
-        state = state.copy(confirmPassword = password)
+    private fun toggleVisibility(event: PasswordLockUiEvent) {
+        when (event) {
+            is PasswordLockUiEvent.ToggleShowPassword -> {
+                state = state.copy(showPassword = !state.showPassword)
+            }
 
-    }
+            is PasswordLockUiEvent.ToggleShowConfirmPassword -> {
+                state = state.copy(showConfirmPassword = !state.showConfirmPassword)
+            }
 
-    private fun toggleShowPassword() {
-        state = state.copy(showPassword = !state.showPassword)
-    }
-
-    private fun toggleShowConfirmPassword() {
-        state = state.copy(showConfirmPassword = !state.showConfirmPassword)
+            else -> {
+                null
+            }
+        }
     }
 
     override fun onEvent(event: PasswordLockUiEvent) {
@@ -110,11 +125,11 @@ class PasswordLockViewModel @Inject constructor(
             val effect = when (event) {
                 is PasswordLockUiEvent.SetupNewPassword -> setNewPassword()
                 is PasswordLockUiEvent.VerifyPassword -> verifyPassword()
-                is PasswordLockUiEvent.EnterConfirmPassword -> enterConfirmPassword(event.password)
                 is PasswordLockUiEvent.SetUnlocked -> setUnlocked(event.unlocked)
-                is PasswordLockUiEvent.EnterPassword -> enterPassword(event.password)
-                is PasswordLockUiEvent.ToggleShowPassword -> toggleShowPassword()
-                is PasswordLockUiEvent.ToggleShowConfirmPassword -> toggleShowConfirmPassword()
+                is PasswordLockUiEvent.EnterConfirmPassword -> onEnterText(event)
+                is PasswordLockUiEvent.EnterPassword -> onEnterText(event)
+                is PasswordLockUiEvent.ToggleShowPassword -> toggleVisibility(event)
+                is PasswordLockUiEvent.ToggleShowConfirmPassword -> toggleVisibility(event)
                 is PasswordLockUiEvent.BiometricAuthenticate -> PasswordLockUiEffect.BiometricAuthenticate
             }
 

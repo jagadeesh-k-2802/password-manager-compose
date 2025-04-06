@@ -11,7 +11,13 @@ import com.jackappsdev.password_manager.domain.model.orderBy
 import com.jackappsdev.password_manager.domain.model.where
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
+import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEffect
+import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
+import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,12 +25,14 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val passwordItemRepository: PasswordItemRepository,
-    categoryRepository: CategoryRepository
-) : ViewModel() {
-    val categoryItems = categoryRepository.getAllCategories()
+    private val categoryRepository: CategoryRepository
+) : ViewModel(), EventDrivenViewModel<HomeUiEvent, HomeUiEffect> {
 
     var state by mutableStateOf(HomeState())
         private set
+
+    private val _effectChannel = Channel<HomeUiEffect>()
+    override val effectFlow = _effectChannel.receiveAsFlow()
 
     init {
         onInit()
@@ -33,70 +41,101 @@ class HomeViewModel @Inject constructor(
     private fun onInit() {
         viewModelScope.launch {
             if (state.isLoading) {
+                val itemsFlow = passwordItemRepository.getPasswordItems(
+                    state.sortBy.orderBy(),
+                    state.filterBy.where(),
+                    EMPTY_STRING
+                )
+
+                val categoryFlow = categoryRepository.getAllCategories()
+
                 state = state.copy(
                     isLoading = false,
-                    items = passwordItemRepository.getPasswordItems(
-                        state.sortBy.orderBy(),
-                        state.filterBy.where(),
-                        ""
-                    )
-                        .stateIn(viewModelScope)
+                    items = itemsFlow.stateIn(viewModelScope),
+                    categoryItems = categoryFlow.stateIn(viewModelScope)
                 )
             }
         }
     }
 
-    fun setSortBy(sortBy: SortBy, searchQuery: String) {
-        viewModelScope.launch {
-            state = state.copy(
-                sortBy = sortBy,
-                items = passwordItemRepository.getPasswordItems(
-                    sortBy.orderBy(),
-                    state.filterBy.where(),
-                    ""
-                ).stateIn(viewModelScope)
-            )
+    private suspend fun selectSortBy(sortBy: SortBy): HomeUiEffect {
+        val itemsFlow = passwordItemRepository.getPasswordItems(
+            sortBy.orderBy(),
+            state.filterBy.where(),
+            EMPTY_STRING
+        )
 
-            if (searchQuery.isNotEmpty()) {
-                searchItems(searchQuery)
-            }
-        }
+        state = state.copy(
+            sortBy = sortBy,
+            items = itemsFlow.stateIn(viewModelScope)
+        )
+
+        if (state.searchQuery.isNotEmpty()) { searchItems() }
+        return HomeUiEffect.OnSortSelected
     }
 
-    fun filterByCategory(filterBy: FilterBy, searchQuery: String) {
-        viewModelScope.launch {
-            state = state.copy(
-                filterBy = filterBy,
-                items = passwordItemRepository.getPasswordItems(
-                    state.sortBy.orderBy(),
-                    filterBy.where(),
-                    ""
-                ).stateIn(viewModelScope)
-            )
+    private suspend fun selectFilterBy(filterBy: FilterBy): HomeUiEffect {
+        val itemsFlow = passwordItemRepository.getPasswordItems(
+            state.sortBy.orderBy(),
+            filterBy.where(),
+            EMPTY_STRING
+        )
 
-            if (searchQuery.isNotEmpty()) {
-                searchItems(searchQuery)
-            }
-        }
+        state = state.copy(
+            filterBy = filterBy,
+            items = itemsFlow.stateIn(viewModelScope)
+        )
+
+        if (state.searchQuery.isNotEmpty()) { searchItems() }
+        return HomeUiEffect.OnFilterSelected
     }
 
-    fun searchItems(searchQuery: String) {
-        viewModelScope.launch {
-            state = if (searchQuery.isEmpty()) {
-                state.copy(filteredItems = null)
-            } else {
-                state.copy(
-                    filteredItems = passwordItemRepository.getPasswordItems(
-                        state.sortBy.orderBy(),
-                        state.filterBy.where(),
-                        searchQuery.trim()
-                    ).stateIn(viewModelScope)
-                )
-            }
+    private fun onClearSearch(): HomeUiEffect {
+        state = state.copy(searchQuery = EMPTY_STRING, isSearching = false, filteredItems = null)
+        return HomeUiEffect.OnSearchCleared
+    }
+
+    private fun onEnterSearchQuery(query: String) {
+        state = state.copy(searchQuery = query, isSearching = query.isNotEmpty())
+    }
+
+    private suspend fun searchItems() {
+        state = if (state.searchQuery.isEmpty()) {
+            state.copy(filteredItems = null)
+        } else {
+            val filteredItemsFlow = passwordItemRepository.getPasswordItems(
+                state.sortBy.orderBy(),
+                state.filterBy.where(),
+                state.searchQuery.trim()
+            )
+
+            state.copy(
+                filteredItems = filteredItemsFlow.stateIn(viewModelScope)
+            )
         }
     }
 
     fun lockApplication() {
         Runtime.getRuntime().exit(0)
+    }
+
+    override fun onEvent(event: HomeUiEvent) {
+        viewModelScope.launch {
+            val effect = when (event) {
+                is HomeUiEvent.LockApplication -> lockApplication()
+                is HomeUiEvent.OnClearSearch -> onClearSearch()
+                is HomeUiEvent.OnEnterSearchQuery -> onEnterSearchQuery(event.query)
+                is HomeUiEvent.SearchItems -> searchItems()
+                is HomeUiEvent.SelectFilterBy -> selectFilterBy(event.filterBy)
+                is HomeUiEvent.SelectSortBy -> selectSortBy(event.sortBy)
+                is HomeUiEvent.OnSearch -> HomeUiEffect.OnSearch
+                is HomeUiEvent.ScrollToTop -> HomeUiEffect.ScrollToTop
+                is HomeUiEvent.ToggleFilterSheetVisibility -> HomeUiEffect.ToggleFilterSheetVisibility
+                is HomeUiEvent.ToggleSortSheetVisibility -> HomeUiEffect.ToggleSortSheetVisibility
+                is HomeUiEvent.NavigateToPasswordDetail -> HomeUiEffect.NavigateToPasswordDetail(event.id)
+            }
+
+            if (effect is HomeUiEffect) _effectChannel.send(effect)
+        }
     }
 }

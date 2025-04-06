@@ -2,26 +2,39 @@ package com.jackappsdev.password_manager.presentation.screens.password_item_deta
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.ItemView
+import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailEffectHandler
+import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
+import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEvent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun PasswordItemDetailScreen(
     navController: NavController,
-    passwordItem: State<PasswordItemModel?>
+    state: PasswordItemDetailState,
+    effectFlow: Flow<PasswordItemDetailUiEffect>,
+    effectHandler: PasswordItemDetailEffectHandler,
+    onEvent: (PasswordItemDetailUiEvent) -> Unit,
 ) {
-    var isValueAlreadySetOnce by rememberSaveable { mutableStateOf(false) }
+    val passwordItem = state.passwordItem?.collectAsState()?.value
+
+    LaunchedEffect(key1 = Unit) {
+        effectFlow.collectLatest { effect ->
+            with(effectHandler) {
+                when (effect) {
+                    is PasswordItemDetailUiEffect.NavigateUp -> onNavigateUp()
+                }
+            }
+        }
+    }
 
     val columnState = rememberResponsiveColumnState(
         contentPadding = ScalingLazyColumnDefaults.padding(
@@ -30,15 +43,15 @@ fun PasswordItemDetailScreen(
         )
     )
 
-    LaunchedEffect(passwordItem) {
-        if (passwordItem.value == null && isValueAlreadySetOnce) {
+    LaunchedEffect(state.passwordItem) {
+        if (state.passwordItem == null && state.isValueAlreadySetOnce) {
             navController.navigateUp()
         } else {
-            isValueAlreadySetOnce = true
+            onEvent(PasswordItemDetailUiEvent.ToggleIsAlreadySetOnce)
         }
     }
 
     ScreenScaffold(scrollState = columnState) {
-        ItemView(passwordItem.value, columnState)
+        ItemView(passwordItem, columnState)
     }
 }

@@ -60,6 +60,7 @@ import com.jackappsdev.password_manager.presentation.screens.add_password_item.e
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.json.Json
@@ -98,7 +99,7 @@ fun AddPasswordItemScreen(
 
     LaunchedEffect(key1 = savedStateHandle) {
         if (savedStateHandle?.contains(CREATED_CATEGORY) == true) {
-            val json = savedStateHandle[CREATED_CATEGORY] ?: ""
+            val json = savedStateHandle[CREATED_CATEGORY] ?: EMPTY_STRING
             val model = Json.decodeFromString<CategoryModel>(json)
             onEvent(AddPasswordItemUiEvent.OnSelectCategory(model))
         }

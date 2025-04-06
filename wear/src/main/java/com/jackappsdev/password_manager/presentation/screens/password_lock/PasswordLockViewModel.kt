@@ -9,6 +9,7 @@ import com.jackappsdev.password_manager.domain.repository.UserPreferencesReposit
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -27,17 +28,17 @@ class PasswordLockViewModel @Inject constructor(
     override val effectFlow = _effectChannel.receiveAsFlow()
 
     init {
-        fetchInitialData()
+        onInit()
     }
 
-    private fun fetchInitialData() {
+    private fun onInit() {
         viewModelScope.launch {
             state = state.copy(hasPinSet = userPreferencesRepository.hasPinSet())
         }
     }
 
     fun lockApp() {
-        state = state.copy(hasBeenUnlocked = false, pin = "")
+        state = state.copy(hasBeenUnlocked = false, pin = EMPTY_STRING)
     }
 
     private fun onNumberPress(number: String) {
@@ -52,10 +53,10 @@ class PasswordLockViewModel @Inject constructor(
 
     private suspend fun verifyPin(): PasswordLockUiEffect {
         return if (userPreferencesRepository.verifyPin(state.pin)) {
-            state = state.copy(hasBeenUnlocked = true, pin = "")
+            state = state.copy(hasBeenUnlocked = true, pin = EMPTY_STRING)
             PasswordLockUiEffect.Unlock
         } else {
-            state = state.copy(pin = "")
+            state = state.copy(pin = EMPTY_STRING)
             PasswordLockUiEffect.IncorrectPassword
         }
     }

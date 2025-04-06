@@ -20,6 +20,7 @@ import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemUiEffect
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -74,11 +75,11 @@ class EditPasswordItemViewModel @Inject constructor(
         } else {
             val newPasswordItemModel = PasswordItemModel(
                 id = state.passwordItem?.id,
-                name = state.passwordItem?.name ?: "",
-                username = state.passwordItem?.username ?: "",
-                password = state.passwordItem?.password ?: "",
-                website = state.passwordItem?.website ?: "",
-                notes = state.passwordItem?.notes ?: "",
+                name = state.passwordItem?.name ?: EMPTY_STRING,
+                username = state.passwordItem?.username ?: EMPTY_STRING,
+                password = state.passwordItem?.password ?: EMPTY_STRING,
+                website = state.passwordItem?.website ?: EMPTY_STRING,
+                notes = state.passwordItem?.notes ?: EMPTY_STRING,
                 categoryId = state.category?.id,
                 isAddedToWatch = false,
                 createdAt = System.currentTimeMillis()

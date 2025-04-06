@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,9 +77,9 @@ fun SettingsScreen(
                 when (effect) {
                     is SettingsUiEffect.OnImportPasswords -> onImportPasswords(importIntent)
                     is SettingsUiEffect.OnExportPasswords -> onExportPasswords(exportIntent)
-                    is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
-                    is SettingsUiEffect.OpenScreenLockSettings -> onNoLockScreen()
                     is SettingsUiEffect.OnPasswordsExported -> onPasswordsExported()
+                    is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
+                    is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
                     is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
                 }
             }
@@ -155,6 +156,8 @@ fun SettingsScreen(
                 title = stringResource(R.string.label_export_passwords),
                 onClick = { onEvent(SettingsUiEvent.OnExportPasswords) }
             )
+
+            HorizontalDivider()
 
             SettingItem(
                 leadingIcon = Icons.Outlined.StarOutline,

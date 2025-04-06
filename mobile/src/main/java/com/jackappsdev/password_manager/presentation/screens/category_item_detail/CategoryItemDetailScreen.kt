@@ -2,9 +2,7 @@ package com.jackappsdev.password_manager.presentation.screens.category_item_deta
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Button
@@ -36,10 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -47,15 +40,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseModifiedTime
-import com.jackappsdev.password_manager.shared.constants.colorList
+import com.jackappsdev.password_manager.presentation.components.CheckmarkCircle
+import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEffect
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -148,7 +143,7 @@ fun CategoryItemDetailScreen(
                 .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
-                value = state.categoryModel?.name ?: "",
+                value = state.categoryModel?.name ?: EMPTY_STRING,
                 onValueChange = { onEvent(CategoryItemDetailUiEvent.OnEnterName(it)) },
                 label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -161,26 +156,15 @@ fun CategoryItemDetailScreen(
 
             LazyRow {
                 items(colorList) { item ->
-                    Box(
+                    ColoredCircle(
                         modifier = Modifier
                             .padding(end = 12.dp)
-                            .clip(CircleShape)
-                            .background(parseColor(item))
-                            .size(64.dp)
-                            .clickable { onEvent(CategoryItemDetailUiEvent.OnSelectColor(item)) }
+                            .clickable { onEvent(CategoryItemDetailUiEvent.OnSelectColor(item)) },
+                        color = item,
+                        size = 64.dp
                     ) {
                         if (state.categoryModel?.color == item) {
-                            Icon(
-                                imageVector = Icons.Outlined.Done,
-                                tint = Color.Black,
-                                contentDescription = stringResource(R.string.accessibility_selected_color),
-                                modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .fillMaxWidth()
-                                    .padding(20.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.White)
-                            )
+                            CheckmarkCircle()
                         }
                     }
                 }
@@ -192,7 +176,7 @@ fun CategoryItemDetailScreen(
                 value = if (state.categoryModel?.createdAt != null) {
                     parseModifiedTime(context, state.categoryModel.createdAt)
                 } else {
-                    ""
+                    EMPTY_STRING
                 },
                 onValueChange = {},
                 readOnly = true,

@@ -6,4 +6,5 @@ sealed class ChangePasswordUiEvent {
     data object ToggleShowPassword : ChangePasswordUiEvent()
     data object ToggleShowNewPassword : ChangePasswordUiEvent()
     data object OnPasswordChanged : ChangePasswordUiEvent()
+    data object NavigateUp : ChangePasswordUiEvent()
 }

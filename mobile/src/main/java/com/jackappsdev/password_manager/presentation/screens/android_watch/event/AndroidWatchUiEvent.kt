@@ -9,4 +9,5 @@ sealed class AndroidWatchUiEvent {
     data object DisableAndroidWatchSharing : AndroidWatchUiEvent()
     data object RequestPinChange : AndroidWatchUiEvent()
     data object RequestToggleAndroidWatch : AndroidWatchUiEvent()
+    data object NavigateUp : AndroidWatchUiEvent()
 }

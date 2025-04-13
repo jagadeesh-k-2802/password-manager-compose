@@ -1,8 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.category_item_detail
 
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,16 +28,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.core.parseModifiedTime
@@ -57,7 +52,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryItemDetailScreen(
-    navController: NavController,
     state: CategoryItemDetailState,
     effectFlow: Flow<CategoryItemDetailUiEffect>,
     effectHandler: CategoryItemDetailEffectHandler,
@@ -65,21 +59,7 @@ fun CategoryItemDetailScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
-    val dispatcher = backDispatcher.onBackPressedDispatcher
-
-    val backCallback = remember(state.isChanged) {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (state.isChanged) {
-                    onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog)
-                } else {
-                    navController.navigateUp()
-                }
-            }
-        }
-    }
 
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
@@ -91,14 +71,9 @@ fun CategoryItemDetailScreen(
         }
     }
 
-    DisposableEffect(lifecycleOwner, backDispatcher) {
-        dispatcher.addCallback(lifecycleOwner, backCallback)
-        onDispose { backCallback.remove() }
-    }
-
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
-            onConfirm = { navController.navigateUp() },
+            onConfirm = { onEvent(CategoryItemDetailUiEvent.NavigateUp) },
             onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog) }
         )
     }
@@ -110,12 +85,16 @@ fun CategoryItemDetailScreen(
         )
     }
 
+    BackHandler(enabled = state.isChanged) {
+        onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog)
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_edit_category)) },
                 navigationIcon = {
-                    IconButton(onClick = { backCallback.handleOnBackPressed() }) {
+                    IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
@@ -157,11 +136,10 @@ fun CategoryItemDetailScreen(
             LazyRow {
                 items(colorList) { item ->
                     ColoredCircle(
-                        modifier = Modifier
-                            .padding(end = 12.dp)
-                            .clickable { onEvent(CategoryItemDetailUiEvent.OnSelectColor(item)) },
-                        color = item,
-                        size = 64.dp
+                        modifier = Modifier.padding(end = 12.dp),
+                        size = 64.dp,
+                        onClick = { onEvent(CategoryItemDetailUiEvent.OnSelectColor(item)) },
+                        color = item
                     ) {
                         if (state.categoryModel?.color == item) {
                             CheckmarkCircle()

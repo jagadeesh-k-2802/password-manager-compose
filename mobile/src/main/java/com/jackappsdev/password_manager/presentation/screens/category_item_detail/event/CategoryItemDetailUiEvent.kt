@@ -7,4 +7,5 @@ sealed class CategoryItemDetailUiEvent {
     data class OnSelectColor(val color: String) : CategoryItemDetailUiEvent()
     data object ToggleUnsavedChangesDialog : CategoryItemDetailUiEvent()
     data object ToggleCategoryItemDeleteDialog : CategoryItemDetailUiEvent()
+    data object NavigateUp : CategoryItemDetailUiEvent()
 }

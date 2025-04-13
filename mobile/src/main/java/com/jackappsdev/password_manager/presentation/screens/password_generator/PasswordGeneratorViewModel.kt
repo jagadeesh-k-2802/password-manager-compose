@@ -70,7 +70,7 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
     }
 
     private fun copyToClipboard(): PasswordGeneratorUiEffect {
-        return PasswordGeneratorUiEffect.OnCopyToClipboard(state.password)
+        return PasswordGeneratorUiEffect.CopyToClipboard(state.password)
     }
 
     private fun isLastOption(value: Boolean): PasswordGeneratorUiEffect? {
@@ -81,7 +81,7 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
         if (!state.includeSymbols) count++
 
         return if (count == 3 && !value) {
-            PasswordGeneratorUiEffect.OnShowSnackbarMessage(R.string.text_all_options_warning)
+            PasswordGeneratorUiEffect.ShowSnackbarMessage(R.string.text_all_options_warning)
         } else {
             null
         }

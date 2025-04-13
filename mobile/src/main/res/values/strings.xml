@@ -68,7 +68,7 @@
     <string name="text_no_categories_available">No Categories Available</string>
     <string name="text_all_options_warning">Cannot turn off all options</string>
     <string name="text_import_passwords_note">Importing new passwords will remove all of your existing passwords thereafter, you must use this password to unlock this app.</string>
-    <string name="text_change_password_help">Changing your password won\'t affect your current passwords.</string>
+    <string name="text_change_password_help">Changing your password won\'t affect your current saved passwords.</string>
     <string name="text_filter_by_category">Filter By Category</string>
     <string name="text_sort_by">Sort By</string>
     <string name="text_a_to_z">A -> Z</string>

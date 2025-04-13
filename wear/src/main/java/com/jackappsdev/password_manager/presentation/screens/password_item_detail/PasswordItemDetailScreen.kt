@@ -3,7 +3,6 @@ package com.jackappsdev.password_manager.presentation.screens.password_item_deta
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.navigation.NavController
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun PasswordItemDetailScreen(
-    navController: NavController,
     state: PasswordItemDetailState,
     effectFlow: Flow<PasswordItemDetailUiEffect>,
     effectHandler: PasswordItemDetailEffectHandler,
@@ -45,7 +43,7 @@ fun PasswordItemDetailScreen(
 
     LaunchedEffect(state.passwordItem) {
         if (state.passwordItem == null && state.isValueAlreadySetOnce) {
-            navController.navigateUp()
+            onEvent(PasswordItemDetailUiEvent.NavigateUp)
         } else {
             onEvent(PasswordItemDetailUiEvent.ToggleIsAlreadySetOnce)
         }

@@ -17,7 +17,6 @@ fun CategoryItemDetailRoot(navController: NavController) {
     }
 
     CategoryItemDetailScreen(
-        navController = navController,
         state = viewModel.state,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

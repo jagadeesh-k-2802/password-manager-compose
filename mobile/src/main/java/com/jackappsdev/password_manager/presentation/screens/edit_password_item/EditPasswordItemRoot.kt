@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemEffectHandler
 
 @Composable
@@ -16,6 +17,7 @@ fun EditPasswordItemRoot(
     val viewModel: EditPasswordItemViewModel = hiltViewModel()
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val savedStateHandle = navController.currentBackStackEntryAsState().value?.savedStateHandle
 
     val effectHandler = remember {
         EditPasswordItemEffectHandler(
@@ -26,7 +28,7 @@ fun EditPasswordItemRoot(
     }
 
     EditPasswordItemScreen(
-        navController = navController,
+        savedStateHandle = savedStateHandle,
         state = viewModel.state,
         categoryItems = viewModel.categoryItems.collectAsState(listOf()),
         errorFlow = viewModel.errorFlow,

@@ -14,13 +14,16 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat.getString
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import com.jackappsdev.password_manager.shared.core.showToast
 
 class SettingsEffectHandler(
     activity: FragmentActivity,
+    private val navController: NavController,
     private val onEvent: (SettingsUiEvent) -> Unit
 ) {
     private val context: Context = activity.applicationContext
@@ -99,5 +102,17 @@ class SettingsEffectHandler(
         }
 
         context.startActivity(intent)
+    }
+
+    fun onNavigateToChangePassword() {
+        navController.navigate(Routes.ChangePassword)
+    }
+
+    fun onNavigateToManageCategories() {
+        navController.navigate(Routes.ManageCategories)
+    }
+
+    fun onNavigateToAndroidWatch() {
+        navController.navigate(Routes.AndroidWatch)
     }
 }

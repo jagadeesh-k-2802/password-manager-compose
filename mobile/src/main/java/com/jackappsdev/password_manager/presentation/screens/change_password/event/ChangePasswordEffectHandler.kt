@@ -14,4 +14,8 @@ class ChangePasswordEffectHandler(
         navController.navigateUp()
         context.showToast(context.getString(R.string.toast_password_changed_successfully))
     }
+
+    fun onNavigateUp() {
+        navController.navigateUp()
+    }
 }

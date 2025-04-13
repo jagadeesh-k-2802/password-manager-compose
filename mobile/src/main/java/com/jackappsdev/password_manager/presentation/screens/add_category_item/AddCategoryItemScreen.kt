@@ -1,8 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.add_category_item
 
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +27,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,7 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
@@ -67,9 +64,7 @@ fun AddCategoryItemScreen(
 ) {
     val error by errorFlow.collectAsState(initial = null)
     val scrollState = rememberScrollState()
-    val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
-    val dispatcher = backDispatcher.onBackPressedDispatcher
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(key1 = Unit) {
@@ -84,23 +79,6 @@ fun AddCategoryItemScreen(
         }
     }
 
-    val backCallback = remember(state.name) {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (state.name.isNotEmpty()) {
-                    onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility)
-                } else {
-                    navController.navigateUp()
-                }
-            }
-        }
-    }
-
-    DisposableEffect(lifecycleOwner, backDispatcher) {
-        dispatcher.addCallback(lifecycleOwner, backCallback)
-        onDispose { backCallback.remove() }
-    }
-
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
             onConfirm = { navController.navigateUp() },
@@ -108,12 +86,16 @@ fun AddCategoryItemScreen(
         )
     }
 
+    BackHandler(enabled = state.name.isNotEmpty()) {
+        onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility)
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_add_new_category)) },
                 navigationIcon = {
-                    IconButton(onClick = { backCallback.handleOnBackPressed() }) {
+                    IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
@@ -156,11 +138,10 @@ fun AddCategoryItemScreen(
             LazyRow {
                 items(colorList) { item ->
                     ColoredCircle(
-                        modifier = Modifier
-                            .padding(end = 12.dp)
-                            .clickable { onEvent(AddCategoryItemUiEvent.OnSelectColor(item)) },
+                        modifier = Modifier.padding(end = 12.dp),
+                        size = 64.dp,
+                        onClick = { onEvent(AddCategoryItemUiEvent.OnSelectColor(item)) },
                         color = item,
-                        size = 64.dp
                     ) {
                         if (state.color == item) {
                             CheckmarkCircle()

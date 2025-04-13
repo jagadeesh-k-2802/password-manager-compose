@@ -61,6 +61,7 @@ class AddCategoryItemViewModel @Inject constructor(
                 is AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility -> toggleUnsavedChangesDialog()
                 is AddCategoryItemUiEvent.OnEnterName -> onEnterName(event.name)
                 is AddCategoryItemUiEvent.OnSelectColor -> onSelectColor(event.color)
+                is AddCategoryItemUiEvent.NavigateUp -> AddCategoryItemUiEffect.NavigateUp()
             }
 
             if (effect is AddCategoryItemUiEffect) _effectChannel.send(effect)

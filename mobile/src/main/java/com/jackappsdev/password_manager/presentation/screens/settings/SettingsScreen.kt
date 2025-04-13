@@ -21,7 +21,6 @@ import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +28,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.settings.components.ImportPasswordsDialog
 import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
@@ -47,7 +44,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavController,
     state: SettingsState,
     effectFlow: Flow<SettingsUiEffect>,
     effectHandler: SettingsEffectHandler,
@@ -81,6 +77,9 @@ fun SettingsScreen(
                     is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
                     is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
                     is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
+                    is SettingsUiEffect.NavigateToChangePassword -> onNavigateToChangePassword()
+                    is SettingsUiEffect.NavigateToManageCategories -> onNavigateToManageCategories()
+                    is SettingsUiEffect.NavigateToAndroidWatch -> onNavigateToAndroidWatch()
                 }
             }
         }
@@ -111,21 +110,21 @@ fun SettingsScreen(
                 leadingIcon = Icons.Outlined.Lock,
                 trailingIcon = Icons.Outlined.ChevronRight,
                 title = stringResource(R.string.label_change_lock_password),
-                onClick = { navController.navigate(Routes.ChangePassword) }
+                onClick = { onEvent(SettingsUiEvent.NavigateToChangePassword) }
             )
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Category,
                 trailingIcon = Icons.Outlined.ChevronRight,
                 title = stringResource(R.string.label_manage_categories),
-                onClick = { navController.navigate(Routes.ManageCategories) }
+                onClick = { onEvent(SettingsUiEvent.NavigateToManageCategories) }
             )
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Watch,
                 trailingIcon = Icons.Outlined.ChevronRight,
                 title = stringResource(R.string.label_android_watch),
-                onClick = { navController.navigate(Routes.AndroidWatch) }
+                onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
             )
 
             ToggleSettingItem(
@@ -156,8 +155,6 @@ fun SettingsScreen(
                 title = stringResource(R.string.label_export_passwords),
                 onClick = { onEvent(SettingsUiEvent.OnExportPasswords) }
             )
-
-            HorizontalDivider()
 
             SettingItem(
                 leadingIcon = Icons.Outlined.StarOutline,

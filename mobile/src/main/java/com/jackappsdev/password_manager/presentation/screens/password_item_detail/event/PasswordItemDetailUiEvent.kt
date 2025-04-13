@@ -8,4 +8,6 @@ sealed class PasswordItemDetailUiEvent {
     data class CopyText(val text: String?) : PasswordItemDetailUiEvent()
     data class LaunchUrl(val url: String) : PasswordItemDetailUiEvent()
     data object ToggleIsAddedToWatch : PasswordItemDetailUiEvent()
+    data class NavigateToEditPassword(val id: Int) : PasswordItemDetailUiEvent()
+    data object NavigateUp : PasswordItemDetailUiEvent()
 }

@@ -85,12 +85,13 @@ class ChangePasswordViewModel @Inject constructor(
 
     override fun onEvent(event: ChangePasswordUiEvent) {
         viewModelScope.launch {
-            val effect = when(event) {
+            val effect = when (event) {
                 is ChangePasswordUiEvent.OnNewPasswordEnter -> onEnterText(event)
                 is ChangePasswordUiEvent.OnPasswordEnter -> onEnterText(event)
                 is ChangePasswordUiEvent.ToggleShowPassword -> toggleVisibility(event)
                 is ChangePasswordUiEvent.ToggleShowNewPassword -> toggleVisibility(event)
                 is ChangePasswordUiEvent.OnPasswordChanged -> onPasswordChanged()
+                is ChangePasswordUiEvent.NavigateUp -> ChangePasswordUiEffect.NavigateUp
             }
 
             if (effect is ChangePasswordUiEffect) _effectChannel.send(effect)

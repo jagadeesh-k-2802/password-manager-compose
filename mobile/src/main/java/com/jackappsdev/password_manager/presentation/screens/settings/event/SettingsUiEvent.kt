@@ -12,4 +12,7 @@ sealed class SettingsUiEvent {
     data object OnExportPasswords : SettingsUiEvent()
     data object OpenScreenLockSettings : SettingsUiEvent()
     data object OpenPlayStorePage : SettingsUiEvent()
+    data object NavigateToChangePassword : SettingsUiEvent()
+    data object NavigateToManageCategories : SettingsUiEvent()
+    data object NavigateToAndroidWatch : SettingsUiEvent()
 }

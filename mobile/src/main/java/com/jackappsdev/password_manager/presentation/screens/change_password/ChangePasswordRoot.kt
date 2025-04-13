@@ -20,7 +20,6 @@ fun ChangePasswordRoot(navController: NavController) {
     }
 
     ChangePasswordScreen(
-        navController = navController,
         state = viewModel.state,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

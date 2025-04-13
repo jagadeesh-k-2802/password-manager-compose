@@ -5,4 +5,5 @@ sealed class AddCategoryItemUiEvent {
     data object ToggleUnsavedChangesDialogVisibility : AddCategoryItemUiEvent()
     data class OnEnterName(val name: String) : AddCategoryItemUiEvent()
     data class OnSelectColor(val color: String) : AddCategoryItemUiEvent()
+    data object NavigateUp : AddCategoryItemUiEvent()
 }

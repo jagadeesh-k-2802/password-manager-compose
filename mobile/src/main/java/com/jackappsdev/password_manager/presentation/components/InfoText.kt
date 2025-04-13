@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.jackappsdev.password_manager.R
@@ -31,7 +31,11 @@ fun InfoText(
         horizontalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxWidth()
     ) {
-        Icon(imageVector = Icons.Default.Info, tint = Color.LightGray, contentDescription = null)
+        Icon(
+            imageVector = Icons.Default.Info,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            contentDescription = null
+        )
         Spacer(modifier = Modifier.width(pagePadding))
         Text(text = text)
     }

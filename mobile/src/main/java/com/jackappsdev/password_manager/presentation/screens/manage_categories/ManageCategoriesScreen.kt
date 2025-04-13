@@ -23,11 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.components.EmptyStateView
 import com.jackappsdev.password_manager.presentation.components.LoadingStateView
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.components.CategoryItemsView
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEffect
@@ -39,7 +37,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageCategoriesScreen(
-    navController: NavController,
     state: ManageCategoriesState,
     effectFlow: Flow<ManageCategoriesUiEffect>,
     effectHandler: ManageCategoriesEffectHandler,
@@ -52,8 +49,11 @@ fun ManageCategoriesScreen(
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
-                when(effect) {
-                    ManageCategoriesUiEffect.ScrollToTop -> onScrollToTop(lazyColumnState)
+                when (effect) {
+                    is ManageCategoriesUiEffect.ScrollToTop -> onScrollToTop(lazyColumnState)
+                    is ManageCategoriesUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
+                    is ManageCategoriesUiEffect.NavigateToCategoryItem -> onNavigateToCategoryItem(effect.id)
+                    is ManageCategoriesUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -63,7 +63,7 @@ fun ManageCategoriesScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { onEvent(ManageCategoriesUiEvent.NavigateUp) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
@@ -85,7 +85,7 @@ fun ManageCategoriesScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(Routes.AddCategoryItem) }) {
+            FloatingActionButton(onClick = { onEvent(ManageCategoriesUiEvent.NavigateToAddCategory) }) {
                 Icon(Icons.Rounded.Add, stringResource(R.string.accessibility_add_category))
             }
         },
@@ -105,7 +105,7 @@ fun ManageCategoriesScreen(
             }
 
             else -> {
-                CategoryItemsView(modifier, lazyColumnState, navController, categoryItems)
+                CategoryItemsView(modifier, lazyColumnState, categoryItems, onEvent)
             }
         }
     }

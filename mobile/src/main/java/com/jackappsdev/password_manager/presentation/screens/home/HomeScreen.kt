@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
@@ -28,12 +29,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.FilterBy
 import com.jackappsdev.password_manager.presentation.components.EmptyStateView
 import com.jackappsdev.password_manager.presentation.components.LoadingStateView
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.home.components.FilterByCategoryModalSheet
 import com.jackappsdev.password_manager.presentation.screens.home.components.PasswordItemsView
 import com.jackappsdev.password_manager.presentation.screens.home.components.SortModalSheet
@@ -48,7 +47,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
     state: HomeState,
     filterBySheet: SheetState,
     sortBySheet: SheetState,
@@ -87,14 +85,19 @@ fun HomeScreen(
                     is HomeUiEffect.ToggleSortSheetVisibility -> onToggleSortSheetVisibility()
                     is HomeUiEffect.ScrollToTop -> onScrollToTop()
                     is HomeUiEffect.LockApplication -> onLockApplication()
-                    is HomeUiEffect.NavigateToPasswordDetail -> onNavigateToPasswordDetail(effect.id)
-                    is HomeUiEffect.OnSearch -> onSearch()
-                    is HomeUiEffect.OnFilterSelected -> onFilterSelected(categoryItems)
-                    is HomeUiEffect.OnSortSelected -> onSortSelect(categoryItems)
-                    is HomeUiEffect.OnSearchCleared -> onSearchCleared()
+                    is HomeUiEffect.Search -> onSearch()
+                    is HomeUiEffect.FilterSelected -> onFilterSelected(categoryItems)
+                    is HomeUiEffect.SortSelected -> onSortSelect(categoryItems)
+                    is HomeUiEffect.SearchCleared -> onSearchCleared()
+                    is HomeUiEffect.NavigateToPasswordItem -> onNavigateToPasswordItem(effect.id)
+                    is HomeUiEffect.NavigateToAddPassword -> onNavigateToAddPassword()
                 }
             }
         }
+    }
+
+    BackHandler(enabled = state.isSearching) {
+        onEvent(HomeUiEvent.ClearSearch)
     }
 
     Scaffold(
@@ -143,7 +146,7 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(Routes.AddPasswordItem) }) {
+            FloatingActionButton(onClick = { onEvent(HomeUiEvent.NavigateToAddPassword) }) {
                 Icon(
                     imageVector = Icons.Sharp.Add,
                     contentDescription = stringResource(R.string.accessibility_add_item)

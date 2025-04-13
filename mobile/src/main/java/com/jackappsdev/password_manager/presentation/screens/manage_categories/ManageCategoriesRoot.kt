@@ -14,12 +14,12 @@ fun ManageCategoriesRoot(navController: NavController) {
 
     val effectHandler = remember {
         ManageCategoriesEffectHandler(
+            navController = navController,
             scope = scope
         )
     }
 
     ManageCategoriesScreen(
-        navController = navController,
         state = viewModel.state,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

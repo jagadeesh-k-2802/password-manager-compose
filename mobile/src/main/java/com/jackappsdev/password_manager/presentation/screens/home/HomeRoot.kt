@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -22,6 +23,7 @@ fun HomeRoot(navController: NavHostController) {
     val sortBySheet = rememberModalBottomSheetState()
     val lazyColumnState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     val effectHandler = remember {
         HomeEffectHandler(
@@ -31,12 +33,12 @@ fun HomeRoot(navController: NavHostController) {
             filterBySheet = filterBySheet,
             sortBySheet = sortBySheet,
             lazyColumnState = lazyColumnState,
-            keyboardController = keyboardController
+            keyboardController = keyboardController,
+            focusManager = focusManager
         )
     }
 
     HomeScreen(
-        navController = navController,
         state = viewModel.state,
         filterBySheet = filterBySheet,
         sortBySheet = sortBySheet,

@@ -69,6 +69,10 @@ class AndroidWatchEffectHandler(
         }
     }
 
+    fun onNavigateUp() {
+        navController.navigateUp()
+    }
+
     /**
      * Check if Wear OS Watch is connected & app is installed
      */

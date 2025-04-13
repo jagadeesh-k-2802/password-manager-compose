@@ -5,4 +5,5 @@ sealed class AndroidWatchUiEffect {
     data object RequestPinChange : AndroidWatchUiEffect()
     data object ConfirmToggleAndroidWatch : AndroidWatchUiEffect()
     data object DisableAndroidWatchSharing : AndroidWatchUiEffect()
+    data object NavigateUp : AndroidWatchUiEffect()
 }

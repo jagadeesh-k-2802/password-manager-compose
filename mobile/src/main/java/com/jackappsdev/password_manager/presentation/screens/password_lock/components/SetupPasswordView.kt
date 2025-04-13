@@ -111,7 +111,7 @@ fun SetupPasswordView(
         ),
     )
 
-    Spacer(modifier = Modifier.height(12.dp))
+    Spacer(modifier = Modifier.height(8.dp))
     InfoText(
         modifier = Modifier.padding(vertical = pagePadding),
         text = stringResource(R.string.text_password_warning_note)

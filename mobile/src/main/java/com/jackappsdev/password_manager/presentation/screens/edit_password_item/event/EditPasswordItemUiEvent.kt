@@ -15,4 +15,6 @@ sealed class EditPasswordItemUiEvent {
     data class OnEnterWebsite(val text: String) : EditPasswordItemUiEvent()
     data class OnEnterNotes(val text: String) : EditPasswordItemUiEvent()
     data class OnSelectCategory(val category: CategoryModel?) : EditPasswordItemUiEvent()
+    data object NavigateUp : EditPasswordItemUiEvent()
+    data object NavigateToAddCategory : EditPasswordItemUiEvent()
 }

@@ -19,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.change_password.components.ChangePasswordView
 import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordEffectHandler
@@ -33,7 +32,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangePasswordScreen(
-    navController: NavController,
     state: ChangePasswordState,
     effectFlow: Flow<ChangePasswordUiEffect>,
     effectHandler: ChangePasswordEffectHandler,
@@ -46,8 +44,9 @@ fun ChangePasswordScreen(
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
-                when(effect) {
-                    ChangePasswordUiEffect.OnPasswordChanged -> onPasswordChanged()
+                when (effect) {
+                    is ChangePasswordUiEffect.OnPasswordChanged -> onPasswordChanged()
+                    is ChangePasswordUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -57,7 +56,7 @@ fun ChangePasswordScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { onEvent(ChangePasswordUiEvent.NavigateUp) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)

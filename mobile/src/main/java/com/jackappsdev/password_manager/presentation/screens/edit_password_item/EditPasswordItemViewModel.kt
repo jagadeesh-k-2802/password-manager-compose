@@ -147,6 +147,8 @@ class EditPasswordItemViewModel @Inject constructor(
                 is EditPasswordItemUiEvent.OnEnterUsername -> onEnterText(event)
                 is EditPasswordItemUiEvent.OnEnterWebsite -> onEnterText(event)
                 is EditPasswordItemUiEvent.OnSelectCategory -> onSelectCategory(event.category)
+                is EditPasswordItemUiEvent.NavigateToAddCategory -> EditPasswordItemUiEffect.NavigateToAddCategory
+                is EditPasswordItemUiEvent.NavigateUp -> EditPasswordItemUiEffect.NavigateUp
             }
 
             if (effect is EditPasswordItemUiEffect) _effectChannel.send(effect)

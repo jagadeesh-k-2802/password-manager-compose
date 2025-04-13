@@ -6,16 +6,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.domain.model.CategoryModel
-import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEvent
 
 @Composable
 fun CategoryItemsView(
     modifier: Modifier = Modifier,
     lazyColumnState: LazyListState,
-    navController: NavController,
-    categoryItems: State<List<CategoryModel>>?
+    categoryItems: State<List<CategoryModel>>?,
+    onEvent: (ManageCategoriesUiEvent) -> Unit
 ) {
     LazyColumn(
         state = lazyColumnState,
@@ -23,9 +22,10 @@ fun CategoryItemsView(
     ) {
         categoryItems?.let {
             items(it.value) { item ->
-                CategoryItem(item) {
-                    navController.navigate(Routes.CategoryItemDetail(item.id ?: 0))
-                }
+                CategoryItem(
+                    item = item,
+                    onClick = { onEvent(ManageCategoriesUiEvent.NavigateToCategoryItem(item.id ?: 0)) }
+                )
             }
         }
     }

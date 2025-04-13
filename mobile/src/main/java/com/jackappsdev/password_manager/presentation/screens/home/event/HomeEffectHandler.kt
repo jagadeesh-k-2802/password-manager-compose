@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.navigation.NavHostController
 import com.jackappsdev.password_manager.R
@@ -21,7 +22,8 @@ class HomeEffectHandler(
     private val filterBySheet: SheetState,
     private val sortBySheet: SheetState,
     private val lazyColumnState: LazyListState,
-    private val keyboardController: SoftwareKeyboardController?
+    private val keyboardController: SoftwareKeyboardController?,
+    private val focusManager: FocusManager
 ) {
     fun onLockApplication() {
         context.showToast(context.getString(R.string.toast_app_locked))
@@ -53,15 +55,20 @@ class HomeEffectHandler(
         }
     }
 
-    fun onNavigateToPasswordDetail(id: Int) {
-        navController.navigate(Routes.PasswordItemDetail(id))
-    }
-
     fun onSearch() {
         keyboardController?.hide()
     }
 
     fun onSearchCleared() {
         keyboardController?.hide()
+        focusManager.clearFocus()
+    }
+
+    fun onNavigateToPasswordItem(id: Int) {
+        navController.navigate(Routes.PasswordItemDetail(id))
+    }
+
+    fun onNavigateToAddPassword() {
+        navController.navigate(Routes.AddPasswordItem)
     }
 }

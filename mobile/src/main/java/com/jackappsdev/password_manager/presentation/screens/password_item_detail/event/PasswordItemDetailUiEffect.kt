@@ -5,4 +5,6 @@ sealed class PasswordItemDetailUiEffect {
     data class LaunchUrl(val url: String) : PasswordItemDetailUiEffect()
     data object DeleteItem : PasswordItemDetailUiEffect()
     data object ToggleIsAddedToWatch : PasswordItemDetailUiEffect()
+    data class NavigateToEditPassword(val id: Int) : PasswordItemDetailUiEffect()
+    data object NavigateUp : PasswordItemDetailUiEffect()
 }

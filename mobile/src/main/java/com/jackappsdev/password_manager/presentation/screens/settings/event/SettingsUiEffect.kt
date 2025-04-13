@@ -7,4 +7,7 @@ sealed class SettingsUiEffect {
     data object BiometricAuthenticate : SettingsUiEffect()
     data object OpenScreenLockSettings : SettingsUiEffect()
     data object OpenPlayStorePage : SettingsUiEffect()
+    data object NavigateToChangePassword : SettingsUiEffect()
+    data object NavigateToManageCategories : SettingsUiEffect()
+    data object NavigateToAndroidWatch : SettingsUiEffect()
 }

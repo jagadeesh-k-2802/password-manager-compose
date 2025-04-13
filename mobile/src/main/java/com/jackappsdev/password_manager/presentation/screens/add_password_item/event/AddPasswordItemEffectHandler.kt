@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.presentation.screens.add_password_item.
 
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.navigation.NavController
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 
 class AddPasswordItemEffectHandler(
     val navController: NavController,
@@ -11,5 +12,9 @@ class AddPasswordItemEffectHandler(
     fun onNavigateUp() {
         keyboardController?.hide()
         navController.navigateUp()
+    }
+
+    fun onNavigateToAddCategory() {
+        navController.navigate(Routes.AddCategoryItem)
     }
 }

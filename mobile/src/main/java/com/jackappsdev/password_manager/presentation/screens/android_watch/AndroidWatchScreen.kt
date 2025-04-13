@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
 import com.jackappsdev.password_manager.presentation.screens.android_watch.components.DisableAndroidWatchDialog
@@ -50,7 +49,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AndroidWatchScreen(
-    navController: NavController,
     state: AndroidWatchState,
     effectFlow: Flow<AndroidWatchUiEffect>,
     effectHandler: AndroidWatchEffectHandler,
@@ -68,6 +66,7 @@ fun AndroidWatchScreen(
                     is AndroidWatchUiEffect.RequestPinChange -> onRequestPinChange()
                     is AndroidWatchUiEffect.ConfirmToggleAndroidWatch -> onConfirmToggleAndroidWatch()
                     is AndroidWatchUiEffect.DisableAndroidWatchSharing -> onDisableWatchSharing()
+                    is AndroidWatchUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -84,7 +83,7 @@ fun AndroidWatchScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { onEvent(AndroidWatchUiEvent.NavigateUp) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)

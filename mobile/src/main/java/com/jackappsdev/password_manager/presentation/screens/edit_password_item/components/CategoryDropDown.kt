@@ -18,11 +18,9 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.EditPasswordItemState
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemUiEvent
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
@@ -30,7 +28,6 @@ import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryDropDown(
-    navController: NavController,
     state: EditPasswordItemState,
     categoryItems: State<List<CategoryModel>>,
     onEvent: (EditPasswordItemUiEvent) -> Unit
@@ -100,7 +97,7 @@ fun CategoryDropDown(
                 },
                 text = { Text(text = stringResource(R.string.label_create_new_category)) },
                 onClick = {
-                    navController.navigate(Routes.AddCategoryItem)
+                    onEvent(EditPasswordItemUiEvent.NavigateToAddCategory)
                     onEvent(EditPasswordItemUiEvent.ToggleCategoryDropdownVisibility)
                 }
             )

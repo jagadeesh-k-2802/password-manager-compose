@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import kotlinx.serialization.encodeToString
@@ -37,5 +38,13 @@ class EditPasswordItemEffectHandler(
         dataClient.putDataItem(putDataRequest).addOnCompleteListener {
             navController.navigateUp()
         }
+    }
+
+    fun onNavigateToAddCategory() {
+        navController.navigate(Routes.AddCategoryItem)
+    }
+
+    fun onNavigateUp() {
+        navController.navigateUp()
     }
 }

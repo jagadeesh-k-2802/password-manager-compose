@@ -141,6 +141,8 @@ class AddPasswordItemViewModel @Inject constructor(
                 is AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility -> toggleIsUnsavedDialogVisible()
                 is AddPasswordItemUiEvent.SetIsAlreadyAutoFocus -> setIsAlreadyAutoFocus()
                 is AddPasswordItemUiEvent.OnSelectCategory -> onSetCategory(event.category)
+                is AddPasswordItemUiEvent.NavigateToAddCategory -> AddPasswordItemUiEffect.NavigateToAddCategory
+                is AddPasswordItemUiEvent.NavigateUp -> AddPasswordItemUiEffect.NavigateUp
             }
 
             if (effect is AddPasswordItemUiEffect) _effectChannel.send(effect)

@@ -43,8 +43,8 @@ fun PasswordGeneratorScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is PasswordGeneratorUiEffect.OnCopyToClipboard -> onCopyText(effect.text)
-                    is PasswordGeneratorUiEffect.OnShowSnackbarMessage -> onShowSnackbarMessage(effect.message)
+                    is PasswordGeneratorUiEffect.CopyToClipboard -> onCopyText(effect.text)
+                    is PasswordGeneratorUiEffect.ShowSnackbarMessage -> onShowSnackbarMessage(effect.message)
                 }
             }
         }

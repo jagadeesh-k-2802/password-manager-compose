@@ -14,16 +14,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailState
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEvent
 
 @Composable
 fun RowScope.PasswordItemDetailActions(
-    navController: NavController,
     state: PasswordItemDetailState,
     passwordItem: PasswordWithCategoryModel?,
     onEvent: (PasswordItemDetailUiEvent) -> Unit,
@@ -49,7 +46,7 @@ fun RowScope.PasswordItemDetailActions(
             text = { Text("Edit") },
             onClick = {
                 onEvent(PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility)
-                navController.navigate(Routes.EditPasswordItem(passwordItem?.id ?: 0))
+                onEvent(PasswordItemDetailUiEvent.NavigateToEditPassword(passwordItem?.id ?: 0))
             }
         )
 

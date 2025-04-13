@@ -106,6 +106,7 @@ class CategoryItemDetailViewModel @Inject constructor(
                 is CategoryItemDetailUiEvent.OnSelectColor -> onSelectColor(event.color)
                 is CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialog -> toggleCategoryItemDeleteDialog()
                 is CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog -> toggleUnsavedChangesDialog()
+                is CategoryItemDetailUiEvent.NavigateUp -> CategoryItemDetailUiEffect.NavigateUp
             }
 
             if (effect is CategoryItemDetailUiEffect) _effectChannel.send(effect)

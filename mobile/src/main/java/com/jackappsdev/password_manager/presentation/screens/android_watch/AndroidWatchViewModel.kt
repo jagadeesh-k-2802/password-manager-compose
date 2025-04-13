@@ -96,6 +96,7 @@ class AndroidWatchViewModel @Inject constructor(
                 is AndroidWatchUiEvent.DisableAndroidWatchSharing -> disableAndroidWatchSharing()
                 is AndroidWatchUiEvent.RequestPinChange -> AndroidWatchUiEffect.RequestPinChange
                 is AndroidWatchUiEvent.RequestToggleAndroidWatch -> AndroidWatchUiEffect.ConfirmToggleAndroidWatch
+                is AndroidWatchUiEvent.NavigateUp -> AndroidWatchUiEffect.NavigateUp
             }
 
             if (effect is AndroidWatchUiEffect) _effectChannel.send(effect)

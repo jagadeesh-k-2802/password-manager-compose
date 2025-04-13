@@ -9,6 +9,7 @@ import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.launchUrl
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
@@ -75,5 +76,13 @@ class PasswordItemDetailEffectHandler(
                 }
             )
         }
+    }
+
+    fun onNavigateToEditPassword(id: Int) {
+        navController.navigate(Routes.EditPasswordItem(id))
+    }
+
+    fun onNavigateUp() {
+        navController.navigateUp()
     }
 }

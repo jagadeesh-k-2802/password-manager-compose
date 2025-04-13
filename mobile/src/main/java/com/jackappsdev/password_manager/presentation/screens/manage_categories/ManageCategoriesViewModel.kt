@@ -44,6 +44,9 @@ class ManageCategoriesViewModel @Inject constructor(
         viewModelScope.launch {
             val effect = when (event) {
                 is ManageCategoriesUiEvent.ScrollToTop -> ManageCategoriesUiEffect.ScrollToTop
+                is ManageCategoriesUiEvent.NavigateToCategoryItem -> ManageCategoriesUiEffect.NavigateToCategoryItem(event.id)
+                is ManageCategoriesUiEvent.NavigateToAddCategory -> ManageCategoriesUiEffect.NavigateToAddCategory
+                is ManageCategoriesUiEvent.NavigateUp -> ManageCategoriesUiEffect.NavigateUp
             }
 
             _effectChannel.send(effect)

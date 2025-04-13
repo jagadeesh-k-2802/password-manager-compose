@@ -15,4 +15,6 @@ sealed class AddPasswordItemUiEvent {
     data object ToggleIsUnsavedDialogVisibility : AddPasswordItemUiEvent()
     data object SetIsAlreadyAutoFocus : AddPasswordItemUiEvent()
     data class OnSelectCategory(val category: CategoryModel?) : AddPasswordItemUiEvent()
+    data object NavigateUp : AddPasswordItemUiEvent()
+    data object NavigateToAddCategory : AddPasswordItemUiEvent()
 }

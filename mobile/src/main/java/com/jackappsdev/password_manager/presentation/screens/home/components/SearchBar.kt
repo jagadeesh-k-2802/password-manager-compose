@@ -40,10 +40,10 @@ fun SearchBar(state: HomeState, onEvent: (HomeUiEvent) -> Unit) {
             SearchBarDefaults.InputField(
                 query = state.searchQuery,
                 onQueryChange = { query ->
-                    onEvent(HomeUiEvent.OnEnterSearchQuery(query))
+                    onEvent(HomeUiEvent.EnterSearchQuery(query))
                     debouncedFilter(Unit)
                 },
-                onSearch = { onEvent(HomeUiEvent.OnSearch) },
+                onSearch = { onEvent(HomeUiEvent.Search) },
                 expanded = false,
                 onExpandedChange = { },
                 placeholder = { Text(stringResource(R.string.label_search)) },
@@ -55,7 +55,7 @@ fun SearchBar(state: HomeState, onEvent: (HomeUiEvent) -> Unit) {
                 },
                 trailingIcon = {
                     if (state.searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { onEvent(HomeUiEvent.OnClearSearch) }) {
+                        IconButton(onClick = { onEvent(HomeUiEvent.ClearSearch) }) {
                             Icon(
                                 imageVector = Icons.Outlined.Clear,
                                 contentDescription = stringResource(R.string.accessibility_clear_search)

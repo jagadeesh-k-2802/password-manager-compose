@@ -10,9 +10,12 @@ class AddCategoryItemEffectHandler(
     private val navController: NavController
 ) {
 
-    fun onNavigateUp(model: CategoryModel) {
+    fun onNavigateUp(model: CategoryModel?) {
         navController.navigateUp()
-        val savedState = navController.currentBackStackEntry?.savedStateHandle
-        savedState?.set(CREATED_CATEGORY, Json.encodeToString(model))
+
+        model?.let {
+            val savedState = navController.currentBackStackEntry?.savedStateHandle
+            savedState?.set(CREATED_CATEGORY, Json.encodeToString(model))
+        }
     }
 }

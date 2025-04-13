@@ -27,7 +27,6 @@ fun AndroidWatchRoot(navController: NavController) {
     }
 
     AndroidWatchScreen(
-        navController = navController,
         state = viewModel.state,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

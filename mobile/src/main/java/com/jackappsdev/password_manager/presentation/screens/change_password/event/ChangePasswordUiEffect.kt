@@ -2,4 +2,5 @@ package com.jackappsdev.password_manager.presentation.screens.change_password.ev
 
 sealed class ChangePasswordUiEffect {
     data object OnPasswordChanged : ChangePasswordUiEffect()
+    data object NavigateUp : ChangePasswordUiEffect()
 }

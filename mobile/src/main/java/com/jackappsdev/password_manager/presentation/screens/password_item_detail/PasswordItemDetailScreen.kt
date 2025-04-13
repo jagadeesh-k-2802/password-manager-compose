@@ -36,7 +36,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
@@ -56,7 +55,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordItemDetailScreen(
-    navController: NavController,
     state: PasswordItemDetailState,
     passwordItem: Flow<PasswordWithCategoryModel?>,
     effectFlow: Flow<PasswordItemDetailUiEffect>,
@@ -75,6 +73,8 @@ fun PasswordItemDetailScreen(
                     is PasswordItemDetailUiEffect.LaunchUrl -> onLaunchUrl(effect.url)
                     is PasswordItemDetailUiEffect.DeleteItem -> onDeleteItem(passwordItem)
                     is PasswordItemDetailUiEffect.ToggleIsAddedToWatch -> onToggleIsAddedToWatch(passwordItem)
+                    is PasswordItemDetailUiEffect.NavigateToEditPassword -> onNavigateToEditPassword(effect.id)
+                    is PasswordItemDetailUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -98,7 +98,7 @@ fun PasswordItemDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { onEvent(PasswordItemDetailUiEvent.NavigateUp) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
@@ -107,7 +107,6 @@ fun PasswordItemDetailScreen(
                 },
                 actions = {
                     PasswordItemDetailActions(
-                        navController = navController,
                         state = state,
                         passwordItem = passwordItem,
                         onEvent = onEvent

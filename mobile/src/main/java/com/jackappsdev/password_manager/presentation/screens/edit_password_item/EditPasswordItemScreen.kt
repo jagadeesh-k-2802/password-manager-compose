@@ -1,6 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +29,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -47,9 +46,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.lifecycle.SavedStateHandle
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
@@ -68,7 +65,7 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditPasswordItemScreen(
-    navController: NavController,
+    savedStateHandle: SavedStateHandle?,
     state: EditPasswordItemState,
     categoryItems: State<List<CategoryModel>>,
     errorFlow: Flow<EditPasswordItemError>,
@@ -78,24 +75,9 @@ fun EditPasswordItemScreen(
 ) {
     val error by errorFlow.collectAsState(initial = null)
     val scrollState = rememberScrollState()
-    val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
-    val dispatcher = backDispatcher.onBackPressedDispatcher
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val savedStateHandle = navController.currentBackStackEntryAsState().value?.savedStateHandle
-
-    val backCallback = remember(state.isChanged) {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (state.isChanged) {
-                    onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility)
-                } else {
-                    navController.navigateUp()
-                }
-            }
-        }
-    }
 
     LaunchedEffect(key1 = Unit) {
         if (!state.isAlreadyAutoFocused) {
@@ -107,6 +89,8 @@ fun EditPasswordItemScreen(
             with(effectHandler) {
                 when (effect) {
                     is EditPasswordItemUiEffect.OnEditComplete -> onEditComplete(state.passwordItem)
+                    is EditPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
+                    is EditPasswordItemUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -120,16 +104,15 @@ fun EditPasswordItemScreen(
         }
     }
 
-    DisposableEffect(lifecycleOwner, backDispatcher) {
-        dispatcher.addCallback(lifecycleOwner, backCallback)
-        onDispose { backCallback.remove() }
-    }
-
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
-            onConfirm = { navController.navigateUp() },
+            onConfirm = { onEvent(EditPasswordItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility) }
         )
+    }
+
+    BackHandler(enabled = state.isChanged) {
+        onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility)
     }
 
     Scaffold(
@@ -137,7 +120,7 @@ fun EditPasswordItemScreen(
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_edit_item)) },
                 navigationIcon = {
-                    IconButton(onClick = { backCallback.handleOnBackPressed() }) {
+                    IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
@@ -271,7 +254,6 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             CategoryDropDown(
-                navController = navController,
                 state = state,
                 categoryItems = categoryItems,
                 onEvent = onEvent

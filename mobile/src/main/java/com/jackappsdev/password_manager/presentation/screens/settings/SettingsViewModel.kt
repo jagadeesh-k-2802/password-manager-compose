@@ -106,6 +106,9 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.OnExportPasswords -> SettingsUiEffect.OnExportPasswords
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings
                 is SettingsUiEvent.OpenPlayStorePage -> SettingsUiEffect.OpenPlayStorePage
+                is SettingsUiEvent.NavigateToAndroidWatch -> SettingsUiEffect.NavigateToAndroidWatch
+                is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
+                is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories
             }
 
             if (effect is SettingsUiEffect) { _effectChannel.send(effect) }

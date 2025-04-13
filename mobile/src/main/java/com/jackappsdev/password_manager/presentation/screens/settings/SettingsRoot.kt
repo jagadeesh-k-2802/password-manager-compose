@@ -16,12 +16,12 @@ fun SettingsRoot(navController: NavController) {
     val effectHandler = remember {
         SettingsEffectHandler(
             activity = activity,
+            navController = navController,
             onEvent = viewModel::onEvent
         )
     }
 
     SettingsScreen(
-        navController = navController,
         state = viewModel.state,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

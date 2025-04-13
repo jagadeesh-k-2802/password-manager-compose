@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.InfoText
 import com.jackappsdev.password_manager.presentation.screens.change_password.ChangePasswordError
 import com.jackappsdev.password_manager.presentation.screens.change_password.ChangePasswordState
 import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEvent
@@ -34,9 +35,6 @@ fun ChangePasswordView(
     state: ChangePasswordState,
     onEvent: (ChangePasswordUiEvent) -> Unit,
 ) {
-    Text(stringResource(R.string.text_change_password_help))
-    Spacer(modifier = Modifier.height(12.dp))
-
     OutlinedTextField(
         value = state.currentPassword,
         onValueChange = { onEvent(ChangePasswordUiEvent.OnPasswordEnter(it)) },
@@ -69,8 +67,6 @@ fun ChangePasswordView(
             }
         },
     )
-
-    Spacer(modifier = Modifier.height(4.dp))
 
     OutlinedTextField(
         value = state.newPassword,
@@ -105,6 +101,8 @@ fun ChangePasswordView(
         },
     )
 
+    Spacer(modifier = Modifier.height(8.dp))
+    InfoText(text = stringResource(R.string.text_change_password_help))
     Spacer(modifier = Modifier.height(16.dp))
 
     Button(

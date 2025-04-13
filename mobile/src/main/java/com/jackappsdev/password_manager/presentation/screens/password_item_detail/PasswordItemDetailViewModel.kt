@@ -100,6 +100,8 @@ class PasswordItemDetailViewModel @Inject constructor(
                 is PasswordItemDetailUiEvent.ToggleIsAddedToWatch -> toggleIsAddedToWatch()
                 is PasswordItemDetailUiEvent.CopyText -> PasswordItemDetailUiEffect.CopyText(event.text)
                 is PasswordItemDetailUiEvent.LaunchUrl -> PasswordItemDetailUiEffect.LaunchUrl(event.url)
+                is PasswordItemDetailUiEvent.NavigateToEditPassword -> PasswordItemDetailUiEffect.NavigateToEditPassword(event.id)
+                is PasswordItemDetailUiEvent.NavigateUp -> PasswordItemDetailUiEffect.NavigateUp
             }
 
             if (effect is PasswordItemDetailUiEffect) _effectChannel.send(effect)

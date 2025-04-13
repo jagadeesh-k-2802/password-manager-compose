@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
         )
 
         if (state.searchQuery.isNotEmpty()) { searchItems() }
-        return HomeUiEffect.OnSortSelected
+        return HomeUiEffect.SortSelected
     }
 
     private suspend fun selectFilterBy(filterBy: FilterBy): HomeUiEffect {
@@ -87,12 +87,12 @@ class HomeViewModel @Inject constructor(
         )
 
         if (state.searchQuery.isNotEmpty()) { searchItems() }
-        return HomeUiEffect.OnFilterSelected
+        return HomeUiEffect.FilterSelected
     }
 
     private fun onClearSearch(): HomeUiEffect {
         state = state.copy(searchQuery = EMPTY_STRING, isSearching = false, filteredItems = null)
-        return HomeUiEffect.OnSearchCleared
+        return HomeUiEffect.SearchCleared
     }
 
     private fun onEnterSearchQuery(query: String) {
@@ -123,16 +123,17 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val effect = when (event) {
                 is HomeUiEvent.LockApplication -> lockApplication()
-                is HomeUiEvent.OnClearSearch -> onClearSearch()
-                is HomeUiEvent.OnEnterSearchQuery -> onEnterSearchQuery(event.query)
+                is HomeUiEvent.ClearSearch -> onClearSearch()
+                is HomeUiEvent.EnterSearchQuery -> onEnterSearchQuery(event.query)
                 is HomeUiEvent.SearchItems -> searchItems()
                 is HomeUiEvent.SelectFilterBy -> selectFilterBy(event.filterBy)
                 is HomeUiEvent.SelectSortBy -> selectSortBy(event.sortBy)
-                is HomeUiEvent.OnSearch -> HomeUiEffect.OnSearch
+                is HomeUiEvent.Search -> HomeUiEffect.Search
                 is HomeUiEvent.ScrollToTop -> HomeUiEffect.ScrollToTop
-                is HomeUiEvent.ToggleFilterSheetVisibility -> HomeUiEffect.ToggleFilterSheetVisibility
                 is HomeUiEvent.ToggleSortSheetVisibility -> HomeUiEffect.ToggleSortSheetVisibility
-                is HomeUiEvent.NavigateToPasswordDetail -> HomeUiEffect.NavigateToPasswordDetail(event.id)
+                is HomeUiEvent.ToggleFilterSheetVisibility -> HomeUiEffect.ToggleFilterSheetVisibility
+                is HomeUiEvent.NavigateToPasswordItem -> HomeUiEffect.NavigateToPasswordItem(event.id)
+                is HomeUiEvent.NavigateToAddPassword -> HomeUiEffect.NavigateToAddPassword
             }
 
             if (effect is HomeUiEffect) _effectChannel.send(effect)

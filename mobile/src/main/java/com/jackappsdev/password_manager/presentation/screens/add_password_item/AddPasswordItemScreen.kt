@@ -1,6 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +29,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -47,9 +46,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.lifecycle.SavedStateHandle
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
@@ -68,34 +65,19 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPasswordItemScreen(
-    navController: NavController,
+    savedStateHandle: SavedStateHandle?,
     state: AddPasswordItemState,
     categoryItems: State<List<CategoryModel>>,
     errorFlow: Flow<AddPasswordItemError>,
     effectFlow: Flow<AddPasswordItemUiEffect>,
     effectHandler: AddPasswordItemEffectHandler,
-    onEvent: (AddPasswordItemUiEvent) -> Unit
+    onEvent: (AddPasswordItemUiEvent) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
-    val dispatcher = backDispatcher.onBackPressedDispatcher
-    val savedStateHandle = navController.currentBackStackEntryAsState().value?.savedStateHandle
     val error by errorFlow.collectAsState(initial = null)
-
-    val backCallback = remember(state.hasUserEnteredDetails) {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (state.hasUserEnteredDetails) {
-                    onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility)
-                } else {
-                    navController.navigateUp()
-                }
-            }
-        }
-    }
 
     LaunchedEffect(key1 = savedStateHandle) {
         if (savedStateHandle?.contains(CREATED_CATEGORY) == true) {
@@ -113,23 +95,23 @@ fun AddPasswordItemScreen(
 
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
-                when(effect) {
-                    AddPasswordItemUiEffect.NavigateUp -> onNavigateUp()
+                when (effect) {
+                    is AddPasswordItemUiEffect.NavigateUp -> onNavigateUp()
+                    is AddPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
                 }
             }
         }
     }
 
-    DisposableEffect(lifecycleOwner, backDispatcher) {
-        dispatcher.addCallback(lifecycleOwner, backCallback)
-        onDispose { backCallback.remove() }
-    }
-
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
-            onConfirm = { navController.navigateUp() },
+            onConfirm = { onEvent(AddPasswordItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility) }
         )
+    }
+
+    BackHandler(state.hasUserEnteredDetails) {
+        onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility)
     }
 
     Scaffold(
@@ -137,7 +119,7 @@ fun AddPasswordItemScreen(
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_add_new_password)) },
                 navigationIcon = {
-                    IconButton(onClick = { backCallback.handleOnBackPressed() }) {
+                    IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
@@ -270,7 +252,6 @@ fun AddPasswordItemScreen(
             Spacer(modifier = Modifier.height(15.dp))
 
             CategoryDropDown(
-                navController = navController,
                 state = state,
                 categoryItems = categoryItems,
                 onEvent = onEvent

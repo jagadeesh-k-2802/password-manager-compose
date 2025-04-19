@@ -74,19 +74,19 @@ fun CategoryItemDetailScreen(
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
             onConfirm = { onEvent(CategoryItemDetailUiEvent.NavigateUp) },
-            onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog) }
+            onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialogVisibility) }
         )
     }
 
     if (state.isDeleteDialogVisible) {
         CategoryItemDeleteDialog(
             onConfirm = { onEvent(CategoryItemDetailUiEvent.DeleteCategoryItem) },
-            onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialog) }
+            onDismiss = { onEvent(CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialogVisibility) }
         )
     }
 
     BackHandler(enabled = state.isChanged) {
-        onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog)
+        onEvent(CategoryItemDetailUiEvent.ToggleUnsavedChangesDialogVisibility)
     }
 
     Scaffold(
@@ -103,7 +103,7 @@ fun CategoryItemDetailScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = { onEvent(CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialog) }
+                        onClick = { onEvent(CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialogVisibility) }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
@@ -123,13 +123,13 @@ fun CategoryItemDetailScreen(
         ) {
             OutlinedTextField(
                 value = state.categoryModel?.name ?: EMPTY_STRING,
-                onValueChange = { onEvent(CategoryItemDetailUiEvent.OnEnterName(it)) },
+                onValueChange = { onEvent(CategoryItemDetailUiEvent.EnterName(it)) },
                 label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(text = stringResource(R.string.label_category_color), style = MaterialTheme.typography.labelLarge)
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -137,8 +137,8 @@ fun CategoryItemDetailScreen(
                 items(colorList) { item ->
                     ColoredCircle(
                         modifier = Modifier.padding(end = 12.dp),
-                        size = 64.dp,
-                        onClick = { onEvent(CategoryItemDetailUiEvent.OnSelectColor(item)) },
+                        size = 48.dp,
+                        onClick = { onEvent(CategoryItemDetailUiEvent.SelectColor(item)) },
                         color = item
                     ) {
                         if (state.categoryModel?.color == item) {
@@ -148,7 +148,7 @@ fun CategoryItemDetailScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = if (state.categoryModel?.createdAt != null) {
@@ -162,7 +162,7 @@ fun CategoryItemDetailScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { onEvent(CategoryItemDetailUiEvent.UpdateCategoryItem) },

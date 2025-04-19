@@ -112,7 +112,7 @@ fun parseColor(string: String): Color {
 }
 
 /**
- *
+ * Parse the Date from the given [time] in milliseconds to a formatted string
  */
 fun parseModifiedTime(context: Context, time: Long): String {
     val is24Hours = DateFormat.is24HourFormat(context)

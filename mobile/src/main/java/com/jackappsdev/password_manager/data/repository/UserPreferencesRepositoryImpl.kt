@@ -13,46 +13,26 @@ class UserPreferencesRepositoryImpl(
     private val dataStore: DataStore<UserSettings>
 ) : UserPreferencesRepository {
 
-    /**
-     * Return the password for DB encryption purpose
-     */
     override fun getPassword(): String? {
         return runBlocking(Dispatchers.IO) { dataStore.data.first().password }
     }
 
-    /**
-     * Set password for the first time only
-     */
-    override suspend fun setPassword(newPassword: String) {
+    override suspend fun setInitialPassword(newPassword: String) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(password = newPassword) }
     }
 
-    /**
-     * Check whether user has a password already
-     */
     override suspend fun hasPasswordSet(): Boolean {
-        val userSettings = dataStore.data.first()
-        return !userSettings.password.isNullOrBlank()
+        return dataStore.data.first().password.isNullOrBlank().not()
     }
 
-    /**
-     * Verify password when unlocking
-     */
     override suspend fun verifyPassword(password: String): Boolean {
-        val prevPassword = dataStore.data.first().password
-        return password == prevPassword
+        return password == dataStore.data.first().password
     }
 
-    /**
-     * Check whether user has enabled unlock using screen lock
-     */
     override suspend fun getScreenLockToUnlock(): Boolean {
         return dataStore.data.first().useScreenLockToUnlock
     }
 
-    /**
-     * Set useScreenLockToUnlock preference according to user
-     */
     override suspend fun setUseScreenLockToUnlock(newValue: Boolean) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(useScreenLockToUnlock = newValue) }
     }
@@ -66,8 +46,7 @@ class UserPreferencesRepositoryImpl(
     }
 
     override suspend fun hasAndroidWatchPinSet(): Boolean {
-        val userSettings = dataStore.data.first()
-        return !userSettings.androidWatchPin.isNullOrBlank()
+        return dataStore.data.first().androidWatchPin.isNullOrBlank().not()
     }
 
     override suspend fun setAndroidWatchPinSet(newPin: String?) {

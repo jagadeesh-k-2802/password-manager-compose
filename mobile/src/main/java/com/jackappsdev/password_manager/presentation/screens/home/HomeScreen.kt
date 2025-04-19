@@ -81,14 +81,14 @@ fun HomeScreen(
         with(effectHandler) {
             effectFlow.collectLatest { effect ->
                 when (effect) {
+                    is HomeUiEffect.LockApplication -> onLockApplication()
+                    is HomeUiEffect.ScrollToTop -> onScrollToTop()
+                    is HomeUiEffect.Search -> onSearch()
+                    is HomeUiEffect.SearchCleared -> onSearchCleared()
                     is HomeUiEffect.ToggleFilterSheetVisibility -> onToggleFilterSheetVisibility()
                     is HomeUiEffect.ToggleSortSheetVisibility -> onToggleSortSheetVisibility()
-                    is HomeUiEffect.ScrollToTop -> onScrollToTop()
-                    is HomeUiEffect.LockApplication -> onLockApplication()
-                    is HomeUiEffect.Search -> onSearch()
                     is HomeUiEffect.FilterSelected -> onFilterSelected(categoryItems)
                     is HomeUiEffect.SortSelected -> onSortSelect(categoryItems)
-                    is HomeUiEffect.SearchCleared -> onSearchCleared()
                     is HomeUiEffect.NavigateToPasswordItem -> onNavigateToPasswordItem(effect.id)
                     is HomeUiEffect.NavigateToAddPassword -> onNavigateToAddPassword()
                 }

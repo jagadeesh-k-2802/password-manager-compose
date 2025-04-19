@@ -25,8 +25,22 @@ class HomeEffectHandler(
     private val keyboardController: SoftwareKeyboardController?,
     private val focusManager: FocusManager
 ) {
+
     fun onLockApplication() {
         context.showToast(context.getString(R.string.toast_app_locked))
+    }
+
+    fun onScrollToTop() {
+        scope.launch { lazyColumnState.animateScrollToItem(0) }
+    }
+
+    fun onSearch() {
+        keyboardController?.hide()
+    }
+
+    fun onSearchCleared() {
+        keyboardController?.hide()
+        focusManager.clearFocus()
     }
 
     fun onToggleFilterSheetVisibility() {
@@ -37,17 +51,6 @@ class HomeEffectHandler(
         scope.launch { sortBySheet.show() }
     }
 
-    fun onScrollToTop() {
-        scope.launch { lazyColumnState.animateScrollToItem(0) }
-    }
-
-    fun onSortSelect(categoryItems: List<CategoryModel>?) {
-        scope.launch {
-            if (categoryItems?.isNotEmpty() == true) { lazyColumnState.animateScrollToItem(0) }
-            sortBySheet.hide()
-        }
-    }
-
     fun onFilterSelected(categoryItems: List<CategoryModel>?) {
         scope.launch {
             if (categoryItems?.isNotEmpty() == true) { lazyColumnState.animateScrollToItem(0) }
@@ -55,13 +58,11 @@ class HomeEffectHandler(
         }
     }
 
-    fun onSearch() {
-        keyboardController?.hide()
-    }
-
-    fun onSearchCleared() {
-        keyboardController?.hide()
-        focusManager.clearFocus()
+    fun onSortSelect(categoryItems: List<CategoryModel>?) {
+        scope.launch {
+            if (categoryItems?.isNotEmpty() == true) { lazyColumnState.animateScrollToItem(0) }
+            sortBySheet.hide()
+        }
     }
 
     fun onNavigateToPasswordItem(id: Int) {

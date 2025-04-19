@@ -21,7 +21,7 @@ fun BackSpaceChip(
     onEvent: (PasswordLockUiEvent) -> Unit
 ) {
     Chip(
-        onClick = { onEvent(PasswordLockUiEvent.OnBackSpacePress) },
+        onClick = { onEvent(PasswordLockUiEvent.BackSpacePress) },
         modifier = modifier,
         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(horizontal = 12.dp),

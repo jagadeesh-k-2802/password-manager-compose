@@ -15,9 +15,7 @@ class UserPreferencesRepositoryImpl(
      * Return the password for DB encryption purpose
      */
     override fun getPin(): String? {
-        return runBlocking(Dispatchers.IO) {
-            return@runBlocking dataStore.data.first().pin
-        }
+        return runBlocking(Dispatchers.IO) { dataStore.data.first().pin }
     }
 
     /**
@@ -31,15 +29,13 @@ class UserPreferencesRepositoryImpl(
      * Verify pin when unlocking
      */
     override suspend fun verifyPin(pin: String): Boolean {
-        val prevPin = dataStore.data.first().pin
-        return pin == prevPin
+        return pin == dataStore.data.first().pin
     }
 
     /**
      * Check whether user has a password already
      */
     override suspend fun hasPinSet(): Boolean {
-        val userSettings = dataStore.data.first()
-        return !userSettings.pin.isNullOrBlank()
+        return dataStore.data.first().pin.isNullOrBlank().not()
     }
 }

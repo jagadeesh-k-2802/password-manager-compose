@@ -82,13 +82,13 @@ fun EditPasswordItemScreen(
     LaunchedEffect(key1 = Unit) {
         if (!state.isAlreadyAutoFocused) {
             focusRequester.requestFocus()
-            onEvent(EditPasswordItemUiEvent.ToggleIsAlreadyAutoFocused)
+            onEvent(EditPasswordItemUiEvent.ToggleAlreadyAutoFocused)
         }
 
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is EditPasswordItemUiEffect.OnEditComplete -> onEditComplete(state.passwordItem)
+                    is EditPasswordItemUiEffect.EditComplete -> onEditComplete(state.passwordItem)
                     is EditPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
                     is EditPasswordItemUiEffect.NavigateUp -> onNavigateUp()
                 }
@@ -100,7 +100,7 @@ fun EditPasswordItemScreen(
         if (savedStateHandle?.contains(CREATED_CATEGORY) == true) {
             val json = savedStateHandle[CREATED_CATEGORY] ?: EMPTY_STRING
             val model = Json.decodeFromString<CategoryModel>(json)
-            onEvent(EditPasswordItemUiEvent.OnSelectCategory(model))
+            onEvent(EditPasswordItemUiEvent.SelectCategory(model))
         }
     }
 
@@ -140,7 +140,7 @@ fun EditPasswordItemScreen(
         ) {
             OutlinedTextField(
                 value = state.passwordItem?.name ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterName(it)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterName(it)) },
                 isError = error is EditPasswordItemError.NameError,
                 supportingText = {
                     error?.let {
@@ -161,11 +161,9 @@ fun EditPasswordItemScreen(
                     .focusRequester(focusRequester)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
             OutlinedTextField(
                 value = state.passwordItem?.username ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterUsername(it)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterUsername(it)) },
                 label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -178,11 +176,11 @@ fun EditPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = state.passwordItem?.password ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterPassword(it)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterPassword(it)) },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -193,7 +191,7 @@ fun EditPasswordItemScreen(
                 },
                 trailingIcon = {
                     Row {
-                        IconButton(onClick = { onEvent(EditPasswordItemUiEvent.OnGenerateRandomPassword) }) {
+                        IconButton(onClick = { onEvent(EditPasswordItemUiEvent.GenerateRandomPassword) }) {
                             Icon(
                                 imageVector = Icons.Outlined.Refresh,
                                 contentDescription = stringResource(R.string.accessibility_toggle_password)
@@ -220,11 +218,11 @@ fun EditPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = state.passwordItem?.website ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterWebsite(it)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterWebsite(it)) },
                 label = { Text(stringResource(R.string.label_website)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -237,11 +235,11 @@ fun EditPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = state.passwordItem?.notes ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.OnEnterNotes(it)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterNotes(it)) },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
@@ -251,7 +249,7 @@ fun EditPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             CategoryDropDown(
                 state = state,
@@ -259,7 +257,7 @@ fun EditPasswordItemScreen(
                 onEvent = onEvent
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { onEvent(EditPasswordItemUiEvent.EditPassword) },

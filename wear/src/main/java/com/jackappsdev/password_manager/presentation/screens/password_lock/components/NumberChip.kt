@@ -21,7 +21,7 @@ fun NumberChip(
     val numButtonPadding = if (isLargeDisplay()) 20.dp else 18.dp
 
     Chip(
-        onClick = { onEvent(PasswordLockUiEvent.OnNumberPress(label)) },
+        onClick = { onEvent(PasswordLockUiEvent.NumberPress(label)) },
         modifier = modifier,
         colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(horizontal = numButtonPadding),

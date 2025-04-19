@@ -18,6 +18,10 @@ class MainViewModel @Inject constructor(
     var useDynamicColors by mutableStateOf<Boolean?>(null)
 
     init {
+        onInit()
+    }
+
+    private fun onInit() {
         viewModelScope.launch {
             userPreferencesRepository.getUseDynamicColors().collect {
                 useDynamicColors = it

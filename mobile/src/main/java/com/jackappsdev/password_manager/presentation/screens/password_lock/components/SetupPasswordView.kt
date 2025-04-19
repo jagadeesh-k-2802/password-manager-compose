@@ -57,7 +57,7 @@ fun SetupPasswordView(
             }
         },
         trailingIcon = {
-            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowPassword) }) {
+            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowPasswordVisibility) }) {
                 Icon(
                     imageVector = if (state.showPassword) {
                         Icons.Outlined.VisibilityOff
@@ -73,8 +73,6 @@ fun SetupPasswordView(
             imeAction = ImeAction.Done
         ),
     )
-
-    Spacer(modifier = Modifier.height(4.dp))
 
     OutlinedTextField(
         value = state.confirmPassword,
@@ -94,7 +92,7 @@ fun SetupPasswordView(
             }
         },
         trailingIcon = {
-            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowConfirmPassword) }) {
+            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowConfirmPasswordVisibility) }) {
                 Icon(
                     imageVector = if (state.showConfirmPassword) {
                         Icons.Outlined.VisibilityOff
@@ -111,12 +109,11 @@ fun SetupPasswordView(
         ),
     )
 
-    Spacer(modifier = Modifier.height(8.dp))
     InfoText(
         modifier = Modifier.padding(vertical = pagePadding),
         text = stringResource(R.string.text_password_warning_note)
     )
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
     Button(
         onClick = { onEvent(PasswordLockUiEvent.SetupNewPassword) },

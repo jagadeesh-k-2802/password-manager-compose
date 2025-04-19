@@ -5,12 +5,12 @@ import com.jackappsdev.password_manager.domain.model.SortBy
 
 sealed class HomeUiEvent {
     data object LockApplication : HomeUiEvent()
-    data class SelectSortBy(val sortBy: SortBy) : HomeUiEvent()
-    data class SelectFilterBy(val filterBy: FilterBy) : HomeUiEvent()
     data class EnterSearchQuery(val query: String): HomeUiEvent()
-    data object SearchItems : HomeUiEvent()
-    data object Search : HomeUiEvent()
     data object ClearSearch : HomeUiEvent()
+    data object SearchItems : HomeUiEvent()
+    data class SelectFilterBy(val filterBy: FilterBy) : HomeUiEvent()
+    data class SelectSortBy(val sortBy: SortBy) : HomeUiEvent()
+    data object Search : HomeUiEvent()
     data object ScrollToTop : HomeUiEvent()
     data object ToggleSortSheetVisibility : HomeUiEvent()
     data object ToggleFilterSheetVisibility : HomeUiEvent()

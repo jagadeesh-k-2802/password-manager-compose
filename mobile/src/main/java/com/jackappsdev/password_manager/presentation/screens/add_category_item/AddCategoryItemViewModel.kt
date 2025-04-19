@@ -31,6 +31,18 @@ class AddCategoryItemViewModel @Inject constructor(
     private val _errorChannel = Channel<AddCategoryItemError>()
     val errorFlow = Channel<AddCategoryItemError>().receiveAsFlow()
 
+    private fun onEnterName(name: String) {
+        state = state.copy(name = name)
+    }
+
+    private fun onSelectColor(color: String) {
+        state = state.copy(color = color)
+    }
+
+    private fun toggleUnsavedChangesDialog() {
+        state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
+    }
+
     private suspend fun addCategoryItem(): AddCategoryItemUiEffect? {
         return if (state.name.isEmpty()) {
             _errorChannel.send(AddCategoryItemError.NameError(R.string.error_name_not_empty))
@@ -42,25 +54,13 @@ class AddCategoryItemViewModel @Inject constructor(
         }
     }
 
-    private fun toggleUnsavedChangesDialog() {
-        state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
-    }
-
-    private fun onEnterName(name: String) {
-        state = state.copy(name = name)
-    }
-
-    private fun onSelectColor(color: String) {
-        state = state.copy(color = color)
-    }
-
     override fun onEvent(event: AddCategoryItemUiEvent) {
         viewModelScope.launch {
             val effect = when(event) {
-                is AddCategoryItemUiEvent.AddCategoryItem -> addCategoryItem()
+                is AddCategoryItemUiEvent.EnterName -> onEnterName(event.name)
+                is AddCategoryItemUiEvent.SelectColor -> onSelectColor(event.color)
                 is AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility -> toggleUnsavedChangesDialog()
-                is AddCategoryItemUiEvent.OnEnterName -> onEnterName(event.name)
-                is AddCategoryItemUiEvent.OnSelectColor -> onSelectColor(event.color)
+                is AddCategoryItemUiEvent.AddCategoryItem -> addCategoryItem()
                 is AddCategoryItemUiEvent.NavigateUp -> AddCategoryItemUiEffect.NavigateUp()
             }
 

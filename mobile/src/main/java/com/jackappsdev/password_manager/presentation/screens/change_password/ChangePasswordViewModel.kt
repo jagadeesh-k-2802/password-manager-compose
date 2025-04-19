@@ -32,6 +32,38 @@ class ChangePasswordViewModel @Inject constructor(
     private val _errorChannel = Channel<ChangePasswordError>()
     val errorFlow = _errorChannel.receiveAsFlow()
 
+    private fun onEnterText(event: ChangePasswordUiEvent) {
+        when (event) {
+            is ChangePasswordUiEvent.PasswordEnter -> {
+                state = state.copy(currentPassword = event.password)
+            }
+
+            is ChangePasswordUiEvent.NewPasswordEnter -> {
+                state = state.copy(newPassword = event.password)
+            }
+
+            else -> {
+                null
+            }
+        }
+    }
+
+    private fun toggleVisibility(event: ChangePasswordUiEvent) {
+        when (event) {
+            is ChangePasswordUiEvent.ToggleShowPasswordVisibility -> {
+                state = state.copy(showPassword = !state.showPassword)
+            }
+
+            is ChangePasswordUiEvent.ToggleShowNewPasswordVisibility -> {
+                state = state.copy(showNewPassword = !state.showNewPassword)
+            }
+
+            else -> {
+                null
+            }
+        }
+    }
+
     private suspend fun onPasswordChanged(): ChangePasswordUiEffect? {
         if (state.currentPassword.isEmpty()) {
             _errorChannel.send(ChangePasswordError.CurrentPasswordError(R.string.error_password_not_empty))
@@ -45,52 +77,20 @@ class ChangePasswordViewModel @Inject constructor(
             _errorChannel.send(ChangePasswordError.CurrentPasswordError(R.string.error_wrong_password))
         } else {
             passphraseRepository.updatePassword(state.newPassword)
-            return ChangePasswordUiEffect.OnPasswordChanged
+            return ChangePasswordUiEffect.PasswordUpdated
         }
 
         return null
     }
 
-    private fun onEnterText(event: ChangePasswordUiEvent) {
-        when (event) {
-            is ChangePasswordUiEvent.OnPasswordEnter -> {
-                state = state.copy(currentPassword = event.password)
-            }
-
-            is ChangePasswordUiEvent.OnNewPasswordEnter -> {
-                state = state.copy(newPassword = event.password)
-            }
-
-            else -> {
-                null
-            }
-        }
-    }
-
-    private fun toggleVisibility(event: ChangePasswordUiEvent) {
-        when (event) {
-            is ChangePasswordUiEvent.ToggleShowPassword -> {
-                state = state.copy(showPassword = !state.showPassword)
-            }
-
-            is ChangePasswordUiEvent.ToggleShowNewPassword -> {
-                state = state.copy(showNewPassword = !state.showNewPassword)
-            }
-
-            else -> {
-                null
-            }
-        }
-    }
-
     override fun onEvent(event: ChangePasswordUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is ChangePasswordUiEvent.OnNewPasswordEnter -> onEnterText(event)
-                is ChangePasswordUiEvent.OnPasswordEnter -> onEnterText(event)
-                is ChangePasswordUiEvent.ToggleShowPassword -> toggleVisibility(event)
-                is ChangePasswordUiEvent.ToggleShowNewPassword -> toggleVisibility(event)
-                is ChangePasswordUiEvent.OnPasswordChanged -> onPasswordChanged()
+                is ChangePasswordUiEvent.PasswordEnter -> onEnterText(event)
+                is ChangePasswordUiEvent.NewPasswordEnter -> onEnterText(event)
+                is ChangePasswordUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)
+                is ChangePasswordUiEvent.ToggleShowNewPasswordVisibility -> toggleVisibility(event)
+                is ChangePasswordUiEvent.UpdatePassword -> onPasswordChanged()
                 is ChangePasswordUiEvent.NavigateUp -> ChangePasswordUiEffect.NavigateUp
             }
 

@@ -34,10 +34,10 @@ class SettingsViewModel @Inject constructor(
     override val effectFlow = _effectChannel.receiveAsFlow()
 
     init {
-        getInitialData()
+        onInit()
     }
 
-    private fun getInitialData() {
+    private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
                 useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
@@ -89,7 +89,7 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun exportData(uri: String): SettingsUiEffect {
         databaseManagerRepository.exportDatabase(uri)
-        return SettingsUiEffect.OnPasswordsExported
+        return SettingsUiEffect.PasswordsExported
     }
 
     override fun onEvent(event: SettingsUiEvent) {
@@ -102,13 +102,13 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.ToggleDynamicColors -> setDynamicColors()
                 is SettingsUiEvent.ToggleUseScreenLock -> toggleScreenLock()
                 is SettingsUiEvent.CheckScreenLockAvailable -> checkIfScreenLockAvailable()
-                is SettingsUiEvent.OnImportPasswords -> SettingsUiEffect.OnImportPasswords
-                is SettingsUiEvent.OnExportPasswords -> SettingsUiEffect.OnExportPasswords
+                is SettingsUiEvent.OpenImportPasswordsIntent -> SettingsUiEffect.OpenImportPasswordsIntent
+                is SettingsUiEvent.OpenExportPasswordsIntent -> SettingsUiEffect.OpenExportPasswordsIntent
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings
-                is SettingsUiEvent.OpenPlayStorePage -> SettingsUiEffect.OpenPlayStorePage
-                is SettingsUiEvent.NavigateToAndroidWatch -> SettingsUiEffect.NavigateToAndroidWatch
                 is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories
+                is SettingsUiEvent.NavigateToAndroidWatch -> SettingsUiEffect.NavigateToAndroidWatch
+                is SettingsUiEvent.OpenPlayStorePage -> SettingsUiEffect.OpenPlayStorePage
             }
 
             if (effect is SettingsUiEffect) { _effectChannel.send(effect) }

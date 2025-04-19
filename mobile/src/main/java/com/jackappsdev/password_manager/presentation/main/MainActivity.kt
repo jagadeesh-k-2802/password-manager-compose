@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.rememberNavController
+import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.presentation.navigation.Router
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
@@ -25,11 +26,17 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
 
         splashScreen.setKeepOnScreenCondition {
-            passwordLockViewModel.state.hasPasswordSet == null && mainViewModel.useDynamicColors == null
+            passwordLockViewModel.state.hasPasswordSet == null
+                    && mainViewModel.useDynamicColors == null
         }
 
         // Disable screenshots & screen recordings
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        if (BuildConfig.DEBUG.not()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        }
 
         setContent {
             PasswordManagerTheme(dynamicColor = mainViewModel.useDynamicColors == true) {

@@ -28,7 +28,10 @@ import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(state: HomeState, onEvent: (HomeUiEvent) -> Unit) {
+fun SearchBar(
+    state: HomeState,
+    onEvent: (HomeUiEvent) -> Unit
+) {
     val debouncedFilter = remember {
         debounce<Unit>(400, Dispatchers.IO) {
             onEvent(HomeUiEvent.SearchItems)

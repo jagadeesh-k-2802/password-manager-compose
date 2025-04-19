@@ -10,7 +10,7 @@ class ChangePasswordEffectHandler(
     private val navController: NavController
 ) {
 
-    fun onPasswordChanged() {
+    fun onPasswordUpdated() {
         navController.navigateUp()
         context.showToast(context.getString(R.string.toast_password_changed_successfully))
     }

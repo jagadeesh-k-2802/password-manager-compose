@@ -25,12 +25,28 @@ class PasswordItemDetailEffectHandler(
 
     private val dataClient = Wearable.getDataClient(context)
 
-    fun onCopy(text: String?) {
-        copyToClipboard(context, text)
-    }
+    fun onToggleAddedToWatch(passwordItem: PasswordWithCategoryModel?) {
+        val path = if (passwordItem?.isAddedToWatch != true) {
+            UPSERT_PASSWORD
+        } else {
+            DELETE_PASSWORD
+        }
 
-    fun onLaunchUrl(url: String) {
-        launchUrl(context, url)
+        val putDataRequest = PutDataMapRequest.create(path).run {
+            dataMap.putString(KEY_PASSWORD, Json.encodeToString(passwordItem?.toPasswordItemDto()))
+            setUrgent()
+            asPutDataRequest()
+        }
+
+        dataClient.putDataItem(putDataRequest).addOnSuccessListener {
+            context.showToast(
+                if (passwordItem?.isAddedToWatch != true) {
+                    context.getString(R.string.toast_added_to_watch)
+                } else {
+                    context.getString(R.string.toast_removed_from_watch)
+                }
+            )
+        }
     }
 
     fun onDeleteItem(passwordItem: PasswordWithCategoryModel?) {
@@ -54,28 +70,12 @@ class PasswordItemDetailEffectHandler(
         }
     }
 
-    fun onToggleIsAddedToWatch(passwordItem: PasswordWithCategoryModel?) {
-        val path = if (passwordItem?.isAddedToWatch != true) {
-            UPSERT_PASSWORD
-        } else {
-            DELETE_PASSWORD
-        }
+    fun onCopy(text: String?) {
+        copyToClipboard(context, text)
+    }
 
-        val putDataRequest = PutDataMapRequest.create(path).run {
-            dataMap.putString(KEY_PASSWORD, Json.encodeToString(passwordItem?.toPasswordItemDto()))
-            setUrgent()
-            asPutDataRequest()
-        }
-
-        dataClient.putDataItem(putDataRequest).addOnSuccessListener {
-            context.showToast(
-                if (passwordItem?.isAddedToWatch != true) {
-                    context.getString(R.string.toast_added_to_watch)
-                } else {
-                    context.getString(R.string.toast_removed_from_watch)
-                }
-            )
-        }
+    fun onLaunchUrl(url: String) {
+        launchUrl(context, url)
     }
 
     fun onNavigateToEditPassword(id: Int) {

@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Done
@@ -30,9 +30,9 @@ fun BoxScope.CheckmarkCircle(
         tint = Color.Black,
         contentDescription = stringResource(R.string.accessibility_selected_color),
         modifier = modifier
-            .align(Alignment.BottomStart)
+            .size(16.dp)
+            .align(Alignment.Center)
             .fillMaxWidth()
-            .padding(20.dp)
             .clip(CircleShape)
             .background(Color.White)
     )

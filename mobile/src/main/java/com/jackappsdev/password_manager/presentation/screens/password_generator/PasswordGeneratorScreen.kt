@@ -1,8 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_generator
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,7 +21,6 @@ import com.jackappsdev.password_manager.presentation.screens.password_generator.
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEvent
-import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -68,7 +65,6 @@ fun PasswordGeneratorScreen(
         ) {
             GeneratedPasswordView(state, onEvent)
             LengthSliderView(state, onEvent)
-            Spacer(modifier = Modifier.height(pagePadding))
             OptionsView(state, onEvent)
         }
     }

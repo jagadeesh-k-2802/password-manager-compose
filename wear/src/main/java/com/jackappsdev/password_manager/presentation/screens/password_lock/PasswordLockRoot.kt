@@ -10,9 +10,16 @@ import com.jackappsdev.password_manager.presentation.screens.password_lock.event
 @Composable
 fun PasswordLockRoot(passwordLockViewModel: PasswordLockViewModel) {
     val context = LocalContext.current
-    val haptic = LocalHapticFeedback.current
+    val hapticFeedback = LocalHapticFeedback.current
     val scope = rememberCoroutineScope()
-    val effectHandler = remember { PasswordLockEffectHandler(context, scope, haptic) }
+
+    val effectHandler = remember {
+        PasswordLockEffectHandler(
+            context = context,
+            scope = scope,
+            hapticFeedback = hapticFeedback
+        )
+    }
 
     PasswordLockScreen(
         state = passwordLockViewModel.state,

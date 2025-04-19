@@ -38,13 +38,29 @@ class CategoryItemDetailViewModel @Inject constructor(
     override val effectFlow = _effectChannel.receiveAsFlow()
 
     init {
-        updateStateOnCategoryItemChange()
+        onInit()
     }
 
-    private fun updateStateOnCategoryItemChange() {
+    private fun onInit() {
         viewModelScope.launch {
             categoryItem.collectLatest { item ->
                 state = state.copy(categoryModel = item)
+            }
+        }
+    }
+
+    private fun toggleVisibility(event: CategoryItemDetailUiEvent) {
+        when (event) {
+            is CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialogVisibility -> {
+                state = state.copy(isDeleteDialogVisible = !state.isDeleteDialogVisible)
+            }
+
+            is CategoryItemDetailUiEvent.ToggleUnsavedChangesDialogVisibility -> {
+                state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
+            }
+
+            else -> {
+                null
             }
         }
     }
@@ -85,27 +101,15 @@ class CategoryItemDetailViewModel @Inject constructor(
         }
     }
 
-    private fun toggleCategoryItemDeleteDialog() {
-        state = state.copy(
-            isDeleteDialogVisible = !state.isDeleteDialogVisible
-        )
-    }
-
-    private fun toggleUnsavedChangesDialog() {
-        state = state.copy(
-            isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible
-        )
-    }
-
     override fun onEvent(event: CategoryItemDetailUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
+                is CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialogVisibility -> toggleVisibility(event)
+                is CategoryItemDetailUiEvent.ToggleUnsavedChangesDialogVisibility -> toggleVisibility(event)
                 is CategoryItemDetailUiEvent.UpdateCategoryItem -> updateCategoryItem()
                 is CategoryItemDetailUiEvent.DeleteCategoryItem -> deleteItem()
-                is CategoryItemDetailUiEvent.OnEnterName -> onEnterName(event.name)
-                is CategoryItemDetailUiEvent.OnSelectColor -> onSelectColor(event.color)
-                is CategoryItemDetailUiEvent.ToggleCategoryItemDeleteDialog -> toggleCategoryItemDeleteDialog()
-                is CategoryItemDetailUiEvent.ToggleUnsavedChangesDialog -> toggleUnsavedChangesDialog()
+                is CategoryItemDetailUiEvent.EnterName -> onEnterName(event.name)
+                is CategoryItemDetailUiEvent.SelectColor -> onSelectColor(event.color)
                 is CategoryItemDetailUiEvent.NavigateUp -> CategoryItemDetailUiEffect.NavigateUp
             }
 

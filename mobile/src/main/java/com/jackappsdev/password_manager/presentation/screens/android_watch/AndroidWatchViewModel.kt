@@ -33,10 +33,10 @@ class AndroidWatchViewModel @Inject constructor(
     val errorFlow = Channel<AndroidWatchError>().receiveAsFlow()
 
     init {
-        getInitialData()
+        onInit()
     }
 
-    private fun getInitialData() {
+    private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
                 useAndroidWatch = userPreferencesRepository.hasAndroidWatchPinSet(),
@@ -45,27 +45,19 @@ class AndroidWatchViewModel @Inject constructor(
         }
     }
 
-    private fun enterPin(pin: String) {
-        if (pin.length > 4) return
-        state = state.copy(pin = pin)
-    }
+    private fun toggleVisibility(event: AndroidWatchUiEvent) {
+        when (event) {
+            is AndroidWatchUiEvent.ToggleDisableAndroidWatchDialogVisibility -> {
+                state = state.copy(showDisableAndroidWatchDialog = !state.showDisableAndroidWatchDialog)
+            }
 
-    private fun toggleShowPin() {
-        state = state.copy(showPin = !state.showPin)
-    }
+            is AndroidWatchUiEvent.ToggleShowPinVisibility -> {
+                state = state.copy(showPin = !state.showPin)
+            }
 
-    private fun toggleAndroidWatchDialog() {
-        state = state.copy(showDisableAndroidWatchDialog = !state.showDisableAndroidWatchDialog)
-    }
-
-    private suspend fun setupPin(): AndroidWatchUiEffect? {
-        return if (state.pin.isEmpty() == true) {
-            _errorChannel.send(AndroidWatchError.PinError(R.string.error_pin_not_empty))
-            null
-        } else {
-            state = state.copy(hasAndroidWatchPinSet = true)
-            userPreferencesRepository.setAndroidWatchPinSet(state.pin)
-            AndroidWatchUiEffect.SetupPin(state.pin)
+            else -> {
+                null
+            }
         }
     }
 
@@ -79,6 +71,22 @@ class AndroidWatchViewModel @Inject constructor(
         }
     }
 
+    private fun enterPin(pin: String) {
+        if (pin.length > 4) return
+        state = state.copy(pin = pin)
+    }
+
+    private suspend fun setupPin(): AndroidWatchUiEffect? {
+        return if (state.pin.isEmpty() == true) {
+            _errorChannel.send(AndroidWatchError.PinError(R.string.error_pin_not_empty))
+            null
+        } else {
+            state = state.copy(hasAndroidWatchPinSet = true)
+            userPreferencesRepository.setAndroidWatchPinSet(state.pin)
+            AndroidWatchUiEffect.SetupPin(state.pin)
+        }
+    }
+
     private suspend fun disableAndroidWatchSharing(): AndroidWatchUiEffect {
         state = state.copy(useAndroidWatch = false, showDisableAndroidWatchDialog = false)
         passwordItemRepository.removePasswordsFromWatch()
@@ -88,11 +96,11 @@ class AndroidWatchViewModel @Inject constructor(
     override fun onEvent(event: AndroidWatchUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is AndroidWatchUiEvent.EnterPin -> enterPin(event.pin)
-                is AndroidWatchUiEvent.ToggleShowPin -> toggleShowPin()
-                is AndroidWatchUiEvent.ToggleDisableAndroidWatchDialog -> toggleAndroidWatchDialog()
-                is AndroidWatchUiEvent.SetupPin -> setupPin()
+                is AndroidWatchUiEvent.ToggleDisableAndroidWatchDialogVisibility -> toggleVisibility(event)
+                is AndroidWatchUiEvent.ToggleShowPinVisibility -> toggleVisibility(event)
                 is AndroidWatchUiEvent.ToggleAndroidWatch -> toggleAndroidWatchSharing()
+                is AndroidWatchUiEvent.EnterPin -> enterPin(event.pin)
+                is AndroidWatchUiEvent.SetupPin -> setupPin()
                 is AndroidWatchUiEvent.DisableAndroidWatchSharing -> disableAndroidWatchSharing()
                 is AndroidWatchUiEvent.RequestPinChange -> AndroidWatchUiEffect.RequestPinChange
                 is AndroidWatchUiEvent.RequestToggleAndroidWatch -> AndroidWatchUiEffect.ConfirmToggleAndroidWatch

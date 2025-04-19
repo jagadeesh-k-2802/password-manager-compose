@@ -62,8 +62,8 @@ fun AndroidWatchScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is AndroidWatchUiEffect.SetupPin -> onSetupPin(effect.pin)
                     is AndroidWatchUiEffect.RequestPinChange -> onRequestPinChange()
+                    is AndroidWatchUiEffect.SetupPin -> onSetupPin(effect.pin)
                     is AndroidWatchUiEffect.ConfirmToggleAndroidWatch -> onConfirmToggleAndroidWatch()
                     is AndroidWatchUiEffect.DisableAndroidWatchSharing -> onDisableWatchSharing()
                     is AndroidWatchUiEffect.NavigateUp -> onNavigateUp()
@@ -75,7 +75,7 @@ fun AndroidWatchScreen(
     if (state.showDisableAndroidWatchDialog) {
         DisableAndroidWatchDialog(
             onConfirm = { onEvent(AndroidWatchUiEvent.DisableAndroidWatchSharing) },
-            onDismiss = { onEvent(AndroidWatchUiEvent.ToggleDisableAndroidWatchDialog) }
+            onDismiss = { onEvent(AndroidWatchUiEvent.ToggleDisableAndroidWatchDialogVisibility) }
         )
     }
 
@@ -110,8 +110,6 @@ fun AndroidWatchScreen(
 
             if (state.useAndroidWatch == true) {
                 Column {
-                    Spacer(modifier = Modifier.height(12.dp))
-
                     OutlinedTextField(
                         value = state.pin,
                         onValueChange = { onEvent(AndroidWatchUiEvent.EnterPin(it)) },
@@ -143,7 +141,7 @@ fun AndroidWatchScreen(
                             PasswordVisualTransformation()
                         },
                         trailingIcon = {
-                            IconButton(onClick = { onEvent(AndroidWatchUiEvent.ToggleShowPin) }) {
+                            IconButton(onClick = { onEvent(AndroidWatchUiEvent.ToggleShowPinVisibility) }) {
                                 Icon(
                                     imageVector = if (state.showPin) {
                                         Icons.Outlined.VisibilityOff
@@ -163,7 +161,7 @@ fun AndroidWatchScreen(
                         )
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
                     Button(
                         onClick = { onEvent(AndroidWatchUiEvent.RequestPinChange) },

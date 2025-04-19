@@ -17,11 +17,10 @@ fun AddCategoryItemRoot(navController: NavController) {
     }
 
     AddCategoryItemScreen(
-        navController = navController,
         state = viewModel.state,
-        errorFlow = viewModel.errorFlow,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,
+        errorFlow = viewModel.errorFlow,
         onEvent = viewModel::onEvent
     )
 }

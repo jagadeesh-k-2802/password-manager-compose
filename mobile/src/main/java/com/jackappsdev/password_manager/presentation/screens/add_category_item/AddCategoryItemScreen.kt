@@ -38,7 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.presentation.components.CheckmarkCircle
@@ -55,11 +54,10 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCategoryItemScreen(
-    navController: NavController,
     state: AddCategoryItemState,
-    errorFlow: Flow<AddCategoryItemError>,
     effectFlow: Flow<AddCategoryItemUiEffect>,
     effectHandler: AddCategoryItemEffectHandler,
+    errorFlow: Flow<AddCategoryItemError>,
     onEvent: (AddCategoryItemUiEvent) -> Unit
 ) {
     val error by errorFlow.collectAsState(initial = null)
@@ -81,7 +79,7 @@ fun AddCategoryItemScreen(
 
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
-            onConfirm = { navController.navigateUp() },
+            onConfirm = { onEvent(AddCategoryItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility) }
         )
     }
@@ -120,7 +118,7 @@ fun AddCategoryItemScreen(
                         if (it is AddCategoryItemError.NameError) Text(stringResource(it.error))
                     }
                 },
-                onValueChange = { onEvent(AddCategoryItemUiEvent.OnEnterName(it)) },
+                onValueChange = { onEvent(AddCategoryItemUiEvent.EnterName(it)) },
                 label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -131,7 +129,6 @@ fun AddCategoryItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
             Text(text = stringResource(R.string.label_category_color), style = MaterialTheme.typography.labelLarge)
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -139,8 +136,8 @@ fun AddCategoryItemScreen(
                 items(colorList) { item ->
                     ColoredCircle(
                         modifier = Modifier.padding(end = 12.dp),
-                        size = 64.dp,
-                        onClick = { onEvent(AddCategoryItemUiEvent.OnSelectColor(item)) },
+                        size = 48.dp,
+                        onClick = { onEvent(AddCategoryItemUiEvent.SelectColor(item)) },
                         color = item,
                     ) {
                         if (state.color == item) {
@@ -150,7 +147,7 @@ fun AddCategoryItemScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { onEvent(AddCategoryItemUiEvent.AddCategoryItem) },

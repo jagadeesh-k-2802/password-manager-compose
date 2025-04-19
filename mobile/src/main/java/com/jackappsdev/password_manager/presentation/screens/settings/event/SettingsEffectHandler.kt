@@ -44,7 +44,7 @@ class SettingsEffectHandler(
         }
     )
 
-    fun onImportPasswords(intent: ActivityResultLauncher<Intent>) {
+    fun onOpenImportPasswordsIntent(intent: ActivityResultLauncher<Intent>) {
         Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             type = "application/*"
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -52,7 +52,7 @@ class SettingsEffectHandler(
         }
     }
 
-    fun onExportPasswords(intent: ActivityResultLauncher<Intent>) {
+    fun onOpenExportPasswordsIntent(intent: ActivityResultLauncher<Intent>) {
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             type = "application/vnd.sqlite3"
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -88,6 +88,18 @@ class SettingsEffectHandler(
         }
     }
 
+    fun onNavigateToChangePassword() {
+        navController.navigate(Routes.ChangePassword)
+    }
+
+    fun onNavigateToManageCategories() {
+        navController.navigate(Routes.ManageCategories)
+    }
+
+    fun onNavigateToAndroidWatch() {
+        navController.navigate(Routes.AndroidWatch)
+    }
+
     fun onOpenPlayStorePage() {
         val intent = try {
             Intent(Intent.ACTION_VIEW).apply {
@@ -102,17 +114,5 @@ class SettingsEffectHandler(
         }
 
         context.startActivity(intent)
-    }
-
-    fun onNavigateToChangePassword() {
-        navController.navigate(Routes.ChangePassword)
-    }
-
-    fun onNavigateToManageCategories() {
-        navController.navigate(Routes.ManageCategories)
-    }
-
-    fun onNavigateToAndroidWatch() {
-        navController.navigate(Routes.AndroidWatch)
     }
 }

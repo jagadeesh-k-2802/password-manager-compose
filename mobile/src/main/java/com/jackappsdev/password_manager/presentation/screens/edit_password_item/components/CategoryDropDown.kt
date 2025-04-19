@@ -73,7 +73,7 @@ fun CategoryDropDown(
                 text = { Text(text = stringResource(R.string.text_no_category)) },
                 onClick = {
                     onEvent(EditPasswordItemUiEvent.ToggleCategoryDropdownVisibility)
-                    onEvent(EditPasswordItemUiEvent.OnSelectCategory(null))
+                    onEvent(EditPasswordItemUiEvent.SelectCategory(null))
                 }
             )
 
@@ -83,7 +83,7 @@ fun CategoryDropDown(
                     text = { Text(text = item.name) },
                     onClick = {
                         onEvent(EditPasswordItemUiEvent.ToggleCategoryDropdownVisibility)
-                        onEvent(EditPasswordItemUiEvent.OnSelectCategory(item))
+                        onEvent(EditPasswordItemUiEvent.SelectCategory(item))
                     }
                 )
             }

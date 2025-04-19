@@ -64,8 +64,8 @@ class PasswordLockViewModel @Inject constructor(
     override fun onEvent(event: PasswordLockUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is PasswordLockUiEvent.OnNumberPress -> onNumberPress(event.number)
-                is PasswordLockUiEvent.OnBackSpacePress -> onBackSpacePress()
+                is PasswordLockUiEvent.NumberPress -> onNumberPress(event.number)
+                is PasswordLockUiEvent.BackSpacePress -> onBackSpacePress()
                 is PasswordLockUiEvent.VerifyPin -> verifyPin()
                 is PasswordLockUiEvent.OpenPhoneApp -> PasswordLockUiEffect.OpenPhoneApp
             }

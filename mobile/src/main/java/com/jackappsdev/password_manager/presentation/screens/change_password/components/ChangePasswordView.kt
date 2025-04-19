@@ -31,13 +31,13 @@ import com.jackappsdev.password_manager.presentation.screens.change_password.eve
 
 @Composable
 fun ChangePasswordView(
-    error: ChangePasswordError?,
     state: ChangePasswordState,
+    error: ChangePasswordError?,
     onEvent: (ChangePasswordUiEvent) -> Unit,
 ) {
     OutlinedTextField(
         value = state.currentPassword,
-        onValueChange = { onEvent(ChangePasswordUiEvent.OnPasswordEnter(it)) },
+        onValueChange = { onEvent(ChangePasswordUiEvent.PasswordEnter(it)) },
         label = { Text(stringResource(R.string.label_current_password)) },
         modifier = Modifier.fillMaxWidth(),
         isError = error is ChangePasswordError.CurrentPasswordError,
@@ -55,7 +55,7 @@ fun ChangePasswordView(
         },
         keyboardActions = KeyboardActions(onDone = {}),
         trailingIcon = {
-            IconButton(onClick = { onEvent(ChangePasswordUiEvent.ToggleShowPassword) }) {
+            IconButton(onClick = { onEvent(ChangePasswordUiEvent.ToggleShowPasswordVisibility) }) {
                 Icon(
                     imageVector = if (state.showPassword) {
                         Icons.Outlined.VisibilityOff
@@ -70,7 +70,7 @@ fun ChangePasswordView(
 
     OutlinedTextField(
         value = state.newPassword,
-        onValueChange = { onEvent(ChangePasswordUiEvent.OnNewPasswordEnter(it)) },
+        onValueChange = { onEvent(ChangePasswordUiEvent.NewPasswordEnter(it)) },
         label = { Text(stringResource(R.string.label_new_password)) },
         modifier = Modifier.fillMaxWidth(),
         isError = error is ChangePasswordError.NewPasswordError,
@@ -88,7 +88,7 @@ fun ChangePasswordView(
         },
         keyboardActions = KeyboardActions(onDone = {}),
         trailingIcon = {
-            IconButton(onClick = { onEvent(ChangePasswordUiEvent.ToggleShowNewPassword) }) {
+            IconButton(onClick = { onEvent(ChangePasswordUiEvent.ToggleShowNewPasswordVisibility) }) {
                 Icon(
                     imageVector = if (state.showNewPassword) {
                         Icons.Outlined.VisibilityOff
@@ -101,13 +101,12 @@ fun ChangePasswordView(
         },
     )
 
-    Spacer(modifier = Modifier.height(8.dp))
     InfoText(text = stringResource(R.string.text_change_password_help))
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = { onEvent(ChangePasswordUiEvent.OnPasswordChanged) }
+        onClick = { onEvent(ChangePasswordUiEvent.UpdatePassword) }
     ) {
         Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_confirm))
         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

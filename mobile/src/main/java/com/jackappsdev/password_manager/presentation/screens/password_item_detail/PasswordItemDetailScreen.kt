@@ -69,10 +69,10 @@ fun PasswordItemDetailScreen(
         with(effectHandler) {
             effectFlow.collectLatest { effect ->
                 when (effect) {
+                    is PasswordItemDetailUiEffect.ToggleAddedToWatch -> onToggleAddedToWatch(passwordItem)
+                    is PasswordItemDetailUiEffect.DeleteItem -> onDeleteItem(passwordItem)
                     is PasswordItemDetailUiEffect.CopyText -> onCopy(effect.text)
                     is PasswordItemDetailUiEffect.LaunchUrl -> onLaunchUrl(effect.url)
-                    is PasswordItemDetailUiEffect.DeleteItem -> onDeleteItem(passwordItem)
-                    is PasswordItemDetailUiEffect.ToggleIsAddedToWatch -> onToggleIsAddedToWatch(passwordItem)
                     is PasswordItemDetailUiEffect.NavigateToEditPassword -> onNavigateToEditPassword(effect.id)
                     is PasswordItemDetailUiEffect.NavigateUp -> onNavigateUp()
                 }
@@ -133,7 +133,7 @@ fun PasswordItemDetailScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = passwordItem?.username ?: EMPTY_STRING,
@@ -157,7 +157,7 @@ fun PasswordItemDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = passwordItem?.password ?: EMPTY_STRING,
@@ -199,7 +199,7 @@ fun PasswordItemDetailScreen(
                 },
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = passwordItem?.website ?: EMPTY_STRING,
@@ -224,7 +224,7 @@ fun PasswordItemDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = passwordItem?.notes ?: EMPTY_STRING,
@@ -249,7 +249,7 @@ fun PasswordItemDetailScreen(
                 },
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
                 OutlinedTextField(
@@ -275,7 +275,7 @@ fun PasswordItemDetailScreen(
                 ExposedDropdownMenu(expanded = false, onDismissRequest = {}) {}
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = if (passwordItem?.createdAt != null) {

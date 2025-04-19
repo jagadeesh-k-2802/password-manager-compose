@@ -44,7 +44,7 @@ internal class CryptoManager {
                     ALIAS,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                 )
-                    .setKeySize(KEY_SIZE * 8) // key size in bits
+                    .setKeySize(KEY_SIZE_BYTES * 8) // key size in bits
                     .setBlockModes(BLOCK_MODE)
                     .setEncryptionPaddings(PADDING)
                     .setUserAuthenticationRequired(false)
@@ -61,9 +61,9 @@ internal class CryptoManager {
         outputStream.use {
             it.write(iv)
             val inputStream = ByteArrayInputStream(bytes)
-            val buffer = ByteArray(CHUNK_SIZE)
+            val buffer = ByteArray(CHUNK_SIZE_BYTES)
 
-            while (inputStream.available() > CHUNK_SIZE) {
+            while (inputStream.available() > CHUNK_SIZE_BYTES) {
                 inputStream.read(buffer)
                 val ciphertextChunk = cipher.update(buffer)
                 it.write(ciphertextChunk)
@@ -77,13 +77,13 @@ internal class CryptoManager {
 
     fun decrypt(inputStream: InputStream): ByteArray {
         return inputStream.use {
-            val iv = ByteArray(KEY_SIZE)
+            val iv = ByteArray(KEY_SIZE_BYTES)
             it.read(iv)
             val cipher = getDecryptCipherForIv(iv)
             val outputStream = ByteArrayOutputStream()
-            val buffer = ByteArray(CHUNK_SIZE)
+            val buffer = ByteArray(CHUNK_SIZE_BYTES)
 
-            while (inputStream.available() > CHUNK_SIZE) {
+            while (inputStream.available() > CHUNK_SIZE_BYTES) {
                 inputStream.read(buffer)
                 val ciphertextChunk = cipher.update(buffer)
                 outputStream.write(ciphertextChunk)
@@ -97,8 +97,8 @@ internal class CryptoManager {
     }
 
     companion object {
-        private const val CHUNK_SIZE = 1024 * 4 // bytes
-        private const val KEY_SIZE = 16 // bytes
+        private const val CHUNK_SIZE_BYTES = 1024 * 4
+        private const val KEY_SIZE_BYTES = 16
         private const val ALIAS = "my_alias"
         private const val ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
         private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC

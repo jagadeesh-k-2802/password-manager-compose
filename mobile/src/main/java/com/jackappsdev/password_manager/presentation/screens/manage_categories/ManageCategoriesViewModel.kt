@@ -34,8 +34,8 @@ class ManageCategoriesViewModel @Inject constructor(
     private fun onInit() {
         if (state.isLoading) {
             viewModelScope.launch {
-                val items = categoryRepository.getAllCategories().stateIn(viewModelScope)
-                state = state.copy(items = items, isLoading = false)
+                val categoryFlow = categoryRepository.getAllCategories().stateIn(viewModelScope)
+                state = state.copy(items = categoryFlow, isLoading = false)
             }
         }
     }

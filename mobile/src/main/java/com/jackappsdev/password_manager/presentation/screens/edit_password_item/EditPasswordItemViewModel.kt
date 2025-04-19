@@ -39,26 +39,25 @@ class EditPasswordItemViewModel @Inject constructor(
         private set
 
     private val editPasswordItem = savedStateHandle.toRoute<Routes.EditPasswordItem>()
-
-    private val _errorChannel = Channel<EditPasswordItemError>()
-    val errorFlow = _errorChannel.receiveAsFlow()
-
     private val passwordItem = passwordItemRepository.getPasswordItem(editPasswordItem.id)
     val categoryItems = categoryRepository.getAllCategories()
-
-    private val _effectChannel = Channel<EditPasswordItemUiEffect>()
-    override val effectFlow = _effectChannel.receiveAsFlow()
 
     private val noCategoryModel = CategoryModel(
         name = application.getString(R.string.text_no_category),
         color = "#000000",
     )
 
+    private val _errorChannel = Channel<EditPasswordItemError>()
+    val errorFlow = _errorChannel.receiveAsFlow()
+
+    private val _effectChannel = Channel<EditPasswordItemUiEffect>()
+    override val effectFlow = _effectChannel.receiveAsFlow()
+
     init {
-        updateStateOnPasswordItemChange()
+        onInit()
     }
 
-    private fun updateStateOnPasswordItemChange() {
+    private fun onInit() {
         viewModelScope.launch {
             passwordItem.collect { item ->
                 state = state.copy(passwordItem = item, category = item?.toCategoryModel())
@@ -86,24 +85,32 @@ class EditPasswordItemViewModel @Inject constructor(
             )
 
             passwordItemRepository.insertPasswordItem(newPasswordItemModel)
-            return EditPasswordItemUiEffect.OnEditComplete
+            return EditPasswordItemUiEffect.EditComplete
         }
     }
 
-    private fun toggleCategoryDropdownVisibility() {
-        state = state.copy(isCategoryDropdownVisible = !state.isCategoryDropdownVisible)
-    }
+    private fun toggleVisibility(event: EditPasswordItemUiEvent) {
+        when (event) {
+            is EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility -> {
+                state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
+            }
 
-    private fun toggleIsAlreadyAutoFocused() {
-        state = state.copy(isAlreadyAutoFocused = !state.isAlreadyAutoFocused)
-    }
+            is EditPasswordItemUiEvent.ToggleAlreadyAutoFocused -> {
+                state = state.copy(isAlreadyAutoFocused = !state.isAlreadyAutoFocused)
+            }
 
-    private fun toggleShowPassword() {
-        state = state.copy(showPassword = !state.showPassword)
-    }
+            is EditPasswordItemUiEvent.ToggleCategoryDropdownVisibility -> {
+                state = state.copy(isCategoryDropdownVisible = !state.isCategoryDropdownVisible)
+            }
 
-    private fun toggleUnsavedChangesDialogVisibility() {
-        state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
+            is EditPasswordItemUiEvent.ToggleShowPassword -> {
+                state = state.copy(showPassword = !state.showPassword)
+            }
+
+            else -> {
+                null
+            }
+        }
     }
 
     private fun onGenerateRandomPassword() {
@@ -113,11 +120,11 @@ class EditPasswordItemViewModel @Inject constructor(
 
     private fun onEnterText(event: EditPasswordItemUiEvent) {
         val newPasswordItem = when (event) {
-            is EditPasswordItemUiEvent.OnEnterName -> state.passwordItem?.copy(name = event.text)
-            is EditPasswordItemUiEvent.OnEnterUsername -> state.passwordItem?.copy(username = event.text)
-            is EditPasswordItemUiEvent.OnEnterPassword -> state.passwordItem?.copy(password = event.text)
-            is EditPasswordItemUiEvent.OnEnterWebsite -> state.passwordItem?.copy(website = event.text)
-            is EditPasswordItemUiEvent.OnEnterNotes -> state.passwordItem?.copy(notes = event.text)
+            is EditPasswordItemUiEvent.EnterName -> state.passwordItem?.copy(name = event.text)
+            is EditPasswordItemUiEvent.EnterUsername -> state.passwordItem?.copy(username = event.text)
+            is EditPasswordItemUiEvent.EnterPassword -> state.passwordItem?.copy(password = event.text)
+            is EditPasswordItemUiEvent.EnterWebsite -> state.passwordItem?.copy(website = event.text)
+            is EditPasswordItemUiEvent.EnterNotes -> state.passwordItem?.copy(notes = event.text)
             else -> null
         }
 
@@ -136,17 +143,17 @@ class EditPasswordItemViewModel @Inject constructor(
         viewModelScope.launch {
             val effect = when (event) {
                 is EditPasswordItemUiEvent.EditPassword -> editPassword()
-                is EditPasswordItemUiEvent.ToggleCategoryDropdownVisibility -> toggleCategoryDropdownVisibility()
-                is EditPasswordItemUiEvent.ToggleIsAlreadyAutoFocused -> toggleIsAlreadyAutoFocused()
-                is EditPasswordItemUiEvent.ToggleShowPassword -> toggleShowPassword()
-                is EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility -> toggleUnsavedChangesDialogVisibility()
-                is EditPasswordItemUiEvent.OnGenerateRandomPassword -> onGenerateRandomPassword()
-                is EditPasswordItemUiEvent.OnEnterName -> onEnterText(event)
-                is EditPasswordItemUiEvent.OnEnterNotes -> onEnterText(event)
-                is EditPasswordItemUiEvent.OnEnterPassword -> onEnterText(event)
-                is EditPasswordItemUiEvent.OnEnterUsername -> onEnterText(event)
-                is EditPasswordItemUiEvent.OnEnterWebsite -> onEnterText(event)
-                is EditPasswordItemUiEvent.OnSelectCategory -> onSelectCategory(event.category)
+                is EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility -> toggleVisibility(event)
+                is EditPasswordItemUiEvent.ToggleAlreadyAutoFocused -> toggleVisibility(event)
+                is EditPasswordItemUiEvent.ToggleCategoryDropdownVisibility -> toggleVisibility(event)
+                is EditPasswordItemUiEvent.ToggleShowPassword -> toggleVisibility(event)
+                is EditPasswordItemUiEvent.GenerateRandomPassword -> onGenerateRandomPassword()
+                is EditPasswordItemUiEvent.EnterName -> onEnterText(event)
+                is EditPasswordItemUiEvent.EnterUsername -> onEnterText(event)
+                is EditPasswordItemUiEvent.EnterPassword -> onEnterText(event)
+                is EditPasswordItemUiEvent.EnterWebsite -> onEnterText(event)
+                is EditPasswordItemUiEvent.EnterNotes -> onEnterText(event)
+                is EditPasswordItemUiEvent.SelectCategory -> onSelectCategory(event.category)
                 is EditPasswordItemUiEvent.NavigateToAddCategory -> EditPasswordItemUiEffect.NavigateToAddCategory
                 is EditPasswordItemUiEvent.NavigateUp -> EditPasswordItemUiEffect.NavigateUp
             }

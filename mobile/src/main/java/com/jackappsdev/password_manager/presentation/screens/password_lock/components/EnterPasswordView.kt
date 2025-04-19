@@ -65,7 +65,7 @@ fun EnterPasswordView(
             }
         },
         trailingIcon = {
-            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowPassword) }) {
+            IconButton(onClick = { onEvent(PasswordLockUiEvent.ToggleShowPasswordVisibility) }) {
                 Icon(
                     imageVector = if (state.showPassword) {
                         Icons.Outlined.VisibilityOff
@@ -96,7 +96,7 @@ fun EnterPasswordView(
         Text(stringResource(R.string.btn_confirm))
     }
 
-    Spacer(modifier = Modifier.height(4.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
     if (state.useScreenLockToUnlock == true && state.isScreenLockAvailable == true) {
         OutlinedButton(

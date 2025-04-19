@@ -21,13 +21,13 @@ class PasswordLockEffectHandler(
     private val hapticFeedback: HapticFeedback
 ) {
 
-    fun onIncorrectPassword() {
-        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-    }
-
     fun onUnlock() {
         hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
         context.showToast(context.getString(R.string.toast_incorrect_password))
+    }
+
+    fun onIncorrectPassword() {
+        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
     }
 
     fun onOpenPhoneApp() {

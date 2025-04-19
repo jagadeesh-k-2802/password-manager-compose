@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
     private fun registerReceiver() {
         ContextCompat.registerReceiver(
-            this,
+            baseContext,
             pinChangeBroadcastReceiver,
             IntentFilter(PIN_CHANGE_ACTION),
             ContextCompat.RECEIVER_NOT_EXPORTED

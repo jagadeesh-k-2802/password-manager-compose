@@ -9,8 +9,13 @@ class EncryptedSQLiteOpenHelper(
     name: String,
     factory: SQLiteDatabase.CursorFactory?,
     version: Int
-) :
-    SQLiteOpenHelper(context, name, factory, version) {
-    override fun onCreate(db: SQLiteDatabase) {}
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+) : SQLiteOpenHelper(context, name, factory, version) {
+
+    override fun onCreate(db: SQLiteDatabase) {
+        // No Operation
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        // No Operation
+    }
 }

@@ -12,6 +12,7 @@ import com.jackappsdev.password_manager.presentation.screens.add_password_item.e
 @Composable
 fun AddPasswordItemRoot(navController: NavController) {
     val viewModel: AddPasswordItemViewModel = hiltViewModel()
+    val categoryItems = viewModel.categoryItems.collectAsState(listOf())
     val keyboardController = LocalSoftwareKeyboardController.current
     val savedStateHandle = navController.currentBackStackEntryAsState().value?.savedStateHandle
 
@@ -25,7 +26,7 @@ fun AddPasswordItemRoot(navController: NavController) {
     AddPasswordItemScreen(
         savedStateHandle = savedStateHandle,
         state = viewModel.state,
-        categoryItems = viewModel.categoryItems.collectAsState(listOf()),
+        categoryItems = categoryItems,
         errorFlow = viewModel.errorFlow,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

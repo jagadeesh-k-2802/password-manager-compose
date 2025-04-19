@@ -15,8 +15,8 @@ sealed interface FilterBy {
  */
 fun FilterBy.where(): String {
     return when(this) {
-        FilterBy.All -> EMPTY_STRING
+        is FilterBy.All -> EMPTY_STRING
         is FilterBy.Category -> "category_id = ${this.categoryId}"
-        FilterBy.NoCategoryItems -> "category_id IS NULL"
+        is FilterBy.NoCategoryItems -> "category_id IS NULL"
     }
 }

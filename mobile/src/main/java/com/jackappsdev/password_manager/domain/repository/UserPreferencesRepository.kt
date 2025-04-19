@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
     fun getPassword(): String?
-    suspend fun setPassword(newPassword: String)
+    suspend fun setInitialPassword(newPassword: String)
     suspend fun hasPasswordSet(): Boolean
     suspend fun verifyPassword(password: String): Boolean
     suspend fun getScreenLockToUnlock(): Boolean

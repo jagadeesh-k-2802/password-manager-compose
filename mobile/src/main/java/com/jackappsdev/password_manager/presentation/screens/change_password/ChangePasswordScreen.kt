@@ -45,7 +45,7 @@ fun ChangePasswordScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is ChangePasswordUiEffect.OnPasswordChanged -> onPasswordChanged()
+                    is ChangePasswordUiEffect.PasswordUpdated -> onPasswordUpdated()
                     is ChangePasswordUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
@@ -76,8 +76,8 @@ fun ChangePasswordScreen(
                 .fillMaxWidth()
         ) {
             ChangePasswordView(
-                error = error,
                 state = state,
+                error = error,
                 onEvent = onEvent
             )
         }

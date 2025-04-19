@@ -13,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.constants.colorList
+import com.jackappsdev.password_manager.core.conditional
 import com.jackappsdev.password_manager.core.parseColor
-import com.jackappsdev.password_manager.presentation.navigation.conditional
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
 @Composable

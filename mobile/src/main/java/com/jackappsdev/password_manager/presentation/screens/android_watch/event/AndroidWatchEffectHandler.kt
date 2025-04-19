@@ -28,6 +28,12 @@ class AndroidWatchEffectHandler(
 
     private val dataClient = Wearable.getDataClient(context)
 
+    fun onRequestPinChange() {
+        checkIfWatchIsAvailableAndAppInstalled {
+            onEvent(AndroidWatchUiEvent.SetupPin)
+        }
+    }
+
     fun onSetupPin(pin: String) {
         keyboardController?.hide()
 
@@ -47,12 +53,6 @@ class AndroidWatchEffectHandler(
     fun onConfirmToggleAndroidWatch() {
         checkIfWatchIsAvailableAndAppInstalled {
             onEvent(AndroidWatchUiEvent.ToggleAndroidWatch)
-        }
-    }
-
-    fun onRequestPinChange() {
-        checkIfWatchIsAvailableAndAppInstalled {
-            onEvent(AndroidWatchUiEvent.SetupPin)
         }
     }
 

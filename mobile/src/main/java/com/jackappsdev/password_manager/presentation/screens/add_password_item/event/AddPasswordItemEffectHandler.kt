@@ -9,12 +9,12 @@ class AddPasswordItemEffectHandler(
     val keyboardController: SoftwareKeyboardController?
 ) {
 
+    fun onNavigateToAddCategory() {
+        navController.navigate(Routes.AddCategoryItem)
+    }
+
     fun onNavigateUp() {
         keyboardController?.hide()
         navController.navigateUp()
-    }
-
-    fun onNavigateToAddCategory() {
-        navController.navigate(Routes.AddCategoryItem)
     }
 }

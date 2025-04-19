@@ -33,7 +33,7 @@ fun GeneratedPasswordView(
         Column(
             modifier = Modifier.padding(
                 top = 12.dp,
-                bottom = 20.dp,
+                bottom = 8.dp,
                 start = pagePadding,
                 end = pagePadding
             )
@@ -62,7 +62,7 @@ fun GeneratedPasswordView(
                         )
                     }
 
-                    IconButton(onClick = { onEvent(PasswordGeneratorUiEvent.OnCopyPassword) }) {
+                    IconButton(onClick = { onEvent(PasswordGeneratorUiEvent.CopyPassword) }) {
                         Icon(
                             imageVector = Icons.Outlined.ContentCopy,
                             contentDescription = stringResource(R.string.accessibility_copy_text)

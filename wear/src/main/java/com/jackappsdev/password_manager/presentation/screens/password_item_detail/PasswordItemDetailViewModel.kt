@@ -42,14 +42,14 @@ class PasswordItemDetailViewModel @Inject constructor(
         }
     }
 
-    private fun toggleIsAlreadySetOnce() {
+    private fun toggleAlreadySetOnce() {
         state = state.copy(isValueAlreadySetOnce = !state.isValueAlreadySetOnce)
     }
 
     override fun onEvent(event: PasswordItemDetailUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is PasswordItemDetailUiEvent.ToggleIsAlreadySetOnce -> toggleIsAlreadySetOnce()
+                is PasswordItemDetailUiEvent.ToggleAlreadySetOnce -> toggleAlreadySetOnce()
                 is PasswordItemDetailUiEvent.NavigateUp -> PasswordItemDetailUiEffect.NavigateUp
             }
 

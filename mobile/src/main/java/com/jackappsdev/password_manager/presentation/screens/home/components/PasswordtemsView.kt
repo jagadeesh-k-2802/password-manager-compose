@@ -47,9 +47,10 @@ fun PasswordItemsView(
 
         items?.let {
             items(it) { item ->
-                PasswordItem(item) {
-                    onEvent(HomeUiEvent.NavigateToPasswordItem(item.id ?: 0))
-                }
+                PasswordItem(
+                    item = item,
+                    onClick = { onEvent(HomeUiEvent.NavigateToPasswordItem(item.id ?: 0)) }
+                )
             }
         }
     }

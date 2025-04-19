@@ -28,11 +28,15 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
     private val _effectChannel = Channel<PasswordGeneratorUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()
 
-    init {
-        generatePassword()
+    companion object {
+        const val LAST_OPTION_COUNT = 3
     }
 
-    private fun generatePassword() {
+    init {
+        onInit()
+    }
+
+    private fun onInit() {
         with(state) {
             state = state.copy(
                 password = generateRandomPassword(
@@ -63,54 +67,40 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
         }
     }
 
-    private fun onLengthChange(length: Int) {
-        if (length == state.passwordLength) return
-        state = state.copy(passwordLength = length)
-        generatePassword()
-    }
-
     private fun copyToClipboard(): PasswordGeneratorUiEffect {
         return PasswordGeneratorUiEffect.CopyToClipboard(state.password)
     }
 
-    private fun isLastOption(value: Boolean): PasswordGeneratorUiEffect? {
-        var count = 0
-        if (!state.includeLowercase) count++
-        if (!state.includeUppercase) count++
-        if (!state.includeNumbers) count++
-        if (!state.includeSymbols) count++
-
-        return if (count == 3 && !value) {
-            PasswordGeneratorUiEffect.ShowSnackbarMessage(R.string.text_all_options_warning)
-        } else {
-            null
-        }
+    private fun onLengthChange(length: Int) {
+        if (length == state.passwordLength) return
+        state = state.copy(passwordLength = length)
+        onInit()
     }
 
     private fun onOptionToggle(event: PasswordGeneratorUiEvent): PasswordGeneratorUiEffect? {
         when (event) {
-            is PasswordGeneratorUiEvent.OnToggleIncludeLowercase -> {
+            is PasswordGeneratorUiEvent.ToggleIncludeLowercase -> {
                 val value = !state.includeLowercase
                 val effect = isLastOption(value)
                 if (effect != null) return effect
                 state = state.copy(includeLowercase = value)
             }
 
-            is PasswordGeneratorUiEvent.OnToggleIncludeUppercase -> {
+            is PasswordGeneratorUiEvent.ToggleIncludeUppercase -> {
                 val value = !state.includeUppercase
                 val effect = isLastOption(value)
                 if (effect != null) return effect
                 state = state.copy(includeUppercase = value)
             }
 
-            is PasswordGeneratorUiEvent.OnToggleIncludeNumbers -> {
+            is PasswordGeneratorUiEvent.ToggleIncludeNumbers -> {
                 val value = !state.includeNumbers
                 val effect = isLastOption(value)
                 if (effect != null) return effect
                 state = state.copy(includeNumbers = value)
             }
 
-            is PasswordGeneratorUiEvent.OnToggleIncludeSymbols -> {
+            is PasswordGeneratorUiEvent.ToggleIncludeSymbols -> {
                 val value = !state.includeSymbols
                 val effect = isLastOption(value)
                 if (effect != null) return effect
@@ -122,20 +112,34 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
             }
         }
 
-        generatePassword()
+        onInit()
         return null
+    }
+
+    private fun isLastOption(value: Boolean): PasswordGeneratorUiEffect? {
+        var count = 0
+        if (!state.includeLowercase) count++
+        if (!state.includeUppercase) count++
+        if (!state.includeNumbers) count++
+        if (!state.includeSymbols) count++
+
+        return if (count == LAST_OPTION_COUNT && !value) {
+            PasswordGeneratorUiEffect.ShowSnackbarMessage(R.string.text_all_options_warning)
+        } else {
+            null
+        }
     }
 
     override fun onEvent(event: PasswordGeneratorUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is PasswordGeneratorUiEvent.OnCopyPassword -> copyToClipboard()
-                is PasswordGeneratorUiEvent.RegeneratePassword -> generatePassword()
-                is PasswordGeneratorUiEvent.OnLengthChange -> onLengthChange(event.length)
-                is PasswordGeneratorUiEvent.OnToggleIncludeLowercase -> onOptionToggle(event)
-                is PasswordGeneratorUiEvent.OnToggleIncludeUppercase -> onOptionToggle(event)
-                is PasswordGeneratorUiEvent.OnToggleIncludeNumbers -> onOptionToggle(event)
-                is PasswordGeneratorUiEvent.OnToggleIncludeSymbols -> onOptionToggle(event)
+                is PasswordGeneratorUiEvent.RegeneratePassword -> onInit()
+                is PasswordGeneratorUiEvent.CopyPassword -> copyToClipboard()
+                is PasswordGeneratorUiEvent.LengthChange -> onLengthChange(event.length)
+                is PasswordGeneratorUiEvent.ToggleIncludeLowercase -> onOptionToggle(event)
+                is PasswordGeneratorUiEvent.ToggleIncludeUppercase -> onOptionToggle(event)
+                is PasswordGeneratorUiEvent.ToggleIncludeNumbers -> onOptionToggle(event)
+                is PasswordGeneratorUiEvent.ToggleIncludeSymbols -> onOptionToggle(event)
             }
 
             if (effect is PasswordGeneratorUiEffect) { _effectChannel.send(effect) }

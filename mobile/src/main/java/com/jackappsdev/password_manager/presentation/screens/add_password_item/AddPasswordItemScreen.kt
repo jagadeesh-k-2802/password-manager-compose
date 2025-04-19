@@ -83,21 +83,21 @@ fun AddPasswordItemScreen(
         if (savedStateHandle?.contains(CREATED_CATEGORY) == true) {
             val json = savedStateHandle[CREATED_CATEGORY] ?: EMPTY_STRING
             val model = Json.decodeFromString<CategoryModel>(json)
-            onEvent(AddPasswordItemUiEvent.OnSelectCategory(model))
+            onEvent(AddPasswordItemUiEvent.SelectCategory(model))
         }
     }
 
     LaunchedEffect(key1 = Unit) {
         if (!state.isAlreadyAutoFocused) {
             focusRequester.requestFocus()
-            onEvent(AddPasswordItemUiEvent.SetIsAlreadyAutoFocus)
+            onEvent(AddPasswordItemUiEvent.ToggleAlreadyAutoFocusVisibility)
         }
 
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is AddPasswordItemUiEffect.NavigateUp -> onNavigateUp()
                     is AddPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
+                    is AddPasswordItemUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
@@ -106,12 +106,12 @@ fun AddPasswordItemScreen(
     if (state.isUnsavedChangesDialogVisible) {
         UnsavedChangesDialog(
             onConfirm = { onEvent(AddPasswordItemUiEvent.NavigateUp) },
-            onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility) }
+            onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleUnsavedDialogVisibility) }
         )
     }
 
     BackHandler(state.hasUserEnteredDetails) {
-        onEvent(AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility)
+        onEvent(AddPasswordItemUiEvent.ToggleUnsavedDialogVisibility)
     }
 
     Scaffold(
@@ -139,7 +139,7 @@ fun AddPasswordItemScreen(
         ) {
             OutlinedTextField(
                 value = state.name,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.OnEnterName(it)) },
+                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterName(it)) },
                 isError = error is AddPasswordItemError.NameError,
                 supportingText = {
                     error?.let {
@@ -162,7 +162,7 @@ fun AddPasswordItemScreen(
 
             OutlinedTextField(
                 value = state.username,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.OnEnterUsername(it)) },
+                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterUsername(it)) },
                 label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -175,11 +175,11 @@ fun AddPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = state.password,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.OnEnterPassword(it)) },
+                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterPassword(it)) },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -190,14 +190,14 @@ fun AddPasswordItemScreen(
                 },
                 trailingIcon = {
                     Row {
-                        IconButton(onClick = { onEvent(AddPasswordItemUiEvent.OnGenerateRandomPassword) }) {
+                        IconButton(onClick = { onEvent(AddPasswordItemUiEvent.GenerateRandomPassword) }) {
                             Icon(
                                 imageVector = Icons.Outlined.Refresh,
                                 contentDescription = stringResource(R.string.accessibility_toggle_password)
                             )
                         }
 
-                        IconButton(onClick = { onEvent(AddPasswordItemUiEvent.ToggleShowPassword) }) {
+                        IconButton(onClick = { onEvent(AddPasswordItemUiEvent.ToggleShowPasswordVisibility) }) {
                             Icon(
                                 imageVector = if (state.showPassword) {
                                     Icons.Outlined.VisibilityOff
@@ -218,11 +218,11 @@ fun AddPasswordItemScreen(
                 ),
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = state.website,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.OnEnterWebsite(it)) },
+                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterWebsite(it)) },
                 label = { Text(stringResource(R.string.label_website)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -235,11 +235,11 @@ fun AddPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = state.notes,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.OnEnterNotes(it)) },
+                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterNotes(it)) },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
@@ -249,7 +249,7 @@ fun AddPasswordItemScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             CategoryDropDown(
                 state = state,
@@ -257,7 +257,7 @@ fun AddPasswordItemScreen(
                 onEvent = onEvent
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { onEvent(AddPasswordItemUiEvent.AddPasswordItem) },

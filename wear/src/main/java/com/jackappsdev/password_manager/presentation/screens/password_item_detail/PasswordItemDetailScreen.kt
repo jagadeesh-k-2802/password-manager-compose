@@ -45,7 +45,7 @@ fun PasswordItemDetailScreen(
         if (state.passwordItem == null && state.isValueAlreadySetOnce) {
             onEvent(PasswordItemDetailUiEvent.NavigateUp)
         } else {
-            onEvent(PasswordItemDetailUiEvent.ToggleIsAlreadySetOnce)
+            onEvent(PasswordItemDetailUiEvent.ToggleAlreadySetOnce)
         }
     }
 

@@ -32,12 +32,6 @@ class AddPasswordItemViewModel @Inject constructor(
     var state by mutableStateOf(AddPasswordItemState())
         private set
 
-    private val _effectChannel = Channel<AddPasswordItemUiEffect>()
-    override val effectFlow = _effectChannel.receiveAsFlow()
-
-    private val _errorChannel = Channel<AddPasswordItemError>()
-    val errorFlow = _errorChannel.receiveAsFlow()
-
     val categoryItems = categoryRepository.getAllCategories()
 
     private val noCategoryModel = CategoryModel(
@@ -45,25 +39,77 @@ class AddPasswordItemViewModel @Inject constructor(
         color = "#000000",
     )
 
+    private val _effectChannel = Channel<AddPasswordItemUiEffect>()
+    override val effectFlow = _effectChannel.receiveAsFlow()
+
+    private val _errorChannel = Channel<AddPasswordItemError>()
+    val errorFlow = _errorChannel.receiveAsFlow()
+
     init {
-        initializeData()
+        onInit()
     }
 
-    private fun initializeData() {
+    private fun onInit() {
         state = state.copy(category = noCategoryModel)
     }
 
     private fun onEnterText(event: AddPasswordItemUiEvent) {
         when (event) {
-            is AddPasswordItemUiEvent.OnEnterName -> state = state.copy(name = event.name)
-            is AddPasswordItemUiEvent.OnEnterUsername -> state = state.copy(username = event.username)
-            is AddPasswordItemUiEvent.OnEnterPassword -> state = state.copy(password = event.password)
-            is AddPasswordItemUiEvent.OnEnterNotes -> state = state.copy(notes = event.notes)
-            is AddPasswordItemUiEvent.OnEnterWebsite -> state = state.copy(website = event.website)
+            is AddPasswordItemUiEvent.EnterName -> state = state.copy(name = event.name)
+            is AddPasswordItemUiEvent.EnterUsername -> state = state.copy(username = event.username)
+            is AddPasswordItemUiEvent.EnterPassword -> state = state.copy(password = event.password)
+            is AddPasswordItemUiEvent.EnterNotes -> state = state.copy(notes = event.notes)
+            is AddPasswordItemUiEvent.EnterWebsite -> state = state.copy(website = event.website)
             else -> null
         }
 
         checkIfUserEnteredDetails()
+    }
+
+    private fun checkIfUserEnteredDetails() {
+        state = state.copy(
+            hasUserEnteredDetails = state.name.isNotBlank() ||
+                state.username.isNotBlank() ||
+                state.password.isNotBlank() ||
+                state.notes.isNotBlank()
+        )
+    }
+
+    private fun onGenerateRandomPassword() {
+        val password = generateRandomPassword(GeneratePasswordConfig(length = 12))
+        state = state.copy(password = password)
+    }
+
+    private fun toggleVisibility(event: AddPasswordItemUiEvent) {
+        when (event) {
+            is AddPasswordItemUiEvent.ToggleAlreadyAutoFocusVisibility -> {
+                state = state.copy(isAlreadyAutoFocused = !state.isAlreadyAutoFocused)
+            }
+
+            is AddPasswordItemUiEvent.ToggleShowPasswordVisibility -> {
+                state = state.copy(showPassword = !state.showPassword)
+            }
+
+            is AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility -> {
+                state = state.copy(isCategoryDropdownVisible = !state.isCategoryDropdownVisible)
+            }
+
+            is AddPasswordItemUiEvent.ToggleUnsavedDialogVisibility -> {
+                state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
+            }
+
+            else -> {
+                null
+            }
+        }
+    }
+
+    private fun onSelectCategory(category: CategoryModel?) {
+        state = if (category == null) {
+            state.copy(category = noCategoryModel)
+        } else {
+            state.copy(category = category)
+        }
     }
 
     private suspend fun addPasswordItem(): AddPasswordItemUiEffect? {
@@ -88,59 +134,21 @@ class AddPasswordItemViewModel @Inject constructor(
         }
     }
 
-    private fun onGenerateRandomPassword() {
-        val password = generateRandomPassword(GeneratePasswordConfig(length = 12))
-        state = state.copy(password = password)
-    }
-
-    private fun toggleShowPassword() {
-        state = state.copy(showPassword = !state.showPassword)
-    }
-
-    private fun toggleIsCategoryDropdownVisible() {
-        state = state.copy(isCategoryDropdownVisible = !state.isCategoryDropdownVisible)
-    }
-
-    private fun toggleIsUnsavedDialogVisible() {
-        state = state.copy(isUnsavedChangesDialogVisible = !state.isUnsavedChangesDialogVisible)
-    }
-
-    private fun setIsAlreadyAutoFocus() {
-        state = state.copy(isAlreadyAutoFocused = true)
-    }
-
-    private fun onSetCategory(category: CategoryModel?) {
-        state = if (category == null) {
-            state.copy(category = noCategoryModel)
-        } else {
-            state.copy(category = category)
-        }
-    }
-
-    private fun checkIfUserEnteredDetails() {
-        state = state.copy(
-            hasUserEnteredDetails = state.name.isNotBlank() ||
-                state.username.isNotBlank() ||
-                state.password.isNotBlank() ||
-                state.notes.isNotBlank()
-        )
-    }
-
     override fun onEvent(event: AddPasswordItemUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is AddPasswordItemUiEvent.OnEnterName -> onEnterText(event)
-                is AddPasswordItemUiEvent.OnEnterNotes -> onEnterText(event)
-                is AddPasswordItemUiEvent.OnEnterPassword -> onEnterText(event)
-                is AddPasswordItemUiEvent.OnEnterUsername -> onEnterText(event)
-                is AddPasswordItemUiEvent.OnEnterWebsite -> onEnterText(event)
+                is AddPasswordItemUiEvent.EnterName -> onEnterText(event)
+                is AddPasswordItemUiEvent.EnterUsername -> onEnterText(event)
+                is AddPasswordItemUiEvent.EnterPassword -> onEnterText(event)
+                is AddPasswordItemUiEvent.EnterWebsite -> onEnterText(event)
+                is AddPasswordItemUiEvent.EnterNotes -> onEnterText(event)
+                is AddPasswordItemUiEvent.GenerateRandomPassword -> onGenerateRandomPassword()
+                is AddPasswordItemUiEvent.ToggleAlreadyAutoFocusVisibility -> toggleVisibility(event)
+                is AddPasswordItemUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)
+                is AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility -> toggleVisibility(event)
+                is AddPasswordItemUiEvent.ToggleUnsavedDialogVisibility -> toggleVisibility(event)
+                is AddPasswordItemUiEvent.SelectCategory -> onSelectCategory(event.category)
                 is AddPasswordItemUiEvent.AddPasswordItem -> addPasswordItem()
-                is AddPasswordItemUiEvent.OnGenerateRandomPassword -> onGenerateRandomPassword()
-                is AddPasswordItemUiEvent.ToggleShowPassword -> toggleShowPassword()
-                is AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility -> toggleIsCategoryDropdownVisible()
-                is AddPasswordItemUiEvent.ToggleIsUnsavedDialogVisibility -> toggleIsUnsavedDialogVisible()
-                is AddPasswordItemUiEvent.SetIsAlreadyAutoFocus -> setIsAlreadyAutoFocus()
-                is AddPasswordItemUiEvent.OnSelectCategory -> onSetCategory(event.category)
                 is AddPasswordItemUiEvent.NavigateToAddCategory -> AddPasswordItemUiEffect.NavigateToAddCategory
                 is AddPasswordItemUiEvent.NavigateUp -> AddPasswordItemUiEffect.NavigateUp
             }

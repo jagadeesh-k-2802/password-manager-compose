@@ -65,10 +65,8 @@ fun ImportPasswordsDialog(
                     onValueChange = { value -> password = value }
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    stringResource(R.string.text_import_passwords_note)
-                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(stringResource(R.string.text_import_passwords_note))
             }
         },
         confirmButton = { TextButton(onClick = { onConfirm(password) }) { Text(stringResource(R.string.dialog_btn_confirm)) } },

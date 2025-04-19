@@ -15,6 +15,7 @@ fun EditPasswordItemRoot(
     navController: NavController
 ) {
     val viewModel: EditPasswordItemViewModel = hiltViewModel()
+    val categoryItems = viewModel.categoryItems.collectAsState(listOf())
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val savedStateHandle = navController.currentBackStackEntryAsState().value?.savedStateHandle
@@ -30,7 +31,7 @@ fun EditPasswordItemRoot(
     EditPasswordItemScreen(
         savedStateHandle = savedStateHandle,
         state = viewModel.state,
-        categoryItems = viewModel.categoryItems.collectAsState(listOf()),
+        categoryItems = categoryItems,
         errorFlow = viewModel.errorFlow,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

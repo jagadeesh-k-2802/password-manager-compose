@@ -11,17 +11,15 @@ class ManageCategoriesEffectHandler(
     private val scope: CoroutineScope
 ) {
     fun onScrollToTop(state: LazyListState) {
-        scope.launch {
-            state.animateScrollToItem(0)
-        }
-    }
-
-    fun onNavigateToAddCategory() {
-        navController.navigate(Routes.AddCategoryItem)
+        scope.launch { state.animateScrollToItem(0) }
     }
 
     fun onNavigateToCategoryItem(id: Int) {
         navController.navigate(Routes.CategoryItemDetail(id))
+    }
+
+    fun onNavigateToAddCategory() {
+        navController.navigate(Routes.AddCategoryItem)
     }
 
     fun onNavigateUp() {

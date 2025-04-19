@@ -58,45 +58,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun selectSortBy(sortBy: SortBy): HomeUiEffect {
-        val itemsFlow = passwordItemRepository.getPasswordItems(
-            sortBy.orderBy(),
-            state.filterBy.where(),
-            EMPTY_STRING
-        )
-
-        state = state.copy(
-            sortBy = sortBy,
-            items = itemsFlow.stateIn(viewModelScope)
-        )
-
-        if (state.searchQuery.isNotEmpty()) { searchItems() }
-        return HomeUiEffect.SortSelected
+    fun lockApplication() {
+        Runtime.getRuntime().exit(0)
     }
 
-    private suspend fun selectFilterBy(filterBy: FilterBy): HomeUiEffect {
-        val itemsFlow = passwordItemRepository.getPasswordItems(
-            state.sortBy.orderBy(),
-            filterBy.where(),
-            EMPTY_STRING
-        )
-
-        state = state.copy(
-            filterBy = filterBy,
-            items = itemsFlow.stateIn(viewModelScope)
-        )
-
-        if (state.searchQuery.isNotEmpty()) { searchItems() }
-        return HomeUiEffect.FilterSelected
+    private fun onEnterSearchQuery(query: String) {
+        state = state.copy(searchQuery = query, isSearching = query.isNotEmpty())
     }
 
     private fun onClearSearch(): HomeUiEffect {
         state = state.copy(searchQuery = EMPTY_STRING, isSearching = false, filteredItems = null)
         return HomeUiEffect.SearchCleared
-    }
-
-    private fun onEnterSearchQuery(query: String) {
-        state = state.copy(searchQuery = query, isSearching = query.isNotEmpty())
     }
 
     private suspend fun searchItems() {
@@ -115,16 +87,44 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun lockApplication() {
-        Runtime.getRuntime().exit(0)
+    private suspend fun selectFilterBy(filterBy: FilterBy): HomeUiEffect {
+        val itemsFlow = passwordItemRepository.getPasswordItems(
+            state.sortBy.orderBy(),
+            filterBy.where(),
+            EMPTY_STRING
+        )
+
+        state = state.copy(
+            filterBy = filterBy,
+            items = itemsFlow.stateIn(viewModelScope)
+        )
+
+        if (state.searchQuery.isNotEmpty()) { searchItems() }
+        return HomeUiEffect.FilterSelected
+    }
+
+    private suspend fun selectSortBy(sortBy: SortBy): HomeUiEffect {
+        val itemsFlow = passwordItemRepository.getPasswordItems(
+            sortBy.orderBy(),
+            state.filterBy.where(),
+            EMPTY_STRING
+        )
+
+        state = state.copy(
+            sortBy = sortBy,
+            items = itemsFlow.stateIn(viewModelScope)
+        )
+
+        if (state.searchQuery.isNotEmpty()) { searchItems() }
+        return HomeUiEffect.SortSelected
     }
 
     override fun onEvent(event: HomeUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
                 is HomeUiEvent.LockApplication -> lockApplication()
-                is HomeUiEvent.ClearSearch -> onClearSearch()
                 is HomeUiEvent.EnterSearchQuery -> onEnterSearchQuery(event.query)
+                is HomeUiEvent.ClearSearch -> onClearSearch()
                 is HomeUiEvent.SearchItems -> searchItems()
                 is HomeUiEvent.SelectFilterBy -> selectFilterBy(event.filterBy)
                 is HomeUiEvent.SelectSortBy -> selectSortBy(event.sortBy)

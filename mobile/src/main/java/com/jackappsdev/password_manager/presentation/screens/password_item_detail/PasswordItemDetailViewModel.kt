@@ -38,10 +38,10 @@ class PasswordItemDetailViewModel @Inject constructor(
     override val effectFlow = _effectChannel.receiveAsFlow()
 
     init {
-        getInitialData()
+        onInit()
     }
 
-    private fun getInitialData() {
+    private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
                 hasAndroidWatchPinSet = userPreferencesRepository.hasAndroidWatchPinSet(),
@@ -49,7 +49,27 @@ class PasswordItemDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun toggleIsAddedToWatch(): PasswordItemDetailUiEffect? {
+    private fun toggleVisibility(event: PasswordItemDetailUiEvent) {
+        when (event) {
+            is PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility -> {
+                state = state.copy(isDeleteDialogVisible = !state.isDeleteDialogVisible)
+            }
+
+            is PasswordItemDetailUiEvent.ToggleShowPasswordVisibility -> {
+                state = state.copy(showPassword = !state.showPassword)
+            }
+
+            is PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility -> {
+                state = state.copy(dropDownMenuExpanded = !state.dropDownMenuExpanded)
+            }
+
+            else -> {
+                null
+            }
+        }
+    }
+
+    private suspend fun toggleAddedToWatch(): PasswordItemDetailUiEffect? {
         val passwordWithCategoryModel = passwordItem.first()
         if (passwordWithCategoryModel == null) return null
 
@@ -67,19 +87,7 @@ class PasswordItemDetailViewModel @Inject constructor(
             )
         )
 
-        return PasswordItemDetailUiEffect.ToggleIsAddedToWatch
-    }
-
-    private fun toggleShowPasswordVisibility() {
-        state = state.copy(showPassword = !state.showPassword)
-    }
-
-    private fun toggleDropDownMenuVisibility() {
-        state = state.copy(dropDownMenuExpanded = !state.dropDownMenuExpanded)
-    }
-
-    private fun toggleDeleteDialogVisibility() {
-        state = state.copy(isDeleteDialogVisible = !state.isDeleteDialogVisible)
+        return PasswordItemDetailUiEffect.ToggleAddedToWatch
     }
 
     private suspend fun deleteItem(): PasswordItemDetailUiEffect? {
@@ -93,11 +101,11 @@ class PasswordItemDetailViewModel @Inject constructor(
     override fun onEvent(event: PasswordItemDetailUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
+                is PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility -> toggleVisibility(event)
+                is PasswordItemDetailUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)
+                is PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility -> toggleVisibility(event)
                 is PasswordItemDetailUiEvent.DeleteItem -> deleteItem()
-                is PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility -> toggleDeleteDialogVisibility()
-                is PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility -> toggleDropDownMenuVisibility()
-                is PasswordItemDetailUiEvent.ToggleShowPasswordVisibility -> toggleShowPasswordVisibility()
-                is PasswordItemDetailUiEvent.ToggleIsAddedToWatch -> toggleIsAddedToWatch()
+                is PasswordItemDetailUiEvent.ToggleAddedToWatch -> toggleAddedToWatch()
                 is PasswordItemDetailUiEvent.CopyText -> PasswordItemDetailUiEffect.CopyText(event.text)
                 is PasswordItemDetailUiEvent.LaunchUrl -> PasswordItemDetailUiEffect.LaunchUrl(event.url)
                 is PasswordItemDetailUiEvent.NavigateToEditPassword -> PasswordItemDetailUiEffect.NavigateToEditPassword(event.id)

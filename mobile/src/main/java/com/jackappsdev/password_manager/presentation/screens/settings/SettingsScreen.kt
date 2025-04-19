@@ -71,15 +71,15 @@ fun SettingsScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is SettingsUiEffect.OnImportPasswords -> onImportPasswords(importIntent)
-                    is SettingsUiEffect.OnExportPasswords -> onExportPasswords(exportIntent)
-                    is SettingsUiEffect.OnPasswordsExported -> onPasswordsExported()
+                    is SettingsUiEffect.OpenImportPasswordsIntent -> onOpenImportPasswordsIntent(importIntent)
+                    is SettingsUiEffect.OpenExportPasswordsIntent -> onOpenExportPasswordsIntent(exportIntent)
+                    is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
                     is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
                     is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
-                    is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
                     is SettingsUiEffect.NavigateToChangePassword -> onNavigateToChangePassword()
                     is SettingsUiEffect.NavigateToManageCategories -> onNavigateToManageCategories()
                     is SettingsUiEffect.NavigateToAndroidWatch -> onNavigateToAndroidWatch()
+                    is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
                 }
             }
         }
@@ -147,13 +147,13 @@ fun SettingsScreen(
             SettingItem(
                 leadingIcon = Icons.Outlined.Download,
                 title = stringResource(R.string.label_import_passwords),
-                onClick = { onEvent(SettingsUiEvent.OnImportPasswords) }
+                onClick = { onEvent(SettingsUiEvent.OpenImportPasswordsIntent) }
             )
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Upload,
                 title = stringResource(R.string.label_export_passwords),
-                onClick = { onEvent(SettingsUiEvent.OnExportPasswords) }
+                onClick = { onEvent(SettingsUiEvent.OpenExportPasswordsIntent) }
             )
 
             SettingItem(

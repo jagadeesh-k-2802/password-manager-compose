@@ -12,9 +12,6 @@ import com.jackappsdev.password_manager.presentation.MainActivity
 import com.jackappsdev.password_manager.shared.data.dto.PasswordItemDto
 import kotlinx.serialization.json.Json
 
-/**
- * Implementation of [DataLayerListenerActions] for [DataLayerListenerService] actions.
- */
 class DataLayerListenerActionsImpl(
     private val context: Context,
     private val passphraseRepository: PassphraseRepository,

@@ -33,11 +33,11 @@ class PasswordLockEffectHandler(
         }
     )
 
-    fun onBiometricAuthenticate() {
-        biometricPrompt.authenticate(promptInfo)
-    }
-
     fun onHideKeyboard() {
         keyboardController?.hide()
+    }
+
+    fun onBiometricAuthenticate() {
+        biometricPrompt.authenticate(promptInfo)
     }
 }

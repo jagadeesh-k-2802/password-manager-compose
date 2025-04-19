@@ -30,8 +30,8 @@ class DataStoreEncryptionSerializer<T : @Serializable Any>(
         } catch (e: SerializationException) {
             e.printStackTrace()
             defaultValue
-        } catch (e: BadPaddingException) {
-            // Encryption key has changed, clear the app data
+        } catch (_: BadPaddingException) {
+            // Encryption key has changed should clear the app data
             // Happens for fresh install on same device or different device, so clearing data
             // Also disabled auto backup which causes this issue
             val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager

@@ -34,7 +34,7 @@ fun CategoryDropDown(
 ) {
     ExposedDropdownMenuBox(
         expanded = state.isCategoryDropdownVisible,
-        onExpandedChange = { onEvent(AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility) }
+        onExpandedChange = { onEvent(AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility) }
     ) {
         OutlinedTextField(
             leadingIcon = {
@@ -60,7 +60,7 @@ fun CategoryDropDown(
 
         ExposedDropdownMenu(
             expanded = state.isCategoryDropdownVisible,
-            onDismissRequest = { onEvent(AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility) },
+            onDismissRequest = { onEvent(AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility) },
             modifier = Modifier.requiredSizeIn(maxHeight = 150.dp)
         ) {
             DropdownMenuItem(
@@ -72,8 +72,8 @@ fun CategoryDropDown(
                 },
                 text = { Text(stringResource(R.string.text_no_category)) },
                 onClick = {
-                    onEvent(AddPasswordItemUiEvent.OnSelectCategory(null))
-                    onEvent(AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility)
+                    onEvent(AddPasswordItemUiEvent.SelectCategory(null))
+                    onEvent(AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility)
                 }
             )
 
@@ -82,8 +82,8 @@ fun CategoryDropDown(
                     leadingIcon = { ColoredCircle(color = item.color) },
                     text = { Text(text = item.name) },
                     onClick = {
-                        onEvent(AddPasswordItemUiEvent.OnSelectCategory(item))
-                        onEvent(AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility)
+                        onEvent(AddPasswordItemUiEvent.SelectCategory(item))
+                        onEvent(AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility)
                     }
                 )
             }
@@ -98,7 +98,7 @@ fun CategoryDropDown(
                 text = { Text(text = stringResource(R.string.label_create_new_category)) },
                 onClick = {
                     onEvent(AddPasswordItemUiEvent.NavigateToAddCategory)
-                    onEvent(AddPasswordItemUiEvent.ToggleIsCategoryDropdownVisibility)
+                    onEvent(AddPasswordItemUiEvent.ToggleCategoryDropdownVisibility)
                 }
             )
         }

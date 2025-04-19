@@ -35,56 +35,16 @@ class PasswordLockViewModel @Inject constructor(
     val errorFlow = _errorChannel.receiveAsFlow()
 
     init {
-        fetchInitialData()
+        onInit()
     }
 
-    private fun fetchInitialData() {
+    private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
                 hasPasswordSet = userPreferencesRepository.hasPasswordSet(),
                 useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
                 isScreenLockAvailable = isScreenLockAvailable(application.applicationContext)
             )
-        }
-    }
-
-    private fun setNewPassword(): PasswordLockUiEffect {
-        viewModelScope.launch {
-            if (state.password != state.confirmPassword) {
-                _errorChannel.send(PasswordLockError.ConfirmPasswordError(R.string.error_passwords_not_match))
-            } else if (state.password.isEmpty()) {
-                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_password_not_empty))
-            } else if (state.confirmPassword.length < 8) {
-                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_password_is_small))
-            } else if (state.confirmPassword.isEmpty()) {
-                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_confirm_password_not_empty))
-            } else {
-                userPreferencesRepository.setPassword(state.password)
-                state = state.copy(hasPasswordSet = true)
-                setUnlocked(true)
-            }
-        }
-
-        return PasswordLockUiEffect.HideKeyboard
-    }
-
-    fun setUnlocked(hasBeenUnlocked: Boolean) {
-        state = state.copy(
-            hasBeenUnlocked = hasBeenUnlocked,
-            password = EMPTY_STRING,
-            showPassword = false,
-            confirmPassword = EMPTY_STRING,
-            showConfirmPassword = false
-        )
-    }
-
-    private suspend fun verifyPassword(): PasswordLockUiEffect? {
-        return if (userPreferencesRepository.verifyPassword(state.password)) {
-            setUnlocked(true)
-            PasswordLockUiEffect.HideKeyboard
-        } else {
-            _errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_password))
-            null
         }
     }
 
@@ -106,11 +66,11 @@ class PasswordLockViewModel @Inject constructor(
 
     private fun toggleVisibility(event: PasswordLockUiEvent) {
         when (event) {
-            is PasswordLockUiEvent.ToggleShowPassword -> {
+            is PasswordLockUiEvent.ToggleShowPasswordVisibility -> {
                 state = state.copy(showPassword = !state.showPassword)
             }
 
-            is PasswordLockUiEvent.ToggleShowConfirmPassword -> {
+            is PasswordLockUiEvent.ToggleShowConfirmPasswordVisibility -> {
                 state = state.copy(showConfirmPassword = !state.showConfirmPassword)
             }
 
@@ -120,16 +80,56 @@ class PasswordLockViewModel @Inject constructor(
         }
     }
 
+    fun setUnlocked(hasBeenUnlocked: Boolean) {
+        state = state.copy(
+            hasBeenUnlocked = hasBeenUnlocked,
+            password = EMPTY_STRING,
+            showPassword = false,
+            confirmPassword = EMPTY_STRING,
+            showConfirmPassword = false
+        )
+    }
+
+    private fun setNewPassword(): PasswordLockUiEffect {
+        viewModelScope.launch {
+            if (state.password != state.confirmPassword) {
+                _errorChannel.send(PasswordLockError.ConfirmPasswordError(R.string.error_passwords_not_match))
+            } else if (state.password.isEmpty()) {
+                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_password_not_empty))
+            } else if (state.confirmPassword.length < 8) {
+                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_password_is_small))
+            } else if (state.confirmPassword.isEmpty()) {
+                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_confirm_password_not_empty))
+            } else {
+                userPreferencesRepository.setInitialPassword(state.password)
+                state = state.copy(hasPasswordSet = true)
+                setUnlocked(true)
+            }
+        }
+
+        return PasswordLockUiEffect.HideKeyboard
+    }
+
+    private suspend fun verifyPassword(): PasswordLockUiEffect? {
+        return if (userPreferencesRepository.verifyPassword(state.password)) {
+            setUnlocked(true)
+            PasswordLockUiEffect.HideKeyboard
+        } else {
+            _errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_password))
+            null
+        }
+    }
+
     override fun onEvent(event: PasswordLockUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
+                is PasswordLockUiEvent.EnterPassword -> onEnterText(event)
+                is PasswordLockUiEvent.EnterConfirmPassword -> onEnterText(event)
+                is PasswordLockUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)
+                is PasswordLockUiEvent.ToggleShowConfirmPasswordVisibility -> toggleVisibility(event)
+                is PasswordLockUiEvent.SetUnlocked -> setUnlocked(event.unlocked)
                 is PasswordLockUiEvent.SetupNewPassword -> setNewPassword()
                 is PasswordLockUiEvent.VerifyPassword -> verifyPassword()
-                is PasswordLockUiEvent.SetUnlocked -> setUnlocked(event.unlocked)
-                is PasswordLockUiEvent.EnterConfirmPassword -> onEnterText(event)
-                is PasswordLockUiEvent.EnterPassword -> onEnterText(event)
-                is PasswordLockUiEvent.ToggleShowPassword -> toggleVisibility(event)
-                is PasswordLockUiEvent.ToggleShowConfirmPassword -> toggleVisibility(event)
                 is PasswordLockUiEvent.BiometricAuthenticate -> PasswordLockUiEffect.BiometricAuthenticate
             }
 

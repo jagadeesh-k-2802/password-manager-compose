@@ -18,14 +18,18 @@ fun LengthSliderView(
     onEvent: (PasswordGeneratorUiEvent) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = pagePadding)
+        modifier = Modifier.padding(
+            start = pagePadding,
+            end = pagePadding,
+            bottom = pagePadding
+        )
     ) {
         Text(stringResource(R.string.text_length, state.passwordLength))
 
         Slider(
             value = state.passwordLength.toFloat(),
             valueRange = 6f..32f,
-            onValueChange = { onEvent(PasswordGeneratorUiEvent.OnLengthChange(it.toInt())) },
+            onValueChange = { onEvent(PasswordGeneratorUiEvent.LengthChange(it.toInt())) },
         )
     }
 }

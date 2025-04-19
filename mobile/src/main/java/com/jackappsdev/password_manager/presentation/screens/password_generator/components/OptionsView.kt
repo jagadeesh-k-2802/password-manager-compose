@@ -14,24 +14,24 @@ fun OptionsView(
     OptionSwitch(
         title = stringResource(R.string.label_include_lowercase),
         isItemChecked = state.includeLowercase,
-        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.OnToggleIncludeLowercase) }
+        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.ToggleIncludeLowercase) }
     )
 
     OptionSwitch(
         title = stringResource(R.string.label_include_uppercase),
         isItemChecked = state.includeUppercase,
-        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.OnToggleIncludeUppercase) }
+        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.ToggleIncludeUppercase) }
     )
 
     OptionSwitch(
         title = stringResource(R.string.label_include_numbers),
         isItemChecked = state.includeNumbers,
-        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.OnToggleIncludeNumbers) }
+        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.ToggleIncludeNumbers) }
     )
 
     OptionSwitch(
         title = stringResource(R.string.label_include_symbols),
         isItemChecked = state.includeSymbols,
-        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.OnToggleIncludeSymbols) }
+        onItemCheckChange = { onEvent(PasswordGeneratorUiEvent.ToggleIncludeSymbols) }
     )
 }

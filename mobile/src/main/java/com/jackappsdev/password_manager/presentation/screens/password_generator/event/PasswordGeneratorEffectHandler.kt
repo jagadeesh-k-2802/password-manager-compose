@@ -13,13 +13,13 @@ class PasswordGeneratorEffectHandler(
     private val snackbarHostState: SnackbarHostState,
 ) {
 
+    fun onCopyText(text: String) {
+        copyToClipboard(context, text)
+    }
+
     fun onShowSnackbarMessage(@StringRes message: Int) {
         scope.launch {
             snackbarHostState.showSnackbar(context.getString(message))
         }
-    }
-
-    fun onCopyText(text: String) {
-        copyToClipboard(context, text)
     }
 }

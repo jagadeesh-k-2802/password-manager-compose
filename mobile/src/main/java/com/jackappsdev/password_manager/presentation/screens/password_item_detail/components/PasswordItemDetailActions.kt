@@ -43,7 +43,7 @@ fun RowScope.PasswordItemDetailActions(
                     contentDescription = stringResource(R.string.accessibility_edit_item)
                 )
             },
-            text = { Text("Edit") },
+            text = { Text(stringResource(R.string.btn_edit)) },
             onClick = {
                 onEvent(PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility)
                 onEvent(PasswordItemDetailUiEvent.NavigateToEditPassword(passwordItem?.id ?: 0))
@@ -57,7 +57,7 @@ fun RowScope.PasswordItemDetailActions(
                     contentDescription = stringResource(R.string.accessibility_delete_item)
                 )
             },
-            text = { Text("Delete") },
+            text = { Text(stringResource(R.string.btn_delete)) },
             onClick = {
                 onEvent(PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility)
                 onEvent(PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility)
@@ -82,9 +82,9 @@ fun RowScope.PasswordItemDetailActions(
                 },
                 text = {
                     if (passwordItem?.isAddedToWatch != true) {
-                        Text("Add to Watch")
+                        Text(stringResource(R.string.btn_add_to_watch))
                     } else {
-                        Text("Remove from Watch")
+                        Text(stringResource(R.string.btn_remove_from_watch))
                     }
                 },
                 onClick = {

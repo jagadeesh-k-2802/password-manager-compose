@@ -260,7 +260,7 @@ fun PasswordItemDetailScreen(
                             ColoredCircle(color = passwordItem?.categoryColor ?: EMPTY_STRING)
                         }
                     },
-                    value = passwordItem?.categoryName ?: EMPTY_STRING,
+                    value = passwordItem?.categoryName ?: stringResource(R.string.text_no_category),
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(R.string.label_category)) },

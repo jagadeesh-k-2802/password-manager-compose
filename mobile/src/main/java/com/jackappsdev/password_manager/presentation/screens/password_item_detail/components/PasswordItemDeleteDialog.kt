@@ -16,7 +16,7 @@ fun PasswordItemDeleteDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(R.string.dialog_title_delete_password)) },
+        title = { Text(stringResource(R.string.dialog_title_delete_password)) },
         text = { Text(stringResource(R.string.dialog_text_password_delete)) },
         confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.dialog_btn_yes)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_btn_cancel)) } }

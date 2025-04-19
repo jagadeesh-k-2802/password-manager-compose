@@ -33,11 +33,7 @@ class AddPasswordItemViewModel @Inject constructor(
         private set
 
     val categoryItems = categoryRepository.getAllCategories()
-
-    private val noCategoryModel = CategoryModel(
-        name = application.getString(R.string.text_no_category),
-        color = "#000000",
-    )
+    private val noCategoryModel = CategoryModel(name = application.getString(R.string.text_no_category), color = "#000000")
 
     private val _effectChannel = Channel<AddPasswordItemUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()

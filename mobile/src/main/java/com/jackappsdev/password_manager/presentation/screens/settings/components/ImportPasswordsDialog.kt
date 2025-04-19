@@ -41,7 +41,7 @@ fun ImportPasswordsDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(R.string.dialog_title_import_passwords)) },
+        title = { Text(stringResource(R.string.dialog_title_import_passwords)) },
         text = {
             Column {
                 OutlinedTextField(

@@ -41,11 +41,7 @@ class EditPasswordItemViewModel @Inject constructor(
     private val editPasswordItem = savedStateHandle.toRoute<Routes.EditPasswordItem>()
     private val passwordItem = passwordItemRepository.getPasswordItem(editPasswordItem.id)
     val categoryItems = categoryRepository.getAllCategories()
-
-    private val noCategoryModel = CategoryModel(
-        name = application.getString(R.string.text_no_category),
-        color = "#000000",
-    )
+    private val noCategoryModel = CategoryModel(name = application.getString(R.string.text_no_category), color = "#000000")
 
     private val _errorChannel = Channel<EditPasswordItemError>()
     val errorFlow = _errorChannel.receiveAsFlow()

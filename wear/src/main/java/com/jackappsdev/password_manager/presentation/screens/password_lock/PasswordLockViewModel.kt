@@ -27,6 +27,10 @@ class PasswordLockViewModel @Inject constructor(
     private val _effectChannel = Channel<PasswordLockUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()
 
+    companion object {
+        const val MAX_PIN_COUNT = 4
+    }
+
     init {
         onInit()
     }
@@ -42,6 +46,7 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     private fun onNumberPress(number: String) {
+        if (state.pin.length >= MAX_PIN_COUNT) return
         state = state.copy(pin = state.pin + number)
     }
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.jackappsdev.password_manager.constants.APP_AUTO_LOCK_DELAY
 import com.jackappsdev.password_manager.presentation.components.BottomNavigationBar
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.AddCategoryItemRoot
@@ -48,6 +50,14 @@ fun Router(
         val handler = remember { Handler(Looper.getMainLooper()) }
         val runnable = remember { Runnable { passwordLockViewModel.setUnlocked(false) } }
 
+        LaunchedEffect(key1 = state.hasBeenUnlocked) {
+            if (state.hasBeenUnlocked) {
+                navController.navigate(Graph.UnlockedGraph)
+            } else {
+                navController.navigate(Graph.LockGraph)
+            }
+        }
+
         DisposableEffect(lifecycle) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
@@ -63,24 +73,18 @@ fun Router(
             onDispose { lifecycle.removeObserver(observer) }
         }
 
-        if (!state.hasBeenUnlocked) {
-            NavHost(
-                navController,
-                startDestination = Routes.PasswordLock,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                modifier = Modifier.padding(contentPadding)
-            ) {
+        NavHost(
+            navController = navController,
+            startDestination = Graph.LockGraph,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            modifier = Modifier.padding(contentPadding)
+        ) {
+            navigation<Graph.LockGraph>(Routes.PasswordLock) {
                 composable<Routes.PasswordLock> { PasswordLockRoot(passwordLockViewModel) }
             }
-        } else {
-            NavHost(
-                navController,
-                startDestination = Routes.Home,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                modifier = Modifier.padding(contentPadding)
-            ) {
+
+            navigation<Graph.UnlockedGraph>(Routes.Home) {
                 composable<Routes.Home> { HomeRoot(navController) }
                 composable<Routes.AddPasswordItem> { AddPasswordItemRoot(navController) }
                 composable<Routes.PasswordItemDetail> { PasswordItemDetailRoot(navController) }

@@ -16,7 +16,7 @@ fun UnsavedChangesDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(R.string.dialog_title_unsaved_changes)) },
+        title = { Text(stringResource(R.string.dialog_title_unsaved_changes)) },
         text = { Text(stringResource(R.string.dialog_text_unsaved)) },
         confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.dialog_btn_yes)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_btn_cancel)) } }

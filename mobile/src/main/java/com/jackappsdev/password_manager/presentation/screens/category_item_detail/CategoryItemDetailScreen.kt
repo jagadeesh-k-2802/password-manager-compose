@@ -40,6 +40,7 @@ import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.presentation.components.CheckmarkCircle
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
+import com.jackappsdev.password_manager.presentation.screens.category_item_detail.components.CategoryItemDeleteDialog
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEffect
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEvent

@@ -16,10 +16,14 @@ fun PasswordWithCategoryModel.toPasswordItemDto(): PasswordItemDto {
     )
 }
 
-fun PasswordWithCategoryModel.toCategoryModel(): CategoryModel {
-    return CategoryModel(
-        id = categoryId,
-        name = categoryName ?: EMPTY_STRING,
-        color = categoryColor ?: EMPTY_STRING
-    )
+fun PasswordWithCategoryModel.toCategoryModel(): CategoryModel? {
+    return if (categoryId != null) {
+        CategoryModel(
+            id = categoryId,
+            name = categoryName ?: EMPTY_STRING,
+            color = categoryColor ?: EMPTY_STRING
+        )
+    } else {
+        null
+    }
 }

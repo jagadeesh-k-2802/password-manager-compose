@@ -2,6 +2,14 @@ package com.jackappsdev.password_manager.presentation.navigation
 
 import kotlinx.serialization.Serializable
 
+sealed interface Graph {
+    @Serializable
+    data object LockGraph : Graph
+
+    @Serializable
+    data object UnlockedGraph : Graph
+}
+
 sealed interface Routes {
     @Serializable
     data object PasswordLock : Routes

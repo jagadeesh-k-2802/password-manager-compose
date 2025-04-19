@@ -14,7 +14,7 @@ fun DisableAndroidWatchDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(R.string.dialog_title_disable_android_watch)) },
+        title = { Text(stringResource(R.string.dialog_title_disable_android_watch)) },
         text = { Text(stringResource(R.string.dialog_text_disable_android_watch)) },
         confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.dialog_btn_yes)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_btn_cancel)) } }

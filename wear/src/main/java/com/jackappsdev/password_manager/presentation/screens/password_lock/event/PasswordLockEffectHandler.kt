@@ -23,11 +23,11 @@ class PasswordLockEffectHandler(
 
     fun onUnlock() {
         hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-        context.showToast(context.getString(R.string.toast_incorrect_password))
     }
 
     fun onIncorrectPassword() {
         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+        context.showToast(context.getString(R.string.toast_incorrect_password))
     }
 
     fun onOpenPhoneApp() {

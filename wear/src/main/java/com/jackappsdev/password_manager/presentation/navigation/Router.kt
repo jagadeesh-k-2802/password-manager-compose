@@ -29,9 +29,9 @@ fun Router(
 
     LaunchedEffect(key1 = state.hasBeenUnlocked) {
         if (state.hasBeenUnlocked) {
-            navController.navigate(Graph.UnlockedGraph.route)
+            navController.replace(Graph.UnlockedGraph.route)
         } else {
-            navController.navigate(Graph.LockGraph.route)
+            navController.replace(Graph.LockGraph.route)
         }
     }
 

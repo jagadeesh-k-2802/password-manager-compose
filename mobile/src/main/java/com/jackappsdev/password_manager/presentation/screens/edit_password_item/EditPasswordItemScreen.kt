@@ -30,7 +30,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,10 +39,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
@@ -58,6 +59,7 @@ import com.jackappsdev.password_manager.presentation.screens.edit_password_item.
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import com.jackappsdev.password_manager.shared.constants.ZERO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.json.Json
@@ -67,19 +69,19 @@ import kotlinx.serialization.json.Json
 fun EditPasswordItemScreen(
     savedStateHandle: SavedStateHandle?,
     state: EditPasswordItemState,
-    categoryItems: State<List<CategoryModel>>,
     errorFlow: Flow<EditPasswordItemError>,
     effectFlow: Flow<EditPasswordItemUiEffect>,
     effectHandler: EditPasswordItemEffectHandler,
     onEvent: (EditPasswordItemUiEvent) -> Unit
 ) {
+    val categoryItems = state.categoryItems?.collectAsState(initial = listOf())?.value
     val error by errorFlow.collectAsState(initial = null)
     val scrollState = rememberScrollState()
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = state.passwordItem) {
         if (!state.isAlreadyAutoFocused) {
             focusRequester.requestFocus()
             onEvent(EditPasswordItemUiEvent.ToggleAlreadyAutoFocused)
@@ -139,8 +141,13 @@ fun EditPasswordItemScreen(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = state.passwordItem?.name ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterName(it)) },
+                value = remember(state.passwordItem?.name) {
+                    TextFieldValue(
+                        text = state.passwordItem?.name ?: EMPTY_STRING,
+                        selection = TextRange(state.passwordItem?.name?.length ?: ZERO)
+                    )
+                },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterName(it.text)) },
                 isError = error is EditPasswordItemError.NameError,
                 supportingText = {
                     error?.let {
@@ -162,8 +169,13 @@ fun EditPasswordItemScreen(
             )
 
             OutlinedTextField(
-                value = state.passwordItem?.username ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterUsername(it)) },
+                value = remember(state.passwordItem?.username) {
+                    TextFieldValue(
+                        text = state.passwordItem?.username ?: EMPTY_STRING,
+                        selection = TextRange(state.passwordItem?.username?.length ?: ZERO)
+                    )
+                },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterUsername(it.text)) },
                 label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -179,8 +191,13 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.password ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterPassword(it)) },
+                value = remember(state.passwordItem?.password) {
+                    TextFieldValue(
+                        text = state.passwordItem?.password ?: EMPTY_STRING,
+                        selection = TextRange(state.passwordItem?.password?.length ?: ZERO)
+                    )
+                },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterPassword(it.text)) },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -221,8 +238,13 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.website ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterWebsite(it)) },
+                value = remember(state.passwordItem?.website) {
+                    TextFieldValue(
+                        text = state.passwordItem?.website ?: EMPTY_STRING,
+                        selection = TextRange(state.passwordItem?.website?.length ?: ZERO)
+                    )
+                },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterWebsite(it.text)) },
                 label = { Text(stringResource(R.string.label_website)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -238,8 +260,13 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = state.passwordItem?.notes ?: EMPTY_STRING,
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterNotes(it)) },
+                value = remember(state.passwordItem?.notes) {
+                    TextFieldValue(
+                        text = state.passwordItem?.notes ?: EMPTY_STRING,
+                        selection = TextRange(state.passwordItem?.notes?.length ?: ZERO)
+                    )
+                },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterNotes(it.text)) },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,

@@ -52,9 +52,9 @@ fun Router(
 
         LaunchedEffect(key1 = state.hasBeenUnlocked) {
             if (state.hasBeenUnlocked) {
-                navController.navigate(Graph.UnlockedGraph)
+                navController.replace(Graph.UnlockedGraph)
             } else {
-                navController.navigate(Graph.LockGraph)
+                navController.replace(Graph.LockGraph)
             }
         }
 

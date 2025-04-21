@@ -24,6 +24,7 @@ import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ class EditPasswordItemViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     private val passwordItemRepository: PasswordItemRepository,
-    categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository
 ) : ViewModel(), EventDrivenViewModel<EditPasswordItemUiEvent, EditPasswordItemUiEffect> {
 
     var state by mutableStateOf(EditPasswordItemState())
@@ -40,7 +41,6 @@ class EditPasswordItemViewModel @Inject constructor(
 
     private val editPasswordItem = savedStateHandle.toRoute<Routes.EditPasswordItem>()
     private val passwordItem = passwordItemRepository.getPasswordItem(editPasswordItem.id)
-    val categoryItems = categoryRepository.getAllCategories()
     private val noCategoryModel = CategoryModel(name = application.getString(R.string.text_no_category), color = "#000000")
 
     private val _errorChannel = Channel<EditPasswordItemError>()
@@ -55,6 +55,9 @@ class EditPasswordItemViewModel @Inject constructor(
 
     private fun onInit() {
         viewModelScope.launch {
+            val categoryItems = categoryRepository.getAllCategories()
+            state = state.copy(categoryItems = categoryItems.stateIn(viewModelScope))
+
             passwordItem.collect { item ->
                 state = state.copy(passwordItem = item, category = item?.toCategoryModel())
             }
@@ -80,7 +83,7 @@ class EditPasswordItemViewModel @Inject constructor(
                 createdAt = System.currentTimeMillis()
             )
 
-            passwordItemRepository.insertPasswordItem(newPasswordItemModel)
+            passwordItemRepository.upsertPasswordItem(newPasswordItemModel)
             return EditPasswordItemUiEffect.EditComplete
         }
     }

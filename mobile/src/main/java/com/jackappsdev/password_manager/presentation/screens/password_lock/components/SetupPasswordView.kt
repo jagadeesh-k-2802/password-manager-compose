@@ -3,7 +3,6 @@ package com.jackappsdev.password_manager.presentation.screens.password_lock.comp
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -29,7 +28,6 @@ import com.jackappsdev.password_manager.presentation.components.InfoText
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockError
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockState
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
-import com.jackappsdev.password_manager.presentation.theme.pagePadding
 
 @Composable
 fun SetupPasswordView(
@@ -37,8 +35,6 @@ fun SetupPasswordView(
     error: PasswordLockError?,
     onEvent: (PasswordLockUiEvent) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(pagePadding))
-
     OutlinedTextField(
         value = state.password,
         onValueChange = { onEvent(PasswordLockUiEvent.EnterPassword(it)) },
@@ -109,15 +105,13 @@ fun SetupPasswordView(
         ),
     )
 
-    InfoText(
-        modifier = Modifier.padding(vertical = pagePadding),
-        text = stringResource(R.string.text_password_warning_note)
-    )
+    Spacer(modifier = Modifier.height(4.dp))
+    InfoText(text = stringResource(R.string.text_password_warning_note))
     Spacer(modifier = Modifier.height(20.dp))
 
     Button(
-        onClick = { onEvent(PasswordLockUiEvent.SetupNewPassword) },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { onEvent(PasswordLockUiEvent.SetupNewPassword) }
     ) {
         Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_confirm))
         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

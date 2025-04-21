@@ -89,7 +89,7 @@ fun RowScope.PasswordItemDetailActions(
                 },
                 onClick = {
                     onEvent(PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility)
-                    onEvent(PasswordItemDetailUiEvent.ToggleAddedToWatch)
+                    onEvent(PasswordItemDetailUiEvent.RequestToggleAddToWatch)
                 }
             )
         }

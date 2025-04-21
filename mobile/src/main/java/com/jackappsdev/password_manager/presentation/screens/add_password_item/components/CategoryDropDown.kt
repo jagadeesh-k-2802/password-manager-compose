@@ -14,7 +14,6 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,13 +22,12 @@ import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.AddPasswordItemState
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEvent
-import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryDropDown(
     state: AddPasswordItemState,
-    categoryItems: State<List<CategoryModel>>,
+    categoryItems: List<CategoryModel>?,
     onEvent: (AddPasswordItemUiEvent) -> Unit
 ) {
     ExposedDropdownMenuBox(
@@ -38,13 +36,13 @@ fun CategoryDropDown(
     ) {
         OutlinedTextField(
             leadingIcon = {
-                if (state.category?.name == stringResource(R.string.text_no_category)) {
+                if (state.category?.id == null) {
                     Icon(imageVector = Icons.Outlined.Block, contentDescription = null)
                 } else {
-                    ColoredCircle(color = state.category?.color ?: EMPTY_STRING)
+                    ColoredCircle(color = state.category.color)
                 }
             },
-            value = state.category?.name ?: EMPTY_STRING,
+            value = state.category?.name ?: stringResource(R.string.text_no_category),
             onValueChange = {},
             readOnly = true,
             label = { Text(stringResource(R.string.label_category)) },
@@ -77,7 +75,7 @@ fun CategoryDropDown(
                 }
             )
 
-            categoryItems.value.forEach { item ->
+            categoryItems?.forEach { item ->
                 DropdownMenuItem(
                     leadingIcon = { ColoredCircle(color = item.color) },
                     text = { Text(text = item.name) },

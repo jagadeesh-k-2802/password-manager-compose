@@ -16,8 +16,8 @@ import com.jackappsdev.password_manager.presentation.screens.password_item_detai
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +32,6 @@ class PasswordItemDetailViewModel @Inject constructor(
         private set
 
     private val passwordItemDetail = savedStateHandle.toRoute<Routes.PasswordItemDetail>()
-    val passwordItem = passwordItemRepository.getPasswordItem(passwordItemDetail.id)
 
     private val _effectChannel = Channel<PasswordItemDetailUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()
@@ -43,7 +42,10 @@ class PasswordItemDetailViewModel @Inject constructor(
 
     private fun onInit() {
         viewModelScope.launch {
+            val passwordItem = passwordItemRepository.getPasswordItem(passwordItemDetail.id)
+
             state = state.copy(
+                passwordItem = passwordItem.stateIn(viewModelScope),
                 hasAndroidWatchPinSet = userPreferencesRepository.hasAndroidWatchPinSet(),
             )
         }
@@ -69,11 +71,10 @@ class PasswordItemDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun toggleAddedToWatch(): PasswordItemDetailUiEffect? {
-        val passwordWithCategoryModel = passwordItem.first()
-        if (passwordWithCategoryModel == null) return null
+    private suspend fun toggleAddedToWatch() {
+        val passwordWithCategoryModel = state.passwordItem?.value ?: return
 
-        passwordItemRepository.insertPasswordItem(
+        passwordItemRepository.upsertPasswordItem(
             PasswordItemModel(
                 id = passwordWithCategoryModel.id,
                 name = passwordWithCategoryModel.name,
@@ -82,20 +83,15 @@ class PasswordItemDetailViewModel @Inject constructor(
                 notes = passwordWithCategoryModel.notes,
                 categoryId = passwordWithCategoryModel.categoryId,
                 website = passwordWithCategoryModel.website,
-                isAddedToWatch = !passwordWithCategoryModel.isAddedToWatch,
+                isAddedToWatch = passwordWithCategoryModel.isAddedToWatch.not(),
                 createdAt = passwordWithCategoryModel.createdAt
             )
         )
-
-        return PasswordItemDetailUiEffect.ToggleAddedToWatch
     }
 
-    private suspend fun deleteItem(): PasswordItemDetailUiEffect? {
-        val passwordWithCategoryModel = passwordItem.first()
-        if (passwordWithCategoryModel == null) return null
-
+    private suspend fun deleteItem() {
+        val passwordWithCategoryModel = state.passwordItem?.value ?: return
         passwordItemRepository.deletePasswordItem(passwordWithCategoryModel)
-        return PasswordItemDetailUiEffect.DeleteItem
     }
 
     override fun onEvent(event: PasswordItemDetailUiEvent) {
@@ -105,9 +101,11 @@ class PasswordItemDetailViewModel @Inject constructor(
                 is PasswordItemDetailUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)
                 is PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility -> toggleVisibility(event)
                 is PasswordItemDetailUiEvent.DeleteItem -> deleteItem()
-                is PasswordItemDetailUiEvent.ToggleAddedToWatch -> toggleAddedToWatch()
+                is PasswordItemDetailUiEvent.ToggleAddToWatch -> toggleAddedToWatch()
                 is PasswordItemDetailUiEvent.CopyText -> PasswordItemDetailUiEffect.CopyText(event.text)
                 is PasswordItemDetailUiEvent.LaunchUrl -> PasswordItemDetailUiEffect.LaunchUrl(event.url)
+                is PasswordItemDetailUiEvent.RequestToggleAddToWatch -> PasswordItemDetailUiEffect.ToggleAddToWatch
+                is PasswordItemDetailUiEvent.RequestDeleteItem -> PasswordItemDetailUiEffect.DeleteItem
                 is PasswordItemDetailUiEvent.NavigateToEditPassword -> PasswordItemDetailUiEffect.NavigateToEditPassword(event.id)
                 is PasswordItemDetailUiEvent.NavigateUp -> PasswordItemDetailUiEffect.NavigateUp
             }

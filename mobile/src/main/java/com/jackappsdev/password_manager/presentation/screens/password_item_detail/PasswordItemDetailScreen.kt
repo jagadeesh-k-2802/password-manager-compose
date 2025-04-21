@@ -28,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,7 +37,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseModifiedTime
-import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDeleteDialog
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDetailActions
@@ -56,23 +54,22 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun PasswordItemDetailScreen(
     state: PasswordItemDetailState,
-    passwordItem: Flow<PasswordWithCategoryModel?>,
     effectFlow: Flow<PasswordItemDetailUiEffect>,
     effectHandler: PasswordItemDetailEffectHandler,
     onEvent: (PasswordItemDetailUiEvent) -> Unit
 ) {
-    val passwordItem by passwordItem.collectAsState(initial = null)
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val passwordItem = state.passwordItem?.collectAsState()?.value
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = passwordItem) {
         with(effectHandler) {
             effectFlow.collectLatest { effect ->
                 when (effect) {
-                    is PasswordItemDetailUiEffect.ToggleAddedToWatch -> onToggleAddedToWatch(passwordItem)
-                    is PasswordItemDetailUiEffect.DeleteItem -> onDeleteItem(passwordItem)
                     is PasswordItemDetailUiEffect.CopyText -> onCopy(effect.text)
                     is PasswordItemDetailUiEffect.LaunchUrl -> onLaunchUrl(effect.url)
+                    is PasswordItemDetailUiEffect.ToggleAddToWatch -> onToggleAddedToWatch(passwordItem)
+                    is PasswordItemDetailUiEffect.DeleteItem -> onDeleteItem(passwordItem)
                     is PasswordItemDetailUiEffect.NavigateToEditPassword -> onNavigateToEditPassword(effect.id)
                     is PasswordItemDetailUiEffect.NavigateUp -> onNavigateUp()
                 }
@@ -82,7 +79,7 @@ fun PasswordItemDetailScreen(
 
     if (state.isDeleteDialogVisible) {
         PasswordItemDeleteDialog(
-            onConfirm = { onEvent(PasswordItemDetailUiEvent.DeleteItem) },
+            onConfirm = { onEvent(PasswordItemDetailUiEvent.RequestDeleteItem) },
             onDismiss = { onEvent(PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility) }
         )
     }
@@ -257,7 +254,7 @@ fun PasswordItemDetailScreen(
                         if (passwordItem?.categoryId == null) {
                             Icon(Icons.Outlined.Block, null)
                         } else {
-                            ColoredCircle(color = passwordItem?.categoryColor ?: EMPTY_STRING)
+                            ColoredCircle(color = passwordItem.categoryColor ?: EMPTY_STRING)
                         }
                     },
                     value = passwordItem?.categoryName ?: stringResource(R.string.text_no_category),
@@ -279,7 +276,7 @@ fun PasswordItemDetailScreen(
 
             OutlinedTextField(
                 value = if (passwordItem?.createdAt != null) {
-                    parseModifiedTime(context, passwordItem?.createdAt!!)
+                    parseModifiedTime(context, passwordItem.createdAt)
                 } else {
                     EMPTY_STRING
                 },

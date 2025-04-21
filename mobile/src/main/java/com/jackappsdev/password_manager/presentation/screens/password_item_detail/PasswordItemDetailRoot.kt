@@ -22,7 +22,6 @@ fun PasswordItemDetailRoot(navController: NavController) {
 
     PasswordItemDetailScreen(
         state = viewModel.state,
-        passwordItem = viewModel.passwordItem,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,
         onEvent = viewModel::onEvent,

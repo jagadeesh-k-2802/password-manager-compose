@@ -9,3 +9,10 @@ fun NavController.navigateWithState(route: Routes) {
         restoreState = true
     }
 }
+
+fun <T : Any> NavController.replace(route: T) {
+    navigate(route) {
+        popUpTo(graph.startDestinationId) { inclusive = true }
+        launchSingleTop = true
+    }
+}

@@ -25,7 +25,7 @@ interface PasswordDao {
     fun getPasswordItem(id: Int): Flow<PasswordWithCategoryEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPasswordEntity(item: PasswordItemEntity)
+    suspend fun upsertPasswordEntity(item: PasswordItemEntity)
 
     @Query("UPDATE password_items SET is_added_to_watch = 0")
     suspend fun removePasswordsFromWatch()

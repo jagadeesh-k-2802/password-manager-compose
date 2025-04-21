@@ -14,7 +14,6 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,7 +27,7 @@ import com.jackappsdev.password_manager.presentation.screens.edit_password_item.
 @Composable
 fun CategoryDropDown(
     state: EditPasswordItemState,
-    categoryItems: State<List<CategoryModel>>,
+    categoryItems: List<CategoryModel>?,
     onEvent: (EditPasswordItemUiEvent) -> Unit
 ) {
     ExposedDropdownMenuBox(
@@ -76,7 +75,7 @@ fun CategoryDropDown(
                 }
             )
 
-            categoryItems.value.forEach { item ->
+            categoryItems?.forEach { item ->
                 DropdownMenuItem(
                     leadingIcon = { ColoredCircle(color = item.color) },
                     text = { Text(text = item.name) },

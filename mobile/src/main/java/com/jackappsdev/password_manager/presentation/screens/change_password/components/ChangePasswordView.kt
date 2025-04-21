@@ -101,6 +101,7 @@ fun ChangePasswordView(
         },
     )
 
+    Spacer(modifier = Modifier.height(4.dp))
     InfoText(text = stringResource(R.string.text_change_password_help))
     Spacer(modifier = Modifier.height(20.dp))
 

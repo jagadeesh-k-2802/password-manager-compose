@@ -8,7 +8,7 @@ interface PasswordItemRepository {
     fun getPasswordItems(orderBy: String, filterBy: String, query: String): Flow<List<PasswordItemModel>>
     suspend fun getUniqueUsernames(username: String, limit: Int): List<String>
     fun getPasswordItem(id: Int): Flow<PasswordWithCategoryModel?>
-    suspend fun insertPasswordItem(item: PasswordItemModel)
+    suspend fun upsertPasswordItem(item: PasswordItemModel)
     suspend fun removePasswordsFromWatch()
     suspend fun deletePasswordItem(item: PasswordWithCategoryModel)
 }

@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import kotlinx.coroutines.flow.StateFlow
 
 data class AddPasswordItemState(
     val name: String = EMPTY_STRING,
@@ -10,6 +11,7 @@ data class AddPasswordItemState(
     val website: String = EMPTY_STRING,
     val notes: String = EMPTY_STRING,
     val category: CategoryModel? = null,
+    val categoryItems: StateFlow<List<CategoryModel>>? = null,
     val showPassword: Boolean = false,
     val isCategoryDropdownVisible: Boolean = false,
     val isUnsavedChangesDialogVisible: Boolean = false,

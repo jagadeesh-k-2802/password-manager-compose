@@ -30,7 +30,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -67,12 +66,12 @@ import kotlinx.serialization.json.Json
 fun AddPasswordItemScreen(
     savedStateHandle: SavedStateHandle?,
     state: AddPasswordItemState,
-    categoryItems: State<List<CategoryModel>>,
     errorFlow: Flow<AddPasswordItemError>,
     effectFlow: Flow<AddPasswordItemUiEffect>,
     effectHandler: AddPasswordItemEffectHandler,
     onEvent: (AddPasswordItemUiEvent) -> Unit,
 ) {
+    val categoryItems = state.categoryItems?.collectAsState(initial = listOf())?.value
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current

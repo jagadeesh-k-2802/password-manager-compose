@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.shared.data.dto
 
+import com.jackappsdev.password_manager.shared.constants.ZERO
 import kotlinx.serialization.Serializable
 
 /**
@@ -7,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PasswordItemDto(
-    val id: Int = 0,
+    val id: Int = ZERO,
     val name: String,
     val username: String,
     val password: String,

@@ -19,6 +19,7 @@ import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,13 +27,12 @@ import javax.inject.Inject
 class AddPasswordItemViewModel @Inject constructor(
     application: Application,
     private val passwordItemRepository: PasswordItemRepository,
-    categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository
 ) : ViewModel(), EventDrivenViewModel<AddPasswordItemUiEvent, AddPasswordItemUiEffect> {
 
     var state by mutableStateOf(AddPasswordItemState())
         private set
 
-    val categoryItems = categoryRepository.getAllCategories()
     private val noCategoryModel = CategoryModel(name = application.getString(R.string.text_no_category), color = "#000000")
 
     private val _effectChannel = Channel<AddPasswordItemUiEffect>()
@@ -46,7 +46,14 @@ class AddPasswordItemViewModel @Inject constructor(
     }
 
     private fun onInit() {
-        state = state.copy(category = noCategoryModel)
+        viewModelScope.launch {
+            val categoryItems = categoryRepository.getAllCategories()
+
+            state = state.copy(
+                categoryItems = categoryItems.stateIn(viewModelScope),
+                category = noCategoryModel
+            )
+        }
     }
 
     private fun onEnterText(event: AddPasswordItemUiEvent) {
@@ -125,7 +132,7 @@ class AddPasswordItemViewModel @Inject constructor(
                 )
             }
 
-            passwordItemRepository.insertPasswordItem(passwordItemModel)
+            passwordItemRepository.upsertPasswordItem(passwordItemModel)
             AddPasswordItemUiEffect.NavigateUp
         }
     }

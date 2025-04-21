@@ -31,7 +31,6 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockError
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockState
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
-import com.jackappsdev.password_manager.presentation.theme.pagePadding
 
 @Composable
 fun EnterPasswordView(
@@ -44,8 +43,6 @@ fun EnterPasswordView(
             onEvent(PasswordLockUiEvent.BiometricAuthenticate)
         }
     }
-
-    Spacer(modifier = Modifier.height(pagePadding))
 
     OutlinedTextField(
         value = state.password,

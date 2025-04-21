@@ -5,15 +5,15 @@
     <!--  Title  -->
     <string name="title_biometric">Unlock Password Manager</string>
     <string name="title_verify_user">Verify Password</string>
-    <string name="title_enter_password">Enter Your Password</string>
-    <string name="title_create_password">Create Your Password</string>
+    <string name="title_enter_password">Enter Password</string>
+    <string name="title_create_password">Create Password</string>
     <string name="title_passwords">Passwords</string>
     <string name="title_add_new_password">Add New Password</string>
     <string name="title_password_generator">Password Generator</string>
     <string name="title_edit_item">Edit Item</string>
     <string name="title_add_new_category">Add New Category</string>
     <string name="title_edit_category">Edit Category</string>
-    <string name="title_change_password">Change Password</string>
+    <string name="title_change_password">Change Lock Password</string>
     <string name="title_android_watch">Android Watch</string>
     <string name="title_categories">Categories</string>
     <string name="title_settings">Settings</string>
@@ -27,7 +27,7 @@
     <string name="btn_edit">Edit</string>
     <string name="btn_delete">Delete</string>
     <string name="btn_add_to_watch">Add to Watch</string>
-    <string name="btn_remove_from_watch">Add to Watch</string>
+    <string name="btn_remove_from_watch">Remove from Watch</string>
 
     <!--  Label  -->
     <string name="label_name">Name</string>

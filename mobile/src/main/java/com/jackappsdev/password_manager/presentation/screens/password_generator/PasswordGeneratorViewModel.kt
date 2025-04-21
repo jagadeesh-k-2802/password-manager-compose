@@ -12,6 +12,7 @@ import com.jackappsdev.password_manager.core.parseColor
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.ZERO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -117,7 +118,7 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
     }
 
     private fun isLastOption(value: Boolean): PasswordGeneratorUiEffect? {
-        var count = 0
+        var count = ZERO
         if (!state.includeLowercase) count++
         if (!state.includeUppercase) count++
         if (!state.includeNumbers) count++

@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.shared.constants
 
 // General Constants
 const val EMPTY_STRING = ""
+const val ZERO = 0
 
 // Data Communications Between Mobile <-> Wear OS (Change in [AndroidManifest.xml] for Wear OS)
 

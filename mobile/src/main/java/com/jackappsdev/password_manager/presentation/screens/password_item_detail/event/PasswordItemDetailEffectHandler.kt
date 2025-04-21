@@ -46,27 +46,29 @@ class PasswordItemDetailEffectHandler(
                     context.getString(R.string.toast_removed_from_watch)
                 }
             )
+
+            onEvent(PasswordItemDetailUiEvent.ToggleAddToWatch)
         }
     }
 
     fun onDeleteItem(passwordItem: PasswordWithCategoryModel?) {
-        passwordItem?.let { passwordCategoryModel ->
-            onEvent(PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility)
+        onEvent(PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility)
 
-            if (passwordItem.isAddedToWatch == false) {
-                navController.navigateUp()
-                return
-            }
+        if (passwordItem?.isAddedToWatch != true) {
+            onEvent(PasswordItemDetailUiEvent.DeleteItem)
+            navController.navigateUp()
+            return
+        }
 
-            val putDataRequest = PutDataMapRequest.create(DELETE_PASSWORD).run {
-                dataMap.putString(KEY_PASSWORD, Json.encodeToString(passwordCategoryModel.toPasswordItemDto()))
-                setUrgent()
-                asPutDataRequest()
-            }
+        val putDataRequest = PutDataMapRequest.create(DELETE_PASSWORD).run {
+            dataMap.putString(KEY_PASSWORD, Json.encodeToString(passwordItem.toPasswordItemDto()))
+            setUrgent()
+            asPutDataRequest()
+        }
 
-            dataClient.putDataItem(putDataRequest).addOnCompleteListener {
-                navController.navigateUp()
-            }
+        dataClient.putDataItem(putDataRequest).addOnCompleteListener {
+            onEvent(PasswordItemDetailUiEvent.DeleteItem)
+            navController.navigateUp()
         }
     }
 

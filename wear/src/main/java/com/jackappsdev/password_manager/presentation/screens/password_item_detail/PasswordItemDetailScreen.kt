@@ -42,7 +42,7 @@ fun PasswordItemDetailScreen(
     )
 
     LaunchedEffect(state.passwordItem) {
-        if (state.passwordItem == null && state.isValueAlreadySetOnce) {
+        if (state.passwordItem?.value == null && state.isValueAlreadySetOnce) {
             onEvent(PasswordItemDetailUiEvent.NavigateUp)
         } else {
             onEvent(PasswordItemDetailUiEvent.ToggleAlreadySetOnce)

@@ -81,7 +81,7 @@ fun ChangePasswordView(
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
-        visualTransformation = if (state.showPassword) {
+        visualTransformation = if (state.showNewPassword) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()

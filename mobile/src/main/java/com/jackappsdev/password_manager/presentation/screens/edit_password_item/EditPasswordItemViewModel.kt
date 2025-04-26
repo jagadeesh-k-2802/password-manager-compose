@@ -79,7 +79,7 @@ class EditPasswordItemViewModel @Inject constructor(
                 website = state.passwordItem?.website ?: EMPTY_STRING,
                 notes = state.passwordItem?.notes ?: EMPTY_STRING,
                 categoryId = state.category?.id,
-                isAddedToWatch = false,
+                isAddedToWatch = state.passwordItem?.isAddedToWatch == true,
                 createdAt = System.currentTimeMillis()
             )
 

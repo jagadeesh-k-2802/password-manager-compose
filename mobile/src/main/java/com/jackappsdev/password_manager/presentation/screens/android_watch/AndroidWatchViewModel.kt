@@ -89,6 +89,7 @@ class AndroidWatchViewModel @Inject constructor(
 
     private suspend fun disableAndroidWatchSharing(): AndroidWatchUiEffect {
         state = state.copy(useAndroidWatch = false, showDisableAndroidWatchDialog = false)
+        userPreferencesRepository.setAndroidWatchPinSet(newPin = null)
         passwordItemRepository.removePasswordsFromWatch()
         return AndroidWatchUiEffect.DisableAndroidWatchSharing
     }

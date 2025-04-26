@@ -1,4 +1,5 @@
 @file:Suppress("SpellCheckingInspection")
+
 import org.gradle.util.internal.GUtil.loadProperties
 import java.util.Properties
 
@@ -20,7 +21,7 @@ val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 // Version Management
 val versionMajor = 1
 val versionMinor = 1
-val versionPatch = 2
+val versionPatch = 3
 val minimumSdkVersion = 28
 
 fun generateVersionCode(): Int {

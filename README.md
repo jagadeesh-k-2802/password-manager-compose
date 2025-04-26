@@ -30,11 +30,11 @@
 ## Screenshots (Phone) 📷
 
 <img src="https://github.com/user-attachments/assets/d5e16cbb-43ce-495f-878f-6989a1001086" width="250" />
-<img src="https://github.com/user-attachments/assets/b5a541e9-122b-4f6c-81be-85b6edb8ff3c" width="250" />
-<img src="https://github.com/user-attachments/assets/976268dc-667c-4d1f-9ff4-4cf6e26e0693" width="250" />
-<img src="https://github.com/user-attachments/assets/e093ea78-bc16-4636-90df-404128d844ae" width="250" />
-<img src="https://github.com/user-attachments/assets/68ee68d6-cc7c-40ac-aad5-e87902cf3a3a" width="250" />
-<img src="https://github.com/user-attachments/assets/cd4c9c19-5d78-4afa-9a75-637e51cb4a9c" width="250" />
+<img src="https://github.com/user-attachments/assets/839cc891-44a5-4157-bd6d-7093a8d4de43" width="250" />
+<img src="https://github.com/user-attachments/assets/6b1b9f5b-d4d0-4a63-9c8f-890b8fcb5b2a" width="250" />
+<img src="https://github.com/user-attachments/assets/400d5243-bd1d-4216-bcd7-975720bf33ef" width="250" />
+<img src="https://github.com/user-attachments/assets/1153e57d-448b-42bd-84cc-d22f6949f710" width="250" />
+<img src="https://github.com/user-attachments/assets/60912c7b-9aa4-473b-8f8b-66651ae94b13" width="250" />
 
 ## Screenshots (Wear OS) 📷
 

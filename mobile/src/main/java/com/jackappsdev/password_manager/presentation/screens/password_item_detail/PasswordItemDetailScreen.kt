@@ -9,8 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.AlternateEmail
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Visibility
@@ -124,6 +130,9 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.name ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Badge, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_name)) },
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
@@ -136,6 +145,9 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.username ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_username)) },
                 trailingIcon = {
                     if ((passwordItem?.username?.length ?: 0) > 0) {
@@ -160,6 +172,9 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.password ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Key, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = false,
@@ -202,6 +217,9 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.website ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Link, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_website)) },
                 maxLines = 1,
                 trailingIcon = {
@@ -227,6 +245,9 @@ fun PasswordItemDetailScreen(
                 value = passwordItem?.notes ?: EMPTY_STRING,
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.Notes, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
@@ -282,6 +303,9 @@ fun PasswordItemDetailScreen(
                 },
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Filled.AccessTime, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_last_updated_at)) },
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),

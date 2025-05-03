@@ -29,45 +29,45 @@ fun GeneratedPasswordView(
     state: PasswordGeneratorState,
     onEvent: (PasswordGeneratorUiEvent) -> Unit
 ) {
-    SelectionContainer {
-        Column(
-            modifier = Modifier.padding(
-                top = 12.dp,
-                bottom = 8.dp,
-                start = pagePadding,
-                end = pagePadding
-            )
-        ) {
+    Column(
+        modifier = Modifier.padding(
+            top = 12.dp,
+            bottom = 8.dp,
+            start = pagePadding,
+            end = pagePadding
+        )
+    ) {
+        SelectionContainer {
             Text(
                 text = state.password,
                 style = MaterialTheme.typography.headlineLarge
             )
+        }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(state.passwordStrengthText),
-                    color = state.passwordStrengthColor,
-                    fontWeight = FontWeight.SemiBold
-                )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(state.passwordStrengthText),
+                color = state.passwordStrengthColor,
+                fontWeight = FontWeight.SemiBold
+            )
 
-                Row {
-                    IconButton(onClick = { onEvent(PasswordGeneratorUiEvent.RegeneratePassword) }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Refresh,
-                            contentDescription = stringResource(R.string.accessibility_generate_again)
-                        )
-                    }
+            Row {
+                IconButton(onClick = { onEvent(PasswordGeneratorUiEvent.RegeneratePassword) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = stringResource(R.string.accessibility_generate_again)
+                    )
+                }
 
-                    IconButton(onClick = { onEvent(PasswordGeneratorUiEvent.CopyPassword) }) {
-                        Icon(
-                            imageVector = Icons.Outlined.ContentCopy,
-                            contentDescription = stringResource(R.string.accessibility_copy_text)
-                        )
-                    }
+                IconButton(onClick = { onEvent(PasswordGeneratorUiEvent.CopyPassword) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.ContentCopy,
+                        contentDescription = stringResource(R.string.accessibility_copy_text)
+                    )
                 }
             }
         }

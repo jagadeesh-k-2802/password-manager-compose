@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -108,6 +110,7 @@ fun AddCategoryItemScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .imePadding()
                 .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
@@ -119,6 +122,9 @@ fun AddCategoryItemScreen(
                     }
                 },
                 onValueChange = { onEvent(AddCategoryItemUiEvent.EnterName(it)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Category, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier
                     .fillMaxWidth()

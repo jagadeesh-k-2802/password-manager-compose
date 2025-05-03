@@ -26,11 +26,11 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
 
         splashScreen.setKeepOnScreenCondition {
-            passwordLockViewModel.state.hasPasswordSet == null
-                    && mainViewModel.useDynamicColors == null
+            passwordLockViewModel.state.hasPasswordSet == null &&
+            mainViewModel.useDynamicColors == null
         }
 
-        // Disable screenshots & screen recordings
+        // Disable screenshots & screen recordings for production builds
         if (BuildConfig.DEBUG.not()) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,

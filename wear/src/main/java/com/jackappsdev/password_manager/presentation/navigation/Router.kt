@@ -16,9 +16,6 @@ import com.jackappsdev.password_manager.presentation.screens.password_item_detai
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockRoot
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 
-/**
- * Manages all navigation routes
- */
 @Composable
 fun Router(
     navController: NavHostController,

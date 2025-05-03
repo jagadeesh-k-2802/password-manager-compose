@@ -2,8 +2,6 @@ package com.jackappsdev.password_manager.presentation.navigation
 
 import android.os.Handler
 import android.os.Looper
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -34,9 +32,6 @@ import com.jackappsdev.password_manager.presentation.screens.password_lock.Passw
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.screens.settings.SettingsRoot
 
-/**
- * Manages all navigation routes
- */
 @Composable
 fun Router(
     navController: NavHostController,
@@ -76,8 +71,6 @@ fun Router(
         NavHost(
             navController = navController,
             startDestination = Graph.LockGraph,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
             modifier = Modifier.padding(contentPadding)
         ) {
             navigation<Graph.LockGraph>(Routes.PasswordLock) {

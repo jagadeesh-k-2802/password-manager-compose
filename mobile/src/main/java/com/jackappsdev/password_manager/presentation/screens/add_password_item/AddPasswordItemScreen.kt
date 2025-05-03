@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -14,7 +15,12 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.AlternateEmail
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Visibility
@@ -133,6 +139,7 @@ fun AddPasswordItemScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .imePadding()
                 .verticalScroll(scrollState)
                 .fillMaxWidth()
         ) {
@@ -144,6 +151,9 @@ fun AddPasswordItemScreen(
                     error?.let {
                         if (it is AddPasswordItemError.NameError) Text(stringResource(it.error))
                     }
+                },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Badge, contentDescription = null)
                 },
                 label = { Text(stringResource(R.string.label_name)) },
                 singleLine = true,
@@ -162,6 +172,9 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = state.username,
                 onValueChange = { onEvent(AddPasswordItemUiEvent.EnterUsername(it)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_username)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -179,6 +192,9 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = state.password,
                 onValueChange = { onEvent(AddPasswordItemUiEvent.EnterPassword(it)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Key, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -222,6 +238,9 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = state.website,
                 onValueChange = { onEvent(AddPasswordItemUiEvent.EnterWebsite(it)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Link, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_website)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -239,6 +258,9 @@ fun AddPasswordItemScreen(
             OutlinedTextField(
                 value = state.notes,
                 onValueChange = { onEvent(AddPasswordItemUiEvent.EnterNotes(it)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.Notes, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_notes)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,

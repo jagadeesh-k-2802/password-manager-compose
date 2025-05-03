@@ -17,6 +17,7 @@ fun disabledButEnabledOutlinedTextFieldColors(): TextFieldColors {
         disabledLabelColor = defaultColors.unfocusedLabelColor,
         disabledTextColor = defaultColors.unfocusedTextColor,
         disabledBorderColor = defaultColors.unfocusedTextColor,
+        disabledLeadingIconColor = defaultColors.unfocusedLeadingIconColor,
         disabledTrailingIconColor = defaultColors.unfocusedTrailingIconColor
     )
 }

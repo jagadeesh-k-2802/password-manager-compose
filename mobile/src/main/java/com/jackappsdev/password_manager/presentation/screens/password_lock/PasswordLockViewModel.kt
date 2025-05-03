@@ -15,6 +15,7 @@ import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,6 +34,10 @@ class PasswordLockViewModel @Inject constructor(
 
     private val _errorChannel = Channel<PasswordLockError>()
     val errorFlow = _errorChannel.receiveAsFlow()
+
+    companion object {
+        const val RESET_PASSWORD_STATE_DELAY = 2000L
+    }
 
     init {
         onInit()
@@ -81,13 +86,21 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     fun setUnlocked(hasBeenUnlocked: Boolean) {
-        state = state.copy(
-            hasBeenUnlocked = hasBeenUnlocked,
-            password = EMPTY_STRING,
-            showPassword = false,
-            confirmPassword = EMPTY_STRING,
-            showConfirmPassword = false
-        )
+        state = state.copy(hasBeenUnlocked = hasBeenUnlocked)
+    }
+
+    private fun resetPasswordState() {
+        viewModelScope.launch {
+            delay(RESET_PASSWORD_STATE_DELAY)
+
+            state = state.copy(
+                hasPasswordSet = true,
+                password = EMPTY_STRING,
+                showPassword = false,
+                confirmPassword = EMPTY_STRING,
+                showConfirmPassword = false,
+            )
+        }
     }
 
     private fun setNewPassword(): PasswordLockUiEffect {
@@ -102,8 +115,8 @@ class PasswordLockViewModel @Inject constructor(
                 _errorChannel.send(PasswordLockError.PasswordError(R.string.error_confirm_password_not_empty))
             } else {
                 userPreferencesRepository.setInitialPassword(state.password)
-                state = state.copy(hasPasswordSet = true)
                 setUnlocked(true)
+                resetPasswordState()
             }
         }
 
@@ -113,6 +126,7 @@ class PasswordLockViewModel @Inject constructor(
     private suspend fun verifyPassword(): PasswordLockUiEffect? {
         return if (userPreferencesRepository.verifyPassword(state.password)) {
             setUnlocked(true)
+            resetPasswordState()
             PasswordLockUiEffect.HideKeyboard
         } else {
             _errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_password))

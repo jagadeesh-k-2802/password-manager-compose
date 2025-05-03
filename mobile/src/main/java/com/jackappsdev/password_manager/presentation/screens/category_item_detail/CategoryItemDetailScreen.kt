@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,6 +16,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Button
@@ -120,11 +123,15 @@ fun CategoryItemDetailScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
+                .imePadding()
                 .verticalScroll(scrollState)
         ) {
             OutlinedTextField(
                 value = state.categoryModel?.name ?: EMPTY_STRING,
                 onValueChange = { onEvent(CategoryItemDetailUiEvent.EnterName(it)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Category, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
@@ -159,6 +166,9 @@ fun CategoryItemDetailScreen(
                 },
                 onValueChange = {},
                 readOnly = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.AccessTime, contentDescription = null)
+                },
                 label = { Text(stringResource(R.string.label_last_updated_at)) },
                 modifier = Modifier.fillMaxWidth()
             )

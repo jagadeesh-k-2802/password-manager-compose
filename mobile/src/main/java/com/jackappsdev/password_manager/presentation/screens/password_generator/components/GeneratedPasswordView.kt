@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_generator.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,8 +52,12 @@ fun GeneratedPasswordView(
         ) {
             Text(
                 text = stringResource(state.passwordStrengthText),
-                color = state.passwordStrengthColor,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                color = if (isSystemInDarkTheme()) {
+                    state.passwordStrengthColorDark
+                } else {
+                    state.passwordStrengthColor
+                }
             )
 
             Row {

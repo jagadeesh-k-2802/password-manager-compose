@@ -136,3 +136,36 @@ fun isScreenLockAvailable(context: Context): Boolean {
     val credentials = BIOMETRIC_WEAK or BIOMETRIC_STRONG or DEVICE_CREDENTIAL
     return manager.canAuthenticate(credentials) == BiometricManager.BIOMETRIC_SUCCESS
 }
+
+/**
+ * Finds the password strength based on the length
+ */
+fun getPasswordStrengthText(length: Int): Int {
+    return when (length) {
+        in (1..8) -> R.string.text_weak
+        in (8..12) -> R.string.text_medium
+        else -> R.string.text_strong
+    }
+}
+
+/**
+ * Finds the light password strength color based on the length
+ */
+fun getPasswordStrengthColor(length: Int): Color {
+    return when (length) {
+        in (1..8) -> parseColor("#A61B11")
+        in (8..12) -> parseColor("#D1A000")
+        else -> parseColor("#3D9050")
+    }
+}
+
+/**
+ * Finds the dark password strength color based on the length
+ */
+fun getPasswordStrengthColorDark(length: Int): Color {
+    return when (length) {
+        in (1..8) -> parseColor("#FF8C69")
+        in (8..12) -> parseColor("#FFD700")
+        else -> parseColor("#32CD32")
+    }
+}

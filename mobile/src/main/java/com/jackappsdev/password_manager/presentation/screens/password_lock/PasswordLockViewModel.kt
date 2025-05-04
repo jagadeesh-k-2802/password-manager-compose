@@ -32,6 +32,9 @@ class PasswordLockViewModel @Inject constructor(
     private val _effectChannel = Channel<PasswordLockUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()
 
+    private val hasBeenUnlockedChannel = Channel<Boolean>()
+    val hasBeenUnlockedFlow = hasBeenUnlockedChannel.receiveAsFlow()
+
     private val _errorChannel = Channel<PasswordLockError>()
     val errorFlow = _errorChannel.receiveAsFlow()
 
@@ -86,7 +89,9 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     fun setUnlocked(hasBeenUnlocked: Boolean) {
-        state = state.copy(hasBeenUnlocked = hasBeenUnlocked)
+        viewModelScope.launch {
+            hasBeenUnlockedChannel.send(hasBeenUnlocked)
+        }
     }
 
     private fun resetPasswordState() {

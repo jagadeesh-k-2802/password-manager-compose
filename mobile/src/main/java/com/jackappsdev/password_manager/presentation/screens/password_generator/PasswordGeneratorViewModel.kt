@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.GeneratePasswordConfig
 import com.jackappsdev.password_manager.core.generateRandomPassword
-import com.jackappsdev.password_manager.core.parseColor
+import com.jackappsdev.password_manager.core.getPasswordStrengthColor
+import com.jackappsdev.password_manager.core.getPasswordStrengthColorDark
+import com.jackappsdev.password_manager.core.getPasswordStrengthText
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
@@ -49,21 +51,9 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
                         includeSymbols
                     )
                 ),
-                passwordStrengthText = when (passwordLength) {
-                    in (1..8) -> R.string.text_weak
-                    in (8..12) -> R.string.text_medium
-                    else -> R.string.text_strong
-                },
-                passwordStrengthColor = when (passwordLength) {
-                    in (1..8) -> parseColor("#FF8C69")
-                    in (8..12) -> parseColor("#FFD700")
-                    else -> parseColor("#32CD32")
-                },
-                passwordStrengthColorDark = when (passwordLength) {
-                    in (1..8) -> parseColor("#A61B11")
-                    in (8..12) -> parseColor("#D1A000")
-                    else -> parseColor("#3D9050")
-                }
+                passwordStrengthText = getPasswordStrengthText(passwordLength),
+                passwordStrengthColor = getPasswordStrengthColor(passwordLength),
+                passwordStrengthColorDark = getPasswordStrengthColorDark(passwordLength)
             )
         }
     }

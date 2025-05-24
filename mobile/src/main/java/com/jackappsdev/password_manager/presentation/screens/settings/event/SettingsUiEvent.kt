@@ -7,6 +7,8 @@ sealed class SettingsUiEvent {
     data object HideImportPasswordsDialog : SettingsUiEvent()
     data object ToggleDynamicColors : SettingsUiEvent()
     data object ToggleUseScreenLock : SettingsUiEvent()
+    data object CompleteAppUpdate : SettingsUiEvent()
+    data object StartAppUpdate : SettingsUiEvent()
     data object CheckScreenLockAvailable : SettingsUiEvent()
     data object OpenImportPasswordsIntent : SettingsUiEvent()
     data object OpenExportPasswordsIntent : SettingsUiEvent()

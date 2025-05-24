@@ -4,7 +4,9 @@ import androidx.datastore.core.DataStore
 import com.jackappsdev.password_manager.data.models.UserSettings
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 
 class UserPreferencesRepositoryImpl(
@@ -16,6 +18,13 @@ class UserPreferencesRepositoryImpl(
      */
     override fun getPin(): String? {
         return runBlocking(Dispatchers.IO) { dataStore.data.first().pin }
+    }
+
+    /**
+     * Listen for pin changes using flow
+     */
+    override fun listenForPin(): Flow<String?> {
+        return dataStore.data.map { data -> data.pin }
     }
 
     /**

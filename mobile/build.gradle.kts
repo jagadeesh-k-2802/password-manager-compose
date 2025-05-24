@@ -12,8 +12,8 @@ plugins {
 
 // Version Management
 val versionMajor = 2
-val versionMinor = 1
-val versionPatch = 2
+val versionMinor = 2
+val versionPatch = 0
 val minimumSdkVersion = 29
 
 fun generateVersionCode(): Int {
@@ -83,6 +83,10 @@ dependencies {
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // In App Update
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
 
     // Compose
     implementation(libs.androidx.activity.compose)

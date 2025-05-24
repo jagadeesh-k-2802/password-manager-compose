@@ -5,6 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.room.Room
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.jackappsdev.password_manager.data.local.dao.CategoryDao
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.MIGRATION_1_2
@@ -149,5 +151,13 @@ object AppModule {
         passwordDatabase: PasswordDatabase
     ): CategoryDao {
         return passwordDatabase.categoryDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppUpdateManager(
+        @ApplicationContext appContext: Context
+    ): AppUpdateManager {
+        return AppUpdateManagerFactory.create(appContext)
     }
 }

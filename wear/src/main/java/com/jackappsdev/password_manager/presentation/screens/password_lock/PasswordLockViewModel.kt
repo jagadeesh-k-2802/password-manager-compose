@@ -12,6 +12,7 @@ import com.jackappsdev.password_manager.presentation.screens.password_lock.event
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,11 +39,22 @@ class PasswordLockViewModel @Inject constructor(
     private fun onInit() {
         viewModelScope.launch {
             state = state.copy(hasPinSet = userPreferencesRepository.hasPinSet())
+            listenForPinChangesIfNotSetAlready()
         }
     }
 
     fun lockApp() {
         state = state.copy(hasBeenUnlocked = false, pin = EMPTY_STRING)
+    }
+
+    private suspend fun listenForPinChangesIfNotSetAlready() {
+        if (state.hasPinSet == false) {
+            userPreferencesRepository.listenForPin().collectLatest {
+                if (state.hasPinSet == false) {
+                    state = state.copy(hasPinSet = it.isNullOrBlank().not())
+                }
+            }
+        }
     }
 
     private fun onNumberPress(number: String) {

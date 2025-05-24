@@ -15,16 +15,23 @@ import androidx.core.content.ContextCompat.getString
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.ktx.requestAppUpdateInfo
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import com.jackappsdev.password_manager.shared.core.showToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class SettingsEffectHandler(
-    activity: FragmentActivity,
+    private val activity: FragmentActivity,
     private val navController: NavController,
-    private val onEvent: (SettingsUiEvent) -> Unit
+    private val scope: CoroutineScope,
+    private val onEvent: (SettingsUiEvent) -> Unit,
 ) {
     private val context: Context = activity.applicationContext
 
@@ -43,6 +50,14 @@ class SettingsEffectHandler(
             }
         }
     )
+
+    fun onStartAppUpdate(appUpdateManager: AppUpdateManager) {
+        scope.launch {
+            val appUpdateInfo = appUpdateManager.requestAppUpdateInfo()
+            val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
+            appUpdateManager.startUpdateFlow(appUpdateInfo, activity, appUpdateOptions)
+        }
+    }
 
     fun onOpenImportPasswordsIntent(intent: ActivityResultLauncher<Intent>) {
         Intent(Intent.ACTION_OPEN_DOCUMENT).apply {

@@ -1,4 +1,6 @@
 [versions]
+appUpdate = "2.1.0"
+appUpdateKtx = "2.1.0"
 googleDevToolsKsp = "2.1.10-1.0.29"
 kotlinxCoroutinesCore = "1.8.0"
 kotlinxCoroutinesPlayServices = "1.8.0"
@@ -43,6 +45,8 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRunt
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-wear-remote-interactions = { module = "androidx.wear:wear-remote-interactions", version.ref = "wearRemoteInteractions" }
+app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdateKtx" }
+app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }

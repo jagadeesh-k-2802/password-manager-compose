@@ -1,6 +1,9 @@
 package com.jackappsdev.password_manager.presentation.screens.settings.event
 
+import com.google.android.play.core.appupdate.AppUpdateManager
+
 sealed class SettingsUiEffect {
+    data class StartAppUpdate(val appUpdateManager: AppUpdateManager) : SettingsUiEffect()
     data object OpenImportPasswordsIntent : SettingsUiEffect()
     data object OpenExportPasswordsIntent : SettingsUiEffect()
     data object PasswordsExported : SettingsUiEffect()

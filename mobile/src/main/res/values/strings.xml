@@ -62,6 +62,9 @@
     <string name="label_no_category_items">No Category Items</string>
     <string name="label_enter_pin">Set Watch PIN</string>
     <string name="label_update_pin">Update Watch PIN</string>
+    <string name="app_update_available">App Update is Available</string>
+    <string name="app_update_downloading">App Update is Downloading…</string>
+    <string name="app_update_downloaded">Install New App Update</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note that this password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>

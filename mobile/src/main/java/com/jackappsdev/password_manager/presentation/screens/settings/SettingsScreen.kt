@@ -34,6 +34,7 @@ import com.jackappsdev.password_manager.core.isAtLeastAndroid
 import com.jackappsdev.password_manager.presentation.screens.settings.components.ImportPasswordsDialog
 import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
+import com.jackappsdev.password_manager.presentation.screens.settings.components.UpdateSettingItem
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
@@ -71,6 +72,7 @@ fun SettingsScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
+                    is SettingsUiEffect.StartAppUpdate -> onStartAppUpdate(effect.appUpdateManager)
                     is SettingsUiEffect.OpenImportPasswordsIntent -> onOpenImportPasswordsIntent(importIntent)
                     is SettingsUiEffect.OpenExportPasswordsIntent -> onOpenExportPasswordsIntent(exportIntent)
                     is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
@@ -106,6 +108,11 @@ fun SettingsScreen(
                 .padding(contentPadding)
                 .verticalScroll(scrollState)
         ) {
+            UpdateSettingItem(
+                state = state,
+                onEvent = onEvent,
+            )
+
             SettingItem(
                 leadingIcon = Icons.Outlined.Lock,
                 trailingIcon = Icons.Outlined.ChevronRight,

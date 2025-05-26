@@ -26,6 +26,7 @@ import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class SettingsEffectHandler(
     private val activity: FragmentActivity,
@@ -69,9 +70,20 @@ class SettingsEffectHandler(
 
     fun onOpenExportPasswordsIntent(intent: ActivityResultLauncher<Intent>) {
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            val timestamp = LocalDate.now().toString()
             type = "application/vnd.sqlite3"
             addCategory(Intent.CATEGORY_OPENABLE)
-            putExtra(Intent.EXTRA_TITLE, "passwords.db")
+            putExtra(Intent.EXTRA_TITLE, "passwords-$timestamp.db")
+            intent.launch(this)
+        }
+    }
+
+    fun onOpenExportPasswordsAsCsvIntent(intent: ActivityResultLauncher<Intent>) {
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            val timestamp = LocalDate.now().toString()
+            type = "text/csv"
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_TITLE, "passwords-$timestamp.csv")
             intent.launch(this)
         }
     }

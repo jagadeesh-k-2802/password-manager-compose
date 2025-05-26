@@ -1,6 +1,7 @@
 package com.jackappsdev.password_manager.data.repository
 
 import com.jackappsdev.password_manager.data.local.dao.CategoryDao
+import com.jackappsdev.password_manager.data.local.dao.PasswordDao
 import com.jackappsdev.password_manager.data.mappers.toEntity
 import com.jackappsdev.password_manager.data.mappers.toModel
 import com.jackappsdev.password_manager.domain.model.CategoryModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CategoryRepositoryImpl(
+    private val passwordDao: PasswordDao,
     private val categoryDao: CategoryDao
 ) : CategoryRepository {
 
@@ -25,6 +27,7 @@ class CategoryRepositoryImpl(
     }
 
     override suspend fun deleteCategoryItem(item: CategoryModel) {
+        item.id?.let { id -> passwordDao.removeCategoryFromPasswords(id) }
         categoryDao.deleteCategory(item.toEntity())
     }
 }

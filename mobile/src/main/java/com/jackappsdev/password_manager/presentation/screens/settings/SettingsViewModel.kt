@@ -11,6 +11,7 @@ import com.google.android.play.core.ktx.AppUpdateResult
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.requestCompleteUpdate
 import com.google.android.play.core.ktx.requestUpdateFlow
+import com.jackappsdev.password_manager.core.isChromeOS
 import com.jackappsdev.password_manager.core.isScreenLockAvailable
 import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -55,7 +56,8 @@ class SettingsViewModel @Inject constructor(
         state = state.copy(
             useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
             useDynamicColors = userPreferencesRepository.getUseDynamicColors().first(),
-            isScreenLockAvailable = isScreenLockAvailable(application.applicationContext)
+            isScreenLockAvailable = isScreenLockAvailable(application.applicationContext),
+            isChromeOS = isChromeOS(application)
         )
     }
 
@@ -87,16 +89,40 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private suspend fun importData(password: String) {
+        if (state.importFileUri != null) {
+            val uri = state.importFileUri ?: EMPTY_STRING
+            val isDone = databaseManagerRepository.importDatabase(uri, password)
+            state = state.copy(isImportPasswordInvalid = !isDone)
+        }
+    }
+
+    private fun savePasswordsUri(uri: String) {
+        state = state.copy(
+            isImportPasswordsDialogVisible = true,
+            isImportPasswordInvalid = false,
+            importFileUri = uri
+        )
+    }
+
+    private suspend fun exportPasswords(uri: String): SettingsUiEffect {
+        databaseManagerRepository.exportDatabase(uri)
+        return SettingsUiEffect.PasswordsExported
+    }
+
+    private suspend fun exportPasswordsAsCsv(uri: String): SettingsUiEffect {
+        databaseManagerRepository.exportDatabaseAsCsv(uri)
+        return SettingsUiEffect.PasswordsExported
+    }
+
     private fun hideImportPasswordDialog() {
         state = state.copy(isImportPasswordsDialogVisible = false, isImportPasswordInvalid = false)
     }
 
-    private fun checkIfScreenLockAvailable(): SettingsUiEffect {
-        return if (state.isScreenLockAvailable == true) {
-            SettingsUiEffect.BiometricAuthenticate
-        } else {
-            SettingsUiEffect.OpenScreenLockSettings
-        }
+    private suspend fun setDynamicColors() {
+        val toggleValue = state.useDynamicColors != true
+        state = state.copy(useDynamicColors = toggleValue)
+        userPreferencesRepository.setUseDynamicColors(toggleValue)
     }
 
     private suspend fun toggleScreenLock() {
@@ -109,31 +135,12 @@ class SettingsViewModel @Inject constructor(
         appUpdateManager.requestCompleteUpdate()
     }
 
-    private suspend fun setDynamicColors() {
-        val toggleValue = state.useDynamicColors != true
-        state = state.copy(useDynamicColors = toggleValue)
-        userPreferencesRepository.setUseDynamicColors(toggleValue)
-    }
-
-    private fun savePasswordsUri(uri: String) {
-        state = state.copy(
-            isImportPasswordsDialogVisible = true,
-            isImportPasswordInvalid = false,
-            importFileUri = uri
-        )
-    }
-
-    private suspend fun importData(password: String) {
-        if (state.importFileUri != null) {
-            val uri = state.importFileUri ?: EMPTY_STRING
-            val isDone = databaseManagerRepository.importDatabase(uri, password)
-            state = state.copy(isImportPasswordInvalid = !isDone)
+    private fun checkIfScreenLockAvailable(): SettingsUiEffect {
+        return if (state.isScreenLockAvailable == true) {
+            SettingsUiEffect.BiometricAuthenticate
+        } else {
+            SettingsUiEffect.OpenScreenLockSettings
         }
-    }
-
-    private suspend fun exportData(uri: String): SettingsUiEffect {
-        databaseManagerRepository.exportDatabase(uri)
-        return SettingsUiEffect.PasswordsExported
     }
 
     override fun onEvent(event: SettingsUiEvent) {
@@ -141,15 +148,17 @@ class SettingsViewModel @Inject constructor(
             val effect = when (event) {
                 is SettingsUiEvent.ImportPasswords -> importData(event.password)
                 is SettingsUiEvent.SavePasswordsUri -> savePasswordsUri(event.uri)
-                is SettingsUiEvent.ExportPasswords -> exportData(event.uri)
+                is SettingsUiEvent.ExportPasswords -> exportPasswords(event.uri)
+                is SettingsUiEvent.ExportPasswordsAsCsv -> exportPasswordsAsCsv(event.uri)
                 is SettingsUiEvent.HideImportPasswordsDialog -> hideImportPasswordDialog()
                 is SettingsUiEvent.ToggleDynamicColors -> setDynamicColors()
                 is SettingsUiEvent.ToggleUseScreenLock -> toggleScreenLock()
                 is SettingsUiEvent.CompleteAppUpdate -> completeAppUpdate()
-                is SettingsUiEvent.StartAppUpdate -> SettingsUiEffect.StartAppUpdate(appUpdateManager)
                 is SettingsUiEvent.CheckScreenLockAvailable -> checkIfScreenLockAvailable()
+                is SettingsUiEvent.StartAppUpdate -> SettingsUiEffect.StartAppUpdate(appUpdateManager)
                 is SettingsUiEvent.OpenImportPasswordsIntent -> SettingsUiEffect.OpenImportPasswordsIntent
                 is SettingsUiEvent.OpenExportPasswordsIntent -> SettingsUiEffect.OpenExportPasswordsIntent
+                is SettingsUiEvent.OpenExportPasswordsAsCsvIntent -> SettingsUiEffect.OpenExportPasswordsAsCsvIntent
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings
                 is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories

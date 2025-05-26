@@ -9,5 +9,6 @@ data class SettingsState(
     val isImportPasswordsDialogVisible: Boolean = false,
     val isImportPasswordInvalid: Boolean = false,
     val isScreenLockAvailable: Boolean? = null,
-    val importFileUri: String? = null
+    val importFileUri: String? = null,
+    val isChromeOS: Boolean = false,
 )

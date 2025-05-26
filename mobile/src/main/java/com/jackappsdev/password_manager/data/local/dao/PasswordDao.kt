@@ -30,6 +30,9 @@ interface PasswordDao {
     @Query("UPDATE password_items SET is_added_to_watch = 0")
     suspend fun removePasswordsFromWatch()
 
+    @Query("UPDATE password_items SET category_id = NULL WHERE category_id = :id")
+    suspend fun removeCategoryFromPasswords(id: Int)
+
     @Delete
     suspend fun deletePasswordEntity(item: PasswordItemEntity)
 

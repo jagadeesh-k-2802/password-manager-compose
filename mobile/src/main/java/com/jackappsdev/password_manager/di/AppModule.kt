@@ -64,9 +64,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCategoryRepository(
+        passwordDao: PasswordDao,
         categoryDao: CategoryDao
     ): CategoryRepository {
         return CategoryRepositoryImpl(
+            passwordDao = passwordDao,
             categoryDao = categoryDao
         )
     }

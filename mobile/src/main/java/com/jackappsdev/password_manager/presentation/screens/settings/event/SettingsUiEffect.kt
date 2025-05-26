@@ -6,6 +6,7 @@ sealed class SettingsUiEffect {
     data class StartAppUpdate(val appUpdateManager: AppUpdateManager) : SettingsUiEffect()
     data object OpenImportPasswordsIntent : SettingsUiEffect()
     data object OpenExportPasswordsIntent : SettingsUiEffect()
+    data object OpenExportPasswordsAsCsvIntent : SettingsUiEffect()
     data object PasswordsExported : SettingsUiEffect()
     data object BiometricAuthenticate : SettingsUiEffect()
     data object OpenScreenLockSettings : SettingsUiEffect()

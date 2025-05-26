@@ -79,6 +79,7 @@ class CategoryItemDetailViewModel @Inject constructor(
     }
 
     private suspend fun deleteItem(): CategoryItemDetailUiEffect {
+        state = state.copy(isDeleteDialogVisible = false)
         state.categoryModel?.let { categoryRepository.deleteCategoryItem(it) }
         return CategoryItemDetailUiEffect.NavigateUp
     }

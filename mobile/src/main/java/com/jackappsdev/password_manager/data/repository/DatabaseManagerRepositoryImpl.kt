@@ -93,4 +93,8 @@ class DatabaseManagerRepositoryImpl(
             input.close()
         }
     }
+
+    override suspend fun exportDatabaseAsCsv(path: String) {
+        // TODO: Implement CSV export functionality
+    }
 }

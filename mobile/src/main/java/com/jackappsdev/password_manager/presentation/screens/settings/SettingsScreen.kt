@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.TableRows
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -68,6 +69,14 @@ fun SettingsScreen(
         }
     }
 
+    val exportCsvIntent = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            onEvent(SettingsUiEvent.ExportPasswordsAsCsv(result.data?.data.toString()))
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
@@ -75,6 +84,7 @@ fun SettingsScreen(
                     is SettingsUiEffect.StartAppUpdate -> onStartAppUpdate(effect.appUpdateManager)
                     is SettingsUiEffect.OpenImportPasswordsIntent -> onOpenImportPasswordsIntent(importIntent)
                     is SettingsUiEffect.OpenExportPasswordsIntent -> onOpenExportPasswordsIntent(exportIntent)
+                    is SettingsUiEffect.OpenExportPasswordsAsCsvIntent -> onOpenExportPasswordsAsCsvIntent(exportCsvIntent)
                     is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
                     is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
                     is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
@@ -127,12 +137,14 @@ fun SettingsScreen(
                 onClick = { onEvent(SettingsUiEvent.NavigateToManageCategories) }
             )
 
-            SettingItem(
-                leadingIcon = Icons.Outlined.Watch,
-                trailingIcon = Icons.Outlined.ChevronRight,
-                title = stringResource(R.string.label_android_watch),
-                onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
-            )
+            if (state.isChromeOS.not()) {
+                SettingItem(
+                    leadingIcon = Icons.Outlined.Watch,
+                    trailingIcon = Icons.Outlined.ChevronRight,
+                    title = stringResource(R.string.label_android_watch),
+                    onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
+                )
+            }
 
             ToggleSettingItem(
                 modifier = Modifier.alpha(if (state.isScreenLockAvailable == true) 1f else 0.5f),
@@ -153,14 +165,20 @@ fun SettingsScreen(
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Download,
-                title = stringResource(R.string.label_import_passwords),
+                title = stringResource(R.string.label_import_passwords_database),
                 onClick = { onEvent(SettingsUiEvent.OpenImportPasswordsIntent) }
             )
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Upload,
-                title = stringResource(R.string.label_export_passwords),
+                title = stringResource(R.string.label_export_passwords_database),
                 onClick = { onEvent(SettingsUiEvent.OpenExportPasswordsIntent) }
+            )
+
+            SettingItem(
+                leadingIcon = Icons.Outlined.TableRows,
+                title = stringResource(R.string.label_export_passwords_csv),
+                onClick = { onEvent(SettingsUiEvent.OpenExportPasswordsAsCsvIntent) }
             )
 
             SettingItem(

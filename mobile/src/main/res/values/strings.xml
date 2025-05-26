@@ -51,8 +51,9 @@
     <string name="label_dynamic_colors">Dynamic Colors</string>
     <string name="label_android_watch">Android Watch</string>
     <string name="label_enable_android_watch">Enable Android Watch Sharing</string>
-    <string name="label_import_passwords">Import Passwords</string>
-    <string name="label_export_passwords">Export Passwords</string>
+    <string name="label_import_passwords_database">Import Passwords from Database</string>
+    <string name="label_export_passwords_database">Export Passwords as Database</string>
+    <string name="label_export_passwords_csv">Export Passwords as CSV</string>
     <string name="label_rate_app">Rate on Google Play Store</string>
     <string name="label_app_version">App Version: %s</string>
     <string name="label_current_password">Current Password</string>

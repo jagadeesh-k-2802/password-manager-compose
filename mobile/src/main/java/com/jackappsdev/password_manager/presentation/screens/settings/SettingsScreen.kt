@@ -73,7 +73,7 @@ fun SettingsScreen(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            onEvent(SettingsUiEvent.ExportPasswordsAsCsv(result.data?.data.toString()))
+            onEvent(SettingsUiEvent.ExportPasswordsCsv(result.data?.data.toString()))
         }
     }
 
@@ -84,9 +84,10 @@ fun SettingsScreen(
                     is SettingsUiEffect.StartAppUpdate -> onStartAppUpdate(effect.appUpdateManager)
                     is SettingsUiEffect.OpenImportPasswordsIntent -> onOpenImportPasswordsIntent(importIntent)
                     is SettingsUiEffect.OpenExportPasswordsIntent -> onOpenExportPasswordsIntent(exportIntent)
-                    is SettingsUiEffect.OpenExportPasswordsAsCsvIntent -> onOpenExportPasswordsAsCsvIntent(exportCsvIntent)
+                    is SettingsUiEffect.OpenExportCsvIntent -> onOpenExportCsvIntent(exportCsvIntent)
+                    is SettingsUiEffect.BiometricAuthForExportCsv -> onBiometricAuthForExportCsv()
                     is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
-                    is SettingsUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
+                    is SettingsUiEffect.BiometricAuthForScreenLock -> onBiometricAuthForScreenLock()
                     is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
                     is SettingsUiEffect.NavigateToChangePassword -> onNavigateToChangePassword()
                     is SettingsUiEffect.NavigateToManageCategories -> onNavigateToManageCategories()
@@ -178,7 +179,7 @@ fun SettingsScreen(
             SettingItem(
                 leadingIcon = Icons.Outlined.TableRows,
                 title = stringResource(R.string.label_export_passwords_csv),
-                onClick = { onEvent(SettingsUiEvent.OpenExportPasswordsAsCsvIntent) }
+                onClick = { onEvent(SettingsUiEvent.CheckExportCsvAuth) }
             )
 
             SettingItem(

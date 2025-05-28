@@ -13,7 +13,7 @@ import com.google.android.play.core.ktx.requestCompleteUpdate
 import com.google.android.play.core.ktx.requestUpdateFlow
 import com.jackappsdev.password_manager.core.isChromeOS
 import com.jackappsdev.password_manager.core.isScreenLockAvailable
-import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
+import com.jackappsdev.password_manager.domain.repository.DatabaseBackupManager
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val application: Application,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val databaseManagerRepository: DatabaseManagerRepository,
+    private val databaseBackupManager: DatabaseBackupManager,
     private val appUpdateManager: AppUpdateManager
 ) : ViewModel(), EventDrivenViewModel<SettingsUiEvent, SettingsUiEffect> {
 
@@ -92,7 +92,7 @@ class SettingsViewModel @Inject constructor(
     private suspend fun importData(password: String) {
         if (state.importFileUri != null) {
             val uri = state.importFileUri ?: EMPTY_STRING
-            val isDone = databaseManagerRepository.importDatabase(uri, password)
+            val isDone = databaseBackupManager.importDatabase(uri, password)
             state = state.copy(isImportPasswordInvalid = !isDone)
         }
     }
@@ -106,12 +106,12 @@ class SettingsViewModel @Inject constructor(
     }
 
     private suspend fun exportPasswords(uri: String): SettingsUiEffect {
-        databaseManagerRepository.exportDatabase(uri)
+        databaseBackupManager.exportDatabase(uri)
         return SettingsUiEffect.PasswordsExported
     }
 
-    private suspend fun exportPasswordsAsCsv(uri: String): SettingsUiEffect {
-        databaseManagerRepository.exportDatabaseAsCsv(uri)
+    private suspend fun exportPasswordsCsv(uri: String): SettingsUiEffect {
+        databaseBackupManager.exportCsv(uri)
         return SettingsUiEffect.PasswordsExported
     }
 
@@ -137,9 +137,17 @@ class SettingsViewModel @Inject constructor(
 
     private fun checkIfScreenLockAvailable(): SettingsUiEffect {
         return if (state.isScreenLockAvailable == true) {
-            SettingsUiEffect.BiometricAuthenticate
+            SettingsUiEffect.BiometricAuthForScreenLock
         } else {
             SettingsUiEffect.OpenScreenLockSettings
+        }
+    }
+
+    private fun openExportCsvIntent(): SettingsUiEffect {
+        return if (state.isScreenLockAvailable == true) {
+            SettingsUiEffect.BiometricAuthForExportCsv
+        } else {
+            SettingsUiEffect.OpenExportCsvIntent
         }
     }
 
@@ -149,16 +157,17 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.ImportPasswords -> importData(event.password)
                 is SettingsUiEvent.SavePasswordsUri -> savePasswordsUri(event.uri)
                 is SettingsUiEvent.ExportPasswords -> exportPasswords(event.uri)
-                is SettingsUiEvent.ExportPasswordsAsCsv -> exportPasswordsAsCsv(event.uri)
+                is SettingsUiEvent.ExportPasswordsCsv -> exportPasswordsCsv(event.uri)
                 is SettingsUiEvent.HideImportPasswordsDialog -> hideImportPasswordDialog()
                 is SettingsUiEvent.ToggleDynamicColors -> setDynamicColors()
                 is SettingsUiEvent.ToggleUseScreenLock -> toggleScreenLock()
                 is SettingsUiEvent.CompleteAppUpdate -> completeAppUpdate()
                 is SettingsUiEvent.CheckScreenLockAvailable -> checkIfScreenLockAvailable()
+                is SettingsUiEvent.CheckExportCsvAuth -> openExportCsvIntent()
                 is SettingsUiEvent.StartAppUpdate -> SettingsUiEffect.StartAppUpdate(appUpdateManager)
                 is SettingsUiEvent.OpenImportPasswordsIntent -> SettingsUiEffect.OpenImportPasswordsIntent
                 is SettingsUiEvent.OpenExportPasswordsIntent -> SettingsUiEffect.OpenExportPasswordsIntent
-                is SettingsUiEvent.OpenExportPasswordsAsCsvIntent -> SettingsUiEffect.OpenExportPasswordsAsCsvIntent
+                is SettingsUiEvent.OpenExportCsvIntent -> SettingsUiEffect.OpenExportCsvIntent
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings
                 is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories

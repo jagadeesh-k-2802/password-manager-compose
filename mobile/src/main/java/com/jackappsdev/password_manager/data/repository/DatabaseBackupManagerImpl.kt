@@ -7,7 +7,7 @@ import com.jackappsdev.password_manager.shared.core.EncryptedSQLiteOpenHelper
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.DATABASE_VERSION
 import com.jackappsdev.password_manager.data.local.dao.PasswordDao
-import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
+import com.jackappsdev.password_manager.domain.repository.DatabaseBackupManager
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.presentation.main.MainActivity
 import kotlinx.coroutines.Dispatchers
@@ -16,12 +16,14 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import androidx.core.net.toUri
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
+import com.jackappsdev.password_manager.core.parseModifiedTime
 
-class DatabaseManagerRepositoryImpl(
+class DatabaseBackupManagerImpl(
     private val appContext: Context,
     private val passwordDao: PasswordDao,
     private val passphraseRepository: PassphraseRepository
-) : DatabaseManagerRepository {
+) : DatabaseBackupManager {
 
     override suspend fun importDatabase(path: String, password: String): Boolean {
         val tempDatabaseName = "temp.db"
@@ -94,7 +96,37 @@ class DatabaseManagerRepositoryImpl(
         }
     }
 
-    override suspend fun exportDatabaseAsCsv(path: String) {
-        // TODO: Implement CSV export functionality
+    override suspend fun exportCsv(path: String) {
+        withContext(Dispatchers.IO) {
+            passwordDao.checkpoint() // To save changes without it DB will be empty
+            val passwordsWithCategories = passwordDao.getAllPasswordWithCategoryEntities()
+            val output = appContext.contentResolver.openOutputStream(path.toUri())
+
+            output?.let {
+                csvWriter().open(output) {
+                    writeRow(
+                        "Name",
+                        "Username",
+                        "Password",
+                        "Website",
+                        "Notes",
+                        "Category",
+                        "Last Updated At"
+                    )
+
+                    passwordsWithCategories.forEach { item ->
+                        writeRow(
+                            item.passwordItem.name,
+                            item.passwordItem.username,
+                            item.passwordItem.password,
+                            item.passwordItem.website,
+                            item.passwordItem.notes,
+                            item.categoryEntity?.name ?: "No Category",
+                            parseModifiedTime(appContext, item.passwordItem.createdAt)
+                        )
+                    }
+                }
+            }
+        }
     }
 }

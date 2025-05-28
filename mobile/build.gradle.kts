@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.app.update)
     implementation(libs.app.update.ktx)
 
+    // CSV
+    implementation(libs.kotlin.csv.jvm)
+
     // Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

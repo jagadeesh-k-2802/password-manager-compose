@@ -14,12 +14,12 @@ import com.jackappsdev.password_manager.data.local.dao.PasswordDao
 import com.jackappsdev.password_manager.data.local.PasswordDatabase
 import com.jackappsdev.password_manager.data.models.UserSettings
 import com.jackappsdev.password_manager.data.repository.CategoryRepositoryImpl
-import com.jackappsdev.password_manager.data.repository.DatabaseManagerRepositoryImpl
+import com.jackappsdev.password_manager.data.repository.DatabaseBackupManagerImpl
 import com.jackappsdev.password_manager.data.repository.PassphraseRepositoryImpl
 import com.jackappsdev.password_manager.data.repository.PasswordItemRepositoryImpl
 import com.jackappsdev.password_manager.data.repository.UserPreferencesRepositoryImpl
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
-import com.jackappsdev.password_manager.domain.repository.DatabaseManagerRepository
+import com.jackappsdev.password_manager.domain.repository.DatabaseBackupManager
 import com.jackappsdev.password_manager.domain.repository.PassphraseRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -91,8 +91,8 @@ object AppModule {
         @ApplicationContext appContext: Context,
         passwordDao: PasswordDao,
         passphraseRepository: PassphraseRepository
-    ): DatabaseManagerRepository {
-        return DatabaseManagerRepositoryImpl(
+    ): DatabaseBackupManager {
+        return DatabaseBackupManagerImpl(
             appContext = appContext,
             passwordDao = passwordDao,
             passphraseRepository = passphraseRepository

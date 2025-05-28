@@ -35,8 +35,16 @@ class SettingsEffectHandler(
     private val onEvent: (SettingsUiEvent) -> Unit,
 ) {
     private val context: Context = activity.applicationContext
+    private var isExportCsvBiometricAuth = false
+    private var isScreenLockBiometricAuth = false
 
-    private val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    private val exportCsvPromptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle(getString(context, R.string.title_export_passwords_csv))
+        .setDescription(getString(context, R.string.text_export_passwords_as_csv))
+        .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+        .build()
+
+    private val screenLockPromptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle(getString(context, R.string.title_verify_user))
         .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
         .build()
@@ -47,7 +55,14 @@ class SettingsEffectHandler(
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                onEvent(SettingsUiEvent.ToggleUseScreenLock)
+
+                if (isExportCsvBiometricAuth) {
+                    onEvent(SettingsUiEvent.OpenExportCsvIntent)
+                    isExportCsvBiometricAuth = false
+                } else if (isScreenLockBiometricAuth) {
+                    onEvent(SettingsUiEvent.ToggleUseScreenLock)
+                    isScreenLockBiometricAuth = false
+                }
             }
         }
     )
@@ -78,7 +93,7 @@ class SettingsEffectHandler(
         }
     }
 
-    fun onOpenExportPasswordsAsCsvIntent(intent: ActivityResultLauncher<Intent>) {
+    fun onOpenExportCsvIntent(intent: ActivityResultLauncher<Intent>) {
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             val timestamp = LocalDate.now().toString()
             type = "text/csv"
@@ -88,12 +103,18 @@ class SettingsEffectHandler(
         }
     }
 
+    fun onBiometricAuthForExportCsv() {
+        isExportCsvBiometricAuth = true
+        biometricPrompt.authenticate(exportCsvPromptInfo)
+    }
+
     fun onPasswordsExported() {
         context.showToast(context.getString(R.string.toast_passwords_exported))
     }
 
-    fun onBiometricAuthenticate() {
-        biometricPrompt.authenticate(promptInfo)
+    fun onBiometricAuthForScreenLock() {
+        isScreenLockBiometricAuth = true
+        biometricPrompt.authenticate(screenLockPromptInfo)
     }
 
     @SuppressLint("QueryPermissionsNeeded")

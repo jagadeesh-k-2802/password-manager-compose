@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
-import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDeleteDialog
+import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDetailActions
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
@@ -84,7 +84,9 @@ fun PasswordItemDetailScreen(
     }
 
     if (state.isDeleteDialogVisible) {
-        PasswordItemDeleteDialog(
+        ConfirmationDialog(
+            title = R.string.dialog_title_delete_password,
+            description = R.string.dialog_text_password_delete,
             onConfirm = { onEvent(PasswordItemDetailUiEvent.RequestDeleteItem) },
             onDismiss = { onEvent(PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility) }
         )

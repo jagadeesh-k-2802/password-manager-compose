@@ -17,6 +17,7 @@ import com.jackappsdev.password_manager.domain.repository.DatabaseBackupManager
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
+import com.jackappsdev.password_manager.presentation.screens.settings.model.ExportPasswordAuthType
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -115,8 +116,33 @@ class SettingsViewModel @Inject constructor(
         return SettingsUiEffect.PasswordsExported
     }
 
-    private fun hideImportPasswordDialog() {
-        state = state.copy(isImportPasswordsDialogVisible = false, isImportPasswordInvalid = false)
+    private fun hideDialog(event: SettingsUiEvent) {
+        when (event) {
+            is SettingsUiEvent.HideImportPasswordsDialog -> {
+                state = state.copy(
+                    isImportPasswordsDialogVisible = false,
+                    isImportPasswordInvalid = false
+                )
+            }
+
+            is SettingsUiEvent.HideExportPasswordsDialog -> {
+                state = state.copy(
+                    isExportPasswordsDialogVisible = false,
+                    isExportPasswordsPasswordInvalid = false
+                )
+            }
+
+            is SettingsUiEvent.HideExportCsvDialog -> {
+                state = state.copy(
+                    isExportCsvDialogVisible = false,
+                    isExportCsvPasswordInvalid = false
+                )
+            }
+
+            else -> {
+                null
+            }
+        }
     }
 
     private suspend fun setDynamicColors() {
@@ -143,11 +169,63 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun openExportCsvIntent(): SettingsUiEffect {
-        return if (state.isScreenLockAvailable == true) {
+    private fun checkExportPasswordsAuth(): SettingsUiEffect? {
+        return if (state.useScreenLockToUnlock == true) {
+            SettingsUiEffect.BiometricAuthForExportPasswords
+        } else {
+            state = state.copy(isExportPasswordsDialogVisible = true)
+            null
+        }
+    }
+
+    private fun checkExportCsvAuth(): SettingsUiEffect? {
+        return if (state.useScreenLockToUnlock == true) {
             SettingsUiEffect.BiometricAuthForExportCsv
         } else {
-            SettingsUiEffect.OpenExportCsvIntent
+            state = state.copy(isExportCsvDialogVisible = true)
+            null
+        }
+    }
+
+    private suspend fun openExportPasswordsIntent(passwordType: ExportPasswordAuthType): SettingsUiEffect? {
+        return when (passwordType) {
+            is ExportPasswordAuthType.BiometricAuth -> {
+                SettingsUiEffect.OpenExportPasswordsIntent
+            }
+
+            is ExportPasswordAuthType.PasswordAuth -> {
+                if (userPreferencesRepository.verifyPassword(passwordType.password)) {
+                    state = state.copy(
+                        isExportPasswordsDialogVisible = false,
+                        isExportPasswordsPasswordInvalid = false
+                    )
+                    SettingsUiEffect.OpenExportPasswordsIntent
+                } else {
+                    state = state.copy(isExportPasswordsPasswordInvalid = true)
+                    null
+                }
+            }
+        }
+    }
+
+    private suspend fun openExportCsvIntent(passwordType: ExportPasswordAuthType): SettingsUiEffect? {
+        return when (passwordType) {
+            is ExportPasswordAuthType.BiometricAuth -> {
+                SettingsUiEffect.OpenExportCsvIntent
+            }
+
+            is ExportPasswordAuthType.PasswordAuth -> {
+                if (userPreferencesRepository.verifyPassword(passwordType.password)) {
+                    state = state.copy(
+                        isExportCsvDialogVisible = false,
+                        isExportCsvPasswordInvalid = false
+                    )
+                    SettingsUiEffect.OpenExportCsvIntent
+                } else {
+                    state = state.copy(isExportCsvPasswordInvalid = true)
+                    null
+                }
+            }
         }
     }
 
@@ -158,16 +236,19 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.SavePasswordsUri -> savePasswordsUri(event.uri)
                 is SettingsUiEvent.ExportPasswords -> exportPasswords(event.uri)
                 is SettingsUiEvent.ExportPasswordsCsv -> exportPasswordsCsv(event.uri)
-                is SettingsUiEvent.HideImportPasswordsDialog -> hideImportPasswordDialog()
+                is SettingsUiEvent.HideImportPasswordsDialog -> hideDialog(event)
+                is SettingsUiEvent.HideExportPasswordsDialog -> hideDialog(event)
+                is SettingsUiEvent.HideExportCsvDialog -> hideDialog(event)
                 is SettingsUiEvent.ToggleDynamicColors -> setDynamicColors()
                 is SettingsUiEvent.ToggleUseScreenLock -> toggleScreenLock()
                 is SettingsUiEvent.CompleteAppUpdate -> completeAppUpdate()
                 is SettingsUiEvent.CheckScreenLockAvailable -> checkIfScreenLockAvailable()
-                is SettingsUiEvent.CheckExportCsvAuth -> openExportCsvIntent()
+                is SettingsUiEvent.CheckExportPasswordsAuth -> checkExportPasswordsAuth()
+                is SettingsUiEvent.CheckExportCsvAuth -> checkExportCsvAuth()
+                is SettingsUiEvent.OpenExportPasswordsIntent -> openExportPasswordsIntent(event.passwordType)
+                is SettingsUiEvent.OpenExportCsvIntent -> openExportCsvIntent(event.passwordType)
                 is SettingsUiEvent.StartAppUpdate -> SettingsUiEffect.StartAppUpdate(appUpdateManager)
                 is SettingsUiEvent.OpenImportPasswordsIntent -> SettingsUiEffect.OpenImportPasswordsIntent
-                is SettingsUiEvent.OpenExportPasswordsIntent -> SettingsUiEffect.OpenExportPasswordsIntent
-                is SettingsUiEvent.OpenExportCsvIntent -> SettingsUiEffect.OpenExportCsvIntent
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings
                 is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories

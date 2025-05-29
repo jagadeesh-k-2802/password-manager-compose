@@ -44,7 +44,7 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.presentation.components.CheckmarkCircle
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
-import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
+import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.event.AddCategoryItemEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.event.AddCategoryItemUiEffect
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.event.AddCategoryItemUiEvent
@@ -80,7 +80,9 @@ fun AddCategoryItemScreen(
     }
 
     if (state.isUnsavedChangesDialogVisible) {
-        UnsavedChangesDialog(
+        ConfirmationDialog(
+            title = R.string.dialog_title_unsaved_changes,
+            description = R.string.dialog_text_unsaved,
             onConfirm = { onEvent(AddCategoryItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(AddCategoryItemUiEvent.ToggleUnsavedChangesDialogVisibility) }
         )

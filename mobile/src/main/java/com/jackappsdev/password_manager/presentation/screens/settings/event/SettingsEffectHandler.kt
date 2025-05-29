@@ -22,6 +22,7 @@ import com.google.android.play.core.ktx.requestAppUpdateInfo
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
 import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.screens.settings.model.ExportPasswordAuthType.BiometricAuth
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.CoroutineScope
@@ -35,12 +36,19 @@ class SettingsEffectHandler(
     private val onEvent: (SettingsUiEvent) -> Unit,
 ) {
     private val context: Context = activity.applicationContext
+    private var isExportPasswordsBiometricAuth = false
     private var isExportCsvBiometricAuth = false
     private var isScreenLockBiometricAuth = false
 
+    private val exportPasswordsPromptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle(getString(context, R.string.title_export_passwords))
+        .setDescription(getString(context, R.string.text_export_passwords))
+        .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+        .build()
+
     private val exportCsvPromptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle(getString(context, R.string.title_export_passwords_csv))
-        .setDescription(getString(context, R.string.text_export_passwords_as_csv))
+        .setDescription(getString(context, R.string.text_export_passwords_csv_note))
         .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
         .build()
 
@@ -56,12 +64,22 @@ class SettingsEffectHandler(
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
 
-                if (isExportCsvBiometricAuth) {
-                    onEvent(SettingsUiEvent.OpenExportCsvIntent)
-                    isExportCsvBiometricAuth = false
-                } else if (isScreenLockBiometricAuth) {
-                    onEvent(SettingsUiEvent.ToggleUseScreenLock)
-                    isScreenLockBiometricAuth = false
+
+                when {
+                    isExportPasswordsBiometricAuth -> {
+                        onEvent(SettingsUiEvent.OpenExportPasswordsIntent(BiometricAuth))
+                        isExportPasswordsBiometricAuth = false
+                    }
+
+                    isExportCsvBiometricAuth -> {
+                        onEvent(SettingsUiEvent.OpenExportCsvIntent(BiometricAuth))
+                        isExportCsvBiometricAuth = false
+                    }
+
+                    isScreenLockBiometricAuth -> {
+                        onEvent(SettingsUiEvent.ToggleUseScreenLock)
+                        isScreenLockBiometricAuth = false
+                    }
                 }
             }
         }
@@ -101,6 +119,11 @@ class SettingsEffectHandler(
             putExtra(Intent.EXTRA_TITLE, "passwords-$timestamp.csv")
             intent.launch(this)
         }
+    }
+
+    fun onBiometricAuthForExportPasswords() {
+        isExportPasswordsBiometricAuth = true
+        biometricPrompt.authenticate(exportPasswordsPromptInfo)
     }
 
     fun onBiometricAuthForExportCsv() {

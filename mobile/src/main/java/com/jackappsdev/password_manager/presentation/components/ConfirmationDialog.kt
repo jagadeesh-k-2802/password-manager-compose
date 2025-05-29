@@ -1,5 +1,6 @@
-package com.jackappsdev.password_manager.presentation.screens.password_item_detail.components
+package com.jackappsdev.password_manager.presentation.components
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -10,14 +11,16 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
 @Composable
-fun PasswordItemDeleteDialog(
+fun ConfirmationDialog(
+    @StringRes title: Int,
+    @StringRes description: Int,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.dialog_title_delete_password)) },
-        text = { Text(stringResource(R.string.dialog_text_password_delete)) },
+        title = { Text(stringResource(title)) },
+        text = { Text(stringResource(description)) },
         confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.dialog_btn_yes)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_btn_cancel)) } }
     )
@@ -25,9 +28,11 @@ fun PasswordItemDeleteDialog(
 
 @Preview
 @Composable
-private fun PasswordItemDeleteDialogPreview() {
+private fun DeleteCategoryConfirmationDialogPreview() {
     PasswordManagerTheme {
-        PasswordItemDeleteDialog(
+        ConfirmationDialog(
+            title = R.string.dialog_title_delete_category,
+            description = R.string.dialog_text_category_delete,
             onConfirm = {},
             onDismiss = {}
         )

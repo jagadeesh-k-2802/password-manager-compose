@@ -32,13 +32,14 @@ import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
-import com.jackappsdev.password_manager.presentation.screens.settings.components.ImportPasswordsDialog
+import com.jackappsdev.password_manager.presentation.components.PasswordInputDialog
 import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
 import com.jackappsdev.password_manager.presentation.screens.settings.components.UpdateSettingItem
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
+import com.jackappsdev.password_manager.presentation.screens.settings.model.ExportPasswordAuthType.PasswordAuth
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -85,6 +86,7 @@ fun SettingsScreen(
                     is SettingsUiEffect.OpenImportPasswordsIntent -> onOpenImportPasswordsIntent(importIntent)
                     is SettingsUiEffect.OpenExportPasswordsIntent -> onOpenExportPasswordsIntent(exportIntent)
                     is SettingsUiEffect.OpenExportCsvIntent -> onOpenExportCsvIntent(exportCsvIntent)
+                    is SettingsUiEffect.BiometricAuthForExportPasswords -> onBiometricAuthForExportPasswords()
                     is SettingsUiEffect.BiometricAuthForExportCsv -> onBiometricAuthForExportCsv()
                     is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
                     is SettingsUiEffect.BiometricAuthForScreenLock -> onBiometricAuthForScreenLock()
@@ -99,10 +101,32 @@ fun SettingsScreen(
     }
 
     if (state.isImportPasswordsDialogVisible) {
-        ImportPasswordsDialog(
+        PasswordInputDialog(
+            title = R.string.dialog_title_import_passwords,
+            description = R.string.text_import_passwords_note,
             isInvalidPassword = state.isImportPasswordInvalid,
             onConfirm = { onEvent(SettingsUiEvent.ImportPasswords(it)) },
             onDismiss = { onEvent(SettingsUiEvent.HideImportPasswordsDialog) }
+        )
+    }
+
+    if (state.isExportPasswordsDialogVisible) {
+        PasswordInputDialog(
+            title = R.string.dialog_title_export_passwords,
+            description = R.string.text_export_passwords,
+            isInvalidPassword = state.isExportPasswordsPasswordInvalid,
+            onConfirm = { onEvent(SettingsUiEvent.OpenExportPasswordsIntent(PasswordAuth(it))) },
+            onDismiss = { onEvent(SettingsUiEvent.HideExportPasswordsDialog) }
+        )
+    }
+
+    if (state.isExportCsvDialogVisible) {
+        PasswordInputDialog(
+            title = R.string.dialog_title_export_passwords_as_csv,
+            description = R.string.text_export_passwords_csv_note,
+            isInvalidPassword = state.isExportCsvPasswordInvalid,
+            onConfirm = { onEvent(SettingsUiEvent.OpenExportCsvIntent(PasswordAuth(it))) },
+            onDismiss = { onEvent(SettingsUiEvent.HideExportCsvDialog) }
         )
     }
 
@@ -173,7 +197,7 @@ fun SettingsScreen(
             SettingItem(
                 leadingIcon = Icons.Outlined.Upload,
                 title = stringResource(R.string.label_export_passwords_database),
-                onClick = { onEvent(SettingsUiEvent.OpenExportPasswordsIntent) }
+                onClick = { onEvent(SettingsUiEvent.CheckExportPasswordsAuth) }
             )
 
             SettingItem(

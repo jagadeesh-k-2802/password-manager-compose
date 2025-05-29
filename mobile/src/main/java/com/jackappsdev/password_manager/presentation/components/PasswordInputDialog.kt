@@ -1,5 +1,6 @@
-package com.jackappsdev.password_manager.presentation.screens.settings.components
+package com.jackappsdev.password_manager.presentation.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -31,7 +32,9 @@ import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 
 @Composable
-fun ImportPasswordsDialog(
+fun PasswordInputDialog(
+    @StringRes title: Int,
+    @StringRes description: Int,
     isInvalidPassword: Boolean,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit
@@ -41,7 +44,7 @@ fun ImportPasswordsDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.dialog_title_import_passwords)) },
+        title = { Text(stringResource(title)) },
         text = {
             Column {
                 OutlinedTextField(
@@ -66,7 +69,7 @@ fun ImportPasswordsDialog(
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.text_import_passwords_note))
+                Text(stringResource(description))
             }
         },
         confirmButton = { TextButton(onClick = { onConfirm(password) }) { Text(stringResource(R.string.dialog_btn_confirm)) } },
@@ -76,9 +79,25 @@ fun ImportPasswordsDialog(
 
 @Preview
 @Composable
-private fun ImportPasswordsDialogPreview() {
+private fun ImportPasswordInputDialogPreview() {
     PasswordManagerTheme {
-        ImportPasswordsDialog(
+        PasswordInputDialog(
+            title = R.string.dialog_title_import_passwords,
+            description = R.string.text_import_passwords_note,
+            isInvalidPassword = false,
+            onConfirm = {},
+            onDismiss = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ExportCsvPasswordInputDialogPreview() {
+    PasswordManagerTheme {
+        PasswordInputDialog(
+            title = R.string.dialog_title_export_passwords_as_csv,
+            description = R.string.text_export_passwords_csv_note,
             isInvalidPassword = false,
             onConfirm = {},
             onDismiss = {}

@@ -36,8 +36,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
-import com.jackappsdev.password_manager.presentation.screens.android_watch.components.DisableAndroidWatchDialog
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEffect
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEvent
@@ -73,7 +73,9 @@ fun AndroidWatchScreen(
     }
 
     if (state.showDisableAndroidWatchDialog) {
-        DisableAndroidWatchDialog(
+        ConfirmationDialog(
+            title = R.string.dialog_title_disable_android_watch,
+            description = R.string.dialog_text_disable_android_watch,
             onConfirm = { onEvent(AndroidWatchUiEvent.DisableAndroidWatchSharing) },
             onDismiss = { onEvent(AndroidWatchUiEvent.ToggleDisableAndroidWatchDialogVisibility) }
         )

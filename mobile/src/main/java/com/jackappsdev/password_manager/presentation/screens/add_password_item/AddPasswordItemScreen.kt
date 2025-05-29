@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
-import com.jackappsdev.password_manager.presentation.components.UnsavedChangesDialog
+import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.constants.CREATED_CATEGORY
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.components.CategoryDropDown
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemEffectHandler
@@ -109,7 +109,9 @@ fun AddPasswordItemScreen(
     }
 
     if (state.isUnsavedChangesDialogVisible) {
-        UnsavedChangesDialog(
+        ConfirmationDialog(
+            title = R.string.dialog_title_unsaved_changes,
+            description = R.string.dialog_text_unsaved,
             onConfirm = { onEvent(AddPasswordItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleUnsavedDialogVisibility) }
         )

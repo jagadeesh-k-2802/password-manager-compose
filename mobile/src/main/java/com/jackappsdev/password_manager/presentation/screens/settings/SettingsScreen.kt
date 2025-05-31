@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Pin
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.TableRows
 import androidx.compose.material.icons.outlined.Upload
@@ -94,6 +95,7 @@ fun SettingsScreen(
                     is SettingsUiEffect.NavigateToChangePassword -> onNavigateToChangePassword()
                     is SettingsUiEffect.NavigateToManageCategories -> onNavigateToManageCategories()
                     is SettingsUiEffect.NavigateToAndroidWatch -> onNavigateToAndroidWatch()
+                    is SettingsUiEffect.NavigateToPin -> onNavigateToPin()
                     is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
                 }
             }
@@ -170,6 +172,13 @@ fun SettingsScreen(
                     onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
                 )
             }
+
+            SettingItem(
+                leadingIcon = Icons.Outlined.Pin,
+                trailingIcon = Icons.Outlined.ChevronRight,
+                title = stringResource(R.string.label_manage_pin),
+                onClick = { onEvent(SettingsUiEvent.NavigateToPin) }
+            )
 
             ToggleSettingItem(
                 modifier = Modifier.alpha(if (state.isScreenLockAvailable == true) 1f else 0.5f),

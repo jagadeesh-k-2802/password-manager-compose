@@ -1,5 +1,8 @@
 package com.jackappsdev.password_manager.presentation.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,6 +25,7 @@ import com.jackappsdev.password_manager.presentation.screens.password_generator.
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailRoot
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockRoot
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
+import com.jackappsdev.password_manager.presentation.screens.pin.PinRoot
 import com.jackappsdev.password_manager.presentation.screens.settings.SettingsRoot
 import kotlinx.coroutines.flow.collectLatest
 
@@ -46,7 +50,9 @@ fun Router(
         NavHost(
             navController = navController,
             startDestination = Graph.LockGraph,
-            modifier = Modifier.padding(contentPadding)
+            modifier = Modifier.padding(contentPadding),
+            enterTransition = { fadeIn(animationSpec = tween(400)) },
+            exitTransition = { fadeOut(animationSpec = tween(400)) }
         ) {
             navigation<Graph.LockGraph>(Routes.PasswordLock) {
                 composable<Routes.PasswordLock> { PasswordLockRoot(passwordLockViewModel) }
@@ -60,6 +66,7 @@ fun Router(
                 composable<Routes.PasswordGenerator> { PasswordGeneratorRoot() }
                 composable<Routes.Settings> { SettingsRoot(navController) }
                 composable<Routes.AndroidWatch> { AndroidWatchRoot(navController) }
+                composable<Routes.Pin> { PinRoot(navController) }
                 composable<Routes.ChangePassword> { ChangePasswordRoot(navController) }
                 composable<Routes.ManageCategories> { ManageCategoriesRoot(navController) }
                 composable<Routes.AddCategoryItem> { AddCategoryItemRoot(navController) }

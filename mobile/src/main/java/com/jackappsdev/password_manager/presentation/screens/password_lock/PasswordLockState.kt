@@ -7,6 +7,7 @@ data class PasswordLockState(
     val showConfirmPassword: Boolean = false,
     val password: String = EMPTY_STRING,
     val confirmPassword: String = EMPTY_STRING,
+    val hasPinSet: Boolean? = null,
     val hasPasswordSet: Boolean? = null,
     val useScreenLockToUnlock: Boolean? = null,
     val isScreenLockAvailable: Boolean? = null

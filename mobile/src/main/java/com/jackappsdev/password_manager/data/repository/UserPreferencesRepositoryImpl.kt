@@ -29,6 +29,18 @@ class UserPreferencesRepositoryImpl(
         return password == dataStore.data.first().password
     }
 
+    override suspend fun setPin(newPin: String) {
+        dataStore.updateData { prevUserSettings -> prevUserSettings.copy(pin = newPin) }
+    }
+
+    override suspend fun hasPinSet(): Boolean {
+        return dataStore.data.first().pin.isNullOrBlank().not()
+    }
+
+    override suspend fun verifyPin(pin: String): Boolean {
+        return pin == dataStore.data.first().pin
+    }
+
     override suspend fun getScreenLockToUnlock(): Boolean {
         return dataStore.data.first().useScreenLockToUnlock
     }

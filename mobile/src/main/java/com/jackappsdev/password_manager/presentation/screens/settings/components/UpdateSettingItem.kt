@@ -23,7 +23,7 @@ fun UpdateSettingItem(
                 modifier = modifier,
                 leadingIcon = Icons.Outlined.DownloadDone,
                 trailingIcon = Icons.Outlined.ChevronRight,
-                title = stringResource(R.string.app_update_downloaded),
+                title = stringResource(R.string.label_app_update_downloaded),
                 onClick = { onEvent(SettingsUiEvent.CompleteAppUpdate) }
             )
         }
@@ -32,7 +32,7 @@ fun UpdateSettingItem(
             SettingItem(
                 modifier = modifier,
                 leadingIcon = Icons.Outlined.Update,
-                title = stringResource(R.string.app_update_downloading),
+                title = stringResource(R.string.label_app_update_downloading),
                 onClick = { }
             )
         }
@@ -42,7 +42,7 @@ fun UpdateSettingItem(
                 modifier = modifier,
                 leadingIcon = Icons.Outlined.Update,
                 trailingIcon = Icons.Outlined.ChevronRight,
-                title = stringResource(R.string.app_update_available),
+                title = stringResource(R.string.label_app_update_available),
                 onClick = { onEvent(SettingsUiEvent.StartAppUpdate) }
             )
         }

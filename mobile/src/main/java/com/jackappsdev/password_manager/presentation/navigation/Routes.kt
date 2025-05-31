@@ -33,6 +33,9 @@ sealed interface Routes {
     data object AndroidWatch : Routes
 
     @Serializable
+    data object Pin : Routes
+
+    @Serializable
     data object ManageCategories : Routes
 
     @Serializable

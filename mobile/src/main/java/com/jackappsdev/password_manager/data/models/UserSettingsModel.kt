@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserSettings(
     val password: String? = null,
+    val pin: String? = null,
     val androidWatchPin: String? = null,
     val useDynamicColors: Boolean = true,
     val useScreenLockToUnlock: Boolean = true

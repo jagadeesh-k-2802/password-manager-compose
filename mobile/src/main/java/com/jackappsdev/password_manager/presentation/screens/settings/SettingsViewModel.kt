@@ -253,6 +253,7 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories
                 is SettingsUiEvent.NavigateToAndroidWatch -> SettingsUiEffect.NavigateToAndroidWatch
+                is SettingsUiEvent.NavigateToPin -> SettingsUiEffect.NavigateToPin
                 is SettingsUiEvent.OpenPlayStorePage -> SettingsUiEffect.OpenPlayStorePage
             }
 

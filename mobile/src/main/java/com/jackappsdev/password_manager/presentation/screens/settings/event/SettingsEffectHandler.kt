@@ -171,6 +171,10 @@ class SettingsEffectHandler(
         navController.navigate(Routes.AndroidWatch)
     }
 
+    fun onNavigateToPin() {
+        navController.navigate(Routes.Pin)
+    }
+
     fun onOpenPlayStorePage() {
         val intent = try {
             Intent(Intent.ACTION_VIEW).apply {

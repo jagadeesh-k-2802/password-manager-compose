@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,6 +37,7 @@ import com.jackappsdev.password_manager.presentation.screens.password_lock.event
 @Composable
 fun EnterPasswordView(
     state: PasswordLockState,
+    focusRequester: FocusRequester,
     error: PasswordLockError?,
     onEvent: (PasswordLockUiEvent) -> Unit
 ) {
@@ -47,8 +50,18 @@ fun EnterPasswordView(
     OutlinedTextField(
         value = state.password,
         onValueChange = { onEvent(PasswordLockUiEvent.EnterPassword(it)) },
-        label = { Text(stringResource(R.string.label_password)) },
-        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(
+                if (state.hasPinSet == true) {
+                    stringResource(R.string.label_pin)
+                } else {
+                    stringResource(R.string.label_password)
+                }
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         isError = error is PasswordLockError.PasswordError,
         visualTransformation = if (state.showPassword) {
             VisualTransformation.None
@@ -74,7 +87,11 @@ fun EnterPasswordView(
             }
         },
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
+            keyboardType = if (state.hasPinSet == true) {
+                KeyboardType.NumberPassword
+            } else {
+                KeyboardType.Password
+            },
             imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(

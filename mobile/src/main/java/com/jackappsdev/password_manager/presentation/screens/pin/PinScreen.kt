@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.android_watch
+package com.jackappsdev.password_manager.presentation.screens.pin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
-import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchEffectHandler
-import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEffect
-import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEvent
+import com.jackappsdev.password_manager.presentation.screens.pin.event.PinEffectHandler
+import com.jackappsdev.password_manager.presentation.screens.pin.event.PinUiEffect
+import com.jackappsdev.password_manager.presentation.screens.pin.event.PinUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
@@ -48,12 +48,12 @@ import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AndroidWatchScreen(
-    state: AndroidWatchState,
-    effectFlow: Flow<AndroidWatchUiEffect>,
-    effectHandler: AndroidWatchEffectHandler,
-    errorFlow: Flow<AndroidWatchError>,
-    onEvent: (AndroidWatchUiEvent) -> Unit
+fun PinScreen(
+    state: PinState,
+    effectFlow: Flow<PinUiEffect>,
+    effectHandler: PinEffectHandler,
+    errorFlow: Flow<PinError>,
+    onEvent: (PinUiEvent) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val error by errorFlow.collectAsState(initial = null)
@@ -62,22 +62,19 @@ fun AndroidWatchScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
-                    is AndroidWatchUiEffect.RequestPinChange -> onRequestPinChange()
-                    is AndroidWatchUiEffect.SetupPin -> onSetupPin(effect.pin)
-                    is AndroidWatchUiEffect.ConfirmToggleAndroidWatch -> onConfirmToggleAndroidWatch()
-                    is AndroidWatchUiEffect.DisableAndroidWatchSharing -> onDisableWatchSharing()
-                    is AndroidWatchUiEffect.NavigateUp -> onNavigateUp()
+                    is PinUiEffect.PinUpdated -> onPinUpdated()
+                    is PinUiEffect.NavigateUp -> onNavigateUp()
                 }
             }
         }
     }
 
-    if (state.showDisableAndroidWatchDialog) {
+    if (state.showDisablePinDialog) {
         ConfirmationDialog(
-            title = R.string.dialog_title_disable_android_watch,
-            description = R.string.dialog_text_disable_android_watch,
-            onConfirm = { onEvent(AndroidWatchUiEvent.DisableAndroidWatchSharing) },
-            onDismiss = { onEvent(AndroidWatchUiEvent.ToggleDisableAndroidWatchDialogVisibility) }
+            title = R.string.dialog_title_disable_pin_usage,
+            description = R.string.dialog_text_disable_pin_usage,
+            onConfirm = { onEvent(PinUiEvent.DisablePin) },
+            onDismiss = { onEvent(PinUiEvent.ToggleDisablePinDialogVisibility) }
         )
     }
 
@@ -85,14 +82,14 @@ fun AndroidWatchScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(AndroidWatchUiEvent.NavigateUp) }) {
+                    IconButton(onClick = { onEvent(PinUiEvent.NavigateUp) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)
                         )
                     }
                 },
-                title = { Text(stringResource(R.string.title_android_watch)) },
+                title = { Text(stringResource(R.string.title_pin)) },
                 windowInsets = windowInsetsVerticalZero
             )
         },
@@ -104,25 +101,25 @@ fun AndroidWatchScreen(
                 .fillMaxWidth()
         ) {
             ToggleSettingItem(
-                title = stringResource(R.string.label_enable_android_watch),
-                subtitle = stringResource(R.string.text_android_watch_note),
-                checked = state.useAndroidWatch == true,
-                onClick = { onEvent(AndroidWatchUiEvent.RequestToggleAndroidWatch) }
+                title = stringResource(R.string.label_enable_pin),
+                subtitle = stringResource(R.string.text_pin_note),
+                checked = state.hasPinSet == true,
+                onClick = { onEvent(PinUiEvent.TogglePin) }
             )
 
-            if (state.useAndroidWatch == true) {
+            if (state.hasPinSet == true) {
                 Column {
                     OutlinedTextField(
                         value = state.pin,
-                        onValueChange = { onEvent(AndroidWatchUiEvent.EnterPin(it)) },
+                        onValueChange = { onEvent(PinUiEvent.EnterPin(it)) },
                         label = {
                             Text(
                                 stringResource(
-                                    if (state.hasAndroidWatchPinSet != true) {
-                                        R.string.label_enter_watch_pin
+                                    if (state.hasAlreadyPinSet != true) {
+                                        R.string.label_set_pin
                                     }
                                     else {
-                                        R.string.label_update_watch_pin
+                                        R.string.label_update_pin
                                     }
                                 )
                             )
@@ -130,11 +127,11 @@ fun AndroidWatchScreen(
                         modifier = Modifier
                             .padding(horizontal = pagePadding)
                             .fillMaxWidth(),
-                        isError = error is AndroidWatchError.PinError,
+                        isError = error is PinError,
                         singleLine = true,
                         supportingText = {
                             error?.let {
-                                if (it is AndroidWatchError.PinError) Text(stringResource(it.error))
+                                if (it is PinError.PinInputError) Text(stringResource(it.error))
                             }
                         },
                         visualTransformation = if (state.showPin) {
@@ -143,7 +140,7 @@ fun AndroidWatchScreen(
                             PasswordVisualTransformation()
                         },
                         trailingIcon = {
-                            IconButton(onClick = { onEvent(AndroidWatchUiEvent.ToggleShowPinVisibility) }) {
+                            IconButton(onClick = { onEvent(PinUiEvent.ToggleShowPinVisibility) }) {
                                 Icon(
                                     imageVector = if (state.showPin) {
                                         Icons.Outlined.VisibilityOff
@@ -159,14 +156,14 @@ fun AndroidWatchScreen(
                             imeAction = ImeAction.Done
                         ),
                         keyboardActions = KeyboardActions(
-                            onDone = { onEvent(AndroidWatchUiEvent.RequestPinChange) }
+                            onDone = { onEvent(PinUiEvent.ChangePin) }
                         )
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Button(
-                        onClick = { onEvent(AndroidWatchUiEvent.RequestPinChange) },
+                        onClick = { onEvent(PinUiEvent.ChangePin) },
                         modifier = Modifier
                             .padding(horizontal = pagePadding)
                             .fillMaxWidth()
@@ -175,7 +172,7 @@ fun AndroidWatchScreen(
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                         Text(
                             stringResource(
-                                if (state.hasAndroidWatchPinSet != true) {
+                                if (state.hasAlreadyPinSet != true) {
                                     R.string.btn_set_pin
                                 } else {
                                     R.string.btn_update_pin

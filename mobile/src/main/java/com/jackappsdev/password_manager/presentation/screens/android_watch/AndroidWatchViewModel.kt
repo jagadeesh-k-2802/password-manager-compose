@@ -11,6 +11,7 @@ import com.jackappsdev.password_manager.domain.repository.UserPreferencesReposit
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEffect
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -81,7 +82,7 @@ class AndroidWatchViewModel @Inject constructor(
             _errorChannel.send(AndroidWatchError.PinError(R.string.error_pin_not_empty))
             null
         } else {
-            state = state.copy(hasAndroidWatchPinSet = true)
+            state = state.copy(hasAndroidWatchPinSet = true, pin = EMPTY_STRING)
             userPreferencesRepository.setAndroidWatchPinSet(state.pin)
             AndroidWatchUiEffect.SetupPin(state.pin)
         }

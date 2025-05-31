@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.password_lock.components.EnterPasswordView
@@ -29,10 +30,11 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun PasswordLockScreen(
     state: PasswordLockState,
+    focusRequester: FocusRequester,
     effectFlow: Flow<PasswordLockUiEffect>,
     effectHandler: PasswordLockEffectHandler,
     errorFlow: Flow<PasswordLockError>,
-    onEvent: (PasswordLockUiEvent) -> Unit
+    onEvent: (PasswordLockUiEvent) -> Unit,
 ) {
     val error by errorFlow.collectAsState(null)
 
@@ -40,6 +42,7 @@ fun PasswordLockScreen(
         effectFlow.collectLatest { effect ->
             with(effectHandler) {
                 when (effect) {
+                    is PasswordLockUiEffect.FocusPasswordField -> onFocusPasswordField()
                     is PasswordLockUiEffect.HideKeyboard -> onHideKeyboard()
                     is PasswordLockUiEffect.BiometricAuthenticate -> onBiometricAuthenticate()
                 }
@@ -49,16 +52,27 @@ fun PasswordLockScreen(
 
     Scaffold(
         topBar = {
-            if (state.hasPasswordSet == true) {
-                CenterAlignedTopAppBar(
-                    title = { Text(stringResource(R.string.title_enter_password)) },
-                    windowInsets = windowInsetsVerticalZero
-                )
-            } else {
-                CenterAlignedTopAppBar(
-                    title = { Text(stringResource(R.string.title_create_password)) },
-                    windowInsets = windowInsetsVerticalZero
-                )
+            when {
+                state.hasPinSet == true -> {
+                    CenterAlignedTopAppBar(
+                        title = { Text(stringResource(R.string.title_enter_pin)) },
+                        windowInsets = windowInsetsVerticalZero
+                    )
+                }
+
+                state.hasPasswordSet == true -> {
+                    CenterAlignedTopAppBar(
+                        title = { Text(stringResource(R.string.title_enter_password)) },
+                        windowInsets = windowInsetsVerticalZero
+                    )
+                }
+
+                else -> {
+                    CenterAlignedTopAppBar(
+                        title = { Text(stringResource(R.string.title_create_password)) },
+                        windowInsets = windowInsetsVerticalZero
+                    )
+                }
             }
         }
     ) { contentPadding ->
@@ -71,7 +85,7 @@ fun PasswordLockScreen(
         ) {
             when (state.hasPasswordSet) {
                 false, null -> SetupPasswordView(state, error, onEvent)
-                true -> EnterPasswordView(state, error, onEvent)
+                true -> EnterPasswordView(state, focusRequester, error, onEvent)
             }
         }
     }

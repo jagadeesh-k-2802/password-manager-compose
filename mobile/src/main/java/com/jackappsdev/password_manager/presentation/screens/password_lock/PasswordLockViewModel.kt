@@ -39,6 +39,7 @@ class PasswordLockViewModel @Inject constructor(
     val errorFlow = _errorChannel.receiveAsFlow()
 
     companion object {
+        const val TEXT_FIELD_FOCUS_DELAY = 500L
         const val RESET_PASSWORD_STATE_DELAY = 2000L
     }
 
@@ -49,10 +50,16 @@ class PasswordLockViewModel @Inject constructor(
     private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
+                hasPinSet = userPreferencesRepository.hasPinSet(),
                 hasPasswordSet = userPreferencesRepository.hasPasswordSet(),
                 useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
                 isScreenLockAvailable = isScreenLockAvailable(application.applicationContext)
             )
+
+            if ((state.hasPinSet == true || state.hasPasswordSet == true) && state.useScreenLockToUnlock == false) {
+                delay(TEXT_FIELD_FOCUS_DELAY)
+                _effectChannel.send(PasswordLockUiEffect.FocusPasswordField)
+            }
         }
     }
 
@@ -129,12 +136,20 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     private suspend fun verifyPassword(): PasswordLockUiEffect? {
-        return if (userPreferencesRepository.verifyPassword(state.password)) {
+        return if (state.hasPinSet == true && userPreferencesRepository.verifyPin(state.password)) {
+            setUnlocked(true)
+            resetPasswordState()
+            PasswordLockUiEffect.HideKeyboard
+        } else if (state.hasPasswordSet == true && userPreferencesRepository.verifyPassword(state.password)) {
             setUnlocked(true)
             resetPasswordState()
             PasswordLockUiEffect.HideKeyboard
         } else {
-            _errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_password))
+            if (state.hasPinSet == true) {
+                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_pin))
+            } else {
+                _errorChannel.send(PasswordLockError.PasswordError(R.string.error_incorrect_password))
+            }
             null
         }
     }

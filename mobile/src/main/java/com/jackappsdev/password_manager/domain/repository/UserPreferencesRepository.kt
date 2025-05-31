@@ -7,6 +7,9 @@ interface UserPreferencesRepository {
     suspend fun setInitialPassword(newPassword: String)
     suspend fun hasPasswordSet(): Boolean
     suspend fun verifyPassword(password: String): Boolean
+    suspend fun setPin(newPin: String)
+    suspend fun hasPinSet(): Boolean
+    suspend fun verifyPin(pin: String): Boolean
     suspend fun getScreenLockToUnlock(): Boolean
     suspend fun setUseScreenLockToUnlock(newValue: Boolean)
     suspend fun getUseDynamicColors(): Flow<Boolean>

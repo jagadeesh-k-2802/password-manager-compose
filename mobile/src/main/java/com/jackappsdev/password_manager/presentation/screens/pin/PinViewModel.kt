@@ -31,6 +31,10 @@ class PinViewModel @Inject constructor(
     private val _errorChannel = Channel<PinError>()
     val errorFlow = Channel<PinError>().receiveAsFlow()
 
+    companion object {
+        private const val MAX_PIN_LENGTH = 8
+    }
+
     init {
         onInit()
     }
@@ -45,7 +49,7 @@ class PinViewModel @Inject constructor(
     }
 
     private fun enterPin(pin: String) {
-        if (pin.length > 8) return
+        if (pin.length > MAX_PIN_LENGTH) return
         state = state.copy(pin = pin)
     }
 

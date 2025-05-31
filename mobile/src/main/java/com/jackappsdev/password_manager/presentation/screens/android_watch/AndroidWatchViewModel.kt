@@ -37,6 +37,10 @@ class AndroidWatchViewModel @Inject constructor(
         onInit()
     }
 
+    companion object {
+        private const val MAX_PIN_LENGTH = 4
+    }
+
     private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
@@ -73,7 +77,7 @@ class AndroidWatchViewModel @Inject constructor(
     }
 
     private fun enterPin(pin: String) {
-        if (pin.length > 4) return
+        if (pin.length > MAX_PIN_LENGTH) return
         state = state.copy(pin = pin)
     }
 

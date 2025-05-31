@@ -106,6 +106,7 @@ fun SettingsScreen(
         PasswordInputDialog(
             title = R.string.dialog_title_import_passwords,
             description = R.string.text_import_passwords_note,
+            label = R.string.label_database_password,
             isInvalidPassword = state.isImportPasswordInvalid,
             onConfirm = { onEvent(SettingsUiEvent.ImportPasswords(it)) },
             onDismiss = { onEvent(SettingsUiEvent.HideImportPasswordsDialog) }
@@ -116,6 +117,7 @@ fun SettingsScreen(
         PasswordInputDialog(
             title = R.string.dialog_title_export_passwords,
             description = R.string.text_export_passwords,
+            label = R.string.label_password,
             isInvalidPassword = state.isExportPasswordsPasswordInvalid,
             onConfirm = { onEvent(SettingsUiEvent.OpenExportPasswordsIntent(PasswordAuth(it))) },
             onDismiss = { onEvent(SettingsUiEvent.HideExportPasswordsDialog) }
@@ -126,6 +128,7 @@ fun SettingsScreen(
         PasswordInputDialog(
             title = R.string.dialog_title_export_passwords_as_csv,
             description = R.string.text_export_passwords_csv_note,
+            label = R.string.label_password,
             isInvalidPassword = state.isExportCsvPasswordInvalid,
             onConfirm = { onEvent(SettingsUiEvent.OpenExportCsvIntent(PasswordAuth(it))) },
             onDismiss = { onEvent(SettingsUiEvent.HideExportCsvDialog) }

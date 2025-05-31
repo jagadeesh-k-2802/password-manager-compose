@@ -42,8 +42,8 @@ class PinViewModel @Inject constructor(
     private fun onInit() {
         viewModelScope.launch {
             state = state.copy(
+                usePin = userPreferencesRepository.hasPinSet(),
                 hasPinSet = userPreferencesRepository.hasPinSet(),
-                hasAlreadyPinSet = userPreferencesRepository.hasPinSet(),
             )
         }
     }
@@ -55,7 +55,7 @@ class PinViewModel @Inject constructor(
 
     private suspend fun disablePin() {
         userPreferencesRepository.setPin(EMPTY_STRING)
-        state = state.copy(hasPinSet = false, hasAlreadyPinSet = false, showDisablePinDialog = false)
+        state = state.copy(usePin = false, hasPinSet = false, showDisablePinDialog = false)
     }
 
     private fun toggleVisibility(event: PinUiEvent) {
@@ -75,10 +75,12 @@ class PinViewModel @Inject constructor(
     }
 
     private fun togglePin() {
-        state = if (state.hasAlreadyPinSet) {
+        state = if (state.hasPinSet) {
             state.copy(showDisablePinDialog = true)
+        } else if (state.usePin) {
+            state.copy(usePin = false)
         } else {
-            state.copy(hasPinSet = true)
+            state.copy(usePin = true)
         }
     }
 
@@ -88,7 +90,7 @@ class PinViewModel @Inject constructor(
             return null
         } else {
             userPreferencesRepository.setPin(state.pin)
-            state = state.copy(hasPinSet = true, hasAlreadyPinSet = true, pin = EMPTY_STRING)
+            state = state.copy(usePin = true, hasPinSet = true, pin = EMPTY_STRING)
             return PinUiEffect.PinUpdated
         }
     }

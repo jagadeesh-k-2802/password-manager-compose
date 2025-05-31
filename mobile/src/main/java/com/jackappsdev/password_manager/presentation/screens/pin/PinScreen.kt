@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.pin
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -103,11 +104,11 @@ fun PinScreen(
             ToggleSettingItem(
                 title = stringResource(R.string.label_enable_pin),
                 subtitle = stringResource(R.string.text_pin_note),
-                checked = state.hasPinSet == true,
+                checked = state.usePin == true,
                 onClick = { onEvent(PinUiEvent.TogglePin) }
             )
 
-            if (state.hasPinSet == true) {
+            AnimatedVisibility(state.usePin == true) {
                 Column {
                     OutlinedTextField(
                         value = state.pin,
@@ -115,7 +116,7 @@ fun PinScreen(
                         label = {
                             Text(
                                 stringResource(
-                                    if (state.hasAlreadyPinSet != true) {
+                                    if (state.hasPinSet != true) {
                                         R.string.label_set_pin
                                     }
                                     else {
@@ -172,7 +173,7 @@ fun PinScreen(
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                         Text(
                             stringResource(
-                                if (state.hasAlreadyPinSet != true) {
+                                if (state.hasPinSet != true) {
                                     R.string.btn_set_pin
                                 } else {
                                     R.string.btn_update_pin

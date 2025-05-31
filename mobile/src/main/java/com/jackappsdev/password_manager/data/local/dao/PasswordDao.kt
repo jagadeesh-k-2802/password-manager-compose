@@ -36,7 +36,7 @@ interface PasswordDao {
     @Delete
     suspend fun deletePasswordEntity(item: PasswordItemEntity)
 
-    @Query("SELECT * FROM password_items")
+    @Query("SELECT * FROM password_items ORDER BY name ASC")
     suspend fun getAllPasswordWithCategoryEntities(): List<PasswordWithCategoryEntity>
 
     @RawQuery

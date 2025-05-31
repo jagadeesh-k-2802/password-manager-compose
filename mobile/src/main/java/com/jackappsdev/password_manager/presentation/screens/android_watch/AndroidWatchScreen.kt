@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.android_watch
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -110,7 +111,7 @@ fun AndroidWatchScreen(
                 onClick = { onEvent(AndroidWatchUiEvent.RequestToggleAndroidWatch) }
             )
 
-            if (state.useAndroidWatch == true) {
+            AnimatedVisibility(state.useAndroidWatch == true) {
                 Column {
                     OutlinedTextField(
                         value = state.pin,

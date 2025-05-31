@@ -35,6 +35,7 @@ import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 fun PasswordInputDialog(
     @StringRes title: Int,
     @StringRes description: Int,
+    @StringRes label: Int,
     isInvalidPassword: Boolean,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit
@@ -49,7 +50,7 @@ fun PasswordInputDialog(
             Column {
                 OutlinedTextField(
                     value = password,
-                    label = { Text(stringResource(R.string.label_database_password)) },
+                    label = { Text(stringResource(label)) },
                     isError = isInvalidPassword,
                     supportingText = { if (isInvalidPassword) Text(stringResource(R.string.error_password_does_not_match)) },
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
@@ -84,6 +85,7 @@ private fun ImportPasswordInputDialogPreview() {
         PasswordInputDialog(
             title = R.string.dialog_title_import_passwords,
             description = R.string.text_import_passwords_note,
+            label = R.string.label_database_password,
             isInvalidPassword = false,
             onConfirm = {},
             onDismiss = {}
@@ -98,6 +100,7 @@ private fun ExportCsvPasswordInputDialogPreview() {
         PasswordInputDialog(
             title = R.string.dialog_title_export_passwords_as_csv,
             description = R.string.text_export_passwords_csv_note,
+            label = R.string.label_password,
             isInvalidPassword = false,
             onConfirm = {},
             onDismiss = {}

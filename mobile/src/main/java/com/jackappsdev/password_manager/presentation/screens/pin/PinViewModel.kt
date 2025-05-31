@@ -45,7 +45,7 @@ class PinViewModel @Inject constructor(
     }
 
     private fun enterPin(pin: String) {
-        if (pin.length > 4) return
+        if (pin.length > 8) return
         state = state.copy(pin = pin)
     }
 

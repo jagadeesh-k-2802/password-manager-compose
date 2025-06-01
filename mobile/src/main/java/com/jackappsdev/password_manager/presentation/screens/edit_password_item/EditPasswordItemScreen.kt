@@ -49,7 +49,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
@@ -148,12 +147,7 @@ fun EditPasswordItemScreen(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = remember(state.passwordItem?.name, state.nameTextSelection) {
-                    TextFieldValue(
-                        text = state.passwordItem?.name ?: EMPTY_STRING,
-                        selection = state.nameTextSelection
-                    )
-                },
+                value = state.passwordItem?.name ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.EnterName(it)) },
                 isError = error is EditPasswordItemError.NameError,
                 supportingText = {
@@ -179,12 +173,7 @@ fun EditPasswordItemScreen(
             )
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.username, state.usernameTextSelection) {
-                    TextFieldValue(
-                        text = state.passwordItem?.username ?: EMPTY_STRING,
-                        selection = state.usernameTextSelection
-                    )
-                },
+                value = state.passwordItem?.username ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.EnterUsername(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null)
@@ -204,12 +193,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.password, state.passwordTextSelection) {
-                    TextFieldValue(
-                        text = state.passwordItem?.password ?: EMPTY_STRING,
-                        selection = state.passwordTextSelection
-                    )
-                },
+                value = state.passwordItem?.password ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.EnterPassword(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Key, contentDescription = null)
@@ -244,6 +228,7 @@ fun EditPasswordItemScreen(
                     }
                 },
                 keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
@@ -254,12 +239,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.website, state.websiteTextSelection) {
-                    TextFieldValue(
-                        text = state.passwordItem?.website ?: EMPTY_STRING,
-                        selection = state.websiteTextSelection
-                    )
-                },
+                value = state.passwordItem?.website ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.EnterWebsite(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Link, contentDescription = null)
@@ -279,12 +259,7 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.notes, state.notesTextSelection) {
-                    TextFieldValue(
-                        text = state.passwordItem?.notes ?: EMPTY_STRING,
-                        selection = state.notesTextSelection
-                    )
-                },
+                value = state.passwordItem?.notes ?: EMPTY_STRING,
                 onValueChange = { onEvent(EditPasswordItemUiEvent.EnterNotes(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.AutoMirrored.Filled.Notes, contentDescription = null)

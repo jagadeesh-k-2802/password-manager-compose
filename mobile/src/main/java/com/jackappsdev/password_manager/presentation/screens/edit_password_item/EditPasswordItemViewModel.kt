@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.TextRange
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -59,7 +60,15 @@ class EditPasswordItemViewModel @Inject constructor(
             state = state.copy(categoryItems = categoryItems.stateIn(viewModelScope))
 
             passwordItem.collect { item ->
-                state = state.copy(passwordItem = item, category = item?.toCategoryModel())
+                state = state.copy(
+                    passwordItem = item,
+                    category = item?.toCategoryModel(),
+                    nameTextSelection = TextRange(item?.name?.length ?: 0),
+                    usernameTextSelection = TextRange(item?.username?.length ?: 0),
+                    passwordTextSelection = TextRange(item?.password?.length ?: 0),
+                    websiteTextSelection = TextRange(item?.website?.length ?: 0),
+                    notesTextSelection = TextRange(item?.notes?.length ?: 0),
+                )
             }
         }
     }
@@ -118,16 +127,51 @@ class EditPasswordItemViewModel @Inject constructor(
     }
 
     private fun onEnterText(event: EditPasswordItemUiEvent) {
-        val newPasswordItem = when (event) {
-            is EditPasswordItemUiEvent.EnterName -> state.passwordItem?.copy(name = event.text)
-            is EditPasswordItemUiEvent.EnterUsername -> state.passwordItem?.copy(username = event.text)
-            is EditPasswordItemUiEvent.EnterPassword -> state.passwordItem?.copy(password = event.text)
-            is EditPasswordItemUiEvent.EnterWebsite -> state.passwordItem?.copy(website = event.text)
-            is EditPasswordItemUiEvent.EnterNotes -> state.passwordItem?.copy(notes = event.text)
-            else -> null
-        }
+        when (event) {
+            is EditPasswordItemUiEvent.EnterName -> {
+                state = state.copy(
+                    passwordItem = state.passwordItem?.copy(name = event.textFieldValue.text),
+                    nameTextSelection = event.textFieldValue.selection,
+                    isChanged = true
+                )
+            }
 
-        state = state.copy(passwordItem = newPasswordItem, isChanged = true)
+            is EditPasswordItemUiEvent.EnterUsername -> {
+                state = state.copy(
+                    passwordItem = state.passwordItem?.copy(username = event.textFieldValue.text),
+                    usernameTextSelection = event.textFieldValue.selection,
+                    isChanged = true
+                )
+            }
+
+            is EditPasswordItemUiEvent.EnterPassword -> {
+                state = state.copy(
+                    passwordItem = state.passwordItem?.copy(password = event.textFieldValue.text),
+                    passwordTextSelection = event.textFieldValue.selection,
+                    isChanged = true
+                )
+            }
+
+            is EditPasswordItemUiEvent.EnterWebsite -> {
+                state = state.copy(
+                    passwordItem = state.passwordItem?.copy(website = event.textFieldValue.text),
+                    websiteTextSelection = event.textFieldValue.selection,
+                    isChanged = true
+                )
+            }
+
+            is EditPasswordItemUiEvent.EnterNotes -> {
+                state = state.copy(
+                    passwordItem = state.passwordItem?.copy(notes = event.textFieldValue.text),
+                    notesTextSelection = event.textFieldValue.selection,
+                    isChanged = true
+                )
+            }
+
+            else -> {
+                null
+            }
+        }
     }
 
     private fun onSelectCategory(category: CategoryModel?) {

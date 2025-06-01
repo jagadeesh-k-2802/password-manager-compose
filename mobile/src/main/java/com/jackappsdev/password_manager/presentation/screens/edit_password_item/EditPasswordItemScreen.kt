@@ -45,7 +45,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -65,7 +64,6 @@ import com.jackappsdev.password_manager.presentation.screens.edit_password_item.
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
-import com.jackappsdev.password_manager.shared.constants.ZERO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.json.Json
@@ -150,13 +148,13 @@ fun EditPasswordItemScreen(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = remember(state.passwordItem?.name) {
+                value = remember(state.passwordItem?.name, state.nameTextSelection) {
                     TextFieldValue(
                         text = state.passwordItem?.name ?: EMPTY_STRING,
-                        selection = TextRange(state.passwordItem?.name?.length ?: ZERO)
+                        selection = state.nameTextSelection
                     )
                 },
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterName(it.text)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterName(it)) },
                 isError = error is EditPasswordItemError.NameError,
                 supportingText = {
                     error?.let {
@@ -181,13 +179,13 @@ fun EditPasswordItemScreen(
             )
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.username) {
+                value = remember(state.passwordItem?.username, state.usernameTextSelection) {
                     TextFieldValue(
                         text = state.passwordItem?.username ?: EMPTY_STRING,
-                        selection = TextRange(state.passwordItem?.username?.length ?: ZERO)
+                        selection = state.usernameTextSelection
                     )
                 },
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterUsername(it.text)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterUsername(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null)
                 },
@@ -206,13 +204,13 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.password) {
+                value = remember(state.passwordItem?.password, state.passwordTextSelection) {
                     TextFieldValue(
                         text = state.passwordItem?.password ?: EMPTY_STRING,
-                        selection = TextRange(state.passwordItem?.password?.length ?: ZERO)
+                        selection = state.passwordTextSelection
                     )
                 },
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterPassword(it.text)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterPassword(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Key, contentDescription = null)
                 },
@@ -256,13 +254,13 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.website) {
+                value = remember(state.passwordItem?.website, state.websiteTextSelection) {
                     TextFieldValue(
                         text = state.passwordItem?.website ?: EMPTY_STRING,
-                        selection = TextRange(state.passwordItem?.website?.length ?: ZERO)
+                        selection = state.websiteTextSelection
                     )
                 },
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterWebsite(it.text)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterWebsite(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Link, contentDescription = null)
                 },
@@ -281,13 +279,13 @@ fun EditPasswordItemScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = remember(state.passwordItem?.notes) {
+                value = remember(state.passwordItem?.notes, state.notesTextSelection) {
                     TextFieldValue(
                         text = state.passwordItem?.notes ?: EMPTY_STRING,
-                        selection = TextRange(state.passwordItem?.notes?.length ?: ZERO)
+                        selection = state.notesTextSelection
                     )
                 },
-                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterNotes(it.text)) },
+                onValueChange = { onEvent(EditPasswordItemUiEvent.EnterNotes(it)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.AutoMirrored.Filled.Notes, contentDescription = null)
                 },

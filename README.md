@@ -33,7 +33,7 @@
 <img src="https://github.com/user-attachments/assets/50307387-126b-4e50-87af-e67a97f9aa31" width="250" />
 <img src="https://github.com/user-attachments/assets/24d826f0-9032-4599-abab-e52f270c62a4" width="250" />
 <img src="https://github.com/user-attachments/assets/95858715-551c-41b5-b066-5883bf42c804" width="250" />
-<img src="https://github.com/user-attachments/assets/13385699-5840-4cad-8c2c-d307276528da" width="250" />
+<img src="https://github.com/user-attachments/assets/0139fcd7-e30c-4f2c-8f08-baffa57a906a" width="250" />
 <img src="https://github.com/user-attachments/assets/60912c7b-9aa4-473b-8f8b-66651ae94b13" width="250" />
 
 ## Screenshots (Wear OS) 📷
@@ -47,4 +47,3 @@
 <a href="https://play.google.com/store/apps/details?id=com.jackappsdev.password_manager" target="_blank">
     <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="80">
 </a>
-

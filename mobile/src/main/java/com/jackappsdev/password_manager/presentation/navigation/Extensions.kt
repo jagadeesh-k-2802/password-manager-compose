@@ -12,7 +12,7 @@ fun NavController.navigateWithState(route: Routes) {
 
 fun <T : Any> NavController.replace(route: T) {
     navigate(route) {
-        popUpTo(graph.startDestinationId) { inclusive = true }
+        popUpTo(0) { inclusive = true }
         launchSingleTop = true
     }
 }

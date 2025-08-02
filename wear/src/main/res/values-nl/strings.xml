@@ -1,0 +1,41 @@
+<resources>
+    <!--  Core  -->
+<string name="app_name">Wachtwoordbeheerder</string>
+
+    <!-- Title -->
+<string name="title_passwords">Wachtwoorden</string>
+
+    <!--  Buttons  -->
+<string name="btn_open_app">Open app</string>
+    <string name="btn_one" translatable="false">1</string>
+    <string name="btn_two" translatable="false">2</string>
+    <string name="btn_three" translatable="false">3</string>
+    <string name="btn_four" translatable="false">4</string>
+    <string name="btn_five" translatable="false">5</string>
+    <string name="btn_six" translatable="false">6</string>
+    <string name="btn_seven" translatable="false">7</string>
+    <string name="btn_eight" translatable="false">8</string>
+    <string name="btn_nine" translatable="false">9</string>
+    <string name="btn_zero" translatable="false">0</string>
+
+    <!--  Text  -->
+<string name="text_enable_watch_support">Schakel Android Watch -optie in op mobiele app.</string>
+<string name="text_no_passwords">Geen wachtwoorden opgeslagen</string>
+    <string name="text_password_dot" translatable="false">•</string>
+
+    <!--  Label  -->
+<string name="label_username">Gebruikersnaam</string>
+<string name="label_password">Wachtwoord</string>
+<string name="label_notes">Aantekeningen</string>
+
+    <!-- Toast -->
+<string name="toast_opened_phone_app">Geopend telefoon -app</string>
+<string name="toast_cannot_open_phone_app">Kan de telefoon -app niet openen</string>
+<string name="toast_incorrect_password">Onjuist wachtwoord</string>
+
+    <!--  Accessibility  -->
+<string name="accessibility_warning_icon">Waarschuwingspictogram</string>
+<string name="accessibility_backspace">Backspace</string>
+<string name="accessibility_done">Klaar</string>
+</resources>
+

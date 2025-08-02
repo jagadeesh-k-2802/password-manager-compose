@@ -16,8 +16,12 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import androidx.core.net.toUri
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import com.jackappsdev.password_manager.core.parseModifiedTime
+import com.jackappsdev.password_manager.data.local.MIN_DATABASE_VERSION
+import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
+import java.io.InputStream
 
 class DatabaseBackupManagerImpl(
     private val appContext: Context,
@@ -41,12 +45,14 @@ class DatabaseBackupManagerImpl(
 
         try {
             val db = EncryptedSQLiteOpenHelper(
-                appContext,
-                tempDatabaseName,
-                null,
-                DATABASE_VERSION
+                context = appContext,
+                name = tempDatabaseName,
+                factory = null,
+                version = DATABASE_VERSION,
+                minimumSupportedVersion = MIN_DATABASE_VERSION,
+                password = password
             )
-            db.getReadableDatabase(password.toCharArray())
+            db.readableDatabase
         } catch (e: SQLiteException) {
             println(e)
             return false
@@ -83,6 +89,37 @@ class DatabaseBackupManagerImpl(
         return true
     }
 
+    override suspend fun importGoogleChromeCsv(path: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            var input: InputStream? = null
+            try {
+                input = appContext.contentResolver.openInputStream(path.toUri())
+                val passwordEntities = mutableListOf<PasswordItemEntity>()
+                input?.let {
+                    csvReader().readAllWithHeader(input).forEach { row ->
+                        passwordEntities.add(
+                            PasswordItemEntity(
+                                name = row["name"] ?: "",
+                                website = row["url"] ?: "",
+                                username = row["username"] ?: "",
+                                password = row["password"] ?: "",
+                                notes = row["note"] ?: "",
+                                isAddedToWatch = false
+                            )
+                        )
+                    }
+                }
+                passwordDao.upsertPasswordEntity(*passwordEntities.toTypedArray())
+                true
+            } catch (e: Exception) {
+                println(e)
+                false
+            } finally {
+                input?.close()
+            }
+        }
+    }
+
     override suspend fun exportDatabase(path: String) {
         withContext(Dispatchers.IO) {
             passwordDao.checkpoint() // To save changes without it DB will be empty
@@ -93,6 +130,30 @@ class DatabaseBackupManagerImpl(
             output?.flush()
             output?.close()
             input.close()
+        }
+    }
+
+    override suspend fun exportGoogleChromeCsv(path: String) {
+        withContext(Dispatchers.IO) {
+            passwordDao.checkpoint() // To save changes without it DB will be empty
+            val passwords = passwordDao.getAllPasswordWithCategoryEntities()
+            val output = appContext.contentResolver.openOutputStream(path.toUri())
+
+            output?.let {
+                csvWriter().open(output) {
+                    writeRow("name", "url", "username", "password", "note")
+
+                    passwords.forEach { item ->
+                        writeRow(
+                            item.passwordItem.name,
+                            item.passwordItem.website,
+                            item.passwordItem.username,
+                            item.passwordItem.password,
+                            item.passwordItem.notes
+                        )
+                    }
+                }
+            }
         }
     }
 

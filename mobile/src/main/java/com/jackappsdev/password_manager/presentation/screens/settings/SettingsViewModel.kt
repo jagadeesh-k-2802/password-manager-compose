@@ -19,7 +19,6 @@ import com.jackappsdev.password_manager.presentation.screens.settings.event.Sett
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
 import com.jackappsdev.password_manager.presentation.screens.settings.model.ExportPasswordAuthType
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
-import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -90,12 +89,24 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun importData(password: String) {
+    private suspend fun importPasswords(password: String): SettingsUiEffect? {
         if (state.importFileUri != null) {
-            val uri = state.importFileUri ?: EMPTY_STRING
+            val uri = state.importFileUri ?: return null
             val isDone = databaseBackupManager.importDatabase(uri, password)
             state = state.copy(isImportPasswordInvalid = !isDone)
+            if (!isDone) return null
         }
+        return SettingsUiEffect.PasswordsImported
+    }
+
+    private suspend fun importChromePasswords(): SettingsUiEffect? {
+        if (state.importFileUri != null) {
+            val uri = state.importFileUri ?: return null
+            val isDone = databaseBackupManager.importGoogleChromeCsv(uri)
+            state = state.copy(isImportChromePasswordsDialogVisible = false)
+            if (!isDone) return SettingsUiEffect.CannotImportChromePasswords
+        }
+        return SettingsUiEffect.PasswordsImported
     }
 
     private fun savePasswordsUri(uri: String) {
@@ -106,8 +117,20 @@ class SettingsViewModel @Inject constructor(
         )
     }
 
+    private fun showImportChromePasswordsDialog(uri: String) {
+        state = state.copy(
+            isImportChromePasswordsDialogVisible = true,
+            importFileUri = uri
+        )
+    }
+
     private suspend fun exportPasswords(uri: String): SettingsUiEffect {
         databaseBackupManager.exportDatabase(uri)
+        return SettingsUiEffect.PasswordsExported
+    }
+
+    private suspend fun exportChromePasswords(uri: String): SettingsUiEffect {
+        databaseBackupManager.exportGoogleChromeCsv(uri)
         return SettingsUiEffect.PasswordsExported
     }
 
@@ -125,10 +148,23 @@ class SettingsViewModel @Inject constructor(
                 )
             }
 
+            is SettingsUiEvent.HideImportChromePasswordsDialog -> {
+                state = state.copy(
+                    isImportChromePasswordsDialogVisible = false
+                )
+            }
+
             is SettingsUiEvent.HideExportPasswordsDialog -> {
                 state = state.copy(
                     isExportPasswordsDialogVisible = false,
                     isExportPasswordsPasswordInvalid = false
+                )
+            }
+
+            is SettingsUiEvent.HideExportChromePasswordsDialog -> {
+                state = state.copy(
+                    isExportChromePasswordsDialogVisible = false,
+                    isExportChromePasswordsPasswordInvalid = false
                 )
             }
 
@@ -170,7 +206,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun checkExportPasswordsAuth(): SettingsUiEffect? {
-        return if (state.useScreenLockToUnlock == true) {
+        return if (state.isScreenLockAvailable == true && state.useScreenLockToUnlock == true) {
             SettingsUiEffect.BiometricAuthForExportPasswords
         } else {
             state = state.copy(isExportPasswordsDialogVisible = true)
@@ -178,8 +214,17 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private fun checkExportChromePasswordsAuth(): SettingsUiEffect? {
+        return if (state.isScreenLockAvailable == true && state.useScreenLockToUnlock == true) {
+            SettingsUiEffect.BiometricAuthForExportChromePasswords
+        } else {
+            state = state.copy(isExportChromePasswordsDialogVisible = true)
+            null
+        }
+    }
+
     private fun checkExportCsvAuth(): SettingsUiEffect? {
-        return if (state.useScreenLockToUnlock == true) {
+        return if (state.isScreenLockAvailable == true && state.useScreenLockToUnlock == true) {
             SettingsUiEffect.BiometricAuthForExportCsv
         } else {
             state = state.copy(isExportCsvDialogVisible = true)
@@ -202,6 +247,27 @@ class SettingsViewModel @Inject constructor(
                     SettingsUiEffect.OpenExportPasswordsIntent
                 } else {
                     state = state.copy(isExportPasswordsPasswordInvalid = true)
+                    null
+                }
+            }
+        }
+    }
+
+    private suspend fun openExportChromePasswordsIntent(passwordType: ExportPasswordAuthType): SettingsUiEffect? {
+        return when (passwordType) {
+            is ExportPasswordAuthType.BiometricAuth -> {
+                SettingsUiEffect.OpenExportChromePasswordsIntent
+            }
+
+            is ExportPasswordAuthType.PasswordAuth -> {
+                if (userPreferencesRepository.verifyPassword(passwordType.password)) {
+                    state = state.copy(
+                        isExportChromePasswordsDialogVisible = false,
+                        isExportChromePasswordsPasswordInvalid = false
+                    )
+                    SettingsUiEffect.OpenExportChromePasswordsIntent
+                } else {
+                    state = state.copy(isExportChromePasswordsPasswordInvalid = true)
                     null
                 }
             }
@@ -232,23 +298,31 @@ class SettingsViewModel @Inject constructor(
     override fun onEvent(event: SettingsUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is SettingsUiEvent.ImportPasswords -> importData(event.password)
+                is SettingsUiEvent.ImportPasswords -> importPasswords(event.password)
+                is SettingsUiEvent.ImportChromePasswords -> importChromePasswords()
                 is SettingsUiEvent.SavePasswordsUri -> savePasswordsUri(event.uri)
+                is SettingsUiEvent.ShowImportChromePasswordsDialog -> showImportChromePasswordsDialog(event.uri)
                 is SettingsUiEvent.ExportPasswords -> exportPasswords(event.uri)
+                is SettingsUiEvent.ExportChromePasswords -> exportChromePasswords(event.uri)
                 is SettingsUiEvent.ExportPasswordsCsv -> exportPasswordsCsv(event.uri)
                 is SettingsUiEvent.HideImportPasswordsDialog -> hideDialog(event)
+                is SettingsUiEvent.HideImportChromePasswordsDialog -> hideDialog(event)
                 is SettingsUiEvent.HideExportPasswordsDialog -> hideDialog(event)
+                is SettingsUiEvent.HideExportChromePasswordsDialog -> hideDialog(event)
                 is SettingsUiEvent.HideExportCsvDialog -> hideDialog(event)
                 is SettingsUiEvent.ToggleDynamicColors -> setDynamicColors()
                 is SettingsUiEvent.ToggleUseScreenLock -> toggleScreenLock()
                 is SettingsUiEvent.CompleteAppUpdate -> completeAppUpdate()
                 is SettingsUiEvent.CheckScreenLockAvailable -> checkIfScreenLockAvailable()
                 is SettingsUiEvent.CheckExportPasswordsAuth -> checkExportPasswordsAuth()
+                is SettingsUiEvent.CheckExportChromePasswordsAuth -> checkExportChromePasswordsAuth()
                 is SettingsUiEvent.CheckExportCsvAuth -> checkExportCsvAuth()
                 is SettingsUiEvent.OpenExportPasswordsIntent -> openExportPasswordsIntent(event.passwordType)
+                is SettingsUiEvent.OpenExportChromePasswordsIntent -> openExportChromePasswordsIntent(event.passwordType)
                 is SettingsUiEvent.OpenExportCsvIntent -> openExportCsvIntent(event.passwordType)
                 is SettingsUiEvent.StartAppUpdate -> SettingsUiEffect.StartAppUpdate(appUpdateManager)
                 is SettingsUiEvent.OpenImportPasswordsIntent -> SettingsUiEffect.OpenImportPasswordsIntent
+                is SettingsUiEvent.OpenImportChromePasswordsIntent -> SettingsUiEffect.OpenImportChromePasswordsIntent
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings
                 is SettingsUiEvent.NavigateToChangePassword -> SettingsUiEffect.NavigateToChangePassword
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories

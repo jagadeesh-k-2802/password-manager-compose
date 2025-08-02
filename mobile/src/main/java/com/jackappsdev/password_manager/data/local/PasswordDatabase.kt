@@ -10,6 +10,7 @@ import com.jackappsdev.password_manager.data.local.dao.PasswordDao
 import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
 
 const val DATABASE_NAME = "passwords_db"
+const val MIN_DATABASE_VERSION = 1
 const val DATABASE_VERSION = 2
 
 val MIGRATION_1_2 = object : Migration(1, 2) {

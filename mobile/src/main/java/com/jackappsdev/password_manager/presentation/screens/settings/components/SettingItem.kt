@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.settings.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -24,9 +25,19 @@ fun SettingItem(
     onClick: () -> Unit = {}
 ) {
     ListItem(
-        leadingContent = { Icon(leadingIcon, null) },
-        trailingContent = trailingIcon?.let { { Icon(it, null) } },
-        headlineContent = { Text(title) },
+        leadingContent = {
+            Icon(leadingIcon, contentDescription = null)
+        },
+        trailingContent = trailingIcon?.let {
+            {
+                AnimatedContent(trailingIcon) {
+                    Icon(imageVector = it, contentDescription = null)
+                }
+            }
+        },
+        headlineContent = {
+            Text(title)
+        },
         modifier = modifier.clickable(onClick = onClick)
     )
 }

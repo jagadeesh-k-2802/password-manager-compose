@@ -9,5 +9,12 @@
         <option name="version" value="8.13.2" />
       </MTProjectMetadataState>
     </option>
+    <option name="titleBarState">
+      <MTProjectTitleBarConfigState>
+        <option name="enabled" value="true" />
+        <option name="projectFrameColorHex" value="1d5ea3" />
+        <option name="useColoredTitleBar" value="true" />
+      </MTProjectTitleBarConfigState>
+    </option>
   </component>
 </project>

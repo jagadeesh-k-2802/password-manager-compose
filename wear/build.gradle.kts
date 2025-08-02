@@ -20,7 +20,7 @@ val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 
 // Version Management
 val versionMajor = 1
-val versionMinor = 2
+val versionMinor = 3
 val versionPatch = 0
 val minimumSdkVersion = 28
 
@@ -34,12 +34,12 @@ fun generateVersionName(): String {
 
 android {
     namespace = "com.jackappsdev.password_manager"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = minimumSdkVersion
-        targetSdk = 34
+        targetSdk = 36
         versionCode = generateVersionCode()
         versionName = generateVersionName()
         buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)
@@ -125,7 +125,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // SQLCipher
-    implementation(libs.android.database.sqlcipher)
+    implementation(libs.sqlcipher.android)
     implementation(libs.androidx.sqlite)
 
     // Horologist

@@ -37,12 +37,19 @@ class SettingsEffectHandler(
 ) {
     private val context: Context = activity.applicationContext
     private var isExportPasswordsBiometricAuth = false
+    private var isExportChromePasswordsBiometricAuth = false
     private var isExportCsvBiometricAuth = false
     private var isScreenLockBiometricAuth = false
 
     private val exportPasswordsPromptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle(getString(context, R.string.title_export_passwords))
         .setDescription(getString(context, R.string.text_export_passwords))
+        .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+        .build()
+
+    private val exportChromePasswordsPromptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle(getString(context, R.string.title_export_passwords))
+        .setDescription(getString(context, R.string.text_export_passwords_chrome_csv_note))
         .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
         .build()
 
@@ -69,6 +76,11 @@ class SettingsEffectHandler(
                     isExportPasswordsBiometricAuth -> {
                         onEvent(SettingsUiEvent.OpenExportPasswordsIntent(BiometricAuth))
                         isExportPasswordsBiometricAuth = false
+                    }
+
+                    isExportChromePasswordsBiometricAuth -> {
+                        onEvent(SettingsUiEvent.OpenExportChromePasswordsIntent(BiometricAuth))
+                        isExportChromePasswordsBiometricAuth = false
                     }
 
                     isExportCsvBiometricAuth -> {
@@ -101,12 +113,30 @@ class SettingsEffectHandler(
         }
     }
 
+    fun onOpenImportChromePasswordsIntent(intent: ActivityResultLauncher<Intent>) {
+        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "text/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+            intent.launch(this)
+        }
+    }
+
     fun onOpenExportPasswordsIntent(intent: ActivityResultLauncher<Intent>) {
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             val timestamp = LocalDate.now().toString()
             type = "application/vnd.sqlite3"
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, "passwords-$timestamp.db")
+            intent.launch(this)
+        }
+    }
+
+    fun onOpenExportChromePasswordsIntent(intent: ActivityResultLauncher<Intent>) {
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            val timestamp = LocalDate.now().toString()
+            type = "application/vnd.sqlite3"
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_TITLE, "passwords-google-chrome-$timestamp.csv")
             intent.launch(this)
         }
     }
@@ -126,13 +156,26 @@ class SettingsEffectHandler(
         biometricPrompt.authenticate(exportPasswordsPromptInfo)
     }
 
+    fun onBiometricAuthForExportChromePasswords() {
+        isExportChromePasswordsBiometricAuth = true
+        biometricPrompt.authenticate(exportChromePasswordsPromptInfo)
+    }
+
     fun onBiometricAuthForExportCsv() {
         isExportCsvBiometricAuth = true
         biometricPrompt.authenticate(exportCsvPromptInfo)
     }
 
+    fun onPasswordsImported() {
+        context.showToast(context.getString(R.string.toast_passwords_imported))
+    }
+
     fun onPasswordsExported() {
         context.showToast(context.getString(R.string.toast_passwords_exported))
+    }
+
+    fun onCannotImportChromePasswords() {
+        context.showToast(context.getString(R.string.toast_cannot_import_chrome_passwords))
     }
 
     fun onBiometricAuthForScreenLock() {

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -11,7 +12,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Numbers
@@ -19,7 +23,6 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Pin
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.TableRows
-import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,15 +30,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
+import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.PasswordInputDialog
-import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
+import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
 import com.jackappsdev.password_manager.presentation.screens.settings.components.UpdateSettingItem
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
@@ -53,6 +61,8 @@ fun SettingsScreen(
     effectHandler: SettingsEffectHandler,
     onEvent: (SettingsUiEvent) -> Unit
 ) {
+    var isImportSectionVisible by rememberSaveable { mutableStateOf(false) }
+    var isExportSectionVisible by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberScrollState()
 
     val importIntent = rememberLauncherForActivityResult(
@@ -63,11 +73,27 @@ fun SettingsScreen(
         }
     }
 
+    val importChromeIntent = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            onEvent(SettingsUiEvent.ShowImportChromePasswordsDialog(result.data?.data.toString()))
+        }
+    }
+
     val exportIntent = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             onEvent(SettingsUiEvent.ExportPasswords(result.data?.data.toString()))
+        }
+    }
+
+    val exportChromeIntent = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            onEvent(SettingsUiEvent.ExportChromePasswords(result.data?.data.toString()))
         }
     }
 
@@ -85,11 +111,16 @@ fun SettingsScreen(
                 when (effect) {
                     is SettingsUiEffect.StartAppUpdate -> onStartAppUpdate(effect.appUpdateManager)
                     is SettingsUiEffect.OpenImportPasswordsIntent -> onOpenImportPasswordsIntent(importIntent)
+                    is SettingsUiEffect.OpenImportChromePasswordsIntent -> onOpenImportChromePasswordsIntent(importChromeIntent)
                     is SettingsUiEffect.OpenExportPasswordsIntent -> onOpenExportPasswordsIntent(exportIntent)
+                    is SettingsUiEffect.OpenExportChromePasswordsIntent -> onOpenExportChromePasswordsIntent(exportChromeIntent)
                     is SettingsUiEffect.OpenExportCsvIntent -> onOpenExportCsvIntent(exportCsvIntent)
                     is SettingsUiEffect.BiometricAuthForExportPasswords -> onBiometricAuthForExportPasswords()
+                    is SettingsUiEffect.BiometricAuthForExportChromePasswords -> onBiometricAuthForExportChromePasswords()
                     is SettingsUiEffect.BiometricAuthForExportCsv -> onBiometricAuthForExportCsv()
+                    is SettingsUiEffect.PasswordsImported -> onPasswordsImported()
                     is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
+                    is SettingsUiEffect.CannotImportChromePasswords -> onCannotImportChromePasswords()
                     is SettingsUiEffect.BiometricAuthForScreenLock -> onBiometricAuthForScreenLock()
                     is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
                     is SettingsUiEffect.NavigateToChangePassword -> onNavigateToChangePassword()
@@ -113,6 +144,15 @@ fun SettingsScreen(
         )
     }
 
+    if (state.isImportChromePasswordsDialogVisible) {
+        ConfirmationDialog(
+            title = R.string.dialog_title_import_chrome_passwords,
+            description = R.string.text_import_chrome_passwords_note,
+            onConfirm = { onEvent(SettingsUiEvent.ImportChromePasswords) },
+            onDismiss = { onEvent(SettingsUiEvent.HideImportChromePasswordsDialog) }
+        )
+    }
+
     if (state.isExportPasswordsDialogVisible) {
         PasswordInputDialog(
             title = R.string.dialog_title_export_passwords,
@@ -121,6 +161,17 @@ fun SettingsScreen(
             isInvalidPassword = state.isExportPasswordsPasswordInvalid,
             onConfirm = { onEvent(SettingsUiEvent.OpenExportPasswordsIntent(PasswordAuth(it))) },
             onDismiss = { onEvent(SettingsUiEvent.HideExportPasswordsDialog) }
+        )
+    }
+
+    if (state.isExportChromePasswordsDialogVisible) {
+        PasswordInputDialog(
+            title = R.string.dialog_title_export_chrome_passwords,
+            description = R.string.text_export_passwords_chrome_csv_note,
+            label = R.string.label_password,
+            isInvalidPassword = state.isExportChromePasswordsPasswordInvalid,
+            onConfirm = { onEvent(SettingsUiEvent.OpenExportChromePasswordsIntent(PasswordAuth(it))) },
+            onDismiss = { onEvent(SettingsUiEvent.HideExportChromePasswordsDialog) }
         )
     }
 
@@ -202,21 +253,63 @@ fun SettingsScreen(
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Download,
-                title = stringResource(R.string.label_import_passwords_database),
-                onClick = { onEvent(SettingsUiEvent.OpenImportPasswordsIntent) }
+                title = stringResource(R.string.label_import_passwords),
+                onClick = { isImportSectionVisible = !isImportSectionVisible },
+                trailingIcon = if (isImportSectionVisible) {
+                    Icons.Outlined.KeyboardArrowDown
+                } else {
+                    Icons.Outlined.KeyboardArrowUp
+                }
             )
 
-            SettingItem(
-                leadingIcon = Icons.Outlined.Upload,
-                title = stringResource(R.string.label_export_passwords_database),
-                onClick = { onEvent(SettingsUiEvent.CheckExportPasswordsAuth) }
-            )
+            AnimatedVisibility(isImportSectionVisible) {
+                Column {
+                    SettingItem(
+                        leadingIcon = Icons.Outlined.Dataset,
+                        title = stringResource(R.string.label_import_passwords_database),
+                        onClick = { onEvent(SettingsUiEvent.OpenImportPasswordsIntent) }
+                    )
+
+                    SettingItem(
+                        leadingIcon = Icons.Outlined.TableRows,
+                        title = stringResource(R.string.label_import_chrome_passwords),
+                        onClick = { onEvent(SettingsUiEvent.OpenImportChromePasswordsIntent) }
+                    )
+                }
+            }
 
             SettingItem(
-                leadingIcon = Icons.Outlined.TableRows,
-                title = stringResource(R.string.label_export_passwords_csv),
-                onClick = { onEvent(SettingsUiEvent.CheckExportCsvAuth) }
+                leadingIcon = Icons.Outlined.Download,
+                title = stringResource(R.string.label_export_passwords),
+                onClick = { isExportSectionVisible = !isExportSectionVisible },
+                trailingIcon = if (isExportSectionVisible) {
+                    Icons.Outlined.KeyboardArrowDown
+                } else {
+                    Icons.Outlined.KeyboardArrowUp
+                }
             )
+
+            AnimatedVisibility(isExportSectionVisible) {
+                Column {
+                    SettingItem(
+                        leadingIcon = Icons.Outlined.Dataset,
+                        title = stringResource(R.string.label_export_passwords_database),
+                        onClick = { onEvent(SettingsUiEvent.CheckExportPasswordsAuth) }
+                    )
+
+                    SettingItem(
+                        leadingIcon = Icons.Outlined.TableRows,
+                        title = stringResource(R.string.label_export_chrome_passwords),
+                        onClick = { onEvent(SettingsUiEvent.CheckExportChromePasswordsAuth) }
+                    )
+
+                    SettingItem(
+                        leadingIcon = Icons.Outlined.TableRows,
+                        title = stringResource(R.string.label_export_passwords_csv),
+                        onClick = { onEvent(SettingsUiEvent.CheckExportCsvAuth) }
+                    )
+                }
+            }
 
             SettingItem(
                 leadingIcon = Icons.Outlined.StarOutline,

@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.jackappsdev.password_manager.shared"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 28
@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // SQLCipher
-    implementation(libs.android.database.sqlcipher)
+    implementation(libs.sqlcipher.android)
     implementation(libs.androidx.sqlite)
 
     // Testing

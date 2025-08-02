@@ -19,6 +19,7 @@
     <string name="title_categories">Categories</string>
     <string name="title_settings">Settings</string>
     <string name="title_export_passwords">Export Passwords</string>
+    <string name="title_export_chrome_passwords">Export Google Chrome Passwords CSV</string>
     <string name="title_export_passwords_csv">Export Passwords as CSV</string>
     <string name="title_pin">Manage Pin</string>
 
@@ -55,8 +56,12 @@
     <string name="label_dynamic_colors">Dynamic Colors</string>
     <string name="label_android_watch">Android Watch</string>
     <string name="label_enable_android_watch">Enable Android Watch Sharing</string>
+    <string name="label_import_passwords">Import Passwords</string>
     <string name="label_import_passwords_database">Import Passwords from Database</string>
+    <string name="label_import_chrome_passwords">Import Google Chrome Passwords</string>
+    <string name="label_export_passwords">Export Passwords</string>
     <string name="label_export_passwords_database">Export Passwords as Database</string>
+    <string name="label_export_chrome_passwords">Export Google Chrome Passwords</string>
     <string name="label_export_passwords_csv">Export Passwords as CSV</string>
     <string name="label_rate_app">Rate on Google Play Store</string>
     <string name="label_app_version">App Version: %s</string>
@@ -86,6 +91,7 @@
     <string name="text_no_categories_available">No Categories Available</string>
     <string name="text_all_options_warning">Cannot turn off all options</string>
     <string name="text_import_passwords_note">Please note: Importing new passwords will remove all of your existing passwords thereafter, you must use this password to unlock this app.</string>
+    <string name="text_import_chrome_passwords_note">Please note: Importing passwords from Google Chrome CSV file will not affect your existing passwords. Only passwords from the file will be added.</string>
     <string name="text_change_password_help">Changing your password won\'t affect your current saved passwords.</string>
     <string name="text_filter_by_category">Filter By Category</string>
     <string name="text_sort_by">Sort By</string>
@@ -98,10 +104,12 @@
     <string name="text_strong">Strong</string>
     <string name="text_length">Length: %1$s</string>
     <string name="text_export_passwords">Please note: This database contains all your passwords and is encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
+    <string name="text_export_passwords_chrome_csv_note">Please note: This CSV file is compatible with Google Chrome and contains all your passwords in unencrypted form. Keep it secure, do not share it, and delete it when no longer needed.</string>
     <string name="text_export_passwords_csv_note">Please note: This CSV contains all your passwords and is not encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
 
     <!--  Toast Messages  -->
     <string name="toast_app_locked">App Locked</string>
+    <string name="toast_passwords_imported">Passwords Imported Successfully</string>
     <string name="toast_passwords_exported">Passwords Exported Successfully</string>
     <string name="toast_setup_lock_screen">Please, Setup your device lock screen first.</string>
     <string name="toast_password_changed_successfully">Password changed successfully</string>
@@ -113,6 +121,7 @@
     <string name="toast_invalid_url">Invalid URL</string>
     <string name="toast_android_watch_disabled">Disabled sharing with Android Watch</string>
     <string name="toast_pin_set">PIN has been set successfully</string>
+    <string name="toast_cannot_import_chrome_passwords">Couldn\'t import Google Chrome CSV passwords</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Toggle password</string>
@@ -154,7 +163,9 @@
     <string name="dialog_title_delete_password">Delete Password</string>
     <string name="dialog_title_delete_category">Delete Category</string>
     <string name="dialog_title_import_passwords">Import Passwords</string>
+    <string name="dialog_title_import_chrome_passwords">Import Google Chrome Passwords CSV</string>
     <string name="dialog_title_export_passwords">Export Passwords</string>
+    <string name="dialog_title_export_chrome_passwords">Export Google Passwords CSV</string>
     <string name="dialog_title_export_passwords_as_csv">Export Passwords as CSV</string>
     <string name="dialog_title_disable_android_watch">Disable Android Watch ?</string>
     <string name="dialog_title_disable_pin_usage">Disable Pin Usage ?</string>

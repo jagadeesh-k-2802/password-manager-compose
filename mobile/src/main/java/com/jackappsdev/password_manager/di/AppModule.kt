@@ -32,8 +32,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import net.sqlcipher.database.SQLiteDatabase
-import net.sqlcipher.database.SupportFactory
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import javax.inject.Singleton
 
 private const val USER_PREFERENCES = "user_preferences.json"
@@ -120,22 +119,21 @@ object AppModule {
     @Provides
     fun provideSupportFactory(
         userPreferencesRepository: UserPreferencesRepository
-    ): SupportFactory {
-        val userPassphrase = userPreferencesRepository.getPassword()?.toCharArray()
-        val passphrase = SQLiteDatabase.getBytes(userPassphrase)
-        return SupportFactory(passphrase)
+    ): SupportOpenHelperFactory {
+        val userPassphrase = userPreferencesRepository.getPassword()?.toByteArray(Charsets.UTF_8)
+        return SupportOpenHelperFactory(userPassphrase)
     }
 
     @Singleton
     @Provides
     fun provideRoomDatabase(
         @ApplicationContext appContext: Context,
-        supportFactory: SupportFactory
+        supportFactory: SupportOpenHelperFactory
     ): PasswordDatabase {
         return Room.databaseBuilder(appContext, PasswordDatabase::class.java, DATABASE_NAME)
             .addMigrations(MIGRATION_1_2)
             .openHelperFactory(supportFactory)
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 

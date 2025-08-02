@@ -11,8 +11,11 @@ data class SettingsState(
     val isChromeOS: Boolean = false,
     val isImportPasswordsDialogVisible: Boolean = false,
     val isImportPasswordInvalid: Boolean = false,
+    val isImportChromePasswordsDialogVisible: Boolean = false,
     val isExportCsvDialogVisible: Boolean = false,
     val isExportCsvPasswordInvalid: Boolean = false,
-    val isExportPasswordsDialogVisible: Boolean = false,
     val isExportPasswordsPasswordInvalid: Boolean = false,
+    val isExportPasswordsDialogVisible: Boolean = false,
+    val isExportChromePasswordsDialogVisible: Boolean = false,
+    val isExportChromePasswordsPasswordInvalid: Boolean = false
 )

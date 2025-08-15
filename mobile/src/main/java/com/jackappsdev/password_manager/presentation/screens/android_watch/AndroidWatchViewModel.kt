@@ -82,13 +82,14 @@ class AndroidWatchViewModel @Inject constructor(
     }
 
     private suspend fun setupPin(): AndroidWatchUiEffect? {
-        return if (state.pin.isEmpty() == true) {
+        return if (state.pin.isEmpty()) {
             _errorChannel.send(AndroidWatchError.PinError(R.string.error_pin_not_empty))
             null
         } else {
+            val pin = state.pin
             state = state.copy(hasAndroidWatchPinSet = true, pin = EMPTY_STRING)
-            userPreferencesRepository.setAndroidWatchPinSet(state.pin)
-            AndroidWatchUiEffect.SetupPin(state.pin)
+            userPreferencesRepository.setAndroidWatchPinSet(pin)
+            AndroidWatchUiEffect.SetupPin(pin)
         }
     }
 

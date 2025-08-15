@@ -1,5 +1,7 @@
 @file:Suppress("SpellCheckingInspection")
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("kapt")
     alias(libs.plugins.androidApplication)
@@ -55,8 +57,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_1_8
+        }
     }
 
     buildFeatures {

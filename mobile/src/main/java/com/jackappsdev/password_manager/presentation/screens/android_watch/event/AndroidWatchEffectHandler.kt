@@ -88,7 +88,8 @@ class AndroidWatchEffectHandler(
                         val capability = capabilityClient.getCapability(VERIFY_WEAR_APP, FILTER_REACHABLE)
                         isWatchConnectedAndAppInstalled = capability.await().nodes.isNotEmpty()
                     }
-                } catch (_: Exception) {
+                } catch (e: Exception) {
+                    println(e)
                     // Do Nothing
                 }
             }

@@ -15,7 +15,7 @@ plugins {
 // Version Management
 val versionMajor = 2
 val versionMinor = 4
-val versionPatch = 0
+val versionPatch = 1
 val minimumSdkVersion = 29
 
 fun generateVersionCode(): Int {
@@ -33,7 +33,7 @@ android {
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = minimumSdkVersion
-        targetSdk = 36
+        targetSdk = 35
         versionCode = generateVersionCode()
         versionName = generateVersionName()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

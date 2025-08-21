@@ -170,11 +170,3 @@ fun getPasswordStrengthColorDark(length: Int): Color {
     }
 }
 
-/**
- * Check if the app is running on Chrome OS
- */
-fun isChromeOS(context: Context): Boolean {
-    val hasSystemFeature = context.packageManager.hasSystemFeature("org.chromium.arc.device_management")
-    val isCheetahDevice = Build.DEVICE?.contains("cheetah") == true
-    return hasSystemFeature || isCheetahDevice
-}

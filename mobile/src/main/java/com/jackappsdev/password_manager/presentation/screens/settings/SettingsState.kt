@@ -8,7 +8,6 @@ data class SettingsState(
     val useDynamicColors: Boolean? = null,
     val isScreenLockAvailable: Boolean? = null,
     val importFileUri: String? = null,
-    val isChromeOS: Boolean = false,
     val isImportPasswordsDialogVisible: Boolean = false,
     val isImportPasswordInvalid: Boolean = false,
     val isImportChromePasswordsDialogVisible: Boolean = false,

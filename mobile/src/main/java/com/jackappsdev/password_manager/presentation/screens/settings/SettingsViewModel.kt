@@ -11,7 +11,6 @@ import com.google.android.play.core.ktx.AppUpdateResult
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.requestCompleteUpdate
 import com.google.android.play.core.ktx.requestUpdateFlow
-import com.jackappsdev.password_manager.core.isChromeOS
 import com.jackappsdev.password_manager.core.isScreenLockAvailable
 import com.jackappsdev.password_manager.domain.repository.DatabaseBackupManager
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -56,8 +55,7 @@ class SettingsViewModel @Inject constructor(
         state = state.copy(
             useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
             useDynamicColors = userPreferencesRepository.getUseDynamicColors().first(),
-            isScreenLockAvailable = isScreenLockAvailable(application.applicationContext),
-            isChromeOS = isChromeOS(application)
+            isScreenLockAvailable = isScreenLockAvailable(application.applicationContext)
         )
     }
 

@@ -218,14 +218,12 @@ fun SettingsScreen(
                 onClick = { onEvent(SettingsUiEvent.NavigateToManageCategories) }
             )
 
-            if (state.isChromeOS.not()) {
-                SettingItem(
-                    leadingIcon = Icons.Outlined.Watch,
-                    trailingIcon = Icons.Outlined.ChevronRight,
-                    title = stringResource(R.string.label_android_watch),
-                    onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
-                )
-            }
+            SettingItem(
+                leadingIcon = Icons.Outlined.Watch,
+                trailingIcon = Icons.Outlined.ChevronRight,
+                title = stringResource(R.string.label_android_watch),
+                onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
+            )
 
             SettingItem(
                 leadingIcon = Icons.Outlined.Pin,

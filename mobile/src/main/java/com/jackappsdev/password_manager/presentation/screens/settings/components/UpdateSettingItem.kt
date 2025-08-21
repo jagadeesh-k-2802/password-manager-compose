@@ -18,7 +18,7 @@ fun UpdateSettingItem(
     onEvent: (SettingsUiEvent) -> Unit
 ) {
     when {
-        state.isAppUpdateDownloaded == true -> {
+        state.isAppUpdateDownloaded -> {
             SettingItem(
                 modifier = modifier,
                 leadingIcon = Icons.Outlined.DownloadDone,
@@ -28,7 +28,7 @@ fun UpdateSettingItem(
             )
         }
 
-        state.isAppUpdateDownloading == true -> {
+        state.isAppUpdateDownloading -> {
             SettingItem(
                 modifier = modifier,
                 leadingIcon = Icons.Outlined.Update,

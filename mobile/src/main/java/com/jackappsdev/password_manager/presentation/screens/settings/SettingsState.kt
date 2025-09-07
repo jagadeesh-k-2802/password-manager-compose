@@ -16,5 +16,7 @@ data class SettingsState(
     val isExportPasswordsPasswordInvalid: Boolean = false,
     val isExportPasswordsDialogVisible: Boolean = false,
     val isExportChromePasswordsDialogVisible: Boolean = false,
-    val isExportChromePasswordsPasswordInvalid: Boolean = false
+    val isExportChromePasswordsPasswordInvalid: Boolean = false,
+    val isAutoLockDialogVisible: Boolean = false,
+    val autoLockSelectedIndex: Int = 0
 )

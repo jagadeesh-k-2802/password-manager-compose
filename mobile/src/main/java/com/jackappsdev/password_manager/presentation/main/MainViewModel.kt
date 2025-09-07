@@ -16,6 +16,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var useDynamicColors by mutableStateOf<Boolean?>(null)
+    var autoLockDelayMs by mutableStateOf<Long?>(null)
 
     init {
         onInit()
@@ -23,8 +24,11 @@ class MainViewModel @Inject constructor(
 
     private fun onInit() {
         viewModelScope.launch {
-            userPreferencesRepository.getUseDynamicColors().collect {
-                useDynamicColors = it
+            launch {
+                userPreferencesRepository.getUseDynamicColors().collect { useDynamicColors = it }
+            }
+            launch {
+                userPreferencesRepository.getAutoLockDelayMs().collect { autoLockDelayMs = it }
             }
         }
     }

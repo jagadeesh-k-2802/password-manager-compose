@@ -76,6 +76,11 @@
     <string name="label_manage_pin">Beheer de toegangspin</string>
     <string name="label_set_pin">Instellen pin</string>
     <string name="label_update_pin">Update pin</string>
+    <string name="label_auto_lock_delay">Auto Lock Vertraging</string>
+    <string name="label_auto_lock_30_seconds">30 seconden</string>
+    <string name="label_auto_lock_1_minute">1 minuut</string>
+    <string name="label_auto_lock_2_minutes">2 minuten</string>
+    <string name="label_auto_lock_5_minutes">5 minuten</string>
     <string name="label_app_update_available">App -update is beschikbaar</string>
     <string name="label_app_update_downloading">App -update is het downloaden …</string>
     <string name="label_app_update_downloaded">Installeer nieuwe app -update</string>
@@ -177,6 +182,8 @@
     <string name="dialog_btn_yes">Ja</string>
     <string name="dialog_btn_cancel">Annuleren</string>
     <string name="dialog_btn_confirm">Bevestigen</string>
+    <string name="dialog_btn_ok">OK</string>
+    <string name="dialog_title_auto_lock_delay">Kies Auto Lock Vertraging</string>
 
     <!--  Errors  -->
     <string name="error_name_not_empty">Naam moet niet leeg zijn</string>

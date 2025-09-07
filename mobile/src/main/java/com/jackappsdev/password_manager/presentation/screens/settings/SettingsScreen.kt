@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Pin
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.TableRows
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +42,7 @@ import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
+import com.jackappsdev.password_manager.presentation.components.DialogWithOptions
 import com.jackappsdev.password_manager.presentation.components.PasswordInputDialog
 import com.jackappsdev.password_manager.presentation.components.ToggleSettingItem
 import com.jackappsdev.password_manager.presentation.screens.settings.components.SettingItem
@@ -186,6 +188,17 @@ fun SettingsScreen(
         )
     }
 
+    if (state.isAutoLockDialogVisible) {
+        DialogWithOptions(
+            title = R.string.dialog_title_auto_lock_delay,
+            options = SettingsOptions.values,
+            selectedIndex = state.autoLockSelectedIndex,
+            onSelectIndex = { index -> onEvent(SettingsUiEvent.SelectAutoLockDelay(SettingsOptions.values[index].value)) },
+            onConfirm = { onEvent(SettingsUiEvent.SetAutoLockDelay(SettingsOptions.values[state.autoLockSelectedIndex].value)) },
+            onDismiss = { onEvent(SettingsUiEvent.HideAutoLockDialog) }
+        )
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -238,6 +251,13 @@ fun SettingsScreen(
                 leadingIcon = Icons.Outlined.LockOpen,
                 title = stringResource(R.string.label_use_screen_lock_to_unlock),
                 onClick = { onEvent(SettingsUiEvent.CheckScreenLockAvailable) }
+            )
+
+            SettingItem(
+                leadingIcon = Icons.Outlined.Timer,
+                trailingIcon = Icons.Outlined.ChevronRight,
+                title = stringResource(R.string.label_auto_lock_delay),
+                onClick = { onEvent(SettingsUiEvent.ShowAutoLockDialog) }
             )
 
             if (isAtLeastAndroid(Build.VERSION_CODES.S)) {

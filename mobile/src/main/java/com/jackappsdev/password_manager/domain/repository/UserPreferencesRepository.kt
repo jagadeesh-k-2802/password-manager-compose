@@ -16,4 +16,6 @@ interface UserPreferencesRepository {
     suspend fun setUseDynamicColors(newValue: Boolean)
     suspend fun hasAndroidWatchPinSet(): Boolean
     suspend fun setAndroidWatchPinSet(newPin: String?)
+    suspend fun getAutoLockDelayMs(): Flow<Long>
+    suspend fun setAutoLockDelayMs(newDelayMs: Long)
 }

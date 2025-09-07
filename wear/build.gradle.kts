@@ -21,8 +21,8 @@ val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 
 // Version Management
 val versionMajor = 1
-val versionMinor = 3
-val versionPatch = 1
+val versionMinor = 4
+val versionPatch = 0
 val minimumSdkVersion = 28
 
 fun generateVersionCode(): Int {
@@ -40,7 +40,7 @@ android {
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = minimumSdkVersion
-        targetSdk = 35
+        targetSdk = 36
         versionCode = generateVersionCode()
         versionName = generateVersionName()
         buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)

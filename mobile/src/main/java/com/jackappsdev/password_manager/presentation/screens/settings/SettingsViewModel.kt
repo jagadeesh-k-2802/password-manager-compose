@@ -52,10 +52,12 @@ class SettingsViewModel @Inject constructor(
     }
 
     private suspend fun fetchInitialData() {
+        val currentDelay = userPreferencesRepository.getAutoLockDelayMs().first()
         state = state.copy(
             useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
             useDynamicColors = userPreferencesRepository.getUseDynamicColors().first(),
-            isScreenLockAvailable = isScreenLockAvailable(application.applicationContext)
+            isScreenLockAvailable = isScreenLockAvailable(application.applicationContext),
+            autoLockSelectedIndex = SettingsOptions.values.indexOfFirst { it.value == currentDelay }
         )
     }
 
@@ -173,6 +175,12 @@ class SettingsViewModel @Inject constructor(
                 )
             }
 
+            is SettingsUiEvent.HideAutoLockDialog -> {
+                state = state.copy(
+                    isAutoLockDialogVisible = false
+                )
+            }
+
             else -> {
                 null
             }
@@ -189,6 +197,23 @@ class SettingsViewModel @Inject constructor(
         val toggleValue = state.useScreenLockToUnlock != true
         state = state.copy(useScreenLockToUnlock = toggleValue)
         userPreferencesRepository.setUseScreenLockToUnlock(toggleValue)
+    }
+
+    private suspend fun showAutoLockDialog() {
+        val autoLockDelayMs = userPreferencesRepository.getAutoLockDelayMs().first()
+        val index = SettingsOptions.values.indexOfFirst { it.value == autoLockDelayMs }
+        state = state.copy(isAutoLockDialogVisible = true, autoLockSelectedIndex = index)
+    }
+
+    private fun selectAutoLockDelay(delayMs: Long) {
+        val newIndex = SettingsOptions.values.indexOfFirst { it.value == delayMs }
+        state = state.copy(autoLockSelectedIndex = newIndex)
+    }
+
+    private suspend fun setAutoLockDelay(delayMs: Long) {
+        selectAutoLockDelay(delayMs)
+        state = state.copy(isAutoLockDialogVisible = false)
+        userPreferencesRepository.setAutoLockDelayMs(delayMs)
     }
 
     private suspend fun completeAppUpdate() {
@@ -319,6 +344,10 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.OpenExportChromePasswordsIntent -> openExportChromePasswordsIntent(event.passwordType)
                 is SettingsUiEvent.OpenExportCsvIntent -> openExportCsvIntent(event.passwordType)
                 is SettingsUiEvent.StartAppUpdate -> SettingsUiEffect.StartAppUpdate(appUpdateManager)
+                is SettingsUiEvent.ShowAutoLockDialog -> showAutoLockDialog()
+                is SettingsUiEvent.HideAutoLockDialog -> hideDialog(event)
+                is SettingsUiEvent.SelectAutoLockDelay -> selectAutoLockDelay(event.delayMs)
+                is SettingsUiEvent.SetAutoLockDelay -> setAutoLockDelay(event.delayMs)
                 is SettingsUiEvent.OpenImportPasswordsIntent -> SettingsUiEffect.OpenImportPasswordsIntent
                 is SettingsUiEvent.OpenImportChromePasswordsIntent -> SettingsUiEffect.OpenImportChromePasswordsIntent
                 is SettingsUiEvent.OpenScreenLockSettings -> SettingsUiEffect.OpenScreenLockSettings

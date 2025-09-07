@@ -64,4 +64,12 @@ class UserPreferencesRepositoryImpl(
     override suspend fun setAndroidWatchPinSet(newPin: String?) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(androidWatchPin = newPin) }
     }
+
+    override suspend fun getAutoLockDelayMs(): Flow<Long> {
+        return dataStore.data.map { it.autoLockDelayMs }
+    }
+
+    override suspend fun setAutoLockDelayMs(newDelayMs: Long) {
+        dataStore.updateData { prevUserSettings -> prevUserSettings.copy(autoLockDelayMs = newDelayMs) }
+    }
 }

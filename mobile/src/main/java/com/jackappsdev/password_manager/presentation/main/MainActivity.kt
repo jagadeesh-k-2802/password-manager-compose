@@ -7,24 +7,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.jackappsdev.password_manager.BuildConfig
-import com.jackappsdev.password_manager.constants.APP_AUTO_LOCK_DELAY
+import com.jackappsdev.password_manager.constants.DEFAULT_APP_AUTO_LOCK_DELAY
 import com.jackappsdev.password_manager.presentation.navigation.Router
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     private val passwordLockViewModel: PasswordLockViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
-    private var autoLockJob: Job? = null
+    private var autoLockStartTimeMillis: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,28 +50,21 @@ class MainActivity : FragmentActivity() {
 
     override fun onResume() {
         super.onResume()
-        cancelAutoLockJob()
+        checkForAutoLock()
     }
 
     override fun onPause() {
         super.onPause()
-        startAutoLockJob()
+        saveCurrentTimeMillis()
     }
 
-    fun startAutoLockJob() {
-        if (autoLockJob?.isActive == true) {
-            autoLockJob?.cancel()
-        }
-
-        autoLockJob = lifecycleScope.launch {
-            delay(APP_AUTO_LOCK_DELAY)
-            passwordLockViewModel.setUnlocked(false)
-        }
+    private fun saveCurrentTimeMillis() {
+        autoLockStartTimeMillis = System.currentTimeMillis()
     }
 
-    fun cancelAutoLockJob() {
-        if (autoLockJob?.isActive == true) {
-            autoLockJob?.cancel()
-        }
+    private fun checkForAutoLock() {
+        val millisElapsedSinceOnPause = System.currentTimeMillis() - autoLockStartTimeMillis
+        val delay = mainViewModel.autoLockDelayMs ?: DEFAULT_APP_AUTO_LOCK_DELAY
+        if (millisElapsedSinceOnPause >= delay) { passwordLockViewModel.setUnlocked(false) }
     }
 }

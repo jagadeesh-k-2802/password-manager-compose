@@ -1,6 +1,7 @@
 @file:Suppress("SpellCheckingInspection")
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     kotlin("kapt")
@@ -14,8 +15,8 @@ plugins {
 
 // Version Management
 val versionMajor = 2
-val versionMinor = 4
-val versionPatch = 2
+val versionMinor = 5
+val versionPatch = 0
 val minimumSdkVersion = 29
 
 fun generateVersionCode(): Int {
@@ -33,7 +34,7 @@ android {
     defaultConfig {
         applicationId = "com.jackappsdev.password_manager"
         minSdk = minimumSdkVersion
-        targetSdk = 35
+        targetSdk = 36
         versionCode = generateVersionCode()
         versionName = generateVersionName()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -149,4 +150,12 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+        freeCompilerArgs.add("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+    }
 }

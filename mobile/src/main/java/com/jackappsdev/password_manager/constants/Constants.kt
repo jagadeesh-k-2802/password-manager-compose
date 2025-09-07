@@ -1,7 +1,7 @@
 package com.jackappsdev.password_manager.constants
 
 // General Constants
-const val APP_AUTO_LOCK_DELAY = 30_000L
+const val DEFAULT_APP_AUTO_LOCK_DELAY = 30_000L
 
 // Colors List for Categories (Can Be Removed Safely)
 val colorList = listOf(

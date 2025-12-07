@@ -22,7 +22,6 @@ import com.jackappsdev.password_manager.presentation.screens.password_lock.event
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -55,22 +54,19 @@ fun PasswordLockScreen(
             when {
                 state.hasPinSet == true -> {
                     CenterAlignedTopAppBar(
-                        title = { Text(stringResource(R.string.title_enter_pin)) },
-                        windowInsets = windowInsetsVerticalZero
+                        title = { Text(stringResource(R.string.title_enter_pin)) }
                     )
                 }
 
                 state.hasPasswordSet == true -> {
                     CenterAlignedTopAppBar(
-                        title = { Text(stringResource(R.string.title_enter_password)) },
-                        windowInsets = windowInsetsVerticalZero
+                        title = { Text(stringResource(R.string.title_enter_password)) }
                     )
                 }
 
                 else -> {
                     CenterAlignedTopAppBar(
-                        title = { Text(stringResource(R.string.title_create_password)) },
-                        windowInsets = windowInsetsVerticalZero
+                        title = { Text(stringResource(R.string.title_create_password)) }
                     )
                 }
             }

@@ -51,7 +51,6 @@ import com.jackappsdev.password_manager.presentation.screens.password_item_detai
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEvent
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -116,8 +115,7 @@ fun PasswordItemDetailScreen(
                         passwordItem = passwordItem,
                         onEvent = onEvent
                     )
-                },
-                windowInsets = windowInsetsVerticalZero
+                }
             )
         }
     ) { contentPadding ->

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import android.provider.Settings.ACTION_BIOMETRIC_ENROLL
 import android.provider.Settings.ACTION_SECURITY_SETTINGS
 import androidx.activity.result.ActivityResultLauncher
@@ -218,19 +219,34 @@ class SettingsEffectHandler(
         navController.navigate(Routes.Pin)
     }
 
+    fun onOpenAutofillSettings() {
+        try {
+            Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
+                data = "package:${context.packageName}".toUri()
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(this)
+            }
+        } catch (_: Exception) {
+            Intent(Settings.ACTION_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(this)
+            }
+        }
+    }
+
     fun onOpenPlayStorePage() {
-        val intent = try {
+        try {
             Intent(Intent.ACTION_VIEW).apply {
                 data = "market://details?id=${context.packageName}".toUri()
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(this)
             }
         } catch (_: Exception) {
             Intent(Intent.ACTION_VIEW).apply {
                 data = PLAY_STORE_APP_URI.toUri()
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(this)
             }
         }
-
-        context.startActivity(intent)
     }
 }

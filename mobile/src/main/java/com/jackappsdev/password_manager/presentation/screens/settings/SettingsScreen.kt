@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Lock
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
@@ -51,7 +53,6 @@ import com.jackappsdev.password_manager.presentation.screens.settings.event.Sett
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEffect
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsUiEvent
 import com.jackappsdev.password_manager.presentation.screens.settings.model.ExportPasswordAuthType.PasswordAuth
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -129,6 +130,7 @@ fun SettingsScreen(
                     is SettingsUiEffect.NavigateToManageCategories -> onNavigateToManageCategories()
                     is SettingsUiEffect.NavigateToAndroidWatch -> onNavigateToAndroidWatch()
                     is SettingsUiEffect.NavigateToPin -> onNavigateToPin()
+                    is SettingsUiEffect.OpenAutofillSettings -> onOpenAutofillSettings()
                     is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
                 }
             }
@@ -202,14 +204,14 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.title_settings)) },
-                windowInsets = windowInsetsVerticalZero
+                title = { Text(stringResource(R.string.title_settings)) }
             )
         }
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
+                .padding(bottom = 20.dp)
                 .verticalScroll(scrollState)
         ) {
             UpdateSettingItem(
@@ -225,6 +227,20 @@ fun SettingsScreen(
             )
 
             SettingItem(
+                leadingIcon = Icons.Outlined.Pin,
+                trailingIcon = Icons.Outlined.ChevronRight,
+                title = stringResource(R.string.label_manage_pin),
+                onClick = { onEvent(SettingsUiEvent.NavigateToPin) }
+            )
+
+            SettingItem(
+                leadingIcon = Icons.Outlined.Keyboard,
+                trailingIcon = Icons.Outlined.ChevronRight,
+                title = stringResource(R.string.label_autofill_settings),
+                onClick = { onEvent(SettingsUiEvent.OpenAutofillSettings) }
+            )
+
+            SettingItem(
                 leadingIcon = Icons.Outlined.Category,
                 trailingIcon = Icons.Outlined.ChevronRight,
                 title = stringResource(R.string.label_manage_categories),
@@ -236,13 +252,6 @@ fun SettingsScreen(
                 trailingIcon = Icons.Outlined.ChevronRight,
                 title = stringResource(R.string.label_android_watch),
                 onClick = { onEvent(SettingsUiEvent.NavigateToAndroidWatch) }
-            )
-
-            SettingItem(
-                leadingIcon = Icons.Outlined.Pin,
-                trailingIcon = Icons.Outlined.ChevronRight,
-                title = stringResource(R.string.label_manage_pin),
-                onClick = { onEvent(SettingsUiEvent.NavigateToPin) }
             )
 
             ToggleSettingItem(

@@ -87,7 +87,7 @@ class PasswordLockViewModel @Inject constructor(
                 is PasswordLockUiEvent.OpenPhoneApp -> PasswordLockUiEffect.OpenPhoneApp
             }
 
-            if (effect is PasswordLockUiEffect) { _effectChannel.send(effect) }
+            if (effect is PasswordLockUiEffect) _effectChannel.send(effect)
         }
     }
 }

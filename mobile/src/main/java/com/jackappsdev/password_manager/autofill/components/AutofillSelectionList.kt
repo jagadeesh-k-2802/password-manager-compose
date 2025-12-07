@@ -1,43 +1,36 @@
-package com.jackappsdev.password_manager.presentation.screens.home.components
+package com.jackappsdev.password_manager.autofill.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.autofill.AutofillState
+import com.jackappsdev.password_manager.autofill.AutofillUiEvent
 import com.jackappsdev.password_manager.presentation.components.CommonSearchBar
 import com.jackappsdev.password_manager.presentation.components.EmptyStateView
-import com.jackappsdev.password_manager.presentation.screens.home.HomeState
-import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
+import com.jackappsdev.password_manager.presentation.screens.home.components.PasswordItem
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordItemsView(
+fun AutofillSelectionList(
     modifier: Modifier = Modifier,
-    state: HomeState,
-    lazyColumnState: LazyListState,
-    onEvent: (HomeUiEvent) -> Unit
+    state: AutofillState,
+    onEvent: (AutofillUiEvent) -> Unit
 ) {
     val filteredItems = state.filteredItems?.collectAsState()?.value
     val passwordItems = state.items?.collectAsState()?.value
     val items = filteredItems ?: passwordItems
 
     LazyColumn(
-        state = lazyColumnState,
         modifier = modifier.fillMaxSize()
     ) {
         item {
             CommonSearchBar(
                 query = state.searchQuery,
-                onQueryChange = { query -> onEvent(HomeUiEvent.EnterSearchQuery(query)) },
-                onSearch = { onEvent(HomeUiEvent.Search) },
-                onClear = { onEvent(HomeUiEvent.ClearSearch) },
-                enableDebounce = true,
-                onDebouncedSearch = { onEvent(HomeUiEvent.SearchItems) }
+                onQueryChange = { query -> onEvent(AutofillUiEvent.EnterSearchQuery(query)) },
+                onClear = { onEvent(AutofillUiEvent.ClearSearch) }
             )
         }
 
@@ -51,10 +44,10 @@ fun PasswordItemsView(
         }
 
         items?.let {
-            items(it) { item ->
+            items(items) { item ->
                 PasswordItem(
                     item = item,
-                    onClick = { onEvent(HomeUiEvent.NavigateToPasswordItem(item.id ?: 0)) }
+                    onClick = { onEvent(AutofillUiEvent.ItemSelected(item)) }
                 )
             }
         }

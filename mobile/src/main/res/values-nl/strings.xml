@@ -22,6 +22,7 @@
     <string name="title_export_chrome_passwords">"Google Chrome-wachtwoorden exporteren CSV "</string>
     <string name="title_export_passwords_csv">Exporteer wachtwoorden als CSV</string>
     <string name="title_pin">Beheer pin</string>
+    <string name="title_autofill_select_password">Selecteer wachtwoord om automatisch in te vullen</string>
 
     <!--  Buttons  -->
     <string name="btn_confirm">Bevestigen</string>
@@ -74,6 +75,7 @@
     <string name="label_update_watch_pin">Update Watch Pin</string>
     <string name="label_pin">Pin</string>
     <string name="label_manage_pin">Beheer de toegangspin</string>
+    <string name="label_autofill_settings">Instellingen voor automatisch aanvullen</string>
     <string name="label_set_pin">Instellen pin</string>
     <string name="label_update_pin">Update pin</string>
     <string name="label_auto_lock_delay">Auto Lock Vertraging</string>
@@ -111,6 +113,10 @@
     <string name="text_length">Lengte: %1 $ s</string>
     <string name="text_export_passwords">Let op: deze database bevat al uw wachtwoorden en is gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
     <string name="text_export_passwords_csv_note">Let op: deze CSV bevat al uw wachtwoorden en is niet gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
+    <string name="text_autofill_service_description">Wachtwoorden automatisch invullen vanuit Wachtwoordbeheer</string>
+    <string name="text_autofill_open_password_manager">Automatisch invullen met wachtwoordbeheerder</string>
+    <string name="text_autofill_save_fail">Gebruikersnaam en/of wachtwoord zijn leeg, er valt niets op te slaan.</string>
+    <string name="text_autofill_save_fail_generic">Het opslaan van de inloggegevens is mislukt.</string>
 
     <!--  Toast Messages  -->
     <string name="toast_app_locked">App vergrendeld</string>
@@ -127,6 +133,7 @@
     <string name="toast_android_watch_disabled">Uitgeschakeld delen met Android Watch</string>
     <string name="toast_pin_set">Pin is succesvol ingesteld</string>
     <string name="toast_cannot_import_chrome_passwords">Kan Google Chrome CSV-wachtwoorden niet importeren</string>
+    <string name="toast_password_saved">%s is Saved</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Wachtwoord schakelen</string>

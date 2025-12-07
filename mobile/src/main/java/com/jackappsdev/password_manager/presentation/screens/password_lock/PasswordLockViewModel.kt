@@ -74,7 +74,7 @@ class PasswordLockViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // no-op
             }
         }
     }
@@ -90,7 +90,7 @@ class PasswordLockViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // no-op
             }
         }
     }
@@ -167,7 +167,7 @@ class PasswordLockViewModel @Inject constructor(
                 is PasswordLockUiEvent.BiometricAuthenticate -> PasswordLockUiEffect.BiometricAuthenticate
             }
 
-            if (effect is PasswordLockUiEffect) { _effectChannel.send(effect) }
+            if (effect is PasswordLockUiEffect) _effectChannel.send(effect)
         }
     }
 }

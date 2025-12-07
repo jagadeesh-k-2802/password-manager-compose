@@ -99,7 +99,7 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
             }
 
             else -> {
-                null
+                // no-op
             }
         }
 
@@ -133,7 +133,7 @@ class PasswordGeneratorViewModel @Inject constructor() : ViewModel(),
                 is PasswordGeneratorUiEvent.ToggleIncludeSymbols -> onOptionToggle(event)
             }
 
-            if (effect is PasswordGeneratorUiEffect) { _effectChannel.send(effect) }
+            if (effect is PasswordGeneratorUiEffect) _effectChannel.send(effect)
         }
     }
 }

@@ -39,7 +39,6 @@ import com.jackappsdev.password_manager.presentation.screens.home.components.Sor
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEffect
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -142,7 +141,6 @@ fun HomeScreen(
                     ) {
                         onEvent(HomeUiEvent.ScrollToTop)
                     },
-                windowInsets = windowInsetsVerticalZero,
             )
         },
         floatingActionButton = {
@@ -165,7 +163,10 @@ fun HomeScreen(
             }
 
             passwordItems?.isEmpty() == true -> {
-                EmptyStateView(modifier = modifier, title = R.string.text_no_passwords)
+                EmptyStateView(
+                    modifier = modifier,
+                    title = R.string.text_no_passwords
+                )
             }
 
             else -> {

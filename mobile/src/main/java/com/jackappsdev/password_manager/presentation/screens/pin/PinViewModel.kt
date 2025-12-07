@@ -69,7 +69,7 @@ class PinViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // no-op
             }
         }
     }
@@ -107,7 +107,7 @@ class PinViewModel @Inject constructor(
                 is PinUiEvent.NavigateUp -> PinUiEffect.NavigateUp
             }
 
-            if (effect is PinUiEffect) { _effectChannel.send(effect) }
+            if (effect is PinUiEffect) _effectChannel.send(effect)
         }
     }
 }

@@ -182,7 +182,7 @@ class SettingsViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // no-op
             }
         }
     }
@@ -355,10 +355,11 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.NavigateToManageCategories -> SettingsUiEffect.NavigateToManageCategories
                 is SettingsUiEvent.NavigateToAndroidWatch -> SettingsUiEffect.NavigateToAndroidWatch
                 is SettingsUiEvent.NavigateToPin -> SettingsUiEffect.NavigateToPin
+                is SettingsUiEvent.OpenAutofillSettings -> SettingsUiEffect.OpenAutofillSettings
                 is SettingsUiEvent.OpenPlayStorePage -> SettingsUiEffect.OpenPlayStorePage
             }
 
-            if (effect is SettingsUiEffect) { _effectChannel.send(effect) }
+            if (effect is SettingsUiEffect) _effectChannel.send(effect)
         }
     }
 }

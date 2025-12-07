@@ -30,7 +30,6 @@ import com.jackappsdev.password_manager.presentation.screens.manage_categories.c
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEffect
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEvent
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -80,8 +79,7 @@ fun ManageCategoriesScreen(
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
                     onEvent(ManageCategoriesUiEvent.ScrollToTop)
-                },
-                windowInsets = windowInsetsVerticalZero
+                }
             )
         },
         floatingActionButton = {

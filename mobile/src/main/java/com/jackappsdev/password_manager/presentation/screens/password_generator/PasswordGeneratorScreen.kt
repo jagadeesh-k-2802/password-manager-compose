@@ -21,7 +21,6 @@ import com.jackappsdev.password_manager.presentation.screens.password_generator.
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_generator.event.PasswordGeneratorUiEvent
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -50,8 +49,7 @@ fun PasswordGeneratorScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.title_password_generator)) },
-                windowInsets = windowInsetsVerticalZero
+                title = { Text(stringResource(R.string.title_password_generator)) }
             )
         },
         snackbarHost = {

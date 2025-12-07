@@ -1,4 +1,4 @@
-package com.jackappsdev.password_manager.presentation.screens.home.components
+package com.jackappsdev.password_manager.presentation.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,33 +20,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.debounce
-import com.jackappsdev.password_manager.presentation.screens.home.HomeState
-import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * Common search bar used across multiple screens (e.g. Home, Autofill).
+ *
+ * - Handles layout, icons, paddings and insets.
+ * - Optionally triggers a debounced search callback after text changes.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(
-    state: HomeState,
-    onEvent: (HomeUiEvent) -> Unit
+fun CommonSearchBar(
+    modifier: Modifier = Modifier,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (() -> Unit)? = null,
+    onClear: () -> Unit,
+    enableDebounce: Boolean = false,
+    onDebouncedSearch: (() -> Unit)? = null,
 ) {
-    val debouncedFilter = remember {
-        debounce<Unit>(400, Dispatchers.IO) {
-            onEvent(HomeUiEvent.SearchItems)
+    val debouncedSearch = remember(enableDebounce, onDebouncedSearch) {
+        if (enableDebounce && onDebouncedSearch != null) {
+            debounce<Unit>(400, Dispatchers.IO) {
+                onDebouncedSearch()
+            }
+        } else {
+            null
         }
     }
 
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
-                query = state.searchQuery,
-                onQueryChange = { query ->
-                    onEvent(HomeUiEvent.EnterSearchQuery(query))
-                    debouncedFilter(Unit)
+                query = query,
+                onQueryChange = { value ->
+                    onQueryChange(value)
+                    debouncedSearch?.invoke(Unit)
                 },
-                onSearch = { onEvent(HomeUiEvent.Search) },
+                onSearch = { onSearch?.invoke() },
                 expanded = false,
                 onExpandedChange = { },
                 placeholder = { Text(stringResource(R.string.label_search)) },
@@ -57,8 +70,8 @@ fun SearchBar(
                     )
                 },
                 trailingIcon = {
-                    if (state.searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { onEvent(HomeUiEvent.ClearSearch) }) {
+                    if (query.isNotEmpty()) {
+                        IconButton(onClick = onClear) {
                             Icon(
                                 imageVector = Icons.Outlined.Clear,
                                 contentDescription = stringResource(R.string.accessibility_clear_search)
@@ -71,7 +84,7 @@ fun SearchBar(
         },
         expanded = false,
         onExpandedChange = { },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = pagePadding),
         windowInsets = windowInsetsVerticalZero,

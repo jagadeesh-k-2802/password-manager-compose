@@ -5,24 +5,25 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Parcelable
 import android.text.format.DateFormat
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.ui.graphics.Color
+import androidx.core.net.toUri
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
-import androidx.core.net.toUri
-import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
-import com.jackappsdev.password_manager.shared.core.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
 /**
@@ -83,7 +84,7 @@ fun launchUrl(context: Context, url: String) {
 /**
  * Debounce function to prevent multiple calls in a short period of time
  */
-fun <T> debounce(delayMs: Long = 500L, coroutineContext: CoroutineContext, f: (T) -> Unit): (T) -> Unit {
+fun <T> debounce(delayMs: Long = 500L, coroutineContext: CoroutineContext, f: (T) -> Unit): (T) -> Job? {
     var debounceJob: Job? = null
 
     return { param: T ->
@@ -93,6 +94,7 @@ fun <T> debounce(delayMs: Long = 500L, coroutineContext: CoroutineContext, f: (T
                 f(param)
             }
         }
+        debounceJob
     }
 }
 
@@ -102,7 +104,7 @@ fun <T> debounce(delayMs: Long = 500L, coroutineContext: CoroutineContext, f: (T
 fun parseColor(string: String): Color {
     return try {
         val hexString = string.removePrefix("#")
-        val red = hexString.substring(0, 2).toInt(16)
+        val red = hexString.take(2).toInt(16)
         val green = hexString.substring(2, 4).toInt(16)
         val blue = hexString.substring(4, 6).toInt(16)
         Color(red, green, blue)
@@ -170,3 +172,10 @@ fun getPasswordStrengthColorDark(length: Int): Color {
     }
 }
 
+/**
+ * Extension function to get Parcelable extra in a type-safe way
+ */
+inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
+    isAtLeastAndroid(Build.VERSION_CODES.TIRAMISU) -> getParcelableExtra(key, T::class.java)
+    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+}

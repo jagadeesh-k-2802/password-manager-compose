@@ -7,6 +7,7 @@ data class SettingsState(
     val useScreenLockToUnlock: Boolean? = null,
     val useDynamicColors: Boolean? = null,
     val isScreenLockAvailable: Boolean? = null,
+    val isAutofillAvailable: Boolean? = null,
     val importFileUri: String? = null,
     val isImportPasswordsDialogVisible: Boolean = false,
     val isImportPasswordInvalid: Boolean = false,

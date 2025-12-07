@@ -37,5 +37,6 @@ sealed class SettingsUiEvent {
     data object NavigateToManageCategories : SettingsUiEvent()
     data object NavigateToAndroidWatch : SettingsUiEvent()
     data object NavigateToPin : SettingsUiEvent()
+    data object OpenAutofillSettings : SettingsUiEvent()
     data object OpenPlayStorePage : SettingsUiEvent()
 }

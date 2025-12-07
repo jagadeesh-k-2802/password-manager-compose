@@ -22,6 +22,7 @@
     <string name="title_export_chrome_passwords">Export Google Chrome Passwords CSV</string>
     <string name="title_export_passwords_csv">Export Passwords as CSV</string>
     <string name="title_pin">Manage Pin</string>
+    <string name="title_autofill_select_password">Select Password to Autofill</string>
 
     <!--  Buttons  -->
     <string name="btn_confirm">Confirm</string>
@@ -74,6 +75,7 @@
     <string name="label_update_watch_pin">Update Watch PIN</string>
     <string name="label_pin">Pin</string>
     <string name="label_manage_pin">Manage Access Pin</string>
+    <string name="label_autofill_settings">Autofill Settings</string>
     <string name="label_set_pin">Set PIN</string>
     <string name="label_update_pin">Update PIN</string>
     <string name="label_auto_lock_delay">Auto Lock Delay</string>
@@ -111,6 +113,10 @@
     <string name="text_export_passwords">Please note: This database contains all your passwords and is encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
     <string name="text_export_passwords_chrome_csv_note">Please note: This CSV file is compatible with Google Chrome and contains all your passwords in unencrypted form. Keep it secure, do not share it, and delete it when no longer needed.</string>
     <string name="text_export_passwords_csv_note">Please note: This CSV contains all your passwords and is not encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
+    <string name="text_autofill_service_description">Autofill passwords from Password Manager</string>
+    <string name="text_autofill_open_password_manager">Autofill with Password Manager</string>
+    <string name="text_autofill_save_fail">Username or password is empty, nothing to save.</string>
+    <string name="text_autofill_save_fail_generic">Failed to save credentials.</string>
 
     <!--  Toast Messages  -->
     <string name="toast_app_locked">App Locked</string>
@@ -127,6 +133,7 @@
     <string name="toast_android_watch_disabled">Disabled sharing with Android Watch</string>
     <string name="toast_pin_set">PIN has been set successfully</string>
     <string name="toast_cannot_import_chrome_passwords">Couldn\'t import Google Chrome CSV passwords</string>
+    <string name="toast_password_saved">%s is opgeslagen</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Toggle password</string>

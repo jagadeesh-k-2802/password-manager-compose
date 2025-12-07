@@ -21,5 +21,6 @@ sealed class SettingsUiEffect {
     data object NavigateToManageCategories : SettingsUiEffect()
     data object NavigateToAndroidWatch : SettingsUiEffect()
     data object NavigateToPin : SettingsUiEffect()
+    data object OpenAutofillSettings : SettingsUiEffect()
     data object OpenPlayStorePage : SettingsUiEffect()
 }

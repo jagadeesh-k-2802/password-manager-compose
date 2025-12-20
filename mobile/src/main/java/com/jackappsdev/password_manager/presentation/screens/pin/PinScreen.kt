@@ -102,11 +102,11 @@ fun PinScreen(
             ToggleSettingItem(
                 title = stringResource(R.string.label_enable_pin),
                 subtitle = stringResource(R.string.text_pin_note),
-                checked = state.usePin == true,
+                checked = state.usePin,
                 onClick = { onEvent(PinUiEvent.TogglePin) }
             )
 
-            AnimatedVisibility(state.usePin == true) {
+            AnimatedVisibility(state.usePin) {
                 Column {
                     OutlinedTextField(
                         value = state.pin,
@@ -114,7 +114,7 @@ fun PinScreen(
                         label = {
                             Text(
                                 stringResource(
-                                    if (state.hasPinSet != true) {
+                                    if (!state.hasPinSet) {
                                         R.string.label_set_pin
                                     }
                                     else {
@@ -171,7 +171,7 @@ fun PinScreen(
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                         Text(
                             stringResource(
-                                if (state.hasPinSet != true) {
+                                if (!state.hasPinSet) {
                                     R.string.btn_set_pin
                                 } else {
                                     R.string.btn_update_pin

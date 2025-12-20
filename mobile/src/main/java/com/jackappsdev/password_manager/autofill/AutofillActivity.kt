@@ -1,6 +1,7 @@
 package com.jackappsdev.password_manager.autofill
 
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillManager
@@ -31,6 +32,9 @@ class AutofillActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Disable autofill for the entire app
+        window.decorView.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
 
         // Disable screenshots & screen recordings for production builds
         if (BuildConfig.DEBUG.not()) {

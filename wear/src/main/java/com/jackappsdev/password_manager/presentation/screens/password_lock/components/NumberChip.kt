@@ -1,14 +1,14 @@
 package com.jackappsdev.password_manager.presentation.screens.password_lock.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.FilledTonalButton
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockUiEvent
 import com.jackappsdev.password_manager.presentation.theme.isLargeDisplay
 
@@ -18,17 +18,18 @@ fun NumberChip(
     label: String,
     onEvent: (PasswordLockUiEvent) -> Unit
 ) {
-    val numButtonPadding = if (isLargeDisplay()) 20.dp else 18.dp
+    val numButtonPadding = if (isLargeDisplay()) 22.dp else 18.dp
 
-    Chip(
+    FilledTonalButton(
         onClick = { onEvent(PasswordLockUiEvent.NumberPress(label)) },
         modifier = modifier,
-        colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(horizontal = numButtonPadding),
+        shape = CircleShape,
         label = {
             Text(
                 text = label,
-                style = MaterialTheme.typography.title2
+                style = MaterialTheme.typography.labelSmall,
+                textAlign = TextAlign.Center
             )
         }
     )

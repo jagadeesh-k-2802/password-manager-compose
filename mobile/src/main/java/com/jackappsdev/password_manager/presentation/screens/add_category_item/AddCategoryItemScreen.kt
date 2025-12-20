@@ -49,7 +49,6 @@ import com.jackappsdev.password_manager.presentation.screens.add_category_item.e
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.event.AddCategoryItemUiEffect
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.event.AddCategoryItemUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -103,8 +102,7 @@ fun AddCategoryItemScreen(
                             contentDescription = stringResource(R.string.accessibility_go_back)
                         )
                     }
-                },
-                windowInsets = windowInsetsVerticalZero
+                }
             )
         }
     ) { contentPadding ->

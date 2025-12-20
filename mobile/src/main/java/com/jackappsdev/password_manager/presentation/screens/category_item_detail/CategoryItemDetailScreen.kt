@@ -47,7 +47,6 @@ import com.jackappsdev.password_manager.presentation.screens.category_item_detai
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEffect
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -117,8 +116,7 @@ fun CategoryItemDetailScreen(
                             contentDescription = stringResource(R.string.accessibility_delete_item)
                         )
                     }
-                },
-                windowInsets = windowInsetsVerticalZero
+                }
             )
         }
     ) { contentPadding ->

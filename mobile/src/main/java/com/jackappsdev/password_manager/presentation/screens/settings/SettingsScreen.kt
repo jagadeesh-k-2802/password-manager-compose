@@ -39,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.BuildConfig
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
@@ -211,7 +210,6 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(bottom = 20.dp)
                 .verticalScroll(scrollState)
         ) {
             UpdateSettingItem(

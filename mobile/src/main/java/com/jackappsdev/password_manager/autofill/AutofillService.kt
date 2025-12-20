@@ -62,7 +62,7 @@ class AutofillService : AutofillService() {
         val (usernameId, passwordId) = extractAutofillIds(structure)
 
         // If we couldn't find any suitable fields, bail out.
-        if (usernameId == null && passwordId == null) {
+        if (usernameId == null || passwordId == null) {
             callback.onSuccess(null)
             return
         }

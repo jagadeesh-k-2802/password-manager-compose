@@ -15,11 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.ChipDefaults
-import androidx.wear.compose.material.CompactChip
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.CompactButton
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
@@ -63,24 +62,21 @@ fun NoPhoneAppView(
                         text = stringResource(R.string.text_enable_watch_support),
                         textAlign = TextAlign.Center,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.body2,
+                        style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(8.dp)
                     )
                 }
             }
 
             item {
-                CompactChip(
+                CompactButton(
                     onClick = { onEvent(PasswordLockUiEvent.OpenPhoneApp) },
                     label = {
                         Text(
                             text = stringResource(R.string.btn_open_app),
-                            style = MaterialTheme.typography.button
+                            style = MaterialTheme.typography.labelMedium
                         )
-                    },
-                    colors = ChipDefaults.primaryChipColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    )
+                    }
                 )
             }
         }

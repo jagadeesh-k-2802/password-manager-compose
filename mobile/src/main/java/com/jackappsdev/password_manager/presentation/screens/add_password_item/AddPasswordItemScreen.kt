@@ -61,7 +61,6 @@ import com.jackappsdev.password_manager.presentation.screens.add_password_item.e
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -132,8 +131,7 @@ fun AddPasswordItemScreen(
                             contentDescription = stringResource(R.string.accessibility_go_back)
                         )
                     }
-                },
-                windowInsets = windowInsetsVerticalZero
+                }
             )
         }
     ) { contentPadding ->

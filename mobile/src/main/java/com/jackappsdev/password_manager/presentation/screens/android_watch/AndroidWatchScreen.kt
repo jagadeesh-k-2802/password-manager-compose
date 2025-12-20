@@ -43,7 +43,6 @@ import com.jackappsdev.password_manager.presentation.screens.android_watch.event
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEffect
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -93,8 +92,7 @@ fun AndroidWatchScreen(
                         )
                     }
                 },
-                title = { Text(stringResource(R.string.title_android_watch)) },
-                windowInsets = windowInsetsVerticalZero
+                title = { Text(stringResource(R.string.title_android_watch)) }
             )
         },
     ) { contentPadding ->

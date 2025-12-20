@@ -12,13 +12,13 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.jackappsdev.password_manager.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
+import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.base.WearPreview
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
@@ -42,7 +42,7 @@ fun EmptyStateView(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
     }

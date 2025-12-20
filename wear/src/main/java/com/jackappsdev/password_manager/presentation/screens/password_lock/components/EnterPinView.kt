@@ -7,18 +7,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.screens.base.WearPreview
@@ -32,8 +33,7 @@ fun EnterPinView(
     state: PasswordLockState,
     onEvent: (PasswordLockUiEvent) -> Unit
 ) {
-    val context = LocalContext.current
-    val outerScreenPadding = if (isLargeDisplay()) 16.dp else 12.dp
+    val outerScreenPadding = if (isLargeDisplay()) 26.dp else 22.dp
 
     ScreenScaffold(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -41,104 +41,19 @@ fun EnterPinView(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(outerScreenPadding)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                stringResource(R.string.text_password_dot).repeat(state.pin.length),
-                fontSize = 24.sp,
+                text = stringResource(R.string.text_password_dot).repeat(state.pin.length),
+                style = MaterialTheme.typography.numeralExtraSmall.copy(
+                    color = MaterialTheme.colorScheme.primary
+                ),
                 textAlign = TextAlign.Center,
-                letterSpacing = TextUnit(5f, TextUnitType.Sp)
+                letterSpacing = TextUnit(5f, TextUnitType.Sp),
+                modifier = Modifier.heightIn(min = 30.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_one),
-                    onEvent = onEvent
-                )
-
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_two),
-                    onEvent = onEvent
-                )
-
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_three),
-                    onEvent = onEvent
-                )
-
-                BackSpaceChip(
-                    modifier = Modifier.weight(0.5f),
-                    onEvent = onEvent
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_four),
-                    onEvent = onEvent
-                )
-
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_five),
-                    onEvent = onEvent
-                )
-
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_six),
-                    onEvent = onEvent
-                )
-
-                DoneChip(
-                    modifier = Modifier.weight(0.5f),
-                    enabled = state.pin.length == 4,
-                    onEvent = onEvent
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_seven),
-                    onEvent = onEvent
-                )
-
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_eight),
-                    onEvent = onEvent
-                )
-
-                NumberChip(
-                    modifier = Modifier.weight(0.5f),
-                    label = context.getString(R.string.btn_nine),
-                    onEvent = onEvent
-                )
-
-                Spacer(modifier = Modifier.weight(0.5f))
-            }
+            Spacer(modifier = Modifier.height(6.dp))
 
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -146,15 +61,119 @@ fun EnterPinView(
                     .weight(1f)
                     .fillMaxWidth()
             ) {
-                Spacer(modifier = Modifier.weight(1f))
-
                 NumberChip(
-                    modifier = Modifier.weight(1f),
-                    label = context.getString(R.string.btn_zero),
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_one),
                     onEvent = onEvent
                 )
 
-                Spacer(modifier = Modifier.weight(2f))
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_two),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_three),
+                    onEvent = onEvent
+                )
+            }
+
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_four),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_five),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_six),
+                    onEvent = onEvent
+                )
+            }
+
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_seven),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_eight),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_nine),
+                    onEvent = onEvent
+                )
+            }
+
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                BackSpaceChip(
+                    modifier = Modifier.weight(0.5f),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                NumberChip(
+                    modifier = Modifier.weight(0.5f),
+                    label = stringResource(R.string.btn_zero),
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                DoneChip(
+                    modifier = Modifier.weight(0.5f),
+                    enabled = state.pin.length == 4,
+                    onEvent = onEvent
+                )
             }
         }
     }

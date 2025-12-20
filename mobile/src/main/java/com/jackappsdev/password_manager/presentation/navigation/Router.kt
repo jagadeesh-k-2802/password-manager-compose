@@ -3,6 +3,7 @@ package com.jackappsdev.password_manager.presentation.navigation
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -50,9 +51,11 @@ fun Router(
         NavHost(
             navController = navController,
             startDestination = Graph.LockGraph,
-            modifier = Modifier.padding(contentPadding),
             enterTransition = { fadeIn(animationSpec = tween(400)) },
-            exitTransition = { fadeOut(animationSpec = tween(400)) }
+            exitTransition = { fadeOut(animationSpec = tween(400)) },
+            modifier = Modifier
+                .padding(contentPadding)
+                .consumeWindowInsets(contentPadding),
         ) {
             navigation<Graph.LockGraph>(Routes.PasswordLock) {
                 composable<Routes.PasswordLock> { PasswordLockRoot(passwordLockViewModel) }

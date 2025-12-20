@@ -25,7 +25,6 @@ import com.jackappsdev.password_manager.presentation.screens.change_password.eve
 import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEffect
 import com.jackappsdev.password_manager.presentation.screens.change_password.event.ChangePasswordUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.presentation.theme.windowInsetsVerticalZero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -63,8 +62,7 @@ fun ChangePasswordScreen(
                         )
                     }
                 },
-                title = { Text(stringResource(R.string.title_change_password)) },
-                windowInsets = windowInsetsVerticalZero
+                title = { Text(stringResource(R.string.title_change_password)) }
             )
         },
     ) { contentPadding ->

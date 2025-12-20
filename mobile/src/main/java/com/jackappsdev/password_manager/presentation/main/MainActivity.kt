@@ -1,6 +1,7 @@
 package com.jackappsdev.password_manager.presentation.main
 
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +32,9 @@ class MainActivity : FragmentActivity() {
             passwordLockViewModel.state.hasPasswordSet == null &&
             mainViewModel.useDynamicColors == null
         }
+
+        // Disable autofill for the entire app
+        window.decorView.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
 
         // Disable screenshots & screen recordings for production builds
         if (BuildConfig.DEBUG.not()) {

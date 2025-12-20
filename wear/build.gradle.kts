@@ -21,7 +21,7 @@ val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 
 // Version Management
 val versionMajor = 1
-val versionMinor = 4
+val versionMinor = 5
 val versionPatch = 0
 val minimumSdkVersion = 28
 
@@ -102,7 +102,7 @@ dependencies {
     // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
-    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.icons.extended)

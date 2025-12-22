@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/colorBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="12dp"
+    android:theme="@style/Theme.PasswordManager"
     tools:ignore="UseCompoundDrawables">
 
     <ImageView

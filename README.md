@@ -30,10 +30,10 @@
 ## Screenshots (Phone) 📷
 
 <img width="250" alt="image1" src="https://github.com/user-attachments/assets/f3f0fb27-ce9a-4eac-abd7-deb6b5ebf063" />
-<img width="250" alt="image2" src="https://github.com/user-attachments/assets/3d070411-470a-4219-95fd-ba90a742fd2e" />
-<img width="250" alt="image3" src="https://github.com/user-attachments/assets/27741dd1-bee5-4648-91af-7a97cbd3d142" />
+<img width="250" alt="image2" src="https://github.com/user-attachments/assets/27741dd1-bee5-4648-91af-7a97cbd3d142" />
+<img width="250" alt="image3" src="https://github.com/user-attachments/assets/3d070411-470a-4219-95fd-ba90a742fd2e" />
 <img width="250" alt="image4" src="https://github.com/user-attachments/assets/5e88e6b0-3038-4035-a8f1-17f938aec8a6" />
-<img width="250" alt="image5" src="https://github.com/user-attachments/assets/d8f650be-81cd-4dc9-a547-e4d0233536ce" />
+<img width="250" alt="image5" src="https://github.com/user-attachments/assets/9d0bdcb7-427c-4283-bf81-c86b9ea87052" />
 <img width="250" alt="image6" src="https://github.com/user-attachments/assets/64874ffa-498c-44ee-95f0-6ef828660ebf" />
 <img width="250" alt="image7" src="https://github.com/user-attachments/assets/c642e32a-0de4-4a15-b243-76abb26f8a35" />
 

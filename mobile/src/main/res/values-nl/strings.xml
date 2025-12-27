@@ -50,7 +50,7 @@
     <string name="label_include_lowercase">Inclusief kleine letters (ABC)</string>
     <string name="label_include_uppercase">Inclusief hoofdletters (ABC)</string>
     <string name="label_include_numbers">Nummers opnemen (123)</string>
-    <string name="label_include_symbols">Symbols opnemen (! $@)</string>
+    <string name="label_include_symbols">Symbols opnemen (!$@)</string>
     <string name="label_change_lock_password">Wijzig het wachtwoord vergrendelen</string>
     <string name="label_manage_categories">Categorieën beheren</string>
     <string name="label_use_screen_lock_to_unlock">Gebruik schermvergrendeling om te ontgrendelen</string>
@@ -110,7 +110,7 @@
     <string name="text_weak">Zwak</string>
     <string name="text_medium">Medium</string>
     <string name="text_strong">Sterk</string>
-    <string name="text_length">Lengte: %1 $ s</string>
+    <string name="text_length">Lengte: %1$s</string>
     <string name="text_export_passwords">Let op: deze database bevat al uw wachtwoorden en is gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
     <string name="text_export_passwords_csv_note">Let op: deze CSV bevat al uw wachtwoorden en is niet gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
     <string name="text_autofill_service_description">Wachtwoorden automatisch invullen vanuit Wachtwoordbeheer</string>
@@ -133,7 +133,7 @@
     <string name="toast_android_watch_disabled">Uitgeschakeld delen met Android Watch</string>
     <string name="toast_pin_set">Pin is succesvol ingesteld</string>
     <string name="toast_cannot_import_chrome_passwords">Kan Google Chrome CSV-wachtwoorden niet importeren</string>
-    <string name="toast_password_saved">%s is Saved</string>
+    <string name="toast_password_saved">%s is opgeslagen</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Wachtwoord schakelen</string>

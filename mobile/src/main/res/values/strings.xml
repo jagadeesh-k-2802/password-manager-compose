@@ -133,7 +133,7 @@
     <string name="toast_android_watch_disabled">Disabled sharing with Android Watch</string>
     <string name="toast_pin_set">PIN has been set successfully</string>
     <string name="toast_cannot_import_chrome_passwords">Couldn\'t import Google Chrome CSV passwords</string>
-    <string name="toast_password_saved">%s is opgeslagen</string>
+    <string name="toast_password_saved">%s is Saved</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Toggle password</string>

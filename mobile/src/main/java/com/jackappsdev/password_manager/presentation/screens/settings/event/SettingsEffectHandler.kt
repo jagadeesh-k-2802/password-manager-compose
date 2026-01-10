@@ -249,4 +249,16 @@ class SettingsEffectHandler(
             }
         }
     }
+
+    fun onOpenDonateWithPaypal() {
+        try {
+            Intent(Intent.ACTION_VIEW).apply {
+                data = "https://www.paypal.com/ncp/payment/9AC8X87FMR85C".toUri()
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(this)
+            }
+        } catch (_: Exception) {
+            // no-op: No browser is available which is very unlikely
+        }
+    }
 }

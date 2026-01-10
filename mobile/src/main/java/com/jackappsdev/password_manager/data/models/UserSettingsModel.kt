@@ -8,6 +8,7 @@ data class UserSettings(
     val password: String? = null,
     val pin: String? = null,
     val androidWatchPin: String? = null,
+    val useIncognitoKeyboard: Boolean = false,
     val useDynamicColors: Boolean = true,
     val useScreenLockToUnlock: Boolean = true,
     val autoLockDelayMs: Long = DEFAULT_APP_AUTO_LOCK_DELAY,

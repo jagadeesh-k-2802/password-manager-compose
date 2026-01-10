@@ -54,6 +54,7 @@
     <string name="label_change_lock_password">Change Lock Password</string>
     <string name="label_manage_categories">Manage Categories</string>
     <string name="label_use_screen_lock_to_unlock">Use Screen Lock to Unlock</string>
+    <string name="label_incognito_keyboard">Incognito Keyboard</string>
     <string name="label_dynamic_colors">Dynamic Colors</string>
     <string name="label_android_watch">Android Watch</string>
     <string name="label_enable_android_watch">Enable Android Watch Sharing</string>
@@ -64,6 +65,7 @@
     <string name="label_export_passwords_database">Export Passwords as Database</string>
     <string name="label_export_chrome_passwords">Export Google Chrome Passwords</string>
     <string name="label_export_passwords_csv">Export Passwords as CSV</string>
+    <string name="label_donate_with_paypal">Donate with PayPal</string>
     <string name="label_rate_app">Rate on Google Play Store</string>
     <string name="label_app_version">App Version: %s</string>
     <string name="label_current_password">Current Password</string>

@@ -17,6 +17,7 @@ sealed class SettingsUiEvent {
     data object HideExportCsvDialog : SettingsUiEvent()
     data object ToggleDynamicColors : SettingsUiEvent()
     data object ToggleUseScreenLock : SettingsUiEvent()
+    data object ToggleUseIncognitoKeyboard : SettingsUiEvent()
     data object CompleteAppUpdate : SettingsUiEvent()
     data object CheckScreenLockAvailable : SettingsUiEvent()
     data object CheckExportPasswordsAuth : SettingsUiEvent()
@@ -39,4 +40,5 @@ sealed class SettingsUiEvent {
     data object NavigateToPin : SettingsUiEvent()
     data object OpenAutofillSettings : SettingsUiEvent()
     data object OpenPlayStorePage : SettingsUiEvent()
+    data object OpenDonateWithPaypal : SettingsUiEvent()
 }

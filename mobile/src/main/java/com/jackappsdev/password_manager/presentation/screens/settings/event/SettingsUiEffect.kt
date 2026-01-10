@@ -23,4 +23,5 @@ sealed class SettingsUiEffect {
     data object NavigateToPin : SettingsUiEffect()
     data object OpenAutofillSettings : SettingsUiEffect()
     data object OpenPlayStorePage : SettingsUiEffect()
+    data object OpenDonateWithPaypal : SettingsUiEffect()
 }

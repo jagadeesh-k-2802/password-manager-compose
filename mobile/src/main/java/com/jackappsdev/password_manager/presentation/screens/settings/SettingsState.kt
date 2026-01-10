@@ -5,6 +5,7 @@ data class SettingsState(
     val isAppUpdateDownloading: Boolean = false,
     val isAppUpdateDownloaded: Boolean = false,
     val useScreenLockToUnlock: Boolean? = null,
+    val useIncognitoKeyboard: Boolean? = null,
     val useDynamicColors: Boolean? = null,
     val isScreenLockAvailable: Boolean? = null,
     val isAutofillAvailable: Boolean? = null,

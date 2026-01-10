@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var useDynamicColors by mutableStateOf<Boolean?>(null)
+    var useIncognitoKeyboard by mutableStateOf<Boolean?>(null)
     var autoLockDelayMs by mutableStateOf<Long?>(null)
 
     init {
@@ -25,10 +27,13 @@ class MainViewModel @Inject constructor(
     private fun onInit() {
         viewModelScope.launch {
             launch {
-                userPreferencesRepository.getUseDynamicColors().collect { useDynamicColors = it }
+                userPreferencesRepository.getUseDynamicColors().collectLatest { useDynamicColors = it }
             }
             launch {
-                userPreferencesRepository.getAutoLockDelayMs().collect { autoLockDelayMs = it }
+                userPreferencesRepository.getUseIncognitoKeyboard().collectLatest { useIncognitoKeyboard = it }
+            }
+            launch {
+                userPreferencesRepository.getAutoLockDelayMs().collectLatest { autoLockDelayMs = it }
             }
         }
     }

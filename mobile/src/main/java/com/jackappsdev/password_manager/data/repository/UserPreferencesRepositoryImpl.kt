@@ -49,6 +49,14 @@ class UserPreferencesRepositoryImpl(
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(useScreenLockToUnlock = newValue) }
     }
 
+    override suspend fun getUseIncognitoKeyboard(): Flow<Boolean> {
+        return dataStore.data.map { it.useIncognitoKeyboard }
+    }
+
+    override suspend fun setUseIncognitoKeyboard(newValue: Boolean) {
+        dataStore.updateData { prevUserSettings -> prevUserSettings.copy(useIncognitoKeyboard = newValue) }
+    }
+
     override suspend fun getUseDynamicColors(): Flow<Boolean> {
         return dataStore.data.map { it.useDynamicColors }
     }

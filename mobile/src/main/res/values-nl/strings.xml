@@ -54,6 +54,7 @@
     <string name="label_change_lock_password">Wijzig het wachtwoord vergrendelen</string>
     <string name="label_manage_categories">Categorieën beheren</string>
     <string name="label_use_screen_lock_to_unlock">Gebruik schermvergrendeling om te ontgrendelen</string>
+    <string name="label_incognito_keyboard">Incognito-toetsenbord</string>
     <string name="label_dynamic_colors">Dynamische kleuren</string>
     <string name="label_android_watch">Android -horloge</string>
     <string name="label_enable_android_watch">Schakel Android Watch Sharing in</string>
@@ -64,6 +65,7 @@
     <string name="label_import_chrome_passwords">Google Chrome-wachtwoorden importeren</string>
     <string name="label_export_chrome_passwords">"Google Chrome-wachtwoorden exporteren "</string>
     <string name="label_export_passwords_csv">Exporteer wachtwoorden naar CSV</string>
+    <string name="label_donate_with_paypal">Doneer met PayPal</string>
     <string name="label_rate_app">Beoordeel op Google Play Store</string>
     <string name="label_app_version">App -versie: %s</string>
     <string name="label_current_password">Huidig wachtwoord</string>

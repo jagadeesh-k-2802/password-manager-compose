@@ -1,5 +1,8 @@
 package com.jackappsdev.password_manager.core
 
+/**
+ * Configuration holder for generating a password.
+ */
 data class GeneratePasswordConfig(
     val length: Int,
     val includeLowercase: Boolean = true,

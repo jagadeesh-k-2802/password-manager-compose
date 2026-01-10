@@ -12,6 +12,8 @@ interface UserPreferencesRepository {
     suspend fun verifyPin(pin: String): Boolean
     suspend fun getScreenLockToUnlock(): Boolean
     suspend fun setUseScreenLockToUnlock(newValue: Boolean)
+    suspend fun getUseIncognitoKeyboard(): Flow<Boolean>
+    suspend fun setUseIncognitoKeyboard(newValue: Boolean)
     suspend fun getUseDynamicColors(): Flow<Boolean>
     suspend fun setUseDynamicColors(newValue: Boolean)
     suspend fun hasAndroidWatchPinSet(): Boolean

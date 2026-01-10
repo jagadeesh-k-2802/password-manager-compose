@@ -36,6 +36,8 @@ material = "1.13.0"
 wearRemoteInteractions = "1.1.0"
 playServicesWearable = "19.0.0"
 composeUiTooling = "1.5.6"
+nav3Core = "1.0.0"
+lifecycleViewmodelNav3 = "2.10.0-rc01"
 
 [libraries]
 androidx-compose-material3 = { module = "androidx.wear.compose:compose-material3", version.ref = "composeWearMaterial3" }
@@ -58,6 +60,9 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
 kotlin-csv-jvm = { module = "com.jsoizo:kotlin-csv-jvm", version.ref = "kotlinCsvJvm" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }

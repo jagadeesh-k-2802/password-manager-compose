@@ -55,6 +55,7 @@ class SettingsViewModel @Inject constructor(
         val currentDelay = userPreferencesRepository.getAutoLockDelayMs().first()
         state = state.copy(
             useScreenLockToUnlock = userPreferencesRepository.getScreenLockToUnlock(),
+            useIncognitoKeyboard = userPreferencesRepository.getUseIncognitoKeyboard().first(),
             useDynamicColors = userPreferencesRepository.getUseDynamicColors().first(),
             isScreenLockAvailable = isScreenLockAvailable(application.applicationContext),
             autoLockSelectedIndex = SettingsOptions.values.indexOfFirst { it.value == currentDelay }
@@ -199,6 +200,12 @@ class SettingsViewModel @Inject constructor(
         userPreferencesRepository.setUseScreenLockToUnlock(toggleValue)
     }
 
+    private suspend fun toggleIncognitoKeyboard() {
+        val toggleValue = state.useIncognitoKeyboard != true
+        state = state.copy(useIncognitoKeyboard = toggleValue)
+        userPreferencesRepository.setUseIncognitoKeyboard(toggleValue)
+    }
+
     private suspend fun showAutoLockDialog() {
         val autoLockDelayMs = userPreferencesRepository.getAutoLockDelayMs().first()
         val index = SettingsOptions.values.indexOfFirst { it.value == autoLockDelayMs }
@@ -335,6 +342,7 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.HideExportCsvDialog -> hideDialog(event)
                 is SettingsUiEvent.ToggleDynamicColors -> setDynamicColors()
                 is SettingsUiEvent.ToggleUseScreenLock -> toggleScreenLock()
+                is SettingsUiEvent.ToggleUseIncognitoKeyboard -> toggleIncognitoKeyboard()
                 is SettingsUiEvent.CompleteAppUpdate -> completeAppUpdate()
                 is SettingsUiEvent.CheckScreenLockAvailable -> checkIfScreenLockAvailable()
                 is SettingsUiEvent.CheckExportPasswordsAuth -> checkExportPasswordsAuth()
@@ -357,6 +365,7 @@ class SettingsViewModel @Inject constructor(
                 is SettingsUiEvent.NavigateToPin -> SettingsUiEffect.NavigateToPin
                 is SettingsUiEvent.OpenAutofillSettings -> SettingsUiEffect.OpenAutofillSettings
                 is SettingsUiEvent.OpenPlayStorePage -> SettingsUiEffect.OpenPlayStorePage
+                is SettingsUiEvent.OpenDonateWithPaypal -> SettingsUiEffect.OpenDonateWithPaypal
             }
 
             if (effect is SettingsUiEffect) _effectChannel.send(effect)

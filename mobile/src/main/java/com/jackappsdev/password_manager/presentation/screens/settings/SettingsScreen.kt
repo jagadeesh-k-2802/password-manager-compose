@@ -14,6 +14,8 @@ import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
@@ -131,6 +133,7 @@ fun SettingsScreen(
                     is SettingsUiEffect.NavigateToPin -> onNavigateToPin()
                     is SettingsUiEffect.OpenAutofillSettings -> onOpenAutofillSettings()
                     is SettingsUiEffect.OpenPlayStorePage -> onOpenPlayStorePage()
+                    is SettingsUiEffect.OpenDonateWithPaypal -> onOpenDonateWithPaypal()
                 }
             }
         }
@@ -232,7 +235,7 @@ fun SettingsScreen(
             )
 
             SettingItem(
-                leadingIcon = Icons.Outlined.Keyboard,
+                leadingIcon = Icons.Outlined.Key,
                 trailingIcon = Icons.Outlined.ChevronRight,
                 title = stringResource(R.string.label_autofill_settings),
                 onClick = { onEvent(SettingsUiEvent.OpenAutofillSettings) }
@@ -258,6 +261,13 @@ fun SettingsScreen(
                 leadingIcon = Icons.Outlined.LockOpen,
                 title = stringResource(R.string.label_use_screen_lock_to_unlock),
                 onClick = { onEvent(SettingsUiEvent.CheckScreenLockAvailable) }
+            )
+
+            ToggleSettingItem(
+                checked = state.useIncognitoKeyboard == true,
+                leadingIcon = Icons.Outlined.Keyboard,
+                title = stringResource(R.string.label_incognito_keyboard),
+                onClick = { onEvent(SettingsUiEvent.ToggleUseIncognitoKeyboard) }
             )
 
             SettingItem(
@@ -335,6 +345,12 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            SettingItem(
+                leadingIcon = Icons.Outlined.FavoriteBorder,
+                title = stringResource(R.string.label_donate_with_paypal),
+                onClick = { onEvent(SettingsUiEvent.OpenDonateWithPaypal) }
+            )
 
             SettingItem(
                 leadingIcon = Icons.Outlined.StarOutline,

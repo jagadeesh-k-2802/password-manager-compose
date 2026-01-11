@@ -3,10 +3,8 @@ package com.jackappsdev.password_manager.presentation.screens.category_item_deta
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.presentation.navigation.Routes
@@ -14,24 +12,30 @@ import com.jackappsdev.password_manager.presentation.screens.category_item_detai
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class CategoryItemDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = CategoryItemDetailViewModel.Factory::class)
+class CategoryItemDetailViewModel @AssistedInject constructor(
+    @Assisted val categoryItemDetail: Routes.CategoryItemDetail,
     private val categoryRepository: CategoryRepository
 ) : ViewModel(), EventDrivenViewModel<CategoryItemDetailUiEvent, CategoryItemDetailUiEffect> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(categoryItemDetail: Routes.CategoryItemDetail): CategoryItemDetailViewModel
+    }
 
     var state by mutableStateOf(CategoryItemDetailState())
         private set
 
-    private val categoryItemDetail = savedStateHandle.toRoute<Routes.CategoryItemDetail>()
     private val categoryItem = categoryRepository.getCategoryItem(categoryItemDetail.id).filterNotNull()
 
     private val _effectChannel = Channel<CategoryItemDetailUiEffect>()
@@ -60,7 +64,7 @@ class CategoryItemDetailViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // No Operation
             }
         }
     }

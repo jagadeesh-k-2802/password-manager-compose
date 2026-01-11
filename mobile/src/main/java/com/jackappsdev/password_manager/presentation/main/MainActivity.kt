@@ -2,13 +2,20 @@ package com.jackappsdev.password_manager.presentation.main
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.compose.rememberNavController
 import com.jackappsdev.password_manager.constants.DEFAULT_APP_AUTO_LOCK_DELAY
 import com.jackappsdev.password_manager.core.BaseActivity
+import com.jackappsdev.password_manager.presentation.navigation.LocalResultEventBus
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
+import com.jackappsdev.password_manager.presentation.navigation.ResultEventBus
 import com.jackappsdev.password_manager.presentation.navigation.Router
+import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.navigation.TOP_LEVEL_ROUTES
+import com.jackappsdev.password_manager.presentation.navigation.rememberNavigationState
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -26,22 +33,27 @@ class MainActivity : BaseActivity() {
         }
 
         setContent {
-            val navController = rememberNavController()
+            val navigationState = rememberNavigationState(startRoute = Routes.PasswordLock, topLevelRoutes = TOP_LEVEL_ROUTES)
+            val navigator = remember { Navigator(navigationState) }
+            val resultEventBus = remember { ResultEventBus() }
 
             PasswordManagerTheme(dynamicColor = mainViewModel.useDynamicColors == true) {
-                InterceptPlatformTextInput(
-                    interceptor = { request, nextHandler ->
-                        handlePlatformTextInput(
-                            request,
-                            nextHandler,
-                            mainViewModel.useIncognitoKeyboard == true
+                CompositionLocalProvider(LocalResultEventBus provides resultEventBus) {
+                    InterceptPlatformTextInput(
+                        interceptor = { request, nextHandler ->
+                            handlePlatformTextInput(
+                                request,
+                                nextHandler,
+                                mainViewModel.useIncognitoKeyboard == true
+                            )
+                        }
+                    ) {
+                        Router(
+                            navigator = navigator,
+                            navigationState = navigationState,
+                            passwordLockViewModel = passwordLockViewModel
                         )
                     }
-                ) {
-                    Router(
-                        navController = navController,
-                        passwordLockViewModel = passwordLockViewModel
-                    )
                 }
             }
         }

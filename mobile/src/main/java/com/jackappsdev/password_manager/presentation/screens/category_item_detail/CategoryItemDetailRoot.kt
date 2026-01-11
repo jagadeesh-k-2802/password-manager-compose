@@ -3,16 +3,21 @@ package com.jackappsdev.password_manager.presentation.screens.category_item_deta
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
+import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.category_item_detail.event.CategoryItemDetailEffectHandler
 
 @Composable
-fun CategoryItemDetailRoot(navController: NavController) {
-    val viewModel: CategoryItemDetailViewModel = hiltViewModel()
+fun CategoryItemDetailRoot(navigator: Navigator, key: Routes.CategoryItemDetail) {
+    val viewModel = hiltViewModel<CategoryItemDetailViewModel, CategoryItemDetailViewModel.Factory>(
+        creationCallback = {
+                factory -> factory.create(key)
+        }
+    )
 
     val effectHandler = remember {
         CategoryItemDetailEffectHandler(
-            navController = navController
+            navigator = navigator
         )
     }
 

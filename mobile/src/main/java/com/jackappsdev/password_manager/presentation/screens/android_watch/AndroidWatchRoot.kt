@@ -6,11 +6,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.screens.android_watch.event.AndroidWatchEffectHandler
 
 @Composable
-fun AndroidWatchRoot(navController: NavController) {
+fun AndroidWatchRoot(navigator: Navigator) {
     val viewModel: AndroidWatchViewModel = hiltViewModel()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -19,7 +19,7 @@ fun AndroidWatchRoot(navController: NavController) {
     val effectHandler = remember {
         AndroidWatchEffectHandler(
             context = context,
-            navController = navController,
+            navigator = navigator,
             scope = scope,
             keyboardController = keyboardController,
             onEvent = viewModel::onEvent

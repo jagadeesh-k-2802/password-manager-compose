@@ -1,13 +1,13 @@
 package com.jackappsdev.password_manager.presentation.screens.manage_categories.event
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.navigation.NavController
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class ManageCategoriesEffectHandler(
-    private val navController: NavController,
+    private val navigator: Navigator,
     private val scope: CoroutineScope
 ) {
     fun onScrollToTop(state: LazyListState) {
@@ -15,14 +15,14 @@ class ManageCategoriesEffectHandler(
     }
 
     fun onNavigateToCategoryItem(id: Int) {
-        navController.navigate(Routes.CategoryItemDetail(id))
+        navigator.navigate(Routes.CategoryItemDetail(id))
     }
 
     fun onNavigateToAddCategory() {
-        navController.navigate(Routes.AddCategoryItem)
+        navigator.navigate(Routes.AddCategoryItem)
     }
 
     fun onNavigateUp() {
-        navController.navigateUp()
+        navigator.navigateUp()
     }
 }

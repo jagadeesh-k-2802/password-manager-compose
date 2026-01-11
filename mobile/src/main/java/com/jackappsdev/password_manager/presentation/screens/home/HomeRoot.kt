@@ -10,12 +10,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeEffectHandler
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeRoot(navController: NavHostController) {
+fun HomeRoot(navigator: Navigator) {
     val viewModel: HomeViewModel = hiltViewModel()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -28,7 +28,7 @@ fun HomeRoot(navController: NavHostController) {
     val effectHandler = remember {
         HomeEffectHandler(
             context = context,
-            navController = navController,
+            navigator = navigator,
             scope = scope,
             filterBySheet = filterBySheet,
             sortBySheet = sortBySheet,

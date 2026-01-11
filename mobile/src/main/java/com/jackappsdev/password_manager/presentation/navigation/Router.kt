@@ -1,18 +1,20 @@
 package com.jackappsdev.password_manager.presentation.navigation
 
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.scene.SinglePaneSceneStrategy
+import androidx.navigation3.ui.NavDisplay
 import com.jackappsdev.password_manager.presentation.components.BottomNavigationBar
 import com.jackappsdev.password_manager.presentation.screens.add_category_item.AddCategoryItemRoot
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.AddPasswordItemRoot
@@ -32,49 +34,61 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Router(
-    navController: NavHostController,
+    navigator: Navigator,
+    navigationState: NavigationState,
     passwordLockViewModel: PasswordLockViewModel
 ) {
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = { BottomNavigationBar(navigator, navigationState) }
     ) { contentPadding ->
         LaunchedEffect(key1 = Unit) {
             passwordLockViewModel.hasBeenUnlockedFlow.collectLatest { hasBeenUnlocked ->
                 if (hasBeenUnlocked) {
-                    navController.replace(Graph.UnlockedGraph)
+                    navigator.replace(Routes.Home)
                 } else {
-                    navController.replace(Graph.LockGraph)
+                    navigator.replace(Routes.PasswordLock)
                 }
             }
         }
 
-        NavHost(
-            navController = navController,
-            startDestination = Graph.LockGraph,
-            enterTransition = { fadeIn(animationSpec = tween(400)) },
-            exitTransition = { fadeOut(animationSpec = tween(400)) },
+        val entryProvider = entryProvider {
+            featureLockGraph(passwordLockViewModel = passwordLockViewModel)
+            featureUnlockedGraph(navigator = navigator)
+        }
+
+        NavDisplay(
+            entries = navigationState.toEntries(entryProvider),
+            onBack = { navigator.navigateUp() },
+            sceneStrategy = remember { SinglePaneSceneStrategy() },
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            popTransitionSpec = { fadeIn() togetherWith fadeOut() },
+            predictivePopTransitionSpec = { fadeIn() togetherWith fadeOut() },
             modifier = Modifier
                 .padding(contentPadding)
-                .consumeWindowInsets(contentPadding),
-        ) {
-            navigation<Graph.LockGraph>(Routes.PasswordLock) {
-                composable<Routes.PasswordLock> { PasswordLockRoot(passwordLockViewModel) }
-            }
-
-            navigation<Graph.UnlockedGraph>(Routes.Home) {
-                composable<Routes.Home> { HomeRoot(navController) }
-                composable<Routes.AddPasswordItem> { AddPasswordItemRoot(navController) }
-                composable<Routes.PasswordItemDetail> { PasswordItemDetailRoot(navController) }
-                composable<Routes.EditPasswordItem> { EditPasswordItemRoot(navController) }
-                composable<Routes.PasswordGenerator> { PasswordGeneratorRoot() }
-                composable<Routes.Settings> { SettingsRoot(navController) }
-                composable<Routes.AndroidWatch> { AndroidWatchRoot(navController) }
-                composable<Routes.Pin> { PinRoot(navController) }
-                composable<Routes.ChangePassword> { ChangePasswordRoot(navController) }
-                composable<Routes.ManageCategories> { ManageCategoriesRoot(navController) }
-                composable<Routes.AddCategoryItem> { AddCategoryItemRoot(navController) }
-                composable<Routes.CategoryItemDetail> { CategoryItemDetailRoot(navController) }
-            }
-        }
+                .consumeWindowInsets(contentPadding)
+        )
     }
+}
+
+private fun EntryProviderScope<NavKey>.featureLockGraph(
+    passwordLockViewModel: PasswordLockViewModel
+) {
+    entry<Routes.PasswordLock> { PasswordLockRoot(passwordLockViewModel) }
+}
+
+private fun EntryProviderScope<NavKey>.featureUnlockedGraph(
+    navigator: Navigator
+) {
+    entry<Routes.Home> { HomeRoot(navigator) }
+    entry<Routes.AddPasswordItem>(metadata = verticalTransition) { AddPasswordItemRoot(navigator) }
+    entry<Routes.PasswordItemDetail> { key -> PasswordItemDetailRoot(navigator, key) }
+    entry<Routes.EditPasswordItem> { key -> EditPasswordItemRoot(navigator, key) }
+    entry<Routes.PasswordGenerator> { PasswordGeneratorRoot() }
+    entry<Routes.Settings> { SettingsRoot(navigator) }
+    entry<Routes.AndroidWatch> { AndroidWatchRoot(navigator) }
+    entry<Routes.Pin> { PinRoot(navigator) }
+    entry<Routes.ChangePassword> { ChangePasswordRoot(navigator) }
+    entry<Routes.ManageCategories> { ManageCategoriesRoot(navigator) }
+    entry<Routes.AddCategoryItem> { AddCategoryItemRoot(navigator) }
+    entry<Routes.CategoryItemDetail> { key -> CategoryItemDetailRoot(navigator, key) }
 }

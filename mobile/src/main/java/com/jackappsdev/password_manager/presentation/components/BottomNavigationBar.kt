@@ -12,39 +12,31 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.navigation.NavigationState
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.navigateWithState
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var bottomBarVisible by rememberSaveable { mutableStateOf(true) }
-    val currentRoute = navBackStackEntry?.destination
+fun BottomNavigationBar(navigator: Navigator, navigationState: NavigationState) {
+    val currentRoute = navigationState.currentRoute
 
-    bottomBarVisible = when {
-        (currentRoute?.hasRoute<Routes.Home>() == true) -> true
-        (currentRoute?.hasRoute<Routes.PasswordGenerator>() == true) -> true
-        (currentRoute?.hasRoute<Routes.Settings>() == true) -> true
+    val bottomBarVisible = when (currentRoute) {
+        Routes.Home,
+        Routes.PasswordGenerator,
+        Routes.Settings -> true
         else -> false
     }
 
     if (bottomBarVisible) {
         NavigationBar {
             NavigationBarItem(
-                selected = currentRoute?.hasRoute<Routes.Home>() == true,
-                onClick = { navController.navigateWithState(Routes.Home) },
+                selected = currentRoute == Routes.Home,
+                onClick = { navigator.navigate(Routes.Home) },
                 label = { Text(stringResource(R.string.nav_home)) },
                 icon = {
-                    if (currentRoute?.hasRoute<Routes.Home>() == true) {
+                    if (currentRoute == Routes.Home) {
                         Icon(
                             imageVector = Icons.Sharp.Home,
                             contentDescription = stringResource(R.string.accessibility_home_screen)
@@ -59,11 +51,11 @@ fun BottomNavigationBar(navController: NavController) {
             )
 
             NavigationBarItem(
-                selected = currentRoute?.hasRoute<Routes.PasswordGenerator>() == true,
-                onClick = { navController.navigateWithState(Routes.PasswordGenerator) },
+                selected = currentRoute == Routes.PasswordGenerator,
+                onClick = { navigator.navigate(Routes.PasswordGenerator) },
                 label = { Text(stringResource(R.string.nav_generator)) },
                 icon = {
-                    if (currentRoute?.hasRoute<Routes.PasswordGenerator>() == true) {
+                    if (currentRoute == Routes.PasswordGenerator) {
                         Icon(
                             imageVector = Icons.Sharp.VpnKey,
                             contentDescription = stringResource(R.string.accessibility_password_generator_screen)
@@ -79,11 +71,11 @@ fun BottomNavigationBar(navController: NavController) {
             )
 
             NavigationBarItem(
-                selected = currentRoute?.hasRoute<Routes.Settings>() == true,
-                onClick = { navController.navigateWithState(Routes.Settings) },
+                selected = currentRoute == Routes.Settings,
+                onClick = { navigator.navigate(Routes.Settings) },
                 label = { Text(stringResource(R.string.nav_settings)) },
                 icon = {
-                    if (currentRoute?.hasRoute<Routes.Settings>() == true) {
+                    if (currentRoute == Routes.Settings) {
                         Icon(
                             imageVector = Icons.Sharp.Settings,
                             contentDescription = stringResource(R.string.accessibility_settings_screen)

@@ -4,10 +4,8 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.GeneratePasswordConfig
 import com.jackappsdev.password_manager.core.generateRandomPassword
@@ -21,25 +19,31 @@ import com.jackappsdev.password_manager.presentation.screens.edit_password_item.
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class EditPasswordItemViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = EditPasswordItemViewModel.Factory::class)
+class EditPasswordItemViewModel @AssistedInject constructor(
     application: Application,
-    savedStateHandle: SavedStateHandle,
+    @Assisted val editPasswordItem: Routes.EditPasswordItem,
     private val passwordItemRepository: PasswordItemRepository,
     private val categoryRepository: CategoryRepository
 ) : ViewModel(), EventDrivenViewModel<EditPasswordItemUiEvent, EditPasswordItemUiEffect> {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(editPasswordItem: Routes.EditPasswordItem): EditPasswordItemViewModel
+    }
+
     var state by mutableStateOf(EditPasswordItemState())
         private set
 
-    private val editPasswordItem = savedStateHandle.toRoute<Routes.EditPasswordItem>()
     private val passwordItem = passwordItemRepository.getPasswordItem(editPasswordItem.id)
     private val noCategoryModel = CategoryModel(name = application.getString(R.string.text_no_category), color = "#000000")
 
@@ -110,7 +114,7 @@ class EditPasswordItemViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // No Operation
             }
         }
     }

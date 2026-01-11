@@ -1,7 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.password_item_detail.event
 
 import android.content.Context
-import androidx.navigation.NavController
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
@@ -9,17 +8,17 @@ import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.launchUrl
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import com.jackappsdev.password_manager.shared.core.showToast
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class PasswordItemDetailEffectHandler(
     private val context: Context,
-    private val navController: NavController,
+    private val navigator: Navigator,
     private val onEvent: (PasswordItemDetailUiEvent) -> Unit
 ) {
 
@@ -56,7 +55,7 @@ class PasswordItemDetailEffectHandler(
 
         if (passwordItem?.isAddedToWatch != true) {
             onEvent(PasswordItemDetailUiEvent.DeleteItem)
-            navController.navigateUp()
+            navigator.navigateUp()
             return
         }
 
@@ -68,7 +67,7 @@ class PasswordItemDetailEffectHandler(
 
         dataClient.putDataItem(putDataRequest).addOnCompleteListener {
             onEvent(PasswordItemDetailUiEvent.DeleteItem)
-            navController.navigateUp()
+            navigator.navigateUp()
         }
     }
 
@@ -81,10 +80,10 @@ class PasswordItemDetailEffectHandler(
     }
 
     fun onNavigateToEditPassword(id: Int) {
-        navController.navigate(Routes.EditPasswordItem(id))
+        navigator.navigate(Routes.EditPasswordItem(id))
     }
 
     fun onNavigateUp() {
-        navController.navigateUp()
+        navigator.navigateUp()
     }
 }

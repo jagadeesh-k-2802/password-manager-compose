@@ -51,25 +51,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
-import com.jackappsdev.password_manager.presentation.screens.add_category_item.constants.CREATED_CATEGORY
+import com.jackappsdev.password_manager.presentation.navigation.ResultEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.components.CategoryDropDown
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEvent
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
-import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPasswordItemScreen(
-    savedStateHandle: SavedStateHandle?,
     state: AddPasswordItemState,
     errorFlow: Flow<AddPasswordItemError>,
     effectFlow: Flow<AddPasswordItemUiEffect>,
@@ -83,12 +79,8 @@ fun AddPasswordItemScreen(
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val error by errorFlow.collectAsState(initial = null)
 
-    LaunchedEffect(key1 = savedStateHandle) {
-        if (savedStateHandle?.contains(CREATED_CATEGORY) == true) {
-            val json = savedStateHandle[CREATED_CATEGORY] ?: EMPTY_STRING
-            val model = Json.decodeFromString<CategoryModel>(json)
-            onEvent(AddPasswordItemUiEvent.SelectCategory(model))
-        }
+    ResultEffect<CategoryModel> { model ->
+        onEvent(AddPasswordItemUiEvent.SelectCategory(model))
     }
 
     LaunchedEffect(key1 = Unit) {

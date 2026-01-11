@@ -2,20 +2,19 @@ package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 
 import android.content.Context
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.navigation.NavController
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class EditPasswordItemEffectHandler(
     context: Context,
-    private val navController: NavController,
+    private val navigator: Navigator,
     private val keyboardController: SoftwareKeyboardController?
 ) {
 
@@ -25,7 +24,7 @@ class EditPasswordItemEffectHandler(
         keyboardController?.hide()
 
         if (newPasswordItemModel?.isAddedToWatch == false) {
-            navController.navigateUp()
+            navigator.navigateUp()
             return
         }
 
@@ -36,15 +35,15 @@ class EditPasswordItemEffectHandler(
         }
 
         dataClient.putDataItem(putDataRequest).addOnCompleteListener {
-            navController.navigateUp()
+            navigator.navigateUp()
         }
     }
 
     fun onNavigateToAddCategory() {
-        navController.navigate(Routes.AddCategoryItem)
+        navigator.navigate(Routes.AddCategoryItem)
     }
 
     fun onNavigateUp() {
-        navController.navigateUp()
+        navigator.navigateUp()
     }
 }

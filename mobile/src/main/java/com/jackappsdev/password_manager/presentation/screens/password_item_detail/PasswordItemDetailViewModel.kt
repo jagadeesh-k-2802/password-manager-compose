@@ -3,10 +3,8 @@ package com.jackappsdev.password_manager.presentation.screens.password_item_deta
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -14,24 +12,29 @@ import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class PasswordItemDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = PasswordItemDetailViewModel.Factory::class)
+class PasswordItemDetailViewModel @AssistedInject constructor(
+    @Assisted val passwordItemDetail: Routes.PasswordItemDetail,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val passwordItemRepository: PasswordItemRepository
 ) : ViewModel(), EventDrivenViewModel<PasswordItemDetailUiEvent, PasswordItemDetailUiEffect> {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(passwordItemDetail: Routes.PasswordItemDetail): PasswordItemDetailViewModel
+    }
+
     var state by mutableStateOf(PasswordItemDetailState())
         private set
-
-    private val passwordItemDetail = savedStateHandle.toRoute<Routes.PasswordItemDetail>()
 
     private val _effectChannel = Channel<PasswordItemDetailUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()
@@ -66,7 +69,7 @@ class PasswordItemDetailViewModel @Inject constructor(
             }
 
             else -> {
-                null
+                // No Operation
             }
         }
     }

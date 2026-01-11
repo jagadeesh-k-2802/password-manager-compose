@@ -1,52 +1,52 @@
 package com.jackappsdev.password_manager.presentation.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-
-sealed interface Graph {
-    @Serializable
-    data object LockGraph : Graph
-
-    @Serializable
-    data object UnlockedGraph : Graph
-}
 
 sealed interface Routes {
     @Serializable
-    data object PasswordLock : Routes
+    data object PasswordLock : NavKey
 
     @Serializable
-    data object Home : Routes
+    data object Home : NavKey
 
     @Serializable
-    data object AddPasswordItem : Routes
+    data object AddPasswordItem : NavKey
 
     @Serializable
-    data object PasswordGenerator : Routes
+    data object PasswordGenerator : NavKey
 
     @Serializable
-    data object Settings : Routes
+    data object Settings : NavKey
 
     @Serializable
-    data object ChangePassword : Routes
+    data object ChangePassword : NavKey
 
     @Serializable
-    data object AndroidWatch : Routes
+    data object AndroidWatch : NavKey
 
     @Serializable
-    data object Pin : Routes
+    data object Pin : NavKey
 
     @Serializable
-    data object ManageCategories : Routes
+    data object ManageCategories : NavKey
 
     @Serializable
-    data class PasswordItemDetail(val id: Int) : Routes
+    data class PasswordItemDetail(val id: Int) : NavKey
 
     @Serializable
-    data class EditPasswordItem(val id: Int) : Routes
+    data class EditPasswordItem(val id: Int) : NavKey
 
     @Serializable
-    data object AddCategoryItem : Routes
+    data object AddCategoryItem : NavKey
 
     @Serializable
-    data class CategoryItemDetail(val id: Int) : Routes
+    data class CategoryItemDetail(val id: Int) : NavKey
 }
+
+internal val TOP_LEVEL_ROUTES = setOf(
+    Routes.PasswordLock,
+    Routes.Home,
+    Routes.PasswordGenerator,
+    Routes.Settings
+)

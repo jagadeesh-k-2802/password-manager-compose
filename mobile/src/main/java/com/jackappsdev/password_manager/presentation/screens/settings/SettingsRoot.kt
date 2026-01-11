@@ -6,11 +6,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEffectHandler
 
 @Composable
-fun SettingsRoot(navController: NavController) {
+fun SettingsRoot(navigator: Navigator) {
     val viewModel: SettingsViewModel = hiltViewModel()
     val activity = LocalActivity.current as FragmentActivity
     val scope = rememberCoroutineScope()
@@ -18,7 +18,7 @@ fun SettingsRoot(navController: NavController) {
     val effectHandler = remember {
         SettingsEffectHandler(
             activity = activity,
-            navController = navController,
+            navigator = navigator,
             scope = scope,
             onEvent = viewModel::onEvent
         )

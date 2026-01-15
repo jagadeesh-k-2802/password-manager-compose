@@ -1,7 +1,7 @@
 [versions]
 appUpdate = "2.1.0"
 appUpdateKtx = "2.1.0"
-googleDevToolsKsp = "2.2.10-2.0.2"
+googleDevToolsKsp = "2.2.21-2.0.4"
 kotlinCsvJvm = "1.10.0"
 kotlinxCoroutinesCore = "1.10.2"
 kotlinxCoroutinesPlayServices = "1.10.2"

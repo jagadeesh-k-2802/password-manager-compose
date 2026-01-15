@@ -44,8 +44,11 @@ sealed interface Routes {
     data class CategoryItemDetail(val id: Int) : NavKey
 }
 
-internal val TOP_LEVEL_ROUTES = setOf(
-    Routes.PasswordLock,
+internal val LOCKED_TOP_ROUTES = setOf(
+    Routes.PasswordLock
+)
+
+internal val UNLOCKED_TOP_ROUTES = setOf(
     Routes.Home,
     Routes.PasswordGenerator,
     Routes.Settings

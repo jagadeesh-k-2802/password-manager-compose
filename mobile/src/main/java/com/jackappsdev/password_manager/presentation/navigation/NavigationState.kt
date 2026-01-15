@@ -27,7 +27,6 @@ fun rememberNavigationState(
     startRoute: NavKey,
     topLevelRoutes: Set<NavKey>
 ): NavigationState {
-
     val topLevelRoute = rememberSerializable(
         startRoute, topLevelRoutes,
         serializer = MutableStateSerializer(NavKeySerializer())

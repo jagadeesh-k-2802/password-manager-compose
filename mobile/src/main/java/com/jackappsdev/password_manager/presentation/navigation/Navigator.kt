@@ -26,10 +26,4 @@ class Navigator(val state: NavigationState) {
             currentStack.removeLastOrNull()
         }
     }
-
-    fun replace(route: NavKey) {
-        val currentStack = state.backStacks[state.topLevelRoute] ?: error("Stack not found ${state.topLevelRoute}")
-        currentStack.removeLastOrNull()
-        currentStack.add(route)
-    }
 }

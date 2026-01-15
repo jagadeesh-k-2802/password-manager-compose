@@ -3,14 +3,17 @@ package com.jackappsdev.password_manager.presentation.navigation
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.scene.SinglePaneSceneStrategy
@@ -30,50 +33,68 @@ import com.jackappsdev.password_manager.presentation.screens.password_lock.Passw
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.screens.pin.PinRoot
 import com.jackappsdev.password_manager.presentation.screens.settings.SettingsRoot
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Router(
-    navigator: Navigator,
-    navigationState: NavigationState,
     passwordLockViewModel: PasswordLockViewModel
 ) {
-    Scaffold(
-        bottomBar = { BottomNavigationBar(navigator, navigationState) }
-    ) { contentPadding ->
-        LaunchedEffect(key1 = Unit) {
-            passwordLockViewModel.hasBeenUnlockedFlow.collectLatest { hasBeenUnlocked ->
-                if (hasBeenUnlocked) {
-                    navigator.replace(Routes.Home)
-                } else {
-                    navigator.replace(Routes.PasswordLock)
-                }
+    val hasBeenUnlocked by passwordLockViewModel.hasBeenUnlockedFlow.collectAsState(false)
+    val lockedNavigationState = rememberNavigationState(startRoute = Routes.PasswordLock, topLevelRoutes = LOCKED_TOP_ROUTES)
+    val lockedNavigator = remember { Navigator(lockedNavigationState) }
+    val unlockedNavigationState = rememberNavigationState(startRoute = Routes.Home, topLevelRoutes = UNLOCKED_TOP_ROUTES)
+    val unlockNavigator = remember { Navigator(unlockedNavigationState) }
+
+    when (hasBeenUnlocked) {
+        false -> {
+            Scaffold { contentPadding ->
+                Navigation(
+                    navigationState = lockedNavigationState,
+                    entryProvider = entryProvider { featureLockGraph(viewModel = passwordLockViewModel) },
+                    navigator = lockedNavigator,
+                    contentPadding = contentPadding
+                )
             }
         }
 
-        val entryProvider = entryProvider {
-            featureLockGraph(passwordLockViewModel = passwordLockViewModel)
-            featureUnlockedGraph(navigator = navigator)
+        true -> {
+            Scaffold(
+                bottomBar = { BottomNavigationBar(unlockNavigator, unlockedNavigationState) }
+            ) { contentPadding ->
+                Navigation(
+                    navigationState = unlockedNavigationState,
+                    entryProvider = entryProvider { featureUnlockedGraph(navigator = unlockNavigator) },
+                    navigator = unlockNavigator,
+                    contentPadding = contentPadding
+                )
+            }
         }
-
-        NavDisplay(
-            entries = navigationState.toEntries(entryProvider),
-            onBack = { navigator.navigateUp() },
-            sceneStrategy = remember { SinglePaneSceneStrategy() },
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
-            popTransitionSpec = { fadeIn() togetherWith fadeOut() },
-            predictivePopTransitionSpec = { fadeIn() togetherWith fadeOut() },
-            modifier = Modifier
-                .padding(contentPadding)
-                .consumeWindowInsets(contentPadding)
-        )
     }
 }
 
-private fun EntryProviderScope<NavKey>.featureLockGraph(
-    passwordLockViewModel: PasswordLockViewModel
+@Composable
+private fun Navigation(
+    navigationState: NavigationState,
+    entryProvider: (NavKey) -> NavEntry<NavKey>,
+    navigator: Navigator,
+    contentPadding: PaddingValues
 ) {
-    entry<Routes.PasswordLock> { PasswordLockRoot(passwordLockViewModel) }
+    NavDisplay(
+        entries = navigationState.toEntries(entryProvider),
+        onBack = { navigator.navigateUp() },
+        sceneStrategy = remember { SinglePaneSceneStrategy() },
+        transitionSpec = { fadeIn() togetherWith fadeOut() },
+        popTransitionSpec = { fadeIn() togetherWith fadeOut() },
+        predictivePopTransitionSpec = { fadeIn() togetherWith fadeOut() },
+        modifier = Modifier
+            .padding(contentPadding)
+            .consumeWindowInsets(contentPadding)
+    )
+}
+
+private fun EntryProviderScope<NavKey>.featureLockGraph(
+    viewModel: PasswordLockViewModel
+) {
+    entry<Routes.PasswordLock> { PasswordLockRoot(viewModel) }
 }
 
 private fun EntryProviderScope<NavKey>.featureUnlockedGraph(

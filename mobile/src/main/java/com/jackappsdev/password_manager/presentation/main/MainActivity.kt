@@ -10,12 +10,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jackappsdev.password_manager.constants.DEFAULT_APP_AUTO_LOCK_DELAY
 import com.jackappsdev.password_manager.core.BaseActivity
 import com.jackappsdev.password_manager.presentation.navigation.LocalResultEventBus
-import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.navigation.ResultEventBus
 import com.jackappsdev.password_manager.presentation.navigation.Router
-import com.jackappsdev.password_manager.presentation.navigation.Routes
-import com.jackappsdev.password_manager.presentation.navigation.TOP_LEVEL_ROUTES
-import com.jackappsdev.password_manager.presentation.navigation.rememberNavigationState
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -33,8 +29,6 @@ class MainActivity : BaseActivity() {
         }
 
         setContent {
-            val navigationState = rememberNavigationState(startRoute = Routes.PasswordLock, topLevelRoutes = TOP_LEVEL_ROUTES)
-            val navigator = remember { Navigator(navigationState) }
             val resultEventBus = remember { ResultEventBus() }
 
             PasswordManagerTheme(dynamicColor = mainViewModel.useDynamicColors == true) {
@@ -49,8 +43,6 @@ class MainActivity : BaseActivity() {
                         }
                     ) {
                         Router(
-                            navigator = navigator,
-                            navigationState = navigationState,
                             passwordLockViewModel = passwordLockViewModel
                         )
                     }

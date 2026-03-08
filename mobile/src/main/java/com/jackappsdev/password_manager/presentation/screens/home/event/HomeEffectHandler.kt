@@ -23,7 +23,9 @@ class HomeEffectHandler(
     private val sortBySheet: SheetState,
     private val lazyColumnState: LazyListState,
     private val keyboardController: SoftwareKeyboardController?,
-    private val focusManager: FocusManager
+    private val focusManager: FocusManager,
+    private val onShowFilterBySheet: (Boolean) -> Unit,
+    private val onShowSortBySheet: (Boolean) -> Unit
 ) {
 
     fun onLockApplication() {
@@ -44,24 +46,32 @@ class HomeEffectHandler(
     }
 
     fun onToggleFilterSheetVisibility() {
-        scope.launch { filterBySheet.show() }
+        onShowFilterBySheet(true)
     }
 
     fun onToggleSortSheetVisibility() {
-        scope.launch { sortBySheet.show() }
+        onShowSortBySheet(true)
     }
 
     fun onFilterSelected(categoryItems: List<CategoryModel>?) {
         scope.launch {
-            if (categoryItems?.isNotEmpty() == true) { lazyColumnState.animateScrollToItem(0) }
+            if (categoryItems?.isNotEmpty() == true) {
+                lazyColumnState.animateScrollToItem(0)
+            }
             filterBySheet.hide()
+        }.invokeOnCompletion {
+            onShowFilterBySheet(false)
         }
     }
 
     fun onSortSelect(categoryItems: List<CategoryModel>?) {
         scope.launch {
-            if (categoryItems?.isNotEmpty() == true) { lazyColumnState.animateScrollToItem(0) }
+            if (categoryItems?.isNotEmpty() == true) {
+                lazyColumnState.animateScrollToItem(0)
+            }
             sortBySheet.hide()
+        }.invokeOnCompletion {
+            onShowSortBySheet(false)
         }
     }
 

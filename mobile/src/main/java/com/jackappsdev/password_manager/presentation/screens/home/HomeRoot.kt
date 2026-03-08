@@ -4,8 +4,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -21,6 +24,8 @@ fun HomeRoot(navigator: Navigator) {
     val scope = rememberCoroutineScope()
     val filterBySheet = rememberModalBottomSheetState()
     val sortBySheet = rememberModalBottomSheetState()
+    var showFilterBySheet by remember { mutableStateOf(false) }
+    var showSortBySheet by remember { mutableStateOf(false) }
     val lazyColumnState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -34,7 +39,9 @@ fun HomeRoot(navigator: Navigator) {
             sortBySheet = sortBySheet,
             lazyColumnState = lazyColumnState,
             keyboardController = keyboardController,
-            focusManager = focusManager
+            focusManager = focusManager,
+            onShowFilterBySheet = { showFilterBySheet = it },
+            onShowSortBySheet = { showSortBySheet = it }
         )
     }
 
@@ -42,6 +49,10 @@ fun HomeRoot(navigator: Navigator) {
         state = viewModel.state,
         filterBySheet = filterBySheet,
         sortBySheet = sortBySheet,
+        showFilterBySheet = showFilterBySheet,
+        showSortBySheet = showSortBySheet,
+        onDismissFilterSheet = { showFilterBySheet = false },
+        onDismissSortSheet = { showSortBySheet = false },
         lazyColumnState = lazyColumnState,
         effectFlow = viewModel.effectFlow,
         effectHandler = effectHandler,

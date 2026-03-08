@@ -19,6 +19,7 @@
 - 📃Custom Sort Order by Name or When Last Updated
 - ⌚ Wear OS Support with secure end-to-end encryption
 - 🔒 Auto App Lock
+- 🎹 Password Autofill Support
 - 🌐 Add Website Address for each password entry
 
 ## Running The Application 🧑🏻‍💻

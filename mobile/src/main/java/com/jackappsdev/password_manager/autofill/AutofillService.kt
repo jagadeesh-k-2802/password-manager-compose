@@ -11,6 +11,7 @@ import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveCallback
+import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import android.view.View
 import android.view.autofill.AutofillId
@@ -94,9 +95,15 @@ class AutofillService : AutofillService() {
 
         val idsToAuthenticate = arrayOf(usernameId, passwordId)
 
+        val saveInfo = SaveInfo.Builder(
+            SaveInfo.SAVE_DATA_TYPE_USERNAME or SaveInfo.SAVE_DATA_TYPE_PASSWORD,
+            idsToAuthenticate
+        ).build()
+
         @Suppress("DEPRECATION")
         val response = FillResponse.Builder()
             .setAuthentication(idsToAuthenticate, pendingIntent.intentSender, remoteView)
+            .setSaveInfo(saveInfo)
             .build()
 
         callback.onSuccess(response)
@@ -136,7 +143,7 @@ class AutofillService : AutofillService() {
 
                 passwordItemRepository.upsertPasswordItem(item)
 
-                withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main.immediate) {
                     showToast(applicationContext.getString(R.string.toast_password_saved, saveData.appName))
                 }
 
@@ -300,8 +307,26 @@ class AutofillService : AutofillService() {
 
             val dataset = datasetBuilder.build()
 
+            val requiredIds = if (usernameId != null && passwordId != null) {
+                arrayOf(usernameId, passwordId)
+            } else if (usernameId != null) {
+                arrayOf(usernameId)
+            } else if (passwordId != null) {
+                arrayOf(passwordId)
+            } else {
+                emptyArray()
+            }
+
+            val saveInfoBuilder = SaveInfo.Builder(
+                /* type = */ SaveInfo.SAVE_DATA_TYPE_USERNAME or SaveInfo.SAVE_DATA_TYPE_PASSWORD,
+                /* requiredIds = */ requiredIds
+            )
+
+            val saveInfo = saveInfoBuilder.build()
+
             return FillResponse.Builder()
                 .addDataset(dataset)
+                .setSaveInfo(saveInfo)
                 .build()
         }
     }

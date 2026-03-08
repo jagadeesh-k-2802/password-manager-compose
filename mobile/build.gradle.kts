@@ -15,7 +15,7 @@ plugins {
 
 // Version Management
 val versionMajor = 2
-val versionMinor = 7
+val versionMinor = 8
 val versionPatch = 0
 val minimumSdkVersion = 29
 

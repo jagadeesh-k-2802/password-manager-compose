@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -41,7 +40,6 @@ import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEf
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,30 +47,35 @@ fun HomeScreen(
     state: HomeState,
     filterBySheet: SheetState,
     sortBySheet: SheetState,
+    showFilterBySheet: Boolean,
+    showSortBySheet: Boolean,
+    onDismissFilterSheet: () -> Unit,
+    onDismissSortSheet: () -> Unit,
     lazyColumnState: LazyListState,
     effectFlow: Flow<HomeUiEffect>,
     effectHandler: HomeEffectHandler,
     onEvent: (HomeUiEvent) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val passwordItems = state.items?.collectAsState()?.value
     val categoryItems = state.categoryItems?.collectAsState()?.value
 
-    if (sortBySheet.isVisible) {
-        SortModalSheet(
-            sheetState = sortBySheet,
-            currentSortBy = state.sortBy,
-            onValueChoose = { onEvent(HomeUiEvent.SelectSortBy(it)) }
-        )
-    }
-
-    if (filterBySheet.isVisible) {
+    if (showFilterBySheet) {
         FilterByCategoryModalSheet(
             sheetState = filterBySheet,
             currentFilterBy = state.filterBy,
             categoryItems = categoryItems ?: listOf(),
-            onValueChoose = { onEvent(HomeUiEvent.SelectFilterBy(it)) }
+            onValueChoose = { onEvent(HomeUiEvent.SelectFilterBy(it)) },
+            onDismiss = onDismissFilterSheet
+        )
+    }
+
+    if (showSortBySheet) {
+        SortModalSheet(
+            sheetState = sortBySheet,
+            currentSortBy = state.sortBy,
+            onValueChoose = { onEvent(HomeUiEvent.SelectSortBy(it)) },
+            onDismiss = onDismissSortSheet
         )
     }
 
@@ -123,7 +126,7 @@ fun HomeScreen(
                         )
                     }
 
-                    IconButton(onClick = { scope.launch { sortBySheet.show() } }) {
+                    IconButton(onClick = { onEvent(HomeUiEvent.ToggleSortSheetVisibility) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.Sort,
                             contentDescription = stringResource(R.string.accessibility_sort)

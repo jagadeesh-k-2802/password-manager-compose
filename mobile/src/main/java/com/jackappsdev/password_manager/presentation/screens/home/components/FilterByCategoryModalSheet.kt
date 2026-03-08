@@ -35,12 +35,19 @@ fun FilterByCategoryModalSheet(
     sheetState: SheetState,
     currentFilterBy: FilterBy,
     categoryItems: List<CategoryModel>,
-    onValueChoose: (FilterBy) -> Unit
+    onValueChoose: (FilterBy) -> Unit,
+    onDismiss: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
-        onDismissRequest = { scope.launch { sheetState.hide() } },
+        onDismissRequest = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (sheetState.isVisible.not()) {
+                    onDismiss()
+                }
+            }
+        },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.surface
     ) {

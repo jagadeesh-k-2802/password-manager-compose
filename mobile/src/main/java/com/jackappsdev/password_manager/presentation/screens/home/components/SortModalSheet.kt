@@ -30,12 +30,19 @@ import kotlinx.coroutines.launch
 fun SortModalSheet(
     sheetState: SheetState,
     currentSortBy: SortBy,
-    onValueChoose: (SortBy) -> Unit
+    onValueChoose: (SortBy) -> Unit,
+    onDismiss: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
-        onDismissRequest = { scope.launch { sheetState.hide() } },
+        onDismissRequest = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (sheetState.isVisible.not()) {
+                    onDismiss()
+                }
+            }
+        },
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.surface
     ) {

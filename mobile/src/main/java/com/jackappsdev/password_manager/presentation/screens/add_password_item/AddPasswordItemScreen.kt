@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
+import com.jackappsdev.password_manager.presentation.components.ImagesTextField
 import com.jackappsdev.password_manager.presentation.navigation.ResultEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.components.CategoryDropDown
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemEffectHandler
@@ -268,6 +269,14 @@ fun AddPasswordItemScreen(
                 state = state,
                 categoryItems = categoryItems,
                 onEvent = onEvent
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ImagesTextField(
+                images = state.images,
+                onAddImage = { onEvent(AddPasswordItemUiEvent.AddImage(it)) },
+                onRemoveImage = { index -> onEvent(AddPasswordItemUiEvent.RemoveImage(index)) }
             )
 
             Spacer(modifier = Modifier.height(20.dp))

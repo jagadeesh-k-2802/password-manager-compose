@@ -89,6 +89,9 @@
     <string name="label_app_update_downloading">App -update is het downloaden …</string>
     <string name="label_app_update_downloaded">Installeer nieuwe app -update</string>
     <string name="label_enable_pin">Schakel PIN -gebruik in</string>
+    <string name="label_attachments">Bijlagen</string>
+    <string name="label_image_index">Afbeelding %1$d</string>
+    <string name="btn_add_image">Afbeelding toevoegen</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Let op: dit wachtwoord is essentieel voor het ontgrendelen van toegang tot de applicatie. Het verliezen betekent toegang verliezen tot al uw wachtwoorden.</string>
@@ -136,6 +139,10 @@
     <string name="toast_pin_set">Pin is succesvol ingesteld</string>
     <string name="toast_cannot_import_chrome_passwords">Kan Google Chrome CSV-wachtwoorden niet importeren</string>
     <string name="toast_password_saved">%s is opgeslagen</string>
+    <string name="toast_image_too_large">Afbeelding overschrijdt de limiet van %1$d MB</string>
+    <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
+    <string name="toast_image_invalid_type">Alleen afbeeldingen worden ondersteund</string>
+    <string name="toast_max_images_reached">U kunt maximaal %1$d afbeeldingen toevoegen</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Wachtwoord schakelen</string>
@@ -171,6 +178,10 @@
     <string name="accessibility_sort_by_desc_alpha">Sorteren op Z-A</string>
     <string name="accessibility_sort_by_new">Sorteer door nieuwste</string>
     <string name="accessibility_sort_by_old">Sorteer door de oudste</string>
+    <string name="accessibility_add_image">Afbeelding toevoegen</string>
+    <string name="accessibility_remove_image">Afbeelding verwijderen</string>
+    <string name="accessibility_image_preview">Voorvertoning van bijgevoegde afbeelding</string>
+    <string name="accessibility_close_preview">Voorvertoning sluiten</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">Je hebt niet geredde veranderingen</string>

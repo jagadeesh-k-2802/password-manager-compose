@@ -10,6 +10,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.jackappsdev.password_manager.data.local.dao.CategoryDao
 import com.jackappsdev.password_manager.data.local.DATABASE_NAME
 import com.jackappsdev.password_manager.data.local.MIGRATION_1_2
+import com.jackappsdev.password_manager.data.local.MIGRATION_2_3
 import com.jackappsdev.password_manager.data.local.dao.PasswordDao
 import com.jackappsdev.password_manager.data.local.PasswordDatabase
 import com.jackappsdev.password_manager.data.models.UserSettings
@@ -131,7 +132,7 @@ object AppModule {
         supportFactory: SupportOpenHelperFactory
     ): PasswordDatabase {
         return Room.databaseBuilder(appContext, PasswordDatabase::class.java, DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .openHelperFactory(supportFactory)
             .fallbackToDestructiveMigration(true)
             .build()

@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 
+@Suppress("ArrayInDataClass")
 sealed class EditPasswordItemUiEvent {
     data object EditPassword : EditPasswordItemUiEvent()
     data object ToggleUnsavedChangesDialogVisibility : EditPasswordItemUiEvent()
@@ -14,6 +15,8 @@ sealed class EditPasswordItemUiEvent {
     data class EnterPassword(val value: String) : EditPasswordItemUiEvent()
     data class EnterWebsite(val value: String) : EditPasswordItemUiEvent()
     data class EnterNotes(val value: String) : EditPasswordItemUiEvent()
+    data class AddImage(val image: ByteArray) : EditPasswordItemUiEvent()
+    data class RemoveImage(val index: Int) : EditPasswordItemUiEvent()
     data class SelectCategory(val category: CategoryModel?) : EditPasswordItemUiEvent()
     data object NavigateToAddCategory : EditPasswordItemUiEvent()
     data object NavigateUp : EditPasswordItemUiEvent()

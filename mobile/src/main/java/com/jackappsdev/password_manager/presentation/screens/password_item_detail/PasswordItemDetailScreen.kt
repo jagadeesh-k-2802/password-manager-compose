@@ -27,7 +27,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,6 +45,7 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
+import com.jackappsdev.password_manager.presentation.components.ImagesTextField
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDetailActions
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
@@ -286,7 +287,7 @@ fun PasswordItemDetailScreen(
                     colors = disabledButEnabledOutlinedTextFieldColors(),
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
                     modifier = Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth()
                 )
 
@@ -294,6 +295,16 @@ fun PasswordItemDetailScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (!passwordItem?.images.isNullOrEmpty()) {
+                ImagesTextField(
+                    images = passwordItem.images,
+                    onAddImage = {},
+                    onRemoveImage = {},
+                    readOnly = true
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             OutlinedTextField(
                 value = if (passwordItem?.createdAt != null) {

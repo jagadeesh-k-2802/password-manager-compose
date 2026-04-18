@@ -8,10 +8,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -22,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -53,7 +53,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.zIndex
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.ImagePickResult
 import com.jackappsdev.password_manager.core.readImageForAttachment
@@ -62,6 +61,7 @@ import com.jackappsdev.password_manager.shared.core.showToast
 private const val MAX_IMAGES_PER_PASSWORD = 4
 private const val MAX_IMAGE_SIZE_MB = 2
 private const val MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024
+private const val IMAGE_MIME_TYPE = "image/*"
 
 /**
  * A text-field styled container that shows the attached images as chips. Supports
@@ -69,7 +69,6 @@ private const val MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024
  * a dialog. When [readOnly] is true the add and delete affordances are hidden which
  * matches the password detail screen.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ImagesTextField(
     images: List<ByteArray>,
@@ -81,6 +80,7 @@ fun ImagesTextField(
 ) {
     val context = LocalContext.current
     var previewIndex by remember { mutableStateOf<Int?>(null) }
+    val scrollState = rememberScrollState()
 
     @SuppressLint("LocalContextGetResourceValueCall")
     val launcher = rememberLauncherForActivityResult(
@@ -125,12 +125,12 @@ fun ImagesTextField(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            FlowRow(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .zIndex(5f),
+                    .weight(1f)
+                    .horizontalScroll(scrollState),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 images.forEachIndexed { index, _ ->
                     InputChip(
@@ -160,7 +160,7 @@ fun ImagesTextField(
 
                 if (!readOnly && images.size < maxImages) {
                     AssistChip(
-                        onClick = { launcher.launch("image/*") },
+                        onClick = { launcher.launch(IMAGE_MIME_TYPE) },
                         label = { Text(stringResource(R.string.btn_add_image)) },
                         leadingIcon = {
                             Icon(

@@ -17,7 +17,7 @@ fun CategoryItemDetailRoot(navigator: Navigator, key: Routes.CategoryItemDetail)
 
     val effectHandler = remember {
         CategoryItemDetailEffectHandler(
-            navigator = navigator
+            navigateUp = { navigator.navigateUp() }
         )
     }
 

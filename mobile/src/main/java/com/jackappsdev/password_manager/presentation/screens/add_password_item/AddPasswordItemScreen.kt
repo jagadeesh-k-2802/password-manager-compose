@@ -52,6 +52,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.ImagesTextField
@@ -128,15 +129,15 @@ fun AddPasswordItemScreen(
             )
         }
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .padding(contentPadding)
-                .padding(horizontal = pagePadding)
-                .imePadding()
-                .verticalScroll(scrollState)
-                .fillMaxWidth()
-        ) {
-            OutlinedTextField(
+        AdaptiveContentContainer(modifier = Modifier.padding(contentPadding)) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = pagePadding)
+                    .imePadding()
+                    .verticalScroll(scrollState)
+                    .fillMaxWidth()
+            ) {
+                OutlinedTextField(
                 value = state.name,
                 onValueChange = { onEvent(AddPasswordItemUiEvent.EnterName(it)) },
                 isError = error is AddPasswordItemError.NameError,
@@ -288,6 +289,7 @@ fun AddPasswordItemScreen(
                 Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_create))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.btn_create))
+            }
             }
         }
     }

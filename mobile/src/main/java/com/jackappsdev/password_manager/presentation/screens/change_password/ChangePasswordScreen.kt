@@ -35,7 +35,8 @@ fun ChangePasswordScreen(
     effectFlow: Flow<ChangePasswordUiEffect>,
     effectHandler: ChangePasswordEffectHandler,
     errorFlow: Flow<ChangePasswordError>,
-    onEvent: (ChangePasswordUiEvent) -> Unit
+    onEvent: (ChangePasswordUiEvent) -> Unit,
+    showBackButton: Boolean = true
 ) {
     val error by errorFlow.collectAsState(initial = null)
     val scrollState = rememberScrollState()
@@ -55,11 +56,13 @@ fun ChangePasswordScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(ChangePasswordUiEvent.NavigateUp) }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.accessibility_go_back)
-                        )
+                    if (showBackButton) {
+                        IconButton(onClick = { onEvent(ChangePasswordUiEvent.NavigateUp) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_go_back)
+                            )
+                        }
                     }
                 },
                 title = { Text(stringResource(R.string.title_change_password)) }

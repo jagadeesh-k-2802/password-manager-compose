@@ -1,7 +1,6 @@
 package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -77,7 +76,6 @@ fun EditPasswordItemScreen(
     val categoryItems = state.categoryItems?.collectAsState(initial = listOf())?.value
     val error by errorFlow.collectAsState(initial = null)
     val scrollState = rememberScrollState()
-    val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
@@ -111,8 +109,12 @@ fun EditPasswordItemScreen(
         )
     }
 
-    BackHandler(enabled = state.isChanged) {
-        onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility)
+    BackHandler {
+        if (state.isChanged) {
+            onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility)
+        } else {
+            onEvent(EditPasswordItemUiEvent.NavigateUp)
+        }
     }
 
     Scaffold(
@@ -120,7 +122,13 @@ fun EditPasswordItemScreen(
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_edit_item)) },
                 navigationIcon = {
-                    IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
+                    IconButton(onClick = {
+                        if (state.isChanged) {
+                            onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility)
+                        } else {
+                            onEvent(EditPasswordItemUiEvent.NavigateUp)
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_go_back)

@@ -1,61 +1,85 @@
 package com.jackappsdev.password_manager.presentation.screens.home
 
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jackappsdev.password_manager.presentation.navigation.Navigator
-import com.jackappsdev.password_manager.presentation.screens.home.event.HomeEffectHandler
+import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.screens.home.panes.DetailPaneEditPassword
+import com.jackappsdev.password_manager.presentation.screens.home.panes.DetailPanePasswordDetail
+import com.jackappsdev.password_manager.presentation.screens.home.panes.HomeListPane
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun HomeRoot(navigator: Navigator) {
-    val viewModel: HomeViewModel = hiltViewModel()
-    val context = LocalContext.current
+    val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator<Int>()
     val scope = rememberCoroutineScope()
-    val filterBySheet = rememberModalBottomSheetState()
-    val sortBySheet = rememberModalBottomSheetState()
-    var showFilterBySheet by remember { mutableStateOf(false) }
-    var showSortBySheet by remember { mutableStateOf(false) }
-    val lazyColumnState = rememberLazyListState()
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
+    var isEditing by rememberSaveable { mutableStateOf(false) }
+    var editVersion by rememberSaveable { mutableIntStateOf(0) }
 
-    val effectHandler = remember {
-        HomeEffectHandler(
-            context = context,
-            navigator = navigator,
-            scope = scope,
-            filterBySheet = filterBySheet,
-            sortBySheet = sortBySheet,
-            lazyColumnState = lazyColumnState,
-            keyboardController = keyboardController,
-            focusManager = focusManager,
-            onShowFilterBySheet = { showFilterBySheet = it },
-            onShowSortBySheet = { showSortBySheet = it }
-        )
-    }
-
-    HomeScreen(
-        state = viewModel.state,
-        filterBySheet = filterBySheet,
-        sortBySheet = sortBySheet,
-        showFilterBySheet = showFilterBySheet,
-        showSortBySheet = showSortBySheet,
-        onDismissFilterSheet = { showFilterBySheet = false },
-        onDismissSortSheet = { showSortBySheet = false },
-        lazyColumnState = lazyColumnState,
-        effectFlow = viewModel.effectFlow,
-        effectHandler = effectHandler,
-        onEvent = viewModel::onEvent,
+    NavigableListDetailPaneScaffold(
+        navigator = scaffoldNavigator,
+        listPane = {
+            AnimatedPane {
+                HomeListPane(
+                    onNavigateToPasswordItem = { id ->
+                        isEditing = false
+                        scope.launch {
+                            scaffoldNavigator.navigateTo(
+                                ListDetailPaneScaffoldRole.Detail,
+                                id
+                            )
+                        }
+                    },
+                    onNavigateToAddPassword = {
+                        navigator.navigate(Routes.AddPasswordItem)
+                    }
+                )
+            }
+        },
+        detailPane = {
+            AnimatedPane {
+                val selectedId = scaffoldNavigator.currentDestination?.contentKey
+                val isListVisible = scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.List] == PaneAdaptedValue.Expanded
+                if (selectedId != null) {
+                    if (isEditing) {
+                        DetailPaneEditPassword(
+                            id = selectedId,
+                            editVersion = editVersion,
+                            navigator = navigator,
+                            onEditComplete = {
+                                isEditing = false
+                                editVersion++
+                            },
+                            onCancel = {
+                                isEditing = false
+                                editVersion++
+                            }
+                        )
+                    } else {
+                        DetailPanePasswordDetail(
+                            id = selectedId,
+                            showBackButton = !isListVisible,
+                            onEditRequested = { isEditing = true },
+                            onNavigateUp = {
+                                scope.launch { scaffoldNavigator.navigateBack() }
+                            }
+                        )
+                    }
+                }
+            }
+        }
     )
 }

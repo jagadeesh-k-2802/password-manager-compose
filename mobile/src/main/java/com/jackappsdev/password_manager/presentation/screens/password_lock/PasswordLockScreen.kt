@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
 import com.jackappsdev.password_manager.presentation.screens.password_lock.components.EnterPasswordView
 import com.jackappsdev.password_manager.presentation.screens.password_lock.components.SetupPasswordView
 import com.jackappsdev.password_manager.presentation.screens.password_lock.event.PasswordLockEffectHandler
@@ -72,16 +73,17 @@ fun PasswordLockScreen(
             }
         }
     ) { contentPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(contentPadding)
-                .padding(horizontal = pagePadding)
-        ) {
-            when (state.hasPasswordSet) {
-                false, null -> SetupPasswordView(state, error, onEvent)
-                true -> EnterPasswordView(state, focusRequester, error, onEvent)
+        AdaptiveContentContainer(modifier = Modifier.padding(contentPadding)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = pagePadding)
+            ) {
+                when (state.hasPasswordSet) {
+                    false, null -> SetupPasswordView(state, error, onEvent)
+                    true -> EnterPasswordView(state, focusRequester, error, onEvent)
+                }
             }
         }
     }

@@ -1,33 +1,87 @@
 package com.jackappsdev.password_manager.presentation.screens.settings
 
-import androidx.activity.compose.LocalActivity
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.fragment.app.FragmentActivity
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.jackappsdev.password_manager.presentation.navigation.Navigator
-import com.jackappsdev.password_manager.presentation.screens.settings.event.SettingsEffectHandler
+import com.jackappsdev.password_manager.presentation.screens.settings.panes.DetailPaneAndroidWatch
+import com.jackappsdev.password_manager.presentation.screens.settings.panes.DetailPaneChangePassword
+import com.jackappsdev.password_manager.presentation.screens.settings.panes.DetailPanePin
+import com.jackappsdev.password_manager.presentation.screens.settings.panes.SettingsListPane
+import kotlinx.coroutines.launch
 
+private const val DETAIL_CHANGE_PASSWORD = "change_password"
+private const val DETAIL_PIN = "pin"
+private const val DETAIL_ANDROID_WATCH = "android_watch"
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun SettingsRoot(navigator: Navigator) {
-    val viewModel: SettingsViewModel = hiltViewModel()
-    val activity = LocalActivity.current as FragmentActivity
+    val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator<String>()
     val scope = rememberCoroutineScope()
 
-    val effectHandler = remember {
-        SettingsEffectHandler(
-            activity = activity,
-            navigator = navigator,
-            scope = scope,
-            onEvent = viewModel::onEvent
-        )
-    }
+    NavigableListDetailPaneScaffold(
+        navigator = scaffoldNavigator,
+        listPane = {
+            AnimatedPane {
+                SettingsListPane(
+                    navigator = navigator,
+                    onNavigateToChangePassword = {
+                        scope.launch {
+                            scaffoldNavigator.navigateTo(
+                                ListDetailPaneScaffoldRole.Detail,
+                                DETAIL_CHANGE_PASSWORD
+                            )
+                        }
+                    },
+                    onNavigateToPin = {
+                        scope.launch {
+                            scaffoldNavigator.navigateTo(
+                                ListDetailPaneScaffoldRole.Detail,
+                                DETAIL_PIN
+                            )
+                        }
+                    },
+                    onNavigateToAndroidWatch = {
+                        scope.launch {
+                            scaffoldNavigator.navigateTo(
+                                ListDetailPaneScaffoldRole.Detail,
+                                DETAIL_ANDROID_WATCH
+                            )
+                        }
+                    }
+                )
+            }
+        },
+        detailPane = {
+            AnimatedPane {
+                val isListVisible = scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.List] == PaneAdaptedValue.Expanded
+                val onNavigateUp: () -> Unit = {
+                    scope.launch { scaffoldNavigator.navigateBack() }
+                }
 
-    SettingsScreen(
-        state = viewModel.state,
-        effectFlow = viewModel.effectFlow,
-        effectHandler = effectHandler,
-        onEvent = viewModel::onEvent,
+                when (scaffoldNavigator.currentDestination?.contentKey) {
+                    DETAIL_CHANGE_PASSWORD -> DetailPaneChangePassword(
+                        showBackButton = !isListVisible,
+                        onNavigateUp = onNavigateUp
+                    )
+
+                    DETAIL_PIN -> DetailPanePin(
+                        showBackButton = !isListVisible,
+                        onNavigateUp = onNavigateUp
+                    )
+
+                    DETAIL_ANDROID_WATCH -> DetailPaneAndroidWatch(
+                        showBackButton = !isListVisible,
+                        onNavigateUp = onNavigateUp
+                    )
+                }
+            }
+        }
     )
 }

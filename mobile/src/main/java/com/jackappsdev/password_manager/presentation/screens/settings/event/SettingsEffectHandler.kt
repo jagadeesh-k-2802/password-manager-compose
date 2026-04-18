@@ -21,8 +21,6 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.ktx.requestAppUpdateInfo
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.isAtLeastAndroid
-import com.jackappsdev.password_manager.presentation.navigation.Navigator
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.settings.model.ExportPasswordAuthType.BiometricAuth
 import com.jackappsdev.password_manager.shared.constants.PLAY_STORE_APP_URI
 import com.jackappsdev.password_manager.shared.core.showToast
@@ -32,9 +30,12 @@ import java.time.LocalDate
 
 class SettingsEffectHandler(
     private val activity: FragmentActivity,
-    private val navigator: Navigator,
     private val scope: CoroutineScope,
     private val onEvent: (SettingsUiEvent) -> Unit,
+    private val navigateToChangePassword: () -> Unit,
+    private val navigateToManageCategories: () -> Unit,
+    private val navigateToAndroidWatch: () -> Unit,
+    private val navigateToPin: () -> Unit,
 ) {
     private val context: Context = activity.applicationContext
     private var isExportPasswordsBiometricAuth = false
@@ -204,19 +205,19 @@ class SettingsEffectHandler(
     }
 
     fun onNavigateToChangePassword() {
-        navigator.navigate(Routes.ChangePassword)
+        navigateToChangePassword()
     }
 
     fun onNavigateToManageCategories() {
-        navigator.navigate(Routes.ManageCategories)
+        navigateToManageCategories()
     }
 
     fun onNavigateToAndroidWatch() {
-        navigator.navigate(Routes.AndroidWatch)
+        navigateToAndroidWatch()
     }
 
     fun onNavigateToPin() {
-        navigator.navigate(Routes.Pin)
+        navigateToPin()
     }
 
     fun onOpenAutofillSettings() {

@@ -62,7 +62,8 @@ fun PasswordItemDetailScreen(
     state: PasswordItemDetailState,
     effectFlow: Flow<PasswordItemDetailUiEffect>,
     effectHandler: PasswordItemDetailEffectHandler,
-    onEvent: (PasswordItemDetailUiEvent) -> Unit
+    onEvent: (PasswordItemDetailUiEvent) -> Unit,
+    showBackButton: Boolean = true
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -103,11 +104,13 @@ fun PasswordItemDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(PasswordItemDetailUiEvent.NavigateUp) }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.accessibility_go_back)
-                        )
+                    if (showBackButton) {
+                        IconButton(onClick = { onEvent(PasswordItemDetailUiEvent.NavigateUp) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_go_back)
+                            )
+                        }
                     }
                 },
                 actions = {

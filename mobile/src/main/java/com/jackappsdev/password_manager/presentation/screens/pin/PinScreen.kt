@@ -54,6 +54,7 @@ fun PinScreen(
     effectHandler: PinEffectHandler,
     errorFlow: Flow<PinError>,
     onEvent: (PinUiEvent) -> Unit,
+    showBackButton: Boolean = true
 ) {
     val scrollState = rememberScrollState()
     val error by errorFlow.collectAsState(initial = null)
@@ -82,11 +83,13 @@ fun PinScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(PinUiEvent.NavigateUp) }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.accessibility_go_back)
-                        )
+                    if (showBackButton) {
+                        IconButton(onClick = { onEvent(PinUiEvent.NavigateUp) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_go_back)
+                            )
+                        }
                     }
                 },
                 title = { Text(stringResource(R.string.title_pin)) }
@@ -99,7 +102,7 @@ fun PinScreen(
                 .verticalScroll(scrollState)
                 .fillMaxWidth()
         ) {
-            ToggleSettingItem(
+                ToggleSettingItem(
                 title = stringResource(R.string.label_enable_pin),
                 subtitle = stringResource(R.string.text_pin_note),
                 checked = state.usePin,

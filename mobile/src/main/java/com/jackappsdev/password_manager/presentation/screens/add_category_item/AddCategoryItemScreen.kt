@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
 import com.jackappsdev.password_manager.constants.colorList
 import com.jackappsdev.password_manager.presentation.components.CheckmarkCircle
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
@@ -106,13 +107,13 @@ fun AddCategoryItemScreen(
             )
         }
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .padding(contentPadding)
-                .padding(horizontal = pagePadding)
-                .imePadding()
-                .verticalScroll(scrollState)
-        ) {
+        AdaptiveContentContainer(modifier = Modifier.padding(contentPadding)) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = pagePadding)
+                    .imePadding()
+                    .verticalScroll(scrollState)
+            ) {
             OutlinedTextField(
                 value = state.name,
                 isError = error is AddCategoryItemError.NameError,
@@ -162,6 +163,7 @@ fun AddCategoryItemScreen(
                 Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_create))
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.btn_create))
+            }
             }
         }
     }

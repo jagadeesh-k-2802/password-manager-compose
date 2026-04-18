@@ -3,6 +3,7 @@ package com.jackappsdev.password_manager.presentation.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -49,6 +50,7 @@ fun PasswordInputDialog(
         text = {
             Column {
                 OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     value = password,
                     label = { Text(stringResource(label)) },
                     isError = isInvalidPassword,

@@ -6,7 +6,6 @@ import com.google.android.gms.wearable.CapabilityClient.FILTER_REACHABLE
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN
 import com.jackappsdev.password_manager.shared.constants.VERIFY_WEAR_APP
@@ -20,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class AndroidWatchEffectHandler(
     private val context: Context,
-    private val navigator: Navigator,
+    private val navigateUp: () -> Unit,
     private val scope: CoroutineScope,
     private val keyboardController: SoftwareKeyboardController?,
     private val onEvent: (AndroidWatchUiEvent) -> Unit,
@@ -46,7 +45,7 @@ class AndroidWatchEffectHandler(
 
         dataClient.putDataItem(putDataRequest).addOnSuccessListener {
             context.showToast(context.getString(R.string.toast_watch_pin_set))
-            navigator.navigateUp()
+            navigateUp()
         }
     }
 
@@ -65,12 +64,12 @@ class AndroidWatchEffectHandler(
 
         dataClient.putDataItem(putDataRequest).addOnCompleteListener {
             context.showToast(context.getString(R.string.toast_android_watch_disabled))
-            navigator.navigateUp()
+            navigateUp()
         }
     }
 
     fun onNavigateUp() {
-        navigator.navigateUp()
+        navigateUp()
     }
 
     /**

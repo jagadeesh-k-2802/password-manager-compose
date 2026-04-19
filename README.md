@@ -10,6 +10,8 @@
 ## Features 📲
 
 - 🎨 Material 3 & Material You
+- 📷 Add Images in Passwords 
+- 💻 Adaptive UI Support for Foldables & Tablets
 - 🔐 Offline & Completely Encrypted 
 - 🗝️ Password Generator to create Strong Passwords
 - 💾 Import/Export Your Data With Encryption

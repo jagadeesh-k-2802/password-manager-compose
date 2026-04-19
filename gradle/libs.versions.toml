@@ -19,6 +19,9 @@ lifecycleRuntimeKtx = "2.10.0"
 kotlinxSerializationJsonVersion = "1.9.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
+mockk = "1.13.17"
+kotlinxCoroutinesTest = "1.10.2"
+turbine = "1.2.0"
 composeNavigation = "1.6.0-alpha07"
 composeWearMaterial3 = "1.6.0-alpha07"
 horologistComposeLayout = "0.7.15"
@@ -56,6 +59,9 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltA
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }

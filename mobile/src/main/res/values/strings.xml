@@ -115,9 +115,9 @@
     <string name="text_medium">Medium</string>
     <string name="text_strong">Strong</string>
     <string name="text_length">Length: %1$s</string>
-    <string name="text_export_passwords">Please note: This database contains all your passwords and is encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
-    <string name="text_export_passwords_chrome_csv_note">Please note: This CSV file is compatible with Google Chrome and contains all your passwords in unencrypted form. Keep it secure, do not share it, and delete it when no longer needed.</string>
-    <string name="text_export_passwords_csv_note">Please note: This CSV contains all your passwords and is not encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
+    <string name="text_export_passwords">Please note: This database contains all your passwords and is encrypted. Images are included. Keep it secure, don\'t share it, and delete it when not needed.</string>
+    <string name="text_export_passwords_chrome_csv_note">Please note: This CSV file is compatible with Google Chrome and contains all your passwords in unencrypted form. Images are not included. Keep it secure, do not share it, and delete it when no longer needed.</string>
+    <string name="text_export_passwords_csv_note">Please note: This CSV contains all your passwords and is not encrypted. Images are not included. Keep it secure, don\'t share it, and delete it when not needed.</string>
     <string name="text_autofill_service_description">Autofill passwords from Password Manager</string>
     <string name="text_autofill_open_password_manager">Autofill with Password Manager</string>
     <string name="text_autofill_save_fail">Username or password is empty, nothing to save.</string>

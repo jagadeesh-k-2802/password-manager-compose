@@ -6,8 +6,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.presentation.components.CommonSearchBar
 import com.jackappsdev.password_manager.presentation.components.EmptyStateView
@@ -22,9 +24,14 @@ fun PasswordItemsView(
     lazyColumnState: LazyListState,
     onEvent: (HomeUiEvent) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     val filteredItems = state.filteredItems?.collectAsState()?.value
     val passwordItems = state.items?.collectAsState()?.value
     val items = filteredItems ?: passwordItems
+
+    LaunchedEffect(Unit) {
+        focusManager.clearFocus(force = true)
+    }
 
     LazyColumn(
         state = lazyColumnState,

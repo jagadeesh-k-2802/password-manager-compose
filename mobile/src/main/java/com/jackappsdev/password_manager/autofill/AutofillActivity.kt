@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillManager
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import com.jackappsdev.password_manager.autofill.model.FillResult
@@ -24,7 +22,7 @@ class AutofillActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val isUnlocked by passwordLockViewModel.hasBeenUnlockedFlow.collectAsState(false)
+            val isUnlocked = passwordLockViewModel.state.hasBeenUnlocked
 
             PasswordManagerTheme(dynamicColor = mainViewModel.useDynamicColors == true) {
                 InterceptPlatformTextInput(

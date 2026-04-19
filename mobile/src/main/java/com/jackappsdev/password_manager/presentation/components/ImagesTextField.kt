@@ -58,7 +58,7 @@ import com.jackappsdev.password_manager.core.ImagePickResult
 import com.jackappsdev.password_manager.core.readImageForAttachment
 import com.jackappsdev.password_manager.shared.core.showToast
 
-private const val MAX_IMAGES_PER_PASSWORD = 4
+private const val MAX_IMAGES_PER_PASSWORD = 5
 private const val MAX_IMAGE_SIZE_MB = 2
 private const val MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024
 private const val IMAGE_MIME_TYPE = "image/*"
@@ -223,7 +223,7 @@ private fun ImageFullScreenPreview(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color.Black)
         ) {
             if (bitmap != null) {
                 Image(

@@ -18,8 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -49,7 +47,7 @@ import com.jackappsdev.password_manager.presentation.screens.settings.SettingsRo
 fun Router(
     passwordLockViewModel: PasswordLockViewModel
 ) {
-    val hasBeenUnlocked by passwordLockViewModel.hasBeenUnlockedFlow.collectAsState(false)
+    val hasBeenUnlocked = passwordLockViewModel.state.hasBeenUnlocked
     val lockedNavigationState = rememberNavigationState(startRoute = Routes.PasswordLock, topLevelRoutes = LOCKED_TOP_ROUTES)
     val lockedNavigator = remember { Navigator(lockedNavigationState) }
     val unlockedNavigationState = rememberNavigationState(startRoute = Routes.Home, topLevelRoutes = UNLOCKED_TOP_ROUTES)

@@ -96,7 +96,6 @@
     <!--  Text  -->
     <string name="text_password_warning_note">Let op: dit wachtwoord is essentieel voor het ontgrendelen van toegang tot de applicatie. Het verliezen betekent toegang verliezen tot al uw wachtwoorden.</string>
     <string name="text_import_chrome_passwords_note">Let op: het importeren van wachtwoorden uit een Google Chrome CSV-bestand heeft geen invloed op uw bestaande wachtwoorden. Alleen wachtwoorden uit het bestand worden toegevoegd.</string>
-    <string name="text_export_passwords_chrome_csv_note">Let op: dit CSV-bestand is compatibel met Google Chrome en bevat al uw wachtwoorden in ongecodeerde vorm. Bewaar het veilig, deel het niet en verwijder het wanneer u het niet meer nodig hebt.</string>
     <string name="text_android_watch_note">Geselecteerde wachtwoorden worden gedeeld met uw Wear OS-horloge met end-to-end codering.</string>
     <string name="text_pin_note">Stel een pin in voor snellere toegang terwijl gegevens nog steeds veilig blijven &amp; gecodeerd.</string>
     <string name="text_no_passwords">Ziet er hier een beetje leeg uit!</string>
@@ -116,8 +115,9 @@
     <string name="text_medium">Medium</string>
     <string name="text_strong">Sterk</string>
     <string name="text_length">Lengte: %1$s</string>
-    <string name="text_export_passwords">Let op: deze database bevat al uw wachtwoorden en is gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
-    <string name="text_export_passwords_csv_note">Let op: deze CSV bevat al uw wachtwoorden en is niet gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
+    <string name="text_export_passwords">Let op: deze database bevat al uw wachtwoorden en is gecodeerd. Afbeeldingen zijn inbegrepen. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
+    <string name="text_export_passwords_chrome_csv_note">Let op: dit CSV-bestand is compatibel met Google Chrome en bevat al uw wachtwoorden in ongecodeerde vorm. Afbeeldingen zijn niet inbegrepen. Bewaar het veilig, deel het niet en verwijder het wanneer u het niet meer nodig hebt.</string>
+    <string name="text_export_passwords_csv_note">Let op: deze CSV bevat al uw wachtwoorden en is niet gecodeerd. Afbeeldingen zijn niet inbegrepen. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
     <string name="text_autofill_service_description">Wachtwoorden automatisch invullen vanuit Wachtwoordbeheer</string>
     <string name="text_autofill_open_password_manager">Automatisch invullen met wachtwoordbeheerder</string>
     <string name="text_autofill_save_fail">Gebruikersnaam en/of wachtwoord zijn leeg, er valt niets op te slaan.</string>

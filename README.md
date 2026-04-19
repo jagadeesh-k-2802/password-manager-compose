@@ -32,29 +32,28 @@
 
 ## Screenshots (Phone) 📷
 
-<img width="250" alt="image1" src="https://github.com/user-attachments/assets/f3f0fb27-ce9a-4eac-abd7-deb6b5ebf063" />
-<img width="250" alt="image2" src="https://github.com/user-attachments/assets/27741dd1-bee5-4648-91af-7a97cbd3d142" />
-<img width="250" alt="image3" src="https://github.com/user-attachments/assets/4ddcc520-60dd-4f3c-9abc-ab4c8b6e2955" />
-<img width="250" alt="image4" src="https://github.com/user-attachments/assets/5e88e6b0-3038-4035-a8f1-17f938aec8a6" />
-<img width="250" alt="image5" src="https://github.com/user-attachments/assets/b9dd50c3-2c47-4423-9d54-0376310f85ff" />
-<img width="250" alt="image6" src="https://github.com/user-attachments/assets/64874ffa-498c-44ee-95f0-6ef828660ebf" />
-<img width="250" alt="image7" src="https://github.com/user-attachments/assets/c642e32a-0de4-4a15-b243-76abb26f8a35" />
+| | | |
+|---|---|---|
+| <img width="250" src="https://github.com/user-attachments/assets/f3f0fb27-ce9a-4eac-abd7-deb6b5ebf063" /> | <img width="250" src="https://github.com/user-attachments/assets/27741dd1-bee5-4648-91af-7a97cbd3d142" /> | <img width="250" src="https://github.com/user-attachments/assets/4ddcc520-60dd-4f3c-9abc-ab4c8b6e2955" /> |
+| <img width="250" src="https://github.com/user-attachments/assets/5e88e6b0-3038-4035-a8f1-17f938aec8a6" /> | <img width="250" src="https://github.com/user-attachments/assets/b9dd50c3-2c47-4423-9d54-0376310f85ff" /> | <img width="250" src="https://github.com/user-attachments/assets/64874ffa-498c-44ee-95f0-6ef828660ebf" /> |
+| <img width="250" src="https://github.com/user-attachments/assets/c642e32a-0de4-4a15-b243-76abb26f8a35" /> |  |  |
 
 ## Screenshots (Tablet) 💻
 
-<img width="700" alt="image1" src="https://github.com/user-attachments/assets/d076a857-0286-4893-9167-0c7f5030b439" />
-<img width="700" alt="image2" src="https://github.com/user-attachments/assets/f167a142-31db-4825-9644-407be44487ca" />
-<img width="700" alt="image3" src="https://github.com/user-attachments/assets/5b7c1ca0-c8fc-40a8-9368-581c00b17632" />
-<img width="700" alt="image4" src="https://github.com/user-attachments/assets/fb9a6269-78cd-4669-be2d-664c4aa8924b" />
-<img width="700" alt="image5" src="https://github.com/user-attachments/assets/a3b0a33a-fa28-49a7-b50c-c42745557423" />
-<img width="700" alt="image6" src="https://github.com/user-attachments/assets/79ff24bc-c33c-4dfa-b621-94ede03fe722" />
+| |
+|---|
+| <img width="700" src="https://github.com/user-attachments/assets/d076a857-0286-4893-9167-0c7f5030b439" /> |
+| <img width="700" src="https://github.com/user-attachments/assets/f167a142-31db-4825-9644-407be44487ca" /> |
+| <img width="700" src="https://github.com/user-attachments/assets/5b7c1ca0-c8fc-40a8-9368-581c00b17632" /> |
+| <img width="700" src="https://github.com/user-attachments/assets/fb9a6269-78cd-4669-be2d-664c4aa8924b" /> |
+| <img width="700" src="https://github.com/user-attachments/assets/a3b0a33a-fa28-49a7-b50c-c42745557423" /> |
+| <img width="700" src="https://github.com/user-attachments/assets/79ff24bc-c33c-4dfa-b621-94ede03fe722" /> |
 
+## Screenshots (Wear OS) ⌚
 
-## Screenshots (Wear OS) 📷
-
-<img width="250" alt="Screenshot_20251220_191712" src="https://github.com/user-attachments/assets/4c6cf370-11de-4691-b2a3-85f7de1da11c" />
-<img width="250" alt="Screenshot_20251220_191719" src="https://github.com/user-attachments/assets/722c6aee-b6f8-4bbf-b748-d955400a1619" />
-<img width="250" alt="Screenshot_20251220_191733" src="https://github.com/user-attachments/assets/66166393-421f-43e0-b524-10f39ad62143" />
+| | | |
+|---|---|---|
+| <img width="250" src="https://github.com/user-attachments/assets/4c6cf370-11de-4691-b2a3-85f7de1da11c" /> | <img width="250" src="https://github.com/user-attachments/assets/722c6aee-b6f8-4bbf-b748-d955400a1619" /> | <img width="250" src="https://github.com/user-attachments/assets/66166393-421f-43e0-b524-10f39ad62143" /> |
 
 ## Links 🔗
 

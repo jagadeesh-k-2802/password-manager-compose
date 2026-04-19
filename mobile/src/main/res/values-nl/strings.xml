@@ -89,11 +89,13 @@
     <string name="label_app_update_downloading">App -update is het downloaden …</string>
     <string name="label_app_update_downloaded">Installeer nieuwe app -update</string>
     <string name="label_enable_pin">Schakel PIN -gebruik in</string>
+    <string name="label_attachments">Bijlagen</string>
+    <string name="label_image_index">Afbeelding %1$d</string>
+    <string name="btn_add_image">Afbeelding toevoegen</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Let op: dit wachtwoord is essentieel voor het ontgrendelen van toegang tot de applicatie. Het verliezen betekent toegang verliezen tot al uw wachtwoorden.</string>
     <string name="text_import_chrome_passwords_note">Let op: het importeren van wachtwoorden uit een Google Chrome CSV-bestand heeft geen invloed op uw bestaande wachtwoorden. Alleen wachtwoorden uit het bestand worden toegevoegd.</string>
-    <string name="text_export_passwords_chrome_csv_note">Let op: dit CSV-bestand is compatibel met Google Chrome en bevat al uw wachtwoorden in ongecodeerde vorm. Bewaar het veilig, deel het niet en verwijder het wanneer u het niet meer nodig hebt.</string>
     <string name="text_android_watch_note">Geselecteerde wachtwoorden worden gedeeld met uw Wear OS-horloge met end-to-end codering.</string>
     <string name="text_pin_note">Stel een pin in voor snellere toegang terwijl gegevens nog steeds veilig blijven &amp; gecodeerd.</string>
     <string name="text_no_passwords">Ziet er hier een beetje leeg uit!</string>
@@ -113,8 +115,9 @@
     <string name="text_medium">Medium</string>
     <string name="text_strong">Sterk</string>
     <string name="text_length">Lengte: %1$s</string>
-    <string name="text_export_passwords">Let op: deze database bevat al uw wachtwoorden en is gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
-    <string name="text_export_passwords_csv_note">Let op: deze CSV bevat al uw wachtwoorden en is niet gecodeerd. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
+    <string name="text_export_passwords">Let op: deze database bevat al uw wachtwoorden en is gecodeerd. Afbeeldingen zijn inbegrepen. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
+    <string name="text_export_passwords_chrome_csv_note">Let op: dit CSV-bestand is compatibel met Google Chrome en bevat al uw wachtwoorden in ongecodeerde vorm. Afbeeldingen zijn niet inbegrepen. Bewaar het veilig, deel het niet en verwijder het wanneer u het niet meer nodig hebt.</string>
+    <string name="text_export_passwords_csv_note">Let op: deze CSV bevat al uw wachtwoorden en is niet gecodeerd. Afbeeldingen zijn niet inbegrepen. Houd het veilig, deel het niet en verwijder het als het niet nodig is.</string>
     <string name="text_autofill_service_description">Wachtwoorden automatisch invullen vanuit Wachtwoordbeheer</string>
     <string name="text_autofill_open_password_manager">Automatisch invullen met wachtwoordbeheerder</string>
     <string name="text_autofill_save_fail">Gebruikersnaam en/of wachtwoord zijn leeg, er valt niets op te slaan.</string>
@@ -136,6 +139,10 @@
     <string name="toast_pin_set">Pin is succesvol ingesteld</string>
     <string name="toast_cannot_import_chrome_passwords">Kan Google Chrome CSV-wachtwoorden niet importeren</string>
     <string name="toast_password_saved">%s is opgeslagen</string>
+    <string name="toast_image_too_large">Afbeelding overschrijdt de limiet van %1$d MB</string>
+    <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
+    <string name="toast_image_invalid_type">Alleen afbeeldingen worden ondersteund</string>
+    <string name="toast_max_images_reached">U kunt maximaal %1$d afbeeldingen toevoegen</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Wachtwoord schakelen</string>
@@ -171,6 +178,10 @@
     <string name="accessibility_sort_by_desc_alpha">Sorteren op Z-A</string>
     <string name="accessibility_sort_by_new">Sorteer door nieuwste</string>
     <string name="accessibility_sort_by_old">Sorteer door de oudste</string>
+    <string name="accessibility_add_image">Afbeelding toevoegen</string>
+    <string name="accessibility_remove_image">Afbeelding verwijderen</string>
+    <string name="accessibility_image_preview">Voorvertoning van bijgevoegde afbeelding</string>
+    <string name="accessibility_close_preview">Voorvertoning sluiten</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">Je hebt niet geredde veranderingen</string>

@@ -20,8 +20,9 @@ fun PasswordItemDetailRoot(navigator: Navigator, key: Routes.PasswordItemDetail)
     val effectHandler = remember {
         PasswordItemDetailEffectHandler(
             context = context,
-            navigator = navigator,
-            onEvent = viewModel::onEvent
+            onEvent = viewModel::onEvent,
+            navigateToEditPassword = { id -> navigator.navigate(Routes.EditPasswordItem(id)) },
+            navigateUp = { navigator.navigateUp() }
         )
     }
 

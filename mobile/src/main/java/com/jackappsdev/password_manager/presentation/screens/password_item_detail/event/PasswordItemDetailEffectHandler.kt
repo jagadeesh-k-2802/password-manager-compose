@@ -8,8 +8,6 @@ import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.launchUrl
 import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
-import com.jackappsdev.password_manager.presentation.navigation.Navigator
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
@@ -18,8 +16,9 @@ import kotlinx.serialization.json.Json
 
 class PasswordItemDetailEffectHandler(
     private val context: Context,
-    private val navigator: Navigator,
-    private val onEvent: (PasswordItemDetailUiEvent) -> Unit
+    private val onEvent: (PasswordItemDetailUiEvent) -> Unit,
+    private val navigateToEditPassword: (Int) -> Unit,
+    private val navigateUp: () -> Unit
 ) {
 
     private val dataClient = Wearable.getDataClient(context)
@@ -55,7 +54,7 @@ class PasswordItemDetailEffectHandler(
 
         if (passwordItem?.isAddedToWatch != true) {
             onEvent(PasswordItemDetailUiEvent.DeleteItem)
-            navigator.navigateUp()
+            navigateUp()
             return
         }
 
@@ -67,7 +66,7 @@ class PasswordItemDetailEffectHandler(
 
         dataClient.putDataItem(putDataRequest).addOnCompleteListener {
             onEvent(PasswordItemDetailUiEvent.DeleteItem)
-            navigator.navigateUp()
+            navigateUp()
         }
     }
 
@@ -80,10 +79,10 @@ class PasswordItemDetailEffectHandler(
     }
 
     fun onNavigateToEditPassword(id: Int) {
-        navigator.navigate(Routes.EditPasswordItem(id))
+        navigateToEditPassword(id)
     }
 
     fun onNavigateUp() {
-        navigator.navigateUp()
+        navigateUp()
     }
 }

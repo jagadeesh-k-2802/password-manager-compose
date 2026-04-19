@@ -28,7 +28,7 @@ fun InfoText(
 ) {
     Row(
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Start,
         modifier = modifier.fillMaxWidth()
     ) {
         Icon(

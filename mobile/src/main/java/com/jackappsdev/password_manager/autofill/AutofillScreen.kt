@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.autofill.components.AutofillSelectionList
+import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
 import com.jackappsdev.password_manager.presentation.components.EmptyStateView
 import com.jackappsdev.password_manager.presentation.components.LoadingStateView
 import kotlinx.coroutines.flow.Flow
@@ -45,26 +46,28 @@ fun AutofillScreen(
             )
         }
     ) { contentPadding ->
-        val modifier = Modifier.padding(contentPadding).fillMaxSize()
+        AdaptiveContentContainer(modifier = Modifier.padding(contentPadding)) {
+            val modifier = Modifier.fillMaxSize()
 
-        when {
-            state.isLoading -> {
-                LoadingStateView(modifier)
-            }
+            when {
+                state.isLoading -> {
+                    LoadingStateView(modifier)
+                }
 
-            passwordItems.isNullOrEmpty() -> {
-                EmptyStateView(
-                    modifier = modifier,
-                    title = R.string.text_no_passwords
-                )
-            }
+                passwordItems.isNullOrEmpty() -> {
+                    EmptyStateView(
+                        modifier = modifier,
+                        title = R.string.text_no_passwords
+                    )
+                }
 
-            else -> {
-                AutofillSelectionList(
-                    modifier = modifier,
-                    state = state,
-                    onEvent = onEvent
-                )
+                else -> {
+                    AutofillSelectionList(
+                        modifier = modifier,
+                        state = state,
+                        onEvent = onEvent
+                    )
+                }
             }
         }
     }

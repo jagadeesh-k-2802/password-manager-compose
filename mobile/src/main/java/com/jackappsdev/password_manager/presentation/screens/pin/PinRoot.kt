@@ -15,7 +15,7 @@ fun PinRoot(navigator: Navigator) {
     val effectHandler = remember {
         PinEffectHandler(
             context = context,
-            navigator = navigator
+            navigateUp = { navigator.navigateUp() }
         )
     }
 

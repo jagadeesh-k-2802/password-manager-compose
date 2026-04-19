@@ -17,8 +17,6 @@ import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 @OptIn(ExperimentalComposeUiApi::class)
 class MainActivity : BaseActivity() {
 
-    private var autoLockStartTimeMillis: Long = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
@@ -58,16 +56,11 @@ class MainActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        saveCurrentTimeMillis()
-    }
-
-    private fun saveCurrentTimeMillis() {
-        autoLockStartTimeMillis = System.currentTimeMillis()
+        passwordLockViewModel.updateAutoLockStartTime()
     }
 
     private fun checkForAutoLock() {
-        val millisElapsedSinceOnPause = System.currentTimeMillis() - autoLockStartTimeMillis
         val delay = mainViewModel.autoLockDelayMs ?: DEFAULT_APP_AUTO_LOCK_DELAY
-        if (millisElapsedSinceOnPause >= delay) { passwordLockViewModel.setUnlocked(false) }
+        passwordLockViewModel.checkForAutoLock(delay)
     }
 }

@@ -89,6 +89,9 @@
     <string name="label_app_update_downloading">App Update is Downloading…</string>
     <string name="label_app_update_downloaded">Install New App Update</string>
     <string name="label_enable_pin">Enable Pin Usage</string>
+    <string name="label_attachments">Attachments</string>
+    <string name="label_image_index">Image %1$d</string>
+    <string name="btn_add_image">Add Image</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note: This password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
@@ -112,9 +115,9 @@
     <string name="text_medium">Medium</string>
     <string name="text_strong">Strong</string>
     <string name="text_length">Length: %1$s</string>
-    <string name="text_export_passwords">Please note: This database contains all your passwords and is encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
-    <string name="text_export_passwords_chrome_csv_note">Please note: This CSV file is compatible with Google Chrome and contains all your passwords in unencrypted form. Keep it secure, do not share it, and delete it when no longer needed.</string>
-    <string name="text_export_passwords_csv_note">Please note: This CSV contains all your passwords and is not encrypted. Keep it secure, don\'t share it, and delete it when not needed.</string>
+    <string name="text_export_passwords">Please note: This database contains all your passwords and is encrypted. Images are included. Keep it secure, don\'t share it, and delete it when not needed.</string>
+    <string name="text_export_passwords_chrome_csv_note">Please note: This CSV file is compatible with Google Chrome and contains all your passwords in unencrypted form. Images are not included. Keep it secure, do not share it, and delete it when no longer needed.</string>
+    <string name="text_export_passwords_csv_note">Please note: This CSV contains all your passwords and is not encrypted. Images are not included. Keep it secure, don\'t share it, and delete it when not needed.</string>
     <string name="text_autofill_service_description">Autofill passwords from Password Manager</string>
     <string name="text_autofill_open_password_manager">Autofill with Password Manager</string>
     <string name="text_autofill_save_fail">Username or password is empty, nothing to save.</string>
@@ -136,6 +139,10 @@
     <string name="toast_pin_set">PIN has been set successfully</string>
     <string name="toast_cannot_import_chrome_passwords">Couldn\'t import Google Chrome CSV passwords</string>
     <string name="toast_password_saved">%s is Saved</string>
+    <string name="toast_image_too_large">Image size exceeds %1$d MB limit</string>
+    <string name="toast_image_read_failed">Couldn\'t read the selected image</string>
+    <string name="toast_image_invalid_type">Only image files are supported</string>
+    <string name="toast_max_images_reached">You can attach up to %1$d images</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_toggle_password">Toggle password</string>
@@ -171,6 +178,10 @@
     <string name="accessibility_sort_by_desc_alpha">Sort by descending alphabet</string>
     <string name="accessibility_sort_by_new">Sort by newest</string>
     <string name="accessibility_sort_by_old">Sort by oldest</string>
+    <string name="accessibility_add_image">Add image</string>
+    <string name="accessibility_remove_image">Remove image</string>
+    <string name="accessibility_image_preview">Attached image preview</string>
+    <string name="accessibility_close_preview">Close preview</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">You Have Unsaved Changes</string>

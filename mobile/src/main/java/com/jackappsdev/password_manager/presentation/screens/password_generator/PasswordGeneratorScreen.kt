@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
 import com.jackappsdev.password_manager.presentation.screens.password_generator.components.GeneratedPasswordView
 import com.jackappsdev.password_manager.presentation.screens.password_generator.components.LengthSliderView
 import com.jackappsdev.password_manager.presentation.screens.password_generator.components.OptionsView
@@ -56,14 +57,14 @@ fun PasswordGeneratorScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .padding(contentPadding)
-                .verticalScroll(scrollState)
-        ) {
-            GeneratedPasswordView(state, onEvent)
-            LengthSliderView(state, onEvent)
-            OptionsView(state, onEvent)
+        AdaptiveContentContainer(modifier = Modifier.padding(contentPadding)) {
+            Column(
+                modifier = Modifier.verticalScroll(scrollState)
+            ) {
+                GeneratedPasswordView(state, onEvent)
+                LengthSliderView(state, onEvent)
+                OptionsView(state, onEvent)
+            }
         }
     }
 }

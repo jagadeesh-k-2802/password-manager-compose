@@ -58,6 +58,7 @@ fun CategoryItemDetailScreen(
     effectFlow: Flow<CategoryItemDetailUiEffect>,
     effectHandler: CategoryItemDetailEffectHandler,
     onEvent: (CategoryItemDetailUiEvent) -> Unit,
+    showBackButton: Boolean = true
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -100,11 +101,13 @@ fun CategoryItemDetailScreen(
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.title_edit_category)) },
                 navigationIcon = {
-                    IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.accessibility_go_back)
-                        )
+                    if (showBackButton) {
+                        IconButton(onClick = { backDispatcher.onBackPressedDispatcher.onBackPressed() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_go_back)
+                            )
+                        }
                     }
                 },
                 actions = {

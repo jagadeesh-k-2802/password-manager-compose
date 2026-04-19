@@ -86,6 +86,7 @@ class EditPasswordItemViewModel @AssistedInject constructor(
                 website = state.passwordItem?.website ?: EMPTY_STRING,
                 notes = state.passwordItem?.notes ?: EMPTY_STRING,
                 categoryId = state.category?.id,
+                images = state.passwordItem?.images ?: emptyList(),
                 isAddedToWatch = state.passwordItem?.isAddedToWatch == true,
                 createdAt = System.currentTimeMillis()
             )
@@ -139,6 +140,24 @@ class EditPasswordItemViewModel @AssistedInject constructor(
         }
     }
 
+    private fun onAddImage(image: ByteArray) {
+        val current = state.passwordItem?.images ?: emptyList()
+        state = state.copy(
+            passwordItem = state.passwordItem?.copy(images = current + image),
+            isChanged = true
+        )
+    }
+
+    private fun onRemoveImage(index: Int) {
+        val current = state.passwordItem?.images ?: return
+        if (index !in current.indices) return
+        val updated = current.toMutableList().apply { removeAt(index) }
+        state = state.copy(
+            passwordItem = state.passwordItem?.copy(images = updated),
+            isChanged = true
+        )
+    }
+
     private fun onSelectCategory(category: CategoryModel?) {
         state = if (category == null) {
             state.copy(category = noCategoryModel, isChanged = true)
@@ -161,6 +180,8 @@ class EditPasswordItemViewModel @AssistedInject constructor(
                 is EditPasswordItemUiEvent.EnterPassword -> onEnterText(event)
                 is EditPasswordItemUiEvent.EnterWebsite -> onEnterText(event)
                 is EditPasswordItemUiEvent.EnterNotes -> onEnterText(event)
+                is EditPasswordItemUiEvent.AddImage -> onAddImage(event.image)
+                is EditPasswordItemUiEvent.RemoveImage -> onRemoveImage(event.index)
                 is EditPasswordItemUiEvent.SelectCategory -> onSelectCategory(event.category)
                 is EditPasswordItemUiEvent.NavigateToAddCategory -> EditPasswordItemUiEffect.NavigateToAddCategory
                 is EditPasswordItemUiEvent.NavigateUp -> EditPasswordItemUiEffect.NavigateUp

@@ -22,8 +22,9 @@ fun EditPasswordItemRoot(navigator: Navigator, key: Routes.EditPasswordItem) {
     val effectHandler = remember {
         EditPasswordItemEffectHandler(
             context = context,
-            navigator = navigator,
-            keyboardController = keyboardController
+            keyboardController = keyboardController,
+            navigateToAddCategory = { navigator.navigate(Routes.AddCategoryItem) },
+            navigateUp = { navigator.navigateUp() }
         )
     }
 

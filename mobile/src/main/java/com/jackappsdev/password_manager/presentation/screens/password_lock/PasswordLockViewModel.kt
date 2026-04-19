@@ -32,11 +32,10 @@ class PasswordLockViewModel @Inject constructor(
     private val _effectChannel = Channel<PasswordLockUiEffect>()
     override val effectFlow = _effectChannel.receiveAsFlow()
 
-    private val hasBeenUnlockedChannel = Channel<Boolean>()
-    val hasBeenUnlockedFlow = hasBeenUnlockedChannel.receiveAsFlow()
-
     private val _errorChannel = Channel<PasswordLockError>()
     val errorFlow = _errorChannel.receiveAsFlow()
+
+    private var autoLockStartTimeMillis: Long = System.currentTimeMillis()
 
     companion object {
         const val TEXT_FIELD_FOCUS_DELAY = 500L
@@ -45,6 +44,17 @@ class PasswordLockViewModel @Inject constructor(
 
     init {
         onInit()
+    }
+
+    fun updateAutoLockStartTime() {
+        autoLockStartTimeMillis = System.currentTimeMillis()
+    }
+
+    fun checkForAutoLock(delay: Long) {
+        val millisElapsedSinceOnPause = System.currentTimeMillis() - autoLockStartTimeMillis
+        if (millisElapsedSinceOnPause >= delay) {
+            setUnlocked(false)
+        }
     }
 
     private fun onInit() {
@@ -96,9 +106,7 @@ class PasswordLockViewModel @Inject constructor(
     }
 
     fun setUnlocked(hasBeenUnlocked: Boolean) {
-        viewModelScope.launch {
-            hasBeenUnlockedChannel.send(hasBeenUnlocked)
-        }
+        state = state.copy(hasBeenUnlocked = hasBeenUnlocked)
     }
 
     private fun resetPasswordState() {

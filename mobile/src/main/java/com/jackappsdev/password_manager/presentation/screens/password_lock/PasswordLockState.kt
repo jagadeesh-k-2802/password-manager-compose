@@ -10,5 +10,6 @@ data class PasswordLockState(
     val hasPinSet: Boolean? = null,
     val hasPasswordSet: Boolean? = null,
     val useScreenLockToUnlock: Boolean? = null,
-    val isScreenLockAvailable: Boolean? = null
+    val isScreenLockAvailable: Boolean? = null,
+    val hasBeenUnlocked: Boolean = false
 )

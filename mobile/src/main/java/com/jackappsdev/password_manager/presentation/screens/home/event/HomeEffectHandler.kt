@@ -8,8 +8,6 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
-import com.jackappsdev.password_manager.presentation.navigation.Navigator
-import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,7 +15,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 class HomeEffectHandler(
     private val context: Context,
-    private val navigator: Navigator,
     private val scope: CoroutineScope,
     private val filterBySheet: SheetState,
     private val sortBySheet: SheetState,
@@ -25,7 +22,9 @@ class HomeEffectHandler(
     private val keyboardController: SoftwareKeyboardController?,
     private val focusManager: FocusManager,
     private val onShowFilterBySheet: (Boolean) -> Unit,
-    private val onShowSortBySheet: (Boolean) -> Unit
+    private val onShowSortBySheet: (Boolean) -> Unit,
+    private val navigateToPasswordItem: (Int) -> Unit,
+    private val navigateToAddPassword: () -> Unit
 ) {
 
     fun onLockApplication() {
@@ -76,10 +75,10 @@ class HomeEffectHandler(
     }
 
     fun onNavigateToPasswordItem(id: Int) {
-        navigator.navigate(Routes.PasswordItemDetail(id))
+        navigateToPasswordItem(id)
     }
 
     fun onNavigateToAddPassword() {
-        navigator.navigate(Routes.AddPasswordItem)
+        navigateToAddPassword()
     }
 }

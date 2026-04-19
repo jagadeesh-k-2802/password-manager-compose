@@ -53,7 +53,8 @@ fun AndroidWatchScreen(
     effectFlow: Flow<AndroidWatchUiEffect>,
     effectHandler: AndroidWatchEffectHandler,
     errorFlow: Flow<AndroidWatchError>,
-    onEvent: (AndroidWatchUiEvent) -> Unit
+    onEvent: (AndroidWatchUiEvent) -> Unit,
+    showBackButton: Boolean = true
 ) {
     val scrollState = rememberScrollState()
     val error by errorFlow.collectAsState(initial = null)
@@ -85,11 +86,13 @@ fun AndroidWatchScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(AndroidWatchUiEvent.NavigateUp) }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.accessibility_go_back)
-                        )
+                    if (showBackButton) {
+                        IconButton(onClick = { onEvent(AndroidWatchUiEvent.NavigateUp) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_go_back)
+                            )
+                        }
                     }
                 },
                 title = { Text(stringResource(R.string.title_android_watch)) }

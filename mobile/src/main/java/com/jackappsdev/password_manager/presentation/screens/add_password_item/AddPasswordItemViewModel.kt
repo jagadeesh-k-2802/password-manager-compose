@@ -74,8 +74,20 @@ class AddPasswordItemViewModel @Inject constructor(
             hasUserEnteredDetails = state.name.isNotBlank() ||
                 state.username.isNotBlank() ||
                 state.password.isNotBlank() ||
-                state.notes.isNotBlank()
+                state.notes.isNotBlank() ||
+                state.images.isNotEmpty()
         )
+    }
+
+    private fun onAddImage(image: ByteArray) {
+        state = state.copy(images = state.images + image)
+        checkIfUserEnteredDetails()
+    }
+
+    private fun onRemoveImage(index: Int) {
+        if (index !in state.images.indices) return
+        state = state.copy(images = state.images.toMutableList().apply { removeAt(index) })
+        checkIfUserEnteredDetails()
     }
 
     private fun onGenerateRandomPassword() {
@@ -128,6 +140,7 @@ class AddPasswordItemViewModel @Inject constructor(
                     website = website,
                     notes = notes,
                     categoryId = category?.id,
+                    images = images,
                     isAddedToWatch = false
                 )
             }
@@ -145,6 +158,8 @@ class AddPasswordItemViewModel @Inject constructor(
                 is AddPasswordItemUiEvent.EnterPassword -> onEnterText(event)
                 is AddPasswordItemUiEvent.EnterWebsite -> onEnterText(event)
                 is AddPasswordItemUiEvent.EnterNotes -> onEnterText(event)
+                is AddPasswordItemUiEvent.AddImage -> onAddImage(event.image)
+                is AddPasswordItemUiEvent.RemoveImage -> onRemoveImage(event.index)
                 is AddPasswordItemUiEvent.GenerateRandomPassword -> onGenerateRandomPassword()
                 is AddPasswordItemUiEvent.ToggleAlreadyAutoFocusVisibility -> toggleVisibility(event)
                 is AddPasswordItemUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)

@@ -15,7 +15,7 @@ fun ChangePasswordRoot(navigator: Navigator) {
     val effectHandler = remember {
         ChangePasswordEffectHandler(
             context = context,
-            navigator = navigator
+            navigateUp = { navigator.navigateUp() }
         )
     }
 

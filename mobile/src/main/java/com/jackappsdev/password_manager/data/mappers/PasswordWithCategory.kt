@@ -16,6 +16,7 @@ fun PasswordWithCategoryEntity.toModel(): PasswordWithCategoryModel {
         categoryColor = categoryEntity?.color,
         website = passwordItem.website,
         isAddedToWatch = passwordItem.isAddedToWatch,
+        images = passwordItem.images,
         createdAt = passwordItem.createdAt
     )
 }
@@ -31,6 +32,7 @@ fun PasswordWithCategoryModel.toPasswordItemEntity(): PasswordItemEntity {
             categoryId = categoryId,
             website = website,
             isAddedToWatch = isAddedToWatch,
+            images = images,
             createdAt = createdAt
         )
     } else {
@@ -41,7 +43,8 @@ fun PasswordWithCategoryModel.toPasswordItemEntity(): PasswordItemEntity {
             password = password,
             website = website,
             isAddedToWatch = isAddedToWatch,
-            categoryId = categoryId
+            categoryId = categoryId,
+            images = images
         )
     }
 }

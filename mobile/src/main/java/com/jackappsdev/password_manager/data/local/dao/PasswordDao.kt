@@ -40,7 +40,7 @@ interface PasswordDao {
     suspend fun getAllPasswordWithCategoryEntities(): List<PasswordWithCategoryEntity>
 
     @RawQuery
-    suspend fun executeQuery(query: SimpleSQLiteQuery): List<Any>
+    suspend fun executeQuery(query: SimpleSQLiteQuery): List<Long>
 
     suspend fun changePassword(oldPassword: String?, newPassword: String) {
         executeQuery(SimpleSQLiteQuery("PRAGMA key = '$oldPassword'"))

@@ -2,16 +2,17 @@ package com.jackappsdev.password_manager.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jackappsdev.password_manager.data.local.dao.CategoryDao
-import com.jackappsdev.password_manager.data.local.entity.CategoryEntity
 import com.jackappsdev.password_manager.data.local.dao.PasswordDao
+import com.jackappsdev.password_manager.data.local.entity.CategoryEntity
 import com.jackappsdev.password_manager.data.local.entity.PasswordItemEntity
 
 const val DATABASE_NAME = "passwords_db"
 const val MIN_DATABASE_VERSION = 1
-const val DATABASE_VERSION = 2
+const val DATABASE_VERSION = 3
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(db: SupportSQLiteDatabase) {
@@ -20,11 +21,18 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE password_items ADD COLUMN images BLOB NOT NULL DEFAULT x'00000000'")
+    }
+}
+
 @Database(
     entities = [PasswordItemEntity::class, CategoryEntity::class],
     version = DATABASE_VERSION,
     exportSchema = false
 )
+@TypeConverters(ByteArrayListConverter::class)
 abstract class PasswordDatabase : RoomDatabase() {
     abstract fun passwordDao(): PasswordDao
     abstract fun categoryDao(): CategoryDao

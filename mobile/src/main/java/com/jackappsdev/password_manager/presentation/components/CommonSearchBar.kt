@@ -1,5 +1,6 @@
 package com.jackappsdev.password_manager.presentation.components
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,6 +42,7 @@ fun CommonSearchBar(
     enableDebounce: Boolean = false,
     onDebouncedSearch: (() -> Unit)? = null,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     val debouncedSearch = remember(enableDebounce, onDebouncedSearch) {
         if (enableDebounce && onDebouncedSearch != null) {
             debounce<Unit>(400, Dispatchers.IO) {
@@ -79,7 +81,7 @@ fun CommonSearchBar(
                         }
                     }
                 },
-                interactionSource = null
+                interactionSource = interactionSource
             )
         },
         expanded = false,

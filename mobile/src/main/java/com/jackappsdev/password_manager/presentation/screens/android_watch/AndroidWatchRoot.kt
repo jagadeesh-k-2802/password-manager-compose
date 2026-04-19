@@ -19,7 +19,7 @@ fun AndroidWatchRoot(navigator: Navigator) {
     val effectHandler = remember {
         AndroidWatchEffectHandler(
             context = context,
-            navigator = navigator,
+            navigateUp = { navigator.navigateUp() },
             scope = scope,
             keyboardController = keyboardController,
             onEvent = viewModel::onEvent

@@ -4,9 +4,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    kotlin("kapt")
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.legacyKapt)
     alias(libs.plugins.googleDaggerHiltAndroid)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.googleDevToolsKsp)
@@ -92,6 +91,7 @@ dependencies {
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    ksp(libs.kotlin.metadata.jvm)
 
     // In App Update
     implementation(libs.app.update)
@@ -141,6 +141,10 @@ dependencies {
     // SQLCipher
     implementation(libs.sqlcipher.android)
     implementation(libs.androidx.sqlite)
+
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     // Wearable Services
     implementation(libs.play.services.wearable)

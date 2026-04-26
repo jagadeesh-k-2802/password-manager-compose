@@ -4,4 +4,5 @@ sealed class EditPasswordItemUiEffect {
     data object EditComplete : EditPasswordItemUiEffect()
     data object NavigateToAddCategory : EditPasswordItemUiEffect()
     data object NavigateUp : EditPasswordItemUiEffect()
+    data class OpenExportAttachmentIntent(val fileName: String, val mimeType: String) : EditPasswordItemUiEffect()
 }

@@ -5,9 +5,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
-    kotlin("kapt")
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.legacyKapt)
     alias(libs.plugins.googleDaggerHiltAndroid)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.googleDevToolsKsp)
@@ -43,7 +42,7 @@ android {
         targetSdk = 36
         versionCode = generateVersionCode()
         versionName = generateVersionName()
-        buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)
+        buildConfigField("String", "ENCRYPTION_SECRET_KEY", "\"$encryptionSecretKey\"")
 
         vectorDrawables {
             useSupportLibrary = true

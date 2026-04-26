@@ -16,13 +16,15 @@ fun PasswordItemDetailRoot(navigator: Navigator, key: Routes.PasswordItemDetail)
         }
     )
     val context = LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
 
     val effectHandler = remember {
         PasswordItemDetailEffectHandler(
             context = context,
             onEvent = viewModel::onEvent,
             navigateToEditPassword = { id -> navigator.navigate(Routes.EditPasswordItem(id)) },
-            navigateUp = { navigator.navigateUp() }
+            navigateUp = { navigator.navigateUp() },
+            scope = scope
         )
     }
 

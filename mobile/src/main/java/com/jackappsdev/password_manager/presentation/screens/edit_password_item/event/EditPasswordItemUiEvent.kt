@@ -20,4 +20,7 @@ sealed class EditPasswordItemUiEvent {
     data class SelectCategory(val category: CategoryModel?) : EditPasswordItemUiEvent()
     data object NavigateToAddCategory : EditPasswordItemUiEvent()
     data object NavigateUp : EditPasswordItemUiEvent()
+    data class RequestExportAttachment(val bytes: ByteArray, val fileName: String, val mimeType: String) : EditPasswordItemUiEvent()
+    data class ExportAttachment(val password: String) : EditPasswordItemUiEvent()
+    data object ToggleExportAttachmentDialogVisibility : EditPasswordItemUiEvent()
 }

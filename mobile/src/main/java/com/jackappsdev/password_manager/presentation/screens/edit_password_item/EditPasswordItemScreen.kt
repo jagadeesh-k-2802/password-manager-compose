@@ -1,6 +1,8 @@
 package com.jackappsdev.password_manager.presentation.screens.edit_password_item
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -53,7 +56,7 @@ import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
-import com.jackappsdev.password_manager.presentation.components.ImagesTextField
+import com.jackappsdev.password_manager.presentation.components.AttachmentsTextField
 import com.jackappsdev.password_manager.presentation.navigation.ResultEffect
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.components.CategoryDropDown
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.event.EditPasswordItemEffectHandler
@@ -78,6 +81,19 @@ fun EditPasswordItemScreen(
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                state.attachmentToExport?.let { attachment ->
+                    effectHandler.onExportAttachmentToUri(context, uri, attachment.bytes)
+                }
+            }
+        }
+    }
 
     LaunchedEffect(key1 = state.passwordItem) {
         if (!state.isAlreadyAutoFocused) {
@@ -91,6 +107,7 @@ fun EditPasswordItemScreen(
                     is EditPasswordItemUiEffect.EditComplete -> onEditComplete(state.passwordItem)
                     is EditPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
                     is EditPasswordItemUiEffect.NavigateUp -> onNavigateUp()
+                    is EditPasswordItemUiEffect.OpenExportAttachmentIntent -> onOpenExportAttachmentIntent(exportLauncher, effect)
                 }
             }
         }
@@ -106,6 +123,17 @@ fun EditPasswordItemScreen(
             description = R.string.dialog_text_unsaved,
             onConfirm = { onEvent(EditPasswordItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(EditPasswordItemUiEvent.ToggleUnsavedChangesDialogVisibility) }
+        )
+    }
+
+    if (state.isExportAttachmentDialogVisible) {
+        com.jackappsdev.password_manager.presentation.components.PasswordInputDialog(
+            title = R.string.dialog_title_export_attachment,
+            description = R.string.text_export_attachment,
+            label = R.string.label_password,
+            isInvalidPassword = state.isExportAttachmentPasswordInvalid,
+            onConfirm = { onEvent(EditPasswordItemUiEvent.ExportAttachment(it)) },
+            onDismiss = { onEvent(EditPasswordItemUiEvent.ToggleExportAttachmentDialogVisibility) }
         )
     }
 
@@ -283,10 +311,13 @@ fun EditPasswordItemScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ImagesTextField(
+            AttachmentsTextField(
                 images = state.passwordItem?.images ?: emptyList(),
-                onAddImage = { onEvent(EditPasswordItemUiEvent.AddImage(it)) },
-                onRemoveImage = { index -> onEvent(EditPasswordItemUiEvent.RemoveImage(index)) }
+                onAddAttachment = { onEvent(EditPasswordItemUiEvent.AddImage(it)) },
+                onRemoveAttachment = { index -> onEvent(EditPasswordItemUiEvent.RemoveImage(index)) },
+                onExport = { bytes, fileName, mimeType ->
+                    onEvent(EditPasswordItemUiEvent.RequestExportAttachment(bytes, fileName, mimeType))
+                }
             )
 
             Spacer(modifier = Modifier.height(20.dp))

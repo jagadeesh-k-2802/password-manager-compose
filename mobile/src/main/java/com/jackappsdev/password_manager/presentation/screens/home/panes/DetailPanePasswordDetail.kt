@@ -2,6 +2,7 @@ package com.jackappsdev.password_manager.presentation.screens.home.panes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jackappsdev.password_manager.presentation.navigation.Routes
@@ -22,13 +23,15 @@ internal fun DetailPanePasswordDetail(
         creationCallback = { factory -> factory.create(key) }
     )
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     val effectHandler = remember(id, onEditRequested, onNavigateUp) {
         PasswordItemDetailEffectHandler(
             context = context,
             onEvent = viewModel::onEvent,
             navigateToEditPassword = { onEditRequested() },
-            navigateUp = onNavigateUp
+            navigateUp = onNavigateUp,
+            scope = scope
         )
     }
 

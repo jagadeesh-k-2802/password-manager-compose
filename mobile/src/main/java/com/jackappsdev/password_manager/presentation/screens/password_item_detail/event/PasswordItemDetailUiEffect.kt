@@ -7,4 +7,5 @@ sealed class PasswordItemDetailUiEffect {
     data object DeleteItem : PasswordItemDetailUiEffect()
     data class NavigateToEditPassword(val id: Int) : PasswordItemDetailUiEffect()
     data object NavigateUp : PasswordItemDetailUiEffect()
+    data class OpenExportAttachmentIntent(val fileName: String, val mimeType: String) : PasswordItemDetailUiEffect()
 }

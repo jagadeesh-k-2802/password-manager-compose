@@ -1,0 +1,1 @@
+Wachtwoordbeheer is een veilige, open-source applicatie om al uw wachtwoorden, notities en bijlagen (afbeeldingen/PDF's) op één plek te beheren.

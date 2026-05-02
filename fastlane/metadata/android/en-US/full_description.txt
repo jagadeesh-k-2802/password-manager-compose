@@ -1,0 +1,1 @@
+Password Manager is a secure, open-source application to manage all your passwords, notes, and attachments (Images/PDFs) in one place.

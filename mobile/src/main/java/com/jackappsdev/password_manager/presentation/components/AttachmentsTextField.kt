@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.ALL_SUPPORTED_MIME_TYPES
 import com.jackappsdev.password_manager.core.AttachmentPickResult
-import com.jackappsdev.password_manager.core.IMAGES_JPEG_MIME
 import com.jackappsdev.password_manager.core.MAX_ATTACHMENTS_PER_PASSWORD
 import com.jackappsdev.password_manager.core.MAX_IMAGE_SIZE_BYTES
 import com.jackappsdev.password_manager.core.MAX_IMAGE_SIZE_MB
@@ -192,26 +191,12 @@ fun AttachmentsTextField(
     @Suppress("AssignedValueIsNeverRead")
     previewIndex?.let {
         if (previewIndex in images.indices) {
-            val bytes = images[it]
-            val isPdf = remember(bytes) { bytes.isPdf() }
-            when {
-                isPdf -> {
-                    PdfFullScreenPreview(
-                        pdfBytes = bytes,
-                        pdfIndex = it + 1,
-                        onDismiss = { previewIndex = null },
-                        onExport = { onExport(bytes, "pdf-${it + 1}.pdf", PDF_MIME) }
-                    )
-                }
-                else -> {
-                    ImageFullScreenPreview(
-                        image = bytes,
-                        imageIndex = it + 1,
-                        onDismiss = { previewIndex = null },
-                        onExport = { onExport(bytes, "image-${it + 1}.jpg", IMAGES_JPEG_MIME) }
-                    )
-                }
-            }
+            AttachmentsPagerPreview(
+                attachments = images,
+                initialIndex = it,
+                onDismiss = { previewIndex = null },
+                onExport = onExport
+            )
         } else {
             previewIndex = null
         }

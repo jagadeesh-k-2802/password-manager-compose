@@ -22,50 +22,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.PdfBitmapConverter
 
-/**
- * A composable function that displays a full-screen preview of a PDF document.
- * If the PDF cannot be rendered, it shows an error message instead.
- */
 @Composable
-internal fun PdfFullScreenPreview(
+internal fun PdfPreviewContent(
     pdfBytes: ByteArray,
     pdfIndex: Int,
     onDismiss: () -> Unit,
-    onExport: () -> Unit
+    onExport: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Black)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-        ) {
-            PreviewHeader(
-                title = stringResource(R.string.label_pdf_index, pdfIndex),
-                onDismiss = onDismiss,
-                onExport = onExport
-            )
-            PdfViewerScreen(
-                pdfBytes = pdfBytes,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+        PreviewHeader(
+            title = stringResource(R.string.label_pdf_index, pdfIndex),
+            onDismiss = onDismiss,
+            onExport = onExport
+        )
+        PdfViewerScreen(
+            pdfBytes = pdfBytes,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
-
 
 @Composable
 private fun PdfViewerScreen(

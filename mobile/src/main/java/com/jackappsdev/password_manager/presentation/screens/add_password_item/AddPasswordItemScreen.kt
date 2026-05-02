@@ -60,6 +60,7 @@ import com.jackappsdev.password_manager.presentation.components.AdaptiveContentC
 import com.jackappsdev.password_manager.presentation.components.AttachmentsTextField
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.PasswordInputDialog
+import com.jackappsdev.password_manager.presentation.components.PasswordStrengthIndicator
 import com.jackappsdev.password_manager.presentation.navigation.ResultEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.components.CategoryDropDown
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemEffectHandler
@@ -223,7 +224,7 @@ fun AddPasswordItemScreen(
                             IconButton(onClick = { onEvent(AddPasswordItemUiEvent.GenerateRandomPassword) }) {
                                 Icon(
                                     imageVector = Icons.Outlined.Refresh,
-                                    contentDescription = stringResource(R.string.accessibility_toggle_password)
+                                    contentDescription = stringResource(R.string.accessibility_generate_password)
                                 )
                             }
 
@@ -247,6 +248,8 @@ fun AddPasswordItemScreen(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     ),
                 )
+
+                PasswordStrengthIndicator(password = state.password)
 
                 Spacer(modifier = Modifier.height(16.dp))
 

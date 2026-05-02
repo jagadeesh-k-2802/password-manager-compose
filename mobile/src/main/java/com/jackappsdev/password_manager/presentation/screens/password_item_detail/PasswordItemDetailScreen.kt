@@ -48,6 +48,7 @@ import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.AttachmentsTextField
+import com.jackappsdev.password_manager.presentation.components.PasswordStrengthIndicator
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDetailActions
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
@@ -240,6 +241,8 @@ fun PasswordItemDetailScreen(
                     }
                 },
             )
+
+            PasswordStrengthIndicator(password = passwordItem?.password ?: EMPTY_STRING)
 
             Spacer(modifier = Modifier.height(16.dp))
 

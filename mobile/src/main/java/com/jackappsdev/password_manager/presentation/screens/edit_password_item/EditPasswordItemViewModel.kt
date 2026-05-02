@@ -123,7 +123,7 @@ class EditPasswordItemViewModel @AssistedInject constructor(
     }
 
     private fun onGenerateRandomPassword() {
-        val password = generateRandomPassword(GeneratePasswordConfig(length = 12))
+        val password = generateRandomPassword(GeneratePasswordConfig(length = 13))
         state = state.copy(passwordItem = state.passwordItem?.copy(password = password), isChanged = true)
     }
 

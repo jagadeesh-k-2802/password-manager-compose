@@ -147,6 +147,7 @@
     <string name="toast_password_saved">%s is opgeslagen</string>
 
     <!--  Accessibility  -->
+    <string name="accessibility_generate_password">Wachtwoord genereren</string>
     <string name="accessibility_toggle_password">Wachtwoord schakelen</string>
     <string name="accessibility_toggle_new_password">Schakel nieuw wachtwoord in</string>
     <string name="accessibility_toggle_confirm_password">Toggle bevestigen wachtwoord</string>

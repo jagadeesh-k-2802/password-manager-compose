@@ -94,7 +94,7 @@ class AddPasswordItemViewModel @Inject constructor(
     }
 
     private fun onGenerateRandomPassword() {
-        val password = generateRandomPassword(GeneratePasswordConfig(length = 12))
+        val password = generateRandomPassword(GeneratePasswordConfig(length = 13))
         state = state.copy(password = password)
     }
 

@@ -147,6 +147,7 @@
     <string name="toast_attachment_read_failed">Couldn\'t read the selected attachment</string>
 
     <!--  Accessibility  -->
+    <string name="accessibility_generate_password">Generate password</string>
     <string name="accessibility_toggle_password">Toggle password</string>
     <string name="accessibility_toggle_new_password">Toggle new password</string>
     <string name="accessibility_toggle_confirm_password">Toggle confirm password</string>

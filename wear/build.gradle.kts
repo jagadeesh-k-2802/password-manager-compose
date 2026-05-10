@@ -42,7 +42,7 @@ android {
         targetSdk = 36
         versionCode = generateVersionCode()
         versionName = generateVersionName()
-        buildConfigField("String", "ENCRYPTION_SECRET_KEY", "\"$encryptionSecretKey\"")
+        buildConfigField("String", "ENCRYPTION_SECRET_KEY", encryptionSecretKey)
 
         vectorDrawables {
             useSupportLibrary = true

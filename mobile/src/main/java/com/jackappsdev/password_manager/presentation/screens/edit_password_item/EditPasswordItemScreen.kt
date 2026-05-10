@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -55,8 +54,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.CategoryModel
-import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.AttachmentsTextField
+import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
 import com.jackappsdev.password_manager.presentation.components.PasswordStrengthIndicator
 import com.jackappsdev.password_manager.presentation.navigation.ResultEffect
 import com.jackappsdev.password_manager.presentation.screens.edit_password_item.components.CategoryDropDown
@@ -171,7 +170,6 @@ fun EditPasswordItemScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(horizontal = pagePadding)
-                .imePadding()
                 .verticalScroll(scrollState)
                 .fillMaxWidth()
         ) {

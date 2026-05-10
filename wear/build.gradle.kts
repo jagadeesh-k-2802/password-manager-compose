@@ -20,7 +20,7 @@ val encryptionSecretKey: String = secrets.getProperty("ENCRYPTION_SECRET_KEY")
 
 // Version Management
 val versionMajor = 1
-val versionMinor = 5
+val versionMinor = 6
 val versionPatch = 0
 val minimumSdkVersion = 28
 

@@ -98,6 +98,7 @@
     <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
     <string name="toast_attachment_invalid_type">Alleen afbeeldingen en PDF-bestanden worden ondersteund</string>
     <string name="toast_attachment_read_failed">Kon de geselecteerde bijlage niet lezen</string>
+    <string name="toast_incognito_keyboard_warning">De incognitomodus werkt mogelijk niet op alle toetsenborden, afhankelijk van het type toetsenbord dat u gebruikt.</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Let op: dit wachtwoord is essentieel voor het ontgrendelen van toegang tot de applicatie. Het verliezen betekent toegang verliezen tot al uw wachtwoorden.</string>

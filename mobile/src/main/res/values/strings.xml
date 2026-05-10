@@ -145,6 +145,7 @@
     <string name="toast_image_read_failed">Couldn\'t read the selected image</string>
     <string name="toast_attachment_invalid_type">Only image and PDF files are supported</string>
     <string name="toast_attachment_read_failed">Couldn\'t read the selected attachment</string>
+    <string name="toast_incognito_keyboard_warning">Incognito mode may not work on some keyboards, depending on the one you use.</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_generate_password">Generate password</string>

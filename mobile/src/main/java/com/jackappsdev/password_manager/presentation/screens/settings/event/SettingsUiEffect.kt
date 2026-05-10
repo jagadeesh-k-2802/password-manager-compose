@@ -15,6 +15,7 @@ sealed class SettingsUiEffect {
     data object PasswordsImported : SettingsUiEffect()
     data object PasswordsExported : SettingsUiEffect()
     data object CannotImportChromePasswords : SettingsUiEffect()
+    data object ShowIncognitoKeyboardWarning : SettingsUiEffect()
     data object BiometricAuthForScreenLock : SettingsUiEffect()
     data object OpenScreenLockSettings : SettingsUiEffect()
     data object NavigateToChangePassword : SettingsUiEffect()

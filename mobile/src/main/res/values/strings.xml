@@ -91,7 +91,8 @@
     <string name="label_enable_pin">Enable Pin Usage</string>
     <string name="label_attachments">Attachments</string>
     <string name="label_image_index">Image %1$d</string>
-    <string name="btn_add_image">Add Image</string>
+    <string name="label_pdf_index">PDF %1$d</string>
+    <string name="btn_add_attachment">Add Attachment</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note: This password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
@@ -140,11 +141,14 @@
     <string name="toast_cannot_import_chrome_passwords">Couldn\'t import Google Chrome CSV passwords</string>
     <string name="toast_password_saved">%s is Saved</string>
     <string name="toast_image_too_large">Image size exceeds %1$d MB limit</string>
+    <string name="toast_pdf_too_large">PDF size exceeds %1$d MB limit</string>
     <string name="toast_image_read_failed">Couldn\'t read the selected image</string>
-    <string name="toast_image_invalid_type">Only image files are supported</string>
-    <string name="toast_max_images_reached">You can attach up to %1$d images</string>
+    <string name="toast_attachment_invalid_type">Only image and PDF files are supported</string>
+    <string name="toast_attachment_read_failed">Couldn\'t read the selected attachment</string>
+    <string name="toast_incognito_keyboard_warning">Incognito mode may not work on some keyboards, depending on the one you use.</string>
 
     <!--  Accessibility  -->
+    <string name="accessibility_generate_password">Generate password</string>
     <string name="accessibility_toggle_password">Toggle password</string>
     <string name="accessibility_toggle_new_password">Toggle new password</string>
     <string name="accessibility_toggle_confirm_password">Toggle confirm password</string>
@@ -178,10 +182,11 @@
     <string name="accessibility_sort_by_desc_alpha">Sort by descending alphabet</string>
     <string name="accessibility_sort_by_new">Sort by newest</string>
     <string name="accessibility_sort_by_old">Sort by oldest</string>
-    <string name="accessibility_add_image">Add image</string>
-    <string name="accessibility_remove_image">Remove image</string>
+    <string name="accessibility_add_attachment">Add Attachment</string>
+    <string name="accessibility_remove_attachment">Remove Attachment</string>
     <string name="accessibility_image_preview">Attached image preview</string>
     <string name="accessibility_close_preview">Close preview</string>
+    <string name="accessibility_export_attachment">Export attachment</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">You Have Unsaved Changes</string>
@@ -204,6 +209,9 @@
     <string name="dialog_btn_confirm">Confirm</string>
     <string name="dialog_btn_ok">OK</string>
     <string name="dialog_title_auto_lock_delay">Choose Auto Lock Delay</string>
+    <string name="dialog_title_export_attachment">Export Attachment</string>
+    <string name="text_export_attachment">Please note: This attachment will be exported in unencrypted form. Keep it secure and delete it when no longer needed.</string>
+    <string name="toast_attachment_exported">Attachment Exported Successfully</string>
 
     <!--  Errors  -->
     <string name="error_name_not_empty">Name should not be empty</string>

@@ -125,6 +125,7 @@ fun SettingsScreen(
                     is SettingsUiEffect.PasswordsImported -> onPasswordsImported()
                     is SettingsUiEffect.PasswordsExported -> onPasswordsExported()
                     is SettingsUiEffect.CannotImportChromePasswords -> onCannotImportChromePasswords()
+                    is SettingsUiEffect.ShowIncognitoKeyboardWarning -> onShowIncognitoKeyboardWarning()
                     is SettingsUiEffect.BiometricAuthForScreenLock -> onBiometricAuthForScreenLock()
                     is SettingsUiEffect.OpenScreenLockSettings -> onOpenScreenLockSettings()
                     is SettingsUiEffect.NavigateToChangePassword -> onNavigateToChangePassword()

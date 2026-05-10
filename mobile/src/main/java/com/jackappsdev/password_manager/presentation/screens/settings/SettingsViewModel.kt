@@ -200,10 +200,11 @@ class SettingsViewModel @Inject constructor(
         userPreferencesRepository.setUseScreenLockToUnlock(toggleValue)
     }
 
-    private suspend fun toggleIncognitoKeyboard() {
+    private suspend fun toggleIncognitoKeyboard(): SettingsUiEffect? {
         val toggleValue = state.useIncognitoKeyboard != true
         state = state.copy(useIncognitoKeyboard = toggleValue)
         userPreferencesRepository.setUseIncognitoKeyboard(toggleValue)
+        return if (toggleValue) SettingsUiEffect.ShowIncognitoKeyboardWarning else null
     }
 
     private suspend fun showAutoLockDialog() {

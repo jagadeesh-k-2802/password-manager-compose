@@ -180,6 +180,10 @@ class SettingsEffectHandler(
         context.showToast(context.getString(R.string.toast_cannot_import_chrome_passwords))
     }
 
+    fun onShowIncognitoKeyboardWarning() {
+        context.showToast(context.getString(R.string.toast_incognito_keyboard_warning))
+    }
+
     fun onBiometricAuthForScreenLock() {
         isScreenLockBiometricAuth = true
         biometricPrompt.authenticate(screenLockPromptInfo)

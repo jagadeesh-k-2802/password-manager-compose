@@ -1,5 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.password_item_detail
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +47,8 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.parseModifiedTime
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
-import com.jackappsdev.password_manager.presentation.components.ImagesTextField
+import com.jackappsdev.password_manager.presentation.components.AttachmentsTextField
+import com.jackappsdev.password_manager.presentation.components.PasswordStrengthIndicator
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.components.PasswordItemDetailActions
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailEffectHandler
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
@@ -69,6 +72,18 @@ fun PasswordItemDetailScreen(
     val scrollState = rememberScrollState()
     val passwordItem = state.passwordItem?.collectAsState()?.value
 
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                state.attachmentToExport?.let { attachment ->
+                    effectHandler.onExportAttachmentToUri(context, uri, attachment.bytes)
+                }
+            }
+        }
+    }
+
     LaunchedEffect(key1 = passwordItem) {
         with(effectHandler) {
             effectFlow.collectLatest { effect ->
@@ -79,6 +94,7 @@ fun PasswordItemDetailScreen(
                     is PasswordItemDetailUiEffect.DeleteItem -> onDeleteItem(passwordItem)
                     is PasswordItemDetailUiEffect.NavigateToEditPassword -> onNavigateToEditPassword(effect.id)
                     is PasswordItemDetailUiEffect.NavigateUp -> onNavigateUp()
+                    is PasswordItemDetailUiEffect.OpenExportAttachmentIntent -> onOpenExportAttachmentIntent(exportLauncher, effect)
                 }
             }
         }
@@ -90,6 +106,17 @@ fun PasswordItemDetailScreen(
             description = R.string.dialog_text_password_delete,
             onConfirm = { onEvent(PasswordItemDetailUiEvent.RequestDeleteItem) },
             onDismiss = { onEvent(PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility) }
+        )
+    }
+
+    if (state.isExportAttachmentDialogVisible) {
+        com.jackappsdev.password_manager.presentation.components.PasswordInputDialog(
+            title = R.string.dialog_title_export_attachment,
+            description = R.string.text_export_attachment,
+            label = R.string.label_password,
+            isInvalidPassword = state.isExportAttachmentPasswordInvalid,
+            onConfirm = { onEvent(PasswordItemDetailUiEvent.ExportAttachment(it)) },
+            onDismiss = { onEvent(PasswordItemDetailUiEvent.ToggleExportAttachmentDialogVisibility) }
         )
     }
 
@@ -215,6 +242,8 @@ fun PasswordItemDetailScreen(
                 },
             )
 
+            PasswordStrengthIndicator(password = passwordItem?.password ?: EMPTY_STRING)
+
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
@@ -300,10 +329,13 @@ fun PasswordItemDetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             if (!passwordItem?.images.isNullOrEmpty()) {
-                ImagesTextField(
+                AttachmentsTextField(
                     images = passwordItem.images,
-                    onAddImage = {},
-                    onRemoveImage = {},
+                    onAddAttachment = {},
+                    onRemoveAttachment = {},
+                    onExport = { bytes, fileName, mimeType ->
+                        onEvent(PasswordItemDetailUiEvent.RequestExportAttachment(bytes, fileName, mimeType))
+                    },
                     readOnly = true
                 )
                 Spacer(modifier = Modifier.height(16.dp))

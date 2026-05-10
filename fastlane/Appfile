@@ -1,0 +1,2 @@
+json_key_file("") # Path to the json secret file - UNCOMMENT and fill in if you have one
+package_name("com.jackappsdev.password_manager")

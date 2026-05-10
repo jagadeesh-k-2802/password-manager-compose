@@ -60,9 +60,9 @@
     <string name="label_enable_android_watch">Schakel Android Watch Sharing in</string>
     <string name="label_import_passwords">"Wachtwoorden importeren "</string>
     <string name="label_import_passwords_database">Wachtwoorden importeren uit database</string>
+    <string name="label_import_chrome_passwords">Google Chrome-wachtwoorden importeren</string>
     <string name="label_export_passwords">"Wachtwoorden exporteren "</string>
     <string name="label_export_passwords_database">Exporteer wachtwoorden uit de database</string>
-    <string name="label_import_chrome_passwords">Google Chrome-wachtwoorden importeren</string>
     <string name="label_export_chrome_passwords">"Google Chrome-wachtwoorden exporteren "</string>
     <string name="label_export_passwords_csv">Exporteer wachtwoorden naar CSV</string>
     <string name="label_donate_with_paypal">Doneer met PayPal</string>
@@ -91,7 +91,14 @@
     <string name="label_enable_pin">Schakel PIN -gebruik in</string>
     <string name="label_attachments">Bijlagen</string>
     <string name="label_image_index">Afbeelding %1$d</string>
-    <string name="btn_add_image">Afbeelding toevoegen</string>
+    <string name="label_pdf_index">PDF %1$d</string>
+    <string name="btn_add_attachment">Bijlage toevoegen</string>
+    <string name="toast_image_too_large">Afbeelding overschrijdt de limiet van %1$d MB</string>
+    <string name="toast_pdf_too_large">PDF-grootte overschrijdt de limiet van %1$d MB</string>
+    <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
+    <string name="toast_attachment_invalid_type">Alleen afbeeldingen en PDF-bestanden worden ondersteund</string>
+    <string name="toast_attachment_read_failed">Kon de geselecteerde bijlage niet lezen</string>
+    <string name="toast_incognito_keyboard_warning">De incognitomodus werkt mogelijk niet op alle toetsenborden, afhankelijk van het type toetsenbord dat u gebruikt.</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Let op: dit wachtwoord is essentieel voor het ontgrendelen van toegang tot de applicatie. Het verliezen betekent toegang verliezen tot al uw wachtwoorden.</string>
@@ -139,12 +146,9 @@
     <string name="toast_pin_set">Pin is succesvol ingesteld</string>
     <string name="toast_cannot_import_chrome_passwords">Kan Google Chrome CSV-wachtwoorden niet importeren</string>
     <string name="toast_password_saved">%s is opgeslagen</string>
-    <string name="toast_image_too_large">Afbeelding overschrijdt de limiet van %1$d MB</string>
-    <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
-    <string name="toast_image_invalid_type">Alleen afbeeldingen worden ondersteund</string>
-    <string name="toast_max_images_reached">U kunt maximaal %1$d afbeeldingen toevoegen</string>
 
     <!--  Accessibility  -->
+    <string name="accessibility_generate_password">Wachtwoord genereren</string>
     <string name="accessibility_toggle_password">Wachtwoord schakelen</string>
     <string name="accessibility_toggle_new_password">Schakel nieuw wachtwoord in</string>
     <string name="accessibility_toggle_confirm_password">Toggle bevestigen wachtwoord</string>
@@ -178,10 +182,11 @@
     <string name="accessibility_sort_by_desc_alpha">Sorteren op Z-A</string>
     <string name="accessibility_sort_by_new">Sorteer door nieuwste</string>
     <string name="accessibility_sort_by_old">Sorteer door de oudste</string>
-    <string name="accessibility_add_image">Afbeelding toevoegen</string>
-    <string name="accessibility_remove_image">Afbeelding verwijderen</string>
+    <string name="accessibility_add_attachment">Bijlage toevoegen</string>
+    <string name="accessibility_remove_attachment">Bijlage verwijderen</string>
     <string name="accessibility_image_preview">Voorvertoning van bijgevoegde afbeelding</string>
     <string name="accessibility_close_preview">Voorvertoning sluiten</string>
+    <string name="accessibility_export_attachment">Bijlage exporteren</string>
 
     <!--  Dialog  -->
     <string name="dialog_title_unsaved_changes">Je hebt niet geredde veranderingen</string>
@@ -204,6 +209,9 @@
     <string name="dialog_btn_confirm">Bevestigen</string>
     <string name="dialog_btn_ok">OK</string>
     <string name="dialog_title_auto_lock_delay">Kies Auto Lock Vertraging</string>
+    <string name="dialog_title_export_attachment">Bijlage exporteren</string>
+    <string name="text_export_attachment">Let op: deze bijlage wordt onversleuteld geëxporteerd. Bewaar deze veilig en verwijder hem wanneer u hem niet meer nodig hebt.</string>
+    <string name="toast_attachment_exported">Bijlage succesvol geëxporteerd</string>
 
     <!--  Errors  -->
     <string name="error_name_not_empty">Naam moet niet leeg zijn</string>

@@ -1,0 +1,60 @@
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Build Mobile App Bundle"
+  lane :build_mobile do
+    gradle(
+      task: ":mobile:bundle",
+      build_type: "Release"
+    )
+  end
+
+  desc "Build Wear OS App Bundle"
+  lane :build_wear do
+    gradle(
+      task: ":wear:bundle",
+      build_type: "Release"
+    )
+  end
+
+  desc "Submit a new Beta Build to Play Store Internal Track"
+  lane :beta do
+    # Build both bundles
+    build_mobile
+    build_wear
+    
+    # Upload to Play Store
+    upload_to_play_store(
+      track: 'internal',
+      aab: 'mobile/build/outputs/bundle/release/mobile-release.aab',
+      wear_aab: 'wear/build/outputs/bundle/release/wear-release.aab'
+    )
+  end
+
+  desc "Deploy a new version to the Google Play Store"
+  lane :deploy do
+    # Build both bundles
+    build_mobile
+    build_wear
+    
+    # Upload to Play Store
+    upload_to_play_store(
+      track: 'production',
+      aab: 'mobile/build/outputs/bundle/release/mobile-release.aab',
+      wear_aab: 'wear/build/outputs/bundle/release/wear-release.aab'
+    )
+  end
+
+  desc "Download metadata and screenshots from Play Store"
+  lane :refresh_metadata do
+    supply(
+      metadata_path: "./fastlane/metadata/android",
+      package_name: "com.jackappsdev.password_manager"
+    )
+  end
+end

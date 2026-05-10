@@ -11,11 +11,13 @@ import com.jackappsdev.password_manager.presentation.screens.add_password_item.e
 fun AddPasswordItemRoot(navigator: Navigator) {
     val viewModel: AddPasswordItemViewModel = hiltViewModel()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
 
     val effectHandler = remember {
         AddPasswordItemEffectHandler(
             navigator = navigator,
-            keyboardController = keyboardController
+            keyboardController = keyboardController,
+            scope = scope
         )
     }
 

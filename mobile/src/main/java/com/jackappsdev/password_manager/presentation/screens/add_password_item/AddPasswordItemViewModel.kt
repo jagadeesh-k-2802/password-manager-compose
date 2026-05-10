@@ -13,6 +13,8 @@ import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
+import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
+import com.jackappsdev.password_manager.presentation.model.AttachmentToExport
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemUiEvent
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
@@ -27,7 +29,8 @@ import javax.inject.Inject
 class AddPasswordItemViewModel @Inject constructor(
     application: Application,
     private val passwordItemRepository: PasswordItemRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel(), EventDrivenViewModel<AddPasswordItemUiEvent, AddPasswordItemUiEffect> {
 
     var state by mutableStateOf(AddPasswordItemState())
@@ -91,7 +94,7 @@ class AddPasswordItemViewModel @Inject constructor(
     }
 
     private fun onGenerateRandomPassword() {
-        val password = generateRandomPassword(GeneratePasswordConfig(length = 12))
+        val password = generateRandomPassword(GeneratePasswordConfig(length = 13))
         state = state.copy(password = password)
     }
 
@@ -150,6 +153,32 @@ class AddPasswordItemViewModel @Inject constructor(
         }
     }
 
+    private fun onRequestExportAttachment(event: AddPasswordItemUiEvent.RequestExportAttachment) {
+        state = state.copy(
+            isExportAttachmentDialogVisible = true,
+            attachmentToExport = AttachmentToExport(event.bytes, event.fileName, event.mimeType)
+        )
+    }
+
+    private suspend fun onExportAttachment(event: AddPasswordItemUiEvent.ExportAttachment): AddPasswordItemUiEffect? {
+        val isValid = userPreferencesRepository.verifyPassword(event.password)
+        return if (isValid) {
+            val attachment = state.attachmentToExport ?: return null
+            state = state.copy(isExportAttachmentDialogVisible = false, isExportAttachmentPasswordInvalid = false)
+            AddPasswordItemUiEffect.OpenExportAttachmentIntent(attachment.fileName, attachment.mimeType)
+        } else {
+            state = state.copy(isExportAttachmentPasswordInvalid = true)
+            null
+        }
+    }
+
+    private fun onToggleExportAttachmentDialogVisibility() {
+        state = state.copy(
+            isExportAttachmentDialogVisible = !state.isExportAttachmentDialogVisible,
+            isExportAttachmentPasswordInvalid = false
+        )
+    }
+
     override fun onEvent(event: AddPasswordItemUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
@@ -169,6 +198,9 @@ class AddPasswordItemViewModel @Inject constructor(
                 is AddPasswordItemUiEvent.AddPasswordItem -> addPasswordItem()
                 is AddPasswordItemUiEvent.NavigateToAddCategory -> AddPasswordItemUiEffect.NavigateToAddCategory
                 is AddPasswordItemUiEvent.NavigateUp -> AddPasswordItemUiEffect.NavigateUp
+                is AddPasswordItemUiEvent.RequestExportAttachment -> onRequestExportAttachment(event)
+                is AddPasswordItemUiEvent.ExportAttachment -> onExportAttachment(event)
+                is AddPasswordItemUiEvent.ToggleExportAttachmentDialogVisibility -> onToggleExportAttachmentDialogVisibility()
             }
 
             if (effect is AddPasswordItemUiEffect) _effectChannel.send(effect)

@@ -3,6 +3,7 @@ package com.jackappsdev.password_manager.presentation.screens.home.panes
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,13 +29,15 @@ internal fun DetailPaneEditPassword(
     )
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scope = rememberCoroutineScope()
 
     val effectHandler = remember(id, onEditComplete, onCancel) {
         EditPasswordItemEffectHandler(
             context = context,
             keyboardController = keyboardController,
             navigateToAddCategory = { navigator.navigate(Routes.AddCategoryItem) },
-            navigateUp = onEditComplete
+            navigateUp = onEditComplete,
+            scope = scope
         )
     }
 

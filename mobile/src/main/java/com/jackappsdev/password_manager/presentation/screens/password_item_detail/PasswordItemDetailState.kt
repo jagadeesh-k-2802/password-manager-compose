@@ -1,6 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.password_item_detail
 
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
+import com.jackappsdev.password_manager.presentation.model.AttachmentToExport
 import kotlinx.coroutines.flow.StateFlow
 
 data class PasswordItemDetailState(
@@ -8,5 +9,8 @@ data class PasswordItemDetailState(
     val hasAndroidWatchPinSet: Boolean? = null,
     val showPassword: Boolean = false,
     val dropDownMenuExpanded: Boolean = false,
-    val isDeleteDialogVisible: Boolean = false
+    val isDeleteDialogVisible: Boolean = false,
+    val isExportAttachmentDialogVisible: Boolean = false,
+    val isExportAttachmentPasswordInvalid: Boolean = false,
+    val attachmentToExport: AttachmentToExport? = null
 )

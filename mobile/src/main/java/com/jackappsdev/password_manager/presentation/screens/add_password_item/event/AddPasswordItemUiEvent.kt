@@ -20,4 +20,7 @@ sealed class AddPasswordItemUiEvent {
     data object AddPasswordItem : AddPasswordItemUiEvent()
     data object NavigateToAddCategory : AddPasswordItemUiEvent()
     data object NavigateUp : AddPasswordItemUiEvent()
+    data class RequestExportAttachment(val bytes: ByteArray, val fileName: String, val mimeType: String) : AddPasswordItemUiEvent()
+    data class ExportAttachment(val password: String) : AddPasswordItemUiEvent()
+    data object ToggleExportAttachmentDialogVisibility : AddPasswordItemUiEvent()
 }

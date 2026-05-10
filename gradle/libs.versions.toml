@@ -1,12 +1,15 @@
 [versions]
 appUpdate = "2.1.0"
 appUpdateKtx = "2.1.0"
-googleDevToolsKsp = "2.2.21-2.0.4"
+coilCompose = "3.4.0"
+coilNetworkOkhttp = "3.4.0"
+googleDevToolsKsp = "2.3.6"
 kotlinCsvJvm = "1.10.0"
+kotlinMetadataJvm = "2.3.0"
 kotlinxCoroutinesCore = "1.10.2"
 kotlinxCoroutinesPlayServices = "1.10.2"
 kotlinxSerialization = "2.2.10"
-hiltAndroid = "2.57.2"
+hiltAndroid = "2.59.2"
 coreKtx = "1.17.0"
 sqlcipherAndroid = "4.9.0"
 sqlite = "2.5.2"
@@ -25,7 +28,7 @@ turbine = "1.2.0"
 composeNavigation = "1.6.0-alpha07"
 composeWearMaterial3 = "1.6.0-alpha07"
 horologistComposeLayout = "0.7.15"
-agp = "8.13.2"
+agp = "9.2.0"
 kotlin = "2.2.21"
 coreSplashscreen = "1.2.0"
 activityCompose = "1.12.2"
@@ -45,6 +48,9 @@ lifecycleViewmodelNav3 = "2.10.0-rc01"
 [libraries]
 androidx-compose-material3 = { module = "androidx.wear.compose:compose-material3", version.ref = "composeWearMaterial3" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlinMetadataJvm" }
 sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipherAndroid" }
 androidx-sqlite = { module = "androidx.sqlite:sqlite", version.ref = "sqlite" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -100,6 +106,6 @@ googleDaggerHiltAndroid = { id = "com.google.dagger.hilt.android", version.ref =
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinxSerialization" }
 googleDevToolsKsp = { id = "com.google.devtools.ksp", version.ref = "googleDevToolsKsp" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+legacyKapt = { id = "com.android.legacy-kapt", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

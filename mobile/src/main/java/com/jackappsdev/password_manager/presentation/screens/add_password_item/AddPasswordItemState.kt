@@ -1,6 +1,7 @@
 package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
 import com.jackappsdev.password_manager.domain.model.CategoryModel
+import com.jackappsdev.password_manager.presentation.model.AttachmentToExport
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
 import kotlinx.coroutines.flow.StateFlow
 
@@ -17,7 +18,10 @@ data class AddPasswordItemState(
     val isCategoryDropdownVisible: Boolean = false,
     val isUnsavedChangesDialogVisible: Boolean = false,
     val isAlreadyAutoFocused: Boolean = false,
-    val hasUserEnteredDetails: Boolean = false
+    val hasUserEnteredDetails: Boolean = false,
+    val isExportAttachmentDialogVisible: Boolean = false,
+    val isExportAttachmentPasswordInvalid: Boolean = false,
+    val attachmentToExport: AttachmentToExport? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -34,6 +38,9 @@ data class AddPasswordItemState(
         if (isUnsavedChangesDialogVisible != other.isUnsavedChangesDialogVisible) return false
         if (isAlreadyAutoFocused != other.isAlreadyAutoFocused) return false
         if (hasUserEnteredDetails != other.hasUserEnteredDetails) return false
+        if (isExportAttachmentDialogVisible != other.isExportAttachmentDialogVisible) return false
+        if (isExportAttachmentPasswordInvalid != other.isExportAttachmentPasswordInvalid) return false
+        if (attachmentToExport != other.attachmentToExport) return false
         if (images.size != other.images.size) return false
         for (i in images.indices) {
             if (!images[i].contentEquals(other.images[i])) return false
@@ -54,6 +61,9 @@ data class AddPasswordItemState(
         result = 31 * result + isUnsavedChangesDialogVisible.hashCode()
         result = 31 * result + isAlreadyAutoFocused.hashCode()
         result = 31 * result + hasUserEnteredDetails.hashCode()
+        result = 31 * result + isExportAttachmentDialogVisible.hashCode()
+        result = 31 * result + isExportAttachmentPasswordInvalid.hashCode()
+        result = 31 * result + (attachmentToExport?.hashCode() ?: 0)
         result = 31 * result + images.sumOf { it.contentHashCode() }
         return result
     }

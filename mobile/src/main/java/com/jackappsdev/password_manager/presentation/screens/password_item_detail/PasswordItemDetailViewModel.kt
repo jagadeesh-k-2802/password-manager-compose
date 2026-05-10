@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
+import com.jackappsdev.password_manager.presentation.model.AttachmentToExport
 import com.jackappsdev.password_manager.presentation.navigation.Routes
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEffect
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEvent
@@ -87,6 +88,7 @@ class PasswordItemDetailViewModel @AssistedInject constructor(
                 categoryId = passwordWithCategoryModel.categoryId,
                 website = passwordWithCategoryModel.website,
                 isAddedToWatch = passwordWithCategoryModel.isAddedToWatch.not(),
+                images = passwordWithCategoryModel.images,
                 createdAt = passwordWithCategoryModel.createdAt
             )
         )
@@ -97,20 +99,49 @@ class PasswordItemDetailViewModel @AssistedInject constructor(
         passwordItemRepository.deletePasswordItem(passwordWithCategoryModel)
     }
 
+    private fun onRequestExportAttachment(event: PasswordItemDetailUiEvent.RequestExportAttachment) {
+        state = state.copy(
+            isExportAttachmentDialogVisible = true,
+            attachmentToExport = AttachmentToExport(event.bytes, event.fileName, event.mimeType)
+        )
+    }
+
+    private suspend fun onExportAttachment(event: PasswordItemDetailUiEvent.ExportAttachment): PasswordItemDetailUiEffect? {
+        val isValid = userPreferencesRepository.verifyPassword(event.password)
+        return if (isValid) {
+            val attachment = state.attachmentToExport ?: return null
+            state = state.copy(isExportAttachmentDialogVisible = false, isExportAttachmentPasswordInvalid = false)
+            PasswordItemDetailUiEffect.OpenExportAttachmentIntent(attachment.fileName, attachment.mimeType)
+        } else {
+            state = state.copy(isExportAttachmentPasswordInvalid = true)
+            null
+        }
+    }
+
+    private fun onToggleExportAttachmentDialogVisibility() {
+        state = state.copy(
+            isExportAttachmentDialogVisible = !state.isExportAttachmentDialogVisible,
+            isExportAttachmentPasswordInvalid = false
+        )
+    }
+
     override fun onEvent(event: PasswordItemDetailUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
-                is PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility -> toggleVisibility(event)
-                is PasswordItemDetailUiEvent.ToggleShowPasswordVisibility -> toggleVisibility(event)
-                is PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility -> toggleVisibility(event)
-                is PasswordItemDetailUiEvent.DeleteItem -> deleteItem()
-                is PasswordItemDetailUiEvent.ToggleAddToWatch -> toggleAddedToWatch()
+                is PasswordItemDetailUiEvent.ToggleDeleteDialogVisibility -> { toggleVisibility(event); null }
+                is PasswordItemDetailUiEvent.ToggleShowPasswordVisibility -> { toggleVisibility(event); null }
+                is PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility -> { toggleVisibility(event); null }
+                is PasswordItemDetailUiEvent.DeleteItem -> { deleteItem(); null }
+                is PasswordItemDetailUiEvent.ToggleAddToWatch -> { toggleAddedToWatch(); null }
                 is PasswordItemDetailUiEvent.CopyText -> PasswordItemDetailUiEffect.CopyText(event.text)
                 is PasswordItemDetailUiEvent.LaunchUrl -> PasswordItemDetailUiEffect.LaunchUrl(event.url)
                 is PasswordItemDetailUiEvent.RequestToggleAddToWatch -> PasswordItemDetailUiEffect.ToggleAddToWatch
                 is PasswordItemDetailUiEvent.RequestDeleteItem -> PasswordItemDetailUiEffect.DeleteItem
                 is PasswordItemDetailUiEvent.NavigateToEditPassword -> PasswordItemDetailUiEffect.NavigateToEditPassword(event.id)
                 is PasswordItemDetailUiEvent.NavigateUp -> PasswordItemDetailUiEffect.NavigateUp
+                is PasswordItemDetailUiEvent.RequestExportAttachment -> onRequestExportAttachment(event)
+                is PasswordItemDetailUiEvent.ExportAttachment -> onExportAttachment(event)
+                is PasswordItemDetailUiEvent.ToggleExportAttachmentDialogVisibility -> onToggleExportAttachmentDialogVisibility()
             }
 
             if (effect is PasswordItemDetailUiEffect) _effectChannel.send(effect)

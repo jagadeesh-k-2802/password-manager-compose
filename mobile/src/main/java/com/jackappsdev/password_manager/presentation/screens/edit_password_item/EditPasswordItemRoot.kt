@@ -13,18 +13,20 @@ import com.jackappsdev.password_manager.presentation.screens.edit_password_item.
 fun EditPasswordItemRoot(navigator: Navigator, key: Routes.EditPasswordItem) {
     val viewModel = hiltViewModel<EditPasswordItemViewModel, EditPasswordItemViewModel.Factory>(
         creationCallback = {
-                factory -> factory.create(key)
+            factory -> factory.create(key)
         }
     )
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
 
     val effectHandler = remember {
         EditPasswordItemEffectHandler(
             context = context,
             keyboardController = keyboardController,
             navigateToAddCategory = { navigator.navigate(Routes.AddCategoryItem) },
-            navigateUp = { navigator.navigateUp() }
+            navigateUp = { navigator.navigateUp() },
+            scope = scope
         )
     }
 

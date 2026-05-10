@@ -2,12 +2,13 @@ package com.jackappsdev.password_manager.presentation.screens.add_password_item
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -43,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -52,10 +54,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jackappsdev.password_manager.R
-import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
 import com.jackappsdev.password_manager.domain.model.CategoryModel
+import com.jackappsdev.password_manager.presentation.components.AdaptiveContentContainer
+import com.jackappsdev.password_manager.presentation.components.AttachmentsTextField
 import com.jackappsdev.password_manager.presentation.components.ConfirmationDialog
-import com.jackappsdev.password_manager.presentation.components.ImagesTextField
+import com.jackappsdev.password_manager.presentation.components.PasswordInputDialog
+import com.jackappsdev.password_manager.presentation.components.PasswordStrengthIndicator
 import com.jackappsdev.password_manager.presentation.navigation.ResultEffect
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.components.CategoryDropDown
 import com.jackappsdev.password_manager.presentation.screens.add_password_item.event.AddPasswordItemEffectHandler
@@ -80,6 +84,19 @@ fun AddPasswordItemScreen(
     val focusManager = LocalFocusManager.current
     val backDispatcher = checkNotNull(LocalOnBackPressedDispatcherOwner.current)
     val error by errorFlow.collectAsState(initial = null)
+    val context = LocalContext.current
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                state.attachmentToExport?.let { attachment ->
+                    effectHandler.onExportAttachmentToUri(context, uri, attachment.bytes)
+                }
+            }
+        }
+    }
 
     ResultEffect<CategoryModel> { model ->
         onEvent(AddPasswordItemUiEvent.SelectCategory(model))
@@ -96,6 +113,7 @@ fun AddPasswordItemScreen(
                 when (effect) {
                     is AddPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
                     is AddPasswordItemUiEffect.NavigateUp -> onNavigateUp()
+                    is AddPasswordItemUiEffect.OpenExportAttachmentIntent -> onOpenExportAttachmentIntent(exportLauncher, effect)
                 }
             }
         }
@@ -107,6 +125,17 @@ fun AddPasswordItemScreen(
             description = R.string.dialog_text_unsaved,
             onConfirm = { onEvent(AddPasswordItemUiEvent.NavigateUp) },
             onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleUnsavedDialogVisibility) }
+        )
+    }
+
+    if (state.isExportAttachmentDialogVisible) {
+        PasswordInputDialog(
+            title = R.string.dialog_title_export_attachment,
+            description = R.string.text_export_attachment,
+            label = R.string.label_password,
+            isInvalidPassword = state.isExportAttachmentPasswordInvalid,
+            onConfirm = { onEvent(AddPasswordItemUiEvent.ExportAttachment(it)) },
+            onDismiss = { onEvent(AddPasswordItemUiEvent.ToggleExportAttachmentDialogVisibility) }
         )
     }
 
@@ -133,163 +162,168 @@ fun AddPasswordItemScreen(
             Column(
                 modifier = Modifier
                     .padding(horizontal = pagePadding)
-                    .imePadding()
                     .verticalScroll(scrollState)
                     .fillMaxWidth()
             ) {
                 OutlinedTextField(
-                value = state.name,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterName(it)) },
-                isError = error is AddPasswordItemError.NameError,
-                supportingText = {
-                    error?.let {
-                        if (it is AddPasswordItemError.NameError) Text(stringResource(it.error))
-                    }
-                },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Badge, contentDescription = null)
-                },
-                label = { Text(stringResource(R.string.label_name)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-            )
-
-            OutlinedTextField(
-                value = state.username,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterUsername(it)) },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null)
-                },
-                label = { Text(stringResource(R.string.label_username)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = state.password,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterPassword(it)) },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Key, contentDescription = null)
-                },
-                label = { Text(stringResource(R.string.label_password)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                visualTransformation = if (state.showPassword) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                },
-                trailingIcon = {
-                    Row {
-                        IconButton(onClick = { onEvent(AddPasswordItemUiEvent.GenerateRandomPassword) }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Refresh,
-                                contentDescription = stringResource(R.string.accessibility_toggle_password)
-                            )
+                    value = state.name,
+                    onValueChange = { onEvent(AddPasswordItemUiEvent.EnterName(it)) },
+                    isError = error is AddPasswordItemError.NameError,
+                    supportingText = {
+                        error?.let {
+                            if (it is AddPasswordItemError.NameError) Text(stringResource(it.error))
                         }
+                    },
+                    leadingIcon = { Icon(imageVector = Icons.Default.Badge, contentDescription = null) },
+                    label = { Text(stringResource(R.string.label_name)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                )
 
-                        IconButton(onClick = { onEvent(AddPasswordItemUiEvent.ToggleShowPasswordVisibility) }) {
-                            Icon(
-                                imageVector = if (state.showPassword) {
-                                    Icons.Outlined.VisibilityOff
-                                } else {
-                                    Icons.Outlined.Visibility
-                                },
-                                contentDescription = stringResource(R.string.accessibility_toggle_password)
-                            )
+                OutlinedTextField(
+                    value = state.username,
+                    onValueChange = { onEvent(AddPasswordItemUiEvent.EnterUsername(it)) },
+                    leadingIcon = { Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null) },
+                    label = { Text(stringResource(R.string.label_username)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = state.password,
+                    onValueChange = { onEvent(AddPasswordItemUiEvent.EnterPassword(it)) },
+                    leadingIcon = { Icon(imageVector = Icons.Default.Key, contentDescription = null) },
+                    label = { Text(stringResource(R.string.label_password)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    visualTransformation = if (state.showPassword) {
+                        VisualTransformation.None
+                    } else {
+                        PasswordVisualTransformation()
+                    },
+                    trailingIcon = {
+                        Row {
+                            IconButton(onClick = { onEvent(AddPasswordItemUiEvent.GenerateRandomPassword) }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Refresh,
+                                    contentDescription = stringResource(R.string.accessibility_generate_password)
+                                )
+                            }
+
+                            IconButton(onClick = { onEvent(AddPasswordItemUiEvent.ToggleShowPasswordVisibility) }) {
+                                Icon(
+                                    imageVector = if (state.showPassword) {
+                                        Icons.Outlined.VisibilityOff
+                                    } else {
+                                        Icons.Outlined.Visibility
+                                    },
+                                    contentDescription = stringResource(R.string.accessibility_toggle_password)
+                                )
+                            }
                         }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                )
+
+                PasswordStrengthIndicator(password = state.password)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = state.website,
+                    onValueChange = { onEvent(AddPasswordItemUiEvent.EnterWebsite(it)) },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Link, contentDescription = null)
+                    },
+                    label = { Text(stringResource(R.string.label_website)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = state.notes,
+                    onValueChange = { onEvent(AddPasswordItemUiEvent.EnterNotes(it)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Notes,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(stringResource(R.string.label_notes)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 5,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Default
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CategoryDropDown(
+                    state = state,
+                    categoryItems = categoryItems,
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                AttachmentsTextField(
+                    images = state.images,
+                    onAddAttachment = { onEvent(AddPasswordItemUiEvent.AddImage(it)) },
+                    onRemoveAttachment = { index -> onEvent(AddPasswordItemUiEvent.RemoveImage(index)) },
+                    onExport = { bytes, fileName, mimeType ->
+                        onEvent(
+                            AddPasswordItemUiEvent.RequestExportAttachment(
+                                bytes,
+                                fileName,
+                                mimeType
+                            )
+                        )
                     }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = state.website,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterWebsite(it)) },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Link, contentDescription = null)
-                },
-                label = { Text(stringResource(R.string.label_website)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            OutlinedTextField(
-                value = state.notes,
-                onValueChange = { onEvent(AddPasswordItemUiEvent.EnterNotes(it)) },
-                leadingIcon = {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.Notes, contentDescription = null)
-                },
-                label = { Text(stringResource(R.string.label_notes)) },
-                modifier = Modifier.fillMaxWidth(),
-                maxLines = 5,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Default
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            CategoryDropDown(
-                state = state,
-                categoryItems = categoryItems,
-                onEvent = onEvent
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ImagesTextField(
-                images = state.images,
-                onAddImage = { onEvent(AddPasswordItemUiEvent.AddImage(it)) },
-                onRemoveImage = { index -> onEvent(AddPasswordItemUiEvent.RemoveImage(index)) }
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = { onEvent(AddPasswordItemUiEvent.AddPasswordItem) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_create))
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(R.string.btn_create))
-            }
+                Button(
+                    onClick = { onEvent(AddPasswordItemUiEvent.AddPasswordItem) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Outlined.Done, stringResource(R.string.accessibility_create))
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(stringResource(R.string.btn_create))
+                }
             }
         }
     }

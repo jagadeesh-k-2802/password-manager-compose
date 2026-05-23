@@ -34,6 +34,7 @@
     <string name="btn_delete">Verwijderen</string>
     <string name="btn_add_to_watch">Toevoegen om te kijken</string>
     <string name="btn_remove_from_watch">Verwijderen van het horloge</string>
+    <string name="btn_add_attachment">Bijlage toevoegen</string>
 
     <!--  Label  -->
     <string name="label_name">Naam</string>
@@ -92,13 +93,7 @@
     <string name="label_attachments">Bijlagen</string>
     <string name="label_image_index">Afbeelding %1$d</string>
     <string name="label_pdf_index">PDF %1$d</string>
-    <string name="btn_add_attachment">Bijlage toevoegen</string>
-    <string name="toast_image_too_large">Afbeelding overschrijdt de limiet van %1$d MB</string>
-    <string name="toast_pdf_too_large">PDF-grootte overschrijdt de limiet van %1$d MB</string>
-    <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
-    <string name="toast_attachment_invalid_type">Alleen afbeeldingen en PDF-bestanden worden ondersteund</string>
-    <string name="toast_attachment_read_failed">Kon de geselecteerde bijlage niet lezen</string>
-    <string name="toast_incognito_keyboard_warning">De incognitomodus werkt mogelijk niet op alle toetsenborden, afhankelijk van het type toetsenbord dat u gebruikt.</string>
+    <string name="label_auto_add_passwords">Automatisch toevoegen aan horloge</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Let op: dit wachtwoord is essentieel voor het ontgrendelen van toegang tot de applicatie. Het verliezen betekent toegang verliezen tot al uw wachtwoorden.</string>
@@ -129,6 +124,7 @@
     <string name="text_autofill_open_password_manager">Automatisch invullen met wachtwoordbeheerder</string>
     <string name="text_autofill_save_fail">Gebruikersnaam en/of wachtwoord zijn leeg, er valt niets op te slaan.</string>
     <string name="text_autofill_save_fail_generic">Het opslaan van de inloggegevens is mislukt.</string>
+    <string name="text_auto_add_passwords_desc">Voeg automatisch nieuwe wachtwoorden toe aan je horloge wanneer je ze op je telefoon aanmaakt.</string>
 
     <!--  Toast Messages  -->
     <string name="toast_app_locked">App vergrendeld</string>
@@ -146,6 +142,12 @@
     <string name="toast_pin_set">Pin is succesvol ingesteld</string>
     <string name="toast_cannot_import_chrome_passwords">Kan Google Chrome CSV-wachtwoorden niet importeren</string>
     <string name="toast_password_saved">%s is opgeslagen</string>
+    <string name="toast_image_too_large">Afbeelding overschrijdt de limiet van %1$d MB</string>
+    <string name="toast_pdf_too_large">PDF-grootte overschrijdt de limiet van %1$d MB</string>
+    <string name="toast_image_read_failed">Kon de geselecteerde afbeelding niet lezen</string>
+    <string name="toast_attachment_invalid_type">Alleen afbeeldingen en PDF-bestanden worden ondersteund</string>
+    <string name="toast_attachment_read_failed">Kon de geselecteerde bijlage niet lezen</string>
+    <string name="toast_incognito_keyboard_warning">De incognitomodus werkt mogelijk niet op alle toetsenborden, afhankelijk van het type toetsenbord dat u gebruikt.</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_generate_password">Wachtwoord genereren</string>

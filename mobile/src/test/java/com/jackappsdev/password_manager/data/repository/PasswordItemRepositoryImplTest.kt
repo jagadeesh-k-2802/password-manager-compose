@@ -32,6 +32,7 @@ class PasswordItemRepositoryImplTest {
 
     // region getPasswordItems — SQL query construction
 
+    @Suppress("UnusedFlow")
     @Test
     fun `getPasswordItems without filterBy generates query without AND clause`() = runTest {
         every { passwordDao.getAllPasswordEntities(any()) } returns flowOf(emptyList())
@@ -47,6 +48,7 @@ class PasswordItemRepositoryImplTest {
         }
     }
 
+    @Suppress("UnusedFlow")
     @Test
     fun `getPasswordItems with filterBy includes AND and filter clause`() = runTest {
         every { passwordDao.getAllPasswordEntities(any()) } returns flowOf(emptyList())
@@ -62,6 +64,7 @@ class PasswordItemRepositoryImplTest {
         }
     }
 
+    @Suppress("UnusedFlow")
     @Test
     fun `getPasswordItems embeds search term in both name and username LIKE clauses`() = runTest {
         every { passwordDao.getAllPasswordEntities(any()) } returns flowOf(emptyList())
@@ -76,6 +79,7 @@ class PasswordItemRepositoryImplTest {
         }
     }
 
+    @Suppress("UnusedFlow")
     @Test
     fun `getPasswordItems places ORDER BY clause using provided orderBy param`() = runTest {
         every { passwordDao.getAllPasswordEntities(any()) } returns flowOf(emptyList())
@@ -205,7 +209,7 @@ class PasswordItemRepositoryImplTest {
             notes = "Notes app", website = "https://notion.so",
             isAddedToWatch = false, categoryId = 1, createdAt = 200L
         )
-        coEvery { passwordDao.upsertPasswordEntity(any()) } returns Unit
+        coEvery { passwordDao.upsertPasswordEntity(any()) } returns longArrayOf(10L)
 
         repository.upsertPasswordItem(model)
 

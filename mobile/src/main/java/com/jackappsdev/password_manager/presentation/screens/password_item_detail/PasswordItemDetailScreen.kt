@@ -56,6 +56,7 @@ import com.jackappsdev.password_manager.presentation.screens.password_item_detai
 import com.jackappsdev.password_manager.presentation.theme.disabledButEnabledOutlinedTextFieldColors
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import com.jackappsdev.password_manager.shared.constants.ZERO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -181,7 +182,7 @@ fun PasswordItemDetailScreen(
                 },
                 label = { Text(stringResource(R.string.label_username)) },
                 trailingIcon = {
-                    if ((passwordItem?.username?.length ?: 0) > 0) {
+                    if ((passwordItem?.username?.length ?: ZERO) > ZERO) {
                         IconButton(onClick = {
                             onEvent(PasswordItemDetailUiEvent.CopyText(passwordItem?.username))
                         }) {
@@ -216,7 +217,7 @@ fun PasswordItemDetailScreen(
                     PasswordVisualTransformation()
                 },
                 trailingIcon = {
-                    if ((passwordItem?.password?.length ?: 0) > 0) {
+                    if ((passwordItem?.password?.length ?: ZERO) > ZERO) {
                         Row {
                             IconButton(onClick = { onEvent(PasswordItemDetailUiEvent.ToggleShowPasswordVisibility) }) {
                                 Icon(
@@ -256,7 +257,7 @@ fun PasswordItemDetailScreen(
                 label = { Text(stringResource(R.string.label_website)) },
                 maxLines = 1,
                 trailingIcon = {
-                    if ((passwordItem?.website?.length ?: 0) > 0) {
+                    if ((passwordItem?.website?.length ?: ZERO) > ZERO) {
                         IconButton(onClick = {
                             onEvent(PasswordItemDetailUiEvent.LaunchUrl(passwordItem?.website ?: EMPTY_STRING))
                         }) {
@@ -287,7 +288,7 @@ fun PasswordItemDetailScreen(
                 enabled = false,
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 trailingIcon = {
-                    if ((passwordItem?.notes?.length ?: 0) > 0) {
+                    if ((passwordItem?.notes?.length ?: ZERO) > ZERO) {
                         IconButton(onClick = {
                             onEvent(PasswordItemDetailUiEvent.CopyText(passwordItem?.notes))
                         }) {
@@ -357,6 +358,8 @@ fun PasswordItemDetailScreen(
                 colors = disabledButEnabledOutlinedTextFieldColors(),
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

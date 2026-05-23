@@ -80,4 +80,12 @@ class UserPreferencesRepositoryImpl(
     override suspend fun setAutoLockDelayMs(newDelayMs: Long) {
         dataStore.updateData { prevUserSettings -> prevUserSettings.copy(autoLockDelayMs = newDelayMs) }
     }
+
+    override fun getAutoAddPasswordsToWatch(): Flow<Boolean> {
+        return dataStore.data.map { it.autoAddPasswordsToWatch }
+    }
+
+    override suspend fun setAutoAddPasswordsToWatch(newValue: Boolean) {
+        dataStore.updateData { prevUserSettings -> prevUserSettings.copy(autoAddPasswordsToWatch = newValue) }
+    }
 }

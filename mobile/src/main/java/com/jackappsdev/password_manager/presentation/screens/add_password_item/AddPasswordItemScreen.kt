@@ -112,7 +112,7 @@ fun AddPasswordItemScreen(
             with(effectHandler) {
                 when (effect) {
                     is AddPasswordItemUiEffect.NavigateToAddCategory -> onNavigateToAddCategory()
-                    is AddPasswordItemUiEffect.NavigateUp -> onNavigateUp()
+                    is AddPasswordItemUiEffect.NavigateUp -> onNavigateUp(context, effect.createdPassword)
                     is AddPasswordItemUiEffect.OpenExportAttachmentIntent -> onOpenExportAttachmentIntent(exportLauncher, effect)
                 }
             }
@@ -324,6 +324,8 @@ fun AddPasswordItemScreen(
                     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                     Text(stringResource(R.string.btn_create))
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

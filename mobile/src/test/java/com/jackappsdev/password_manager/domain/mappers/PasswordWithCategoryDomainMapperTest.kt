@@ -66,6 +66,12 @@ class PasswordWithCategoryDomainMapperTest {
         assertEquals(0L, dto.createdAt)
     }
 
+    @Test
+    fun `toPasswordItemDto maps timestamp when provided`() {
+        val dto = makeModel().toPasswordItemDto(timestamp = "12345")
+        assertEquals("12345", dto.timestamp)
+    }
+
     // endregion
 
     // region toCategoryModel

@@ -39,12 +39,16 @@ class PasswordItemRepositoryImpl(
         return passwordDao.getPasswordItem(id).map { it?.toModel() }
     }
 
-    override suspend fun upsertPasswordItem(item: PasswordItemModel) {
-        passwordDao.upsertPasswordEntity(item.toEntity())
+    override suspend fun upsertPasswordItem(item: PasswordItemModel): Int {
+        return passwordDao.upsertPasswordEntity(item.toEntity()).first().toInt()
     }
 
     override suspend fun removePasswordsFromWatch() {
         passwordDao.removePasswordsFromWatch()
+    }
+
+    override suspend fun updateWatchStatus(id: Int, isAddedToWatch: Boolean) {
+        passwordDao.updateWatchStatus(id, isAddedToWatch)
     }
 
     override suspend fun deletePasswordItem(item: PasswordWithCategoryModel) {

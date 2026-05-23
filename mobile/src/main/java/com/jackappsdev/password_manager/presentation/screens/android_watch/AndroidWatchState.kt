@@ -7,5 +7,6 @@ data class AndroidWatchState(
     val hasAndroidWatchPinSet: Boolean? = null,
     val pin: String = EMPTY_STRING,
     val showPin: Boolean = false,
-    val showDisableAndroidWatchDialog: Boolean = false
+    val showDisableAndroidWatchDialog: Boolean = false,
+    val autoAddPasswords: Boolean = false
 )

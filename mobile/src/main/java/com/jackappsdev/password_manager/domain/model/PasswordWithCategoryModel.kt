@@ -1,5 +1,7 @@
 package com.jackappsdev.password_manager.domain.model
 
+import com.jackappsdev.password_manager.shared.constants.ZERO
+
 data class PasswordWithCategoryModel(
     val id: Int? = null,
     val name: String,
@@ -34,18 +36,18 @@ data class PasswordWithCategoryModel(
     }
 
     override fun hashCode(): Int {
-        var result = id ?: 0
+        var result = id ?: ZERO
         result = 31 * result + name.hashCode()
         result = 31 * result + username.hashCode()
         result = 31 * result + password.hashCode()
         result = 31 * result + notes.hashCode()
         result = 31 * result + website.hashCode()
         result = 31 * result + isAddedToWatch.hashCode()
-        result = 31 * result + (categoryId ?: 0)
-        result = 31 * result + (categoryName?.hashCode() ?: 0)
-        result = 31 * result + (categoryColor?.hashCode() ?: 0)
+        result = 31 * result + (categoryId ?: ZERO)
+        result = 31 * result + (categoryName?.hashCode() ?: ZERO)
+        result = 31 * result + (categoryColor?.hashCode() ?: ZERO)
         result = 31 * result + images.sumOf { it.contentHashCode() }
-        result = 31 * result + (createdAt?.hashCode() ?: 0)
+        result = 31 * result + (createdAt?.hashCode() ?: ZERO)
         return result
     }
 }

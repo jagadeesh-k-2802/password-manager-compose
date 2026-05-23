@@ -25,10 +25,13 @@ interface PasswordDao {
     fun getPasswordItem(id: Int): Flow<PasswordWithCategoryEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertPasswordEntity(vararg item: PasswordItemEntity)
+    suspend fun upsertPasswordEntity(vararg item: PasswordItemEntity): LongArray
 
     @Query("UPDATE password_items SET is_added_to_watch = 0")
     suspend fun removePasswordsFromWatch()
+
+    @Query("UPDATE password_items SET is_added_to_watch = :isAddedToWatch WHERE id = :id")
+    suspend fun updateWatchStatus(id: Int, isAddedToWatch: Boolean)
 
     @Query("UPDATE password_items SET category_id = NULL WHERE category_id = :id")
     suspend fun removeCategoryFromPasswords(id: Int)

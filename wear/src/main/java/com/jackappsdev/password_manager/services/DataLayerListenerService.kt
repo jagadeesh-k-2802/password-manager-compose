@@ -3,6 +3,8 @@ package com.jackappsdev.password_manager.services
 import android.annotation.SuppressLint
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import com.jackappsdev.password_manager.core.getDataMap
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
@@ -11,6 +13,9 @@ import com.jackappsdev.password_manager.shared.constants.KEY_PIN
 import com.jackappsdev.password_manager.shared.constants.SET_PIN
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.WIPE_DATA
+import com.jackappsdev.password_manager.shared.constants.REQUEST_VERSION
+import com.jackappsdev.password_manager.shared.constants.VERSION_INFO
+import com.jackappsdev.password_manager.shared.core.VersionTracker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +53,31 @@ class DataLayerListenerService : WearableListenerService() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    override fun onMessageReceived(messageEvent: MessageEvent) {
+        super.onMessageReceived(messageEvent)
+        when (messageEvent.path) {
+            REQUEST_VERSION -> {
+                scope.launch {
+                    try {
+                        val currentVersion = VersionTracker.getAppVersionName(applicationContext)
+                        Wearable.getMessageClient(applicationContext).sendMessage(
+                            messageEvent.sourceNodeId,
+                            VERSION_INFO,
+                            currentVersion.toByteArray(Charsets.UTF_8)
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            VERSION_INFO -> {
+                val version = String(messageEvent.data, Charsets.UTF_8)
+                VersionTracker.otherDeviceVersion = version
             }
         }
     }

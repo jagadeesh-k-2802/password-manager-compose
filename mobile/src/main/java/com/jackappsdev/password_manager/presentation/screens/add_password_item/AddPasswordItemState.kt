@@ -3,6 +3,7 @@ package com.jackappsdev.password_manager.presentation.screens.add_password_item
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.model.AttachmentToExport
 import com.jackappsdev.password_manager.shared.constants.EMPTY_STRING
+import com.jackappsdev.password_manager.shared.constants.ZERO
 import kotlinx.coroutines.flow.StateFlow
 
 data class AddPasswordItemState(
@@ -54,8 +55,8 @@ data class AddPasswordItemState(
         result = 31 * result + password.hashCode()
         result = 31 * result + website.hashCode()
         result = 31 * result + notes.hashCode()
-        result = 31 * result + (category?.hashCode() ?: 0)
-        result = 31 * result + (categoryItems?.hashCode() ?: 0)
+        result = 31 * result + (category?.hashCode() ?: ZERO)
+        result = 31 * result + (categoryItems?.hashCode() ?: ZERO)
         result = 31 * result + showPassword.hashCode()
         result = 31 * result + isCategoryDropdownVisible.hashCode()
         result = 31 * result + isUnsavedChangesDialogVisible.hashCode()
@@ -63,7 +64,7 @@ data class AddPasswordItemState(
         result = 31 * result + hasUserEnteredDetails.hashCode()
         result = 31 * result + isExportAttachmentDialogVisible.hashCode()
         result = 31 * result + isExportAttachmentPasswordInvalid.hashCode()
-        result = 31 * result + (attachmentToExport?.hashCode() ?: 0)
+        result = 31 * result + (attachmentToExport?.hashCode() ?: ZERO)
         result = 31 * result + images.sumOf { it.contentHashCode() }
         return result
     }

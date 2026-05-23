@@ -21,9 +21,15 @@
     <string name="toast_opened_phone_app">Geopend telefoon -app</string>
     <string name="toast_cannot_open_phone_app">Kan de telefoon -app niet openen</string>
     <string name="toast_incorrect_password">Onjuist wachtwoord</string>
+    <string name="toast_password_removed">Wachtwoord verwijderd</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_warning_icon">Waarschuwingspictogram</string>
     <string name="accessibility_backspace">Backspace</string>
     <string name="accessibility_done">Klaar</string>
+
+    <!-- Dialog -->
+    <string name="btn_remove">Verwijderen</string>
+    <string name="title_remove_password">Wachtwoord verwijderen</string>
+    <string name="text_remove_watch_only_desc">Dit verwijdert het wachtwoord alleen van het horloge. Het blijft op je telefoon.</string>
 </resources>

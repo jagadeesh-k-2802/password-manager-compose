@@ -12,4 +12,5 @@ data class UserSettings(
     val useDynamicColors: Boolean = true,
     val useScreenLockToUnlock: Boolean = true,
     val autoLockDelayMs: Long = DEFAULT_APP_AUTO_LOCK_DELAY,
+    val autoAddPasswordsToWatch: Boolean = false,
 )

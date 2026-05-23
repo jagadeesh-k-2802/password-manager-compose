@@ -27,6 +27,7 @@ import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.model.FilterBy
 import com.jackappsdev.password_manager.presentation.components.ColoredCircle
 import com.jackappsdev.password_manager.presentation.theme.pagePadding
+import com.jackappsdev.password_manager.shared.constants.ZERO
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,11 +112,11 @@ fun FilterByCategoryModalSheet(
                     trailingContent = {
                         RadioButton(
                             selected = currentFilterBy == item.id?.let { FilterBy.Category(it) },
-                            onClick = { onValueChoose(FilterBy.Category(item.id ?: 0)) }
+                            onClick = { onValueChoose(FilterBy.Category(item.id ?: ZERO)) }
                         )
                     },
                     modifier = Modifier.clickable {
-                        onValueChoose(FilterBy.Category(item.id ?: 0))
+                        onValueChoose(FilterBy.Category(item.id ?: ZERO))
                     }
                 )
             }

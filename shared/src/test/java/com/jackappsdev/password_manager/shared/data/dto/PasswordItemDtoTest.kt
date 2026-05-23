@@ -4,6 +4,8 @@ import com.jackappsdev.password_manager.shared.constants.ZERO
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class PasswordItemDtoTest {
@@ -80,6 +82,7 @@ class PasswordItemDtoTest {
         assertEquals(100L, copy.createdAt)
     }
 
+    @Suppress("UnusedDataClassCopyResult")
     @Test
     fun `copy with updated password does not mutate original`() {
         val original = PasswordItemDto(id = 1, name = "A", username = "u", password = "original", notes = "", createdAt = 0L)
@@ -121,4 +124,66 @@ class PasswordItemDtoTest {
     }
 
     // endregion
+
+    // region serialization compatibility
+
+    @Test
+    fun `serialization omits timestamp key completely when it is null`() {
+        val dto = PasswordItemDto(
+            id = 10,
+            name = "Test",
+            username = "user",
+            password = "pwd",
+            notes = "some notes",
+            createdAt = 12345L,
+            timestamp = null
+        )
+        val jsonString = kotlinx.serialization.json.Json.encodeToString(dto)
+        assertFalse("JSON should not contain timestamp key", jsonString.contains("\"timestamp\""))
+    }
+
+    @Test
+    fun `serialization includes timestamp key when it is not null`() {
+        val dto = PasswordItemDto(
+            id = 10,
+            name = "Test",
+            username = "user",
+            password = "pwd",
+            notes = "some notes",
+            createdAt = 12345L,
+            timestamp = "1716480000"
+        )
+        val jsonString = kotlinx.serialization.json.Json.encodeToString(dto)
+        assertTrue("JSON should contain timestamp key", jsonString.contains("\"timestamp\""))
+        assertTrue("JSON should contain the correct timestamp value", jsonString.contains("\"1716480000\""))
+    }
+
+    @Test
+    fun `deserialization defaults timestamp to null when key is missing`() {
+        // Simulating JSON from an older app version that does not have the timestamp field
+        val jsonWithoutTimestamp = """{"id":10,"name":"Test","username":"user","password":"pwd","notes":"some notes","createdAt":12345}"""
+        val deserialized = kotlinx.serialization.json.Json.decodeFromString<PasswordItemDto>(jsonWithoutTimestamp)
+
+        assertEquals(10, deserialized.id)
+        assertEquals("Test", deserialized.name)
+        assertEquals("user", deserialized.username)
+        assertEquals("pwd", deserialized.password)
+        assertEquals("some notes", deserialized.notes)
+        assertEquals(12345L, deserialized.createdAt)
+        assertNull("timestamp should be null when not present in JSON", deserialized.timestamp)
+    }
+
+    @Test
+    fun `deserialization ignores unknown keys when ignoreUnknownKeys is true`() {
+        // Simulating JSON from a newer version (e.g. with extra fields) parsed by a version using ignoreUnknownKeys = true
+        val jsonWithUnknownFields = """{"id":10,"name":"Test","username":"user","password":"pwd","notes":"some notes","createdAt":12345,"unknownField":"val"}"""
+        val jsonConfig = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+        
+        val deserialized = jsonConfig.decodeFromString<PasswordItemDto>(jsonWithUnknownFields)
+        assertEquals(10, deserialized.id)
+        assertNull(deserialized.timestamp)
+    }
+
+    // endregion
 }
+

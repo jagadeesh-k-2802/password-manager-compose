@@ -4,21 +4,17 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
-import com.google.android.gms.wearable.PutDataMapRequest
-import com.google.android.gms.wearable.Wearable
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.core.copyToClipboard
 import com.jackappsdev.password_manager.core.launchUrl
-import com.jackappsdev.password_manager.domain.mappers.toPasswordItemDto
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
+import com.jackappsdev.password_manager.presentation.utils.WearPasswordManager
 import com.jackappsdev.password_manager.shared.constants.DELETE_PASSWORD
-import com.jackappsdev.password_manager.shared.constants.KEY_PASSWORD
 import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 
 class PasswordItemDetailEffectHandler(
     private val context: Context,
@@ -28,7 +24,7 @@ class PasswordItemDetailEffectHandler(
     private val scope: kotlinx.coroutines.CoroutineScope
 ) {
 
-    private val dataClient = Wearable.getDataClient(context)
+    private val wearPasswordManager = WearPasswordManager(context)
 
     fun onToggleAddedToWatch(passwordItem: PasswordWithCategoryModel?) {
         val path = if (passwordItem?.isAddedToWatch != true) {
@@ -37,22 +33,17 @@ class PasswordItemDetailEffectHandler(
             DELETE_PASSWORD
         }
 
-        val putDataRequest = PutDataMapRequest.create(path).run {
-            dataMap.putString(KEY_PASSWORD, Json.encodeToString(passwordItem?.toPasswordItemDto()))
-            setUrgent()
-            asPutDataRequest()
-        }
-
-        dataClient.putDataItem(putDataRequest).addOnSuccessListener {
-            context.showToast(
-                if (passwordItem?.isAddedToWatch != true) {
-                    context.getString(R.string.toast_added_to_watch)
-                } else {
-                    context.getString(R.string.toast_removed_from_watch)
-                }
-            )
-
-            onEvent(PasswordItemDetailUiEvent.ToggleAddToWatch)
+        wearPasswordManager.sendPasswordToWatch(path, passwordItem) { success ->
+            if (success) {
+                context.showToast(
+                    if (passwordItem?.isAddedToWatch != true) {
+                        context.getString(R.string.toast_added_to_watch)
+                    } else {
+                        context.getString(R.string.toast_removed_from_watch)
+                    }
+                )
+                onEvent(PasswordItemDetailUiEvent.ToggleAddToWatch)
+            }
         }
     }
 
@@ -65,13 +56,7 @@ class PasswordItemDetailEffectHandler(
             return
         }
 
-        val putDataRequest = PutDataMapRequest.create(DELETE_PASSWORD).run {
-            dataMap.putString(KEY_PASSWORD, Json.encodeToString(passwordItem.toPasswordItemDto()))
-            setUrgent()
-            asPutDataRequest()
-        }
-
-        dataClient.putDataItem(putDataRequest).addOnCompleteListener {
+        wearPasswordManager.sendPasswordToWatch(DELETE_PASSWORD, passwordItem) {
             onEvent(PasswordItemDetailUiEvent.DeleteItem)
             navigateUp()
         }

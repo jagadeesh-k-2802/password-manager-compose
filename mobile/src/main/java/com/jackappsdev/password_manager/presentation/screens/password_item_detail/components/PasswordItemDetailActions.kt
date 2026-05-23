@@ -1,6 +1,5 @@
 package com.jackappsdev.password_manager.presentation.screens.password_item_detail.components
 
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -18,9 +17,10 @@ import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.PasswordItemDetailState
 import com.jackappsdev.password_manager.presentation.screens.password_item_detail.event.PasswordItemDetailUiEvent
+import com.jackappsdev.password_manager.shared.constants.ZERO
 
 @Composable
-fun RowScope.PasswordItemDetailActions(
+fun PasswordItemDetailActions(
     state: PasswordItemDetailState,
     passwordItem: PasswordWithCategoryModel?,
     onEvent: (PasswordItemDetailUiEvent) -> Unit,
@@ -46,7 +46,7 @@ fun RowScope.PasswordItemDetailActions(
             text = { Text(stringResource(R.string.btn_edit)) },
             onClick = {
                 onEvent(PasswordItemDetailUiEvent.ToggleDropDownMenuVisibility)
-                onEvent(PasswordItemDetailUiEvent.NavigateToEditPassword(passwordItem?.id ?: 0))
+                onEvent(PasswordItemDetailUiEvent.NavigateToEditPassword(passwordItem?.id ?: ZERO))
             }
         )
 

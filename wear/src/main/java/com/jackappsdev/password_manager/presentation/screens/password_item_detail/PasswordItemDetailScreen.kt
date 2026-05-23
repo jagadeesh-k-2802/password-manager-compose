@@ -29,6 +29,7 @@ fun PasswordItemDetailScreen(
             with(effectHandler) {
                 when (effect) {
                     is PasswordItemDetailUiEffect.NavigateUp -> onNavigateUp()
+                    is PasswordItemDetailUiEffect.PasswordRemoved -> onPasswordRemoved()
                 }
             }
         }
@@ -50,6 +51,12 @@ fun PasswordItemDetailScreen(
     }
 
     ScreenScaffold(scrollState = columnState) {
-        ItemView(passwordItem, columnState)
+        ItemView(
+            passwordItem = passwordItem,
+            columnState = columnState,
+            onConfirmRemove = {
+                onEvent(PasswordItemDetailUiEvent.DeleteFromWatchOnly)
+            }
+        )
     }
 }

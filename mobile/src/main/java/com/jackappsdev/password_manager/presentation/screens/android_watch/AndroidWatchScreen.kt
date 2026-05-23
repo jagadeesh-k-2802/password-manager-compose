@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -185,6 +186,15 @@ fun AndroidWatchScreen(
                             )
                         )
                     }
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+                    ToggleSettingItem(
+                        title = stringResource(R.string.label_auto_add_passwords),
+                        subtitle = stringResource(R.string.text_auto_add_passwords_desc),
+                        checked = state.autoAddPasswords,
+                        onClick = { onEvent(AndroidWatchUiEvent.ToggleAutoAddPasswords) }
+                    )
                 }
             }
         }

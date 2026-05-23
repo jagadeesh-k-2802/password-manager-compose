@@ -11,6 +11,7 @@ import com.jackappsdev.password_manager.core.GeneratePasswordConfig
 import com.jackappsdev.password_manager.core.generateRandomPassword
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
+import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
 import com.jackappsdev.password_manager.domain.repository.CategoryRepository
 import com.jackappsdev.password_manager.domain.repository.PasswordItemRepository
 import com.jackappsdev.password_manager.domain.repository.UserPreferencesRepository
@@ -20,6 +21,7 @@ import com.jackappsdev.password_manager.presentation.screens.add_password_item.e
 import com.jackappsdev.password_manager.shared.base.EventDrivenViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -135,6 +137,10 @@ class AddPasswordItemViewModel @Inject constructor(
             _errorChannel.send(AddPasswordItemError.NameError(R.string.error_name_not_empty))
             null
         } else {
+            val isWatchEnabled = userPreferencesRepository.hasAndroidWatchPinSet()
+            val autoAdd = userPreferencesRepository.getAutoAddPasswordsToWatch().first()
+            val isAddedToWatch = isWatchEnabled && autoAdd
+
             val passwordItemModel = with(state) {
                 PasswordItemModel(
                     name = name,
@@ -144,12 +150,28 @@ class AddPasswordItemViewModel @Inject constructor(
                     notes = notes,
                     categoryId = category?.id,
                     images = images,
-                    isAddedToWatch = false
+                    isAddedToWatch = isAddedToWatch
                 )
             }
 
-            passwordItemRepository.upsertPasswordItem(passwordItemModel)
-            AddPasswordItemUiEffect.NavigateUp
+            val generatedId = passwordItemRepository.upsertPasswordItem(passwordItemModel)
+
+            val createdPasswordWithCategory = PasswordWithCategoryModel(
+                id = generatedId,
+                name = passwordItemModel.name,
+                username = passwordItemModel.username,
+                password = passwordItemModel.password,
+                notes = passwordItemModel.notes,
+                website = passwordItemModel.website,
+                isAddedToWatch = passwordItemModel.isAddedToWatch,
+                categoryId = passwordItemModel.categoryId,
+                categoryName = if (state.category?.name == noCategoryModel.name) null else state.category?.name,
+                categoryColor = if (state.category?.name == noCategoryModel.name) null else state.category?.color,
+                images = passwordItemModel.images,
+                createdAt = passwordItemModel.createdAt
+            )
+
+            AddPasswordItemUiEffect.NavigateUp(createdPasswordWithCategory)
         }
     }
 
@@ -197,7 +219,7 @@ class AddPasswordItemViewModel @Inject constructor(
                 is AddPasswordItemUiEvent.SelectCategory -> onSelectCategory(event.category)
                 is AddPasswordItemUiEvent.AddPasswordItem -> addPasswordItem()
                 is AddPasswordItemUiEvent.NavigateToAddCategory -> AddPasswordItemUiEffect.NavigateToAddCategory
-                is AddPasswordItemUiEvent.NavigateUp -> AddPasswordItemUiEffect.NavigateUp
+                is AddPasswordItemUiEvent.NavigateUp -> AddPasswordItemUiEffect.NavigateUp()
                 is AddPasswordItemUiEvent.RequestExportAttachment -> onRequestExportAttachment(event)
                 is AddPasswordItemUiEvent.ExportAttachment -> onExportAttachment(event)
                 is AddPasswordItemUiEvent.ToggleExportAttachmentDialogVisibility -> onToggleExportAttachmentDialogVisibility()

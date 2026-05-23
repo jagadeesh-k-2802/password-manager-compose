@@ -18,6 +18,9 @@ class DataLayerListenerActionsImpl(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val passwordItemRepository: PasswordItemRepository
 ) : DataLayerListenerActions {
+
+    private val json = Json { ignoreUnknownKeys = true }
+
     override suspend fun setPin(newPin: String?) {
         // Split the time part it is added to the same
         // It is appended so user can change the PIN again instantly
@@ -53,6 +56,6 @@ class DataLayerListenerActionsImpl(
 
     private fun jsonToPasswordItemModel(serializedString: String?): PasswordItemModel? {
         if (serializedString.isNullOrBlank()) return null
-        return Json.decodeFromString<PasswordItemDto>(serializedString).toPasswordItemModel()
+        return json.decodeFromString<PasswordItemDto>(serializedString).toPasswordItemModel()
     }
 }

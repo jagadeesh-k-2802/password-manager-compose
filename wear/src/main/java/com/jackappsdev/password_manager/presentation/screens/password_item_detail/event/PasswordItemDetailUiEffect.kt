@@ -2,4 +2,5 @@ package com.jackappsdev.password_manager.presentation.screens.password_item_deta
 
 sealed class PasswordItemDetailUiEffect {
     data object NavigateUp : PasswordItemDetailUiEffect()
+    data object PasswordRemoved : PasswordItemDetailUiEffect()
 }

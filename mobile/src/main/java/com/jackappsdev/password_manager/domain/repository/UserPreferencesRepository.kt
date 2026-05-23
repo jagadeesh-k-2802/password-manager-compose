@@ -20,4 +20,6 @@ interface UserPreferencesRepository {
     suspend fun setAndroidWatchPinSet(newPin: String?)
     suspend fun getAutoLockDelayMs(): Flow<Long>
     suspend fun setAutoLockDelayMs(newDelayMs: Long)
+    fun getAutoAddPasswordsToWatch(): Flow<Boolean>
+    suspend fun setAutoAddPasswordsToWatch(newValue: Boolean)
 }

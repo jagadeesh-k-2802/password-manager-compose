@@ -34,6 +34,7 @@
     <string name="btn_delete">Delete</string>
     <string name="btn_add_to_watch">Add to Watch</string>
     <string name="btn_remove_from_watch">Remove from Watch</string>
+    <string name="btn_add_attachment">Add Attachment</string>
 
     <!--  Label  -->
     <string name="label_name">Name</string>
@@ -92,7 +93,7 @@
     <string name="label_attachments">Attachments</string>
     <string name="label_image_index">Image %1$d</string>
     <string name="label_pdf_index">PDF %1$d</string>
-    <string name="btn_add_attachment">Add Attachment</string>
+    <string name="label_auto_add_passwords">Auto-add to Watch</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note: This password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
@@ -123,6 +124,7 @@
     <string name="text_autofill_open_password_manager">Autofill with Password Manager</string>
     <string name="text_autofill_save_fail">Username or password is empty, nothing to save.</string>
     <string name="text_autofill_save_fail_generic">Failed to save credentials.</string>
+    <string name="text_auto_add_passwords_desc">Automatically add new passwords to your watch when you create them on your phone.</string>
 
     <!--  Toast Messages  -->
     <string name="toast_app_locked">App Locked</string>

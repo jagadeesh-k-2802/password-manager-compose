@@ -331,6 +331,8 @@ fun EditPasswordItemScreen(
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.btn_confirm))
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

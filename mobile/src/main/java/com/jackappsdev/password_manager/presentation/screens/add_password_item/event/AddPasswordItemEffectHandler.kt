@@ -7,8 +7,11 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import com.jackappsdev.password_manager.R
+import com.jackappsdev.password_manager.domain.model.PasswordWithCategoryModel
 import com.jackappsdev.password_manager.presentation.navigation.Navigator
 import com.jackappsdev.password_manager.presentation.navigation.Routes
+import com.jackappsdev.password_manager.presentation.utils.WearPasswordManager
+import com.jackappsdev.password_manager.shared.constants.UPSERT_PASSWORD
 import com.jackappsdev.password_manager.shared.core.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +28,16 @@ class AddPasswordItemEffectHandler(
         navigator.navigate(Routes.AddCategoryItem)
     }
 
-    fun onNavigateUp() {
+    fun onNavigateUp(context: Context, createdPassword: PasswordWithCategoryModel?) {
         keyboardController?.hide()
-        navigator.navigateUp()
+        if (createdPassword != null && createdPassword.isAddedToWatch) {
+            val wearPasswordManager = WearPasswordManager(context)
+            wearPasswordManager.sendPasswordToWatch(UPSERT_PASSWORD, createdPassword) {
+                navigator.navigateUp()
+            }
+        } else {
+            navigator.navigateUp()
+        }
     }
 
     fun onExportAttachmentToUri(context: Context, uri: Uri, bytes: ByteArray) {

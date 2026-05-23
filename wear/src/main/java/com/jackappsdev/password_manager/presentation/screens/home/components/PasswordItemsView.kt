@@ -13,6 +13,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.jackappsdev.password_manager.R
 import com.jackappsdev.password_manager.domain.model.PasswordItemModel
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
+import com.jackappsdev.password_manager.shared.constants.ZERO
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
@@ -35,7 +36,7 @@ fun PasswordItemsView(
             items(passwords) { item ->
                 PasswordItem(
                     label = item.name,
-                    onClick = { onEvent(HomeUiEvent.NavigateToPasswordDetail(item.id ?: 0)) }
+                    onClick = { onEvent(HomeUiEvent.NavigateToPasswordDetail(item.id ?: ZERO)) }
                 )
             }
         }

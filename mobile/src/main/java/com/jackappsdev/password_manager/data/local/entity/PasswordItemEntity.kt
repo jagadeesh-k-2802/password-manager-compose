@@ -43,7 +43,7 @@ data class PasswordItemEntity(
         result = 31 * result + notes.hashCode()
         result = 31 * result + website.hashCode()
         result = 31 * result + isAddedToWatch.hashCode()
-        result = 31 * result + (categoryId ?: 0)
+        result = 31 * result + (categoryId ?: ZERO)
         result = 31 * result + images.sumOf { it.contentHashCode() }
         result = 31 * result + createdAt.hashCode()
         return result

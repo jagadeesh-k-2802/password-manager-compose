@@ -32,9 +32,15 @@
     <string name="toast_opened_phone_app">Opened Phone App</string>
     <string name="toast_cannot_open_phone_app">Cannot Open Phone App</string>
     <string name="toast_incorrect_password">Incorrect Password</string>
+    <string name="toast_password_removed">Password Removed</string>
 
     <!--  Accessibility  -->
     <string name="accessibility_warning_icon">Warning icon</string>
     <string name="accessibility_backspace">Backspace</string>
     <string name="accessibility_done">Done</string>
+
+    <!-- Dialog -->
+    <string name="btn_remove">Remove</string>
+    <string name="title_remove_password">Remove Password</string>
+    <string name="text_remove_watch_only_desc">This will remove the password from the watch only. It will remain on your phone.</string>
 </resources>

@@ -3,4 +3,5 @@ package com.jackappsdev.password_manager.presentation.screens.password_item_deta
 sealed class PasswordItemDetailUiEvent {
     data object ToggleAlreadySetOnce : PasswordItemDetailUiEvent()
     data object NavigateUp : PasswordItemDetailUiEvent()
+    data object DeleteFromWatchOnly : PasswordItemDetailUiEvent()
 }

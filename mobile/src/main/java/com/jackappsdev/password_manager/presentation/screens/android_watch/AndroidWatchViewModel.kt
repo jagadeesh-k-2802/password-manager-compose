@@ -47,6 +47,10 @@ class AndroidWatchViewModel @Inject constructor(
                 useAndroidWatch = userPreferencesRepository.hasAndroidWatchPinSet(),
                 hasAndroidWatchPinSet = userPreferencesRepository.hasAndroidWatchPinSet()
             )
+
+            userPreferencesRepository.getAutoAddPasswordsToWatch().collect { value ->
+                state = state.copy(autoAddPasswords = value)
+            }
         }
     }
 
@@ -100,6 +104,13 @@ class AndroidWatchViewModel @Inject constructor(
         return AndroidWatchUiEffect.DisableAndroidWatchSharing
     }
 
+    private fun toggleAutoAddPasswords() {
+        viewModelScope.launch {
+            val currentValue = state.autoAddPasswords
+            userPreferencesRepository.setAutoAddPasswordsToWatch(!currentValue)
+        }
+    }
+
     override fun onEvent(event: AndroidWatchUiEvent) {
         viewModelScope.launch {
             val effect = when (event) {
@@ -112,6 +123,7 @@ class AndroidWatchViewModel @Inject constructor(
                 is AndroidWatchUiEvent.RequestPinChange -> AndroidWatchUiEffect.RequestPinChange
                 is AndroidWatchUiEvent.RequestToggleAndroidWatch -> AndroidWatchUiEffect.ConfirmToggleAndroidWatch
                 is AndroidWatchUiEvent.NavigateUp -> AndroidWatchUiEffect.NavigateUp
+                is AndroidWatchUiEvent.ToggleAutoAddPasswords -> toggleAutoAddPasswords()
             }
 
             if (effect is AndroidWatchUiEffect) _effectChannel.send(effect)

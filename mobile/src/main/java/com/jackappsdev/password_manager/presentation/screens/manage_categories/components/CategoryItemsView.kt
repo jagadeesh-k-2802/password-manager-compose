@@ -8,6 +8,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import com.jackappsdev.password_manager.domain.model.CategoryModel
 import com.jackappsdev.password_manager.presentation.screens.manage_categories.event.ManageCategoriesUiEvent
+import com.jackappsdev.password_manager.shared.constants.ZERO
 
 @Composable
 fun CategoryItemsView(
@@ -24,7 +25,7 @@ fun CategoryItemsView(
             items(it.value) { item ->
                 CategoryItem(
                     item = item,
-                    onClick = { onEvent(ManageCategoriesUiEvent.NavigateToCategoryItem(item.id ?: 0)) }
+                    onClick = { onEvent(ManageCategoriesUiEvent.NavigateToCategoryItem(item.id ?: ZERO)) }
                 )
             }
         }

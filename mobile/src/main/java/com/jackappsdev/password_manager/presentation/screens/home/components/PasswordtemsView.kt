@@ -15,6 +15,7 @@ import com.jackappsdev.password_manager.presentation.components.CommonSearchBar
 import com.jackappsdev.password_manager.presentation.components.EmptyStateView
 import com.jackappsdev.password_manager.presentation.screens.home.HomeState
 import com.jackappsdev.password_manager.presentation.screens.home.event.HomeUiEvent
+import com.jackappsdev.password_manager.shared.constants.ZERO
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,7 @@ fun PasswordItemsView(
             items(it) { item ->
                 PasswordItem(
                     item = item,
-                    onClick = { onEvent(HomeUiEvent.NavigateToPasswordItem(item.id ?: 0)) }
+                    onClick = { onEvent(HomeUiEvent.NavigateToPasswordItem(item.id ?: ZERO)) }
                 )
             }
         }

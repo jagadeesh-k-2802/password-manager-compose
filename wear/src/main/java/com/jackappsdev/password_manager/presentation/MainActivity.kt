@@ -12,10 +12,18 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.wearable.Wearable
+import com.jackappsdev.password_manager.shared.constants.REQUEST_VERSION
+import com.jackappsdev.password_manager.shared.constants.VERSION_INFO
+import com.jackappsdev.password_manager.shared.core.VersionTracker
 import com.jackappsdev.password_manager.presentation.navigation.Router
 import com.jackappsdev.password_manager.presentation.screens.password_lock.PasswordLockViewModel
 import com.jackappsdev.password_manager.presentation.theme.PasswordManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -37,6 +45,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         setTheme(android.R.style.Theme_DeviceDefault)
+        sendVersionAndRequestMobileVersion()
 
         splashScreen.setKeepOnScreenCondition {
             passwordLockViewModel.state.hasPinSet == null
@@ -46,6 +55,24 @@ class MainActivity : ComponentActivity() {
             PasswordManagerTheme {
                 val navController = rememberSwipeDismissableNavController()
                 Router(navController, passwordLockViewModel)
+            }
+        }
+    }
+
+    private fun sendVersionAndRequestMobileVersion() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val nodeClient = Wearable.getNodeClient(applicationContext)
+                val messageClient = Wearable.getMessageClient(applicationContext)
+                val nodes = nodeClient.connectedNodes.await()
+                val currentVersion = VersionTracker.getAppVersionName(applicationContext)
+                val versionBytes = currentVersion.toByteArray(Charsets.UTF_8)
+                for (node in nodes) {
+                    messageClient.sendMessage(node.id, REQUEST_VERSION, byteArrayOf())
+                    messageClient.sendMessage(node.id, VERSION_INFO, versionBytes)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

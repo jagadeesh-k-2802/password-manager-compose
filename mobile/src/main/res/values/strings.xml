@@ -93,7 +93,7 @@
     <string name="label_attachments">Attachments</string>
     <string name="label_image_index">Image %1$d</string>
     <string name="label_pdf_index">PDF %1$d</string>
-    <string name="label_auto_add_passwords">Auto-add to Watch</string>
+    <string name="label_auto_add_passwords">Auto add to Watch</string>
 
     <!--  Text  -->
     <string name="text_password_warning_note">Please note: This password is essential for unlocking access to the application. Losing it means losing access to all your passwords.</string>
